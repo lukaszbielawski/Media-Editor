@@ -5,30 +5,30 @@
 //  Created by Łukasz Bielawski on 06/01/2024.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct MenuScrollView: View {
     private let columns =
         Array(repeating: GridItem(.flexible(), spacing: 16), count: UIDevice.current.userInterfaceIdiom == .phone ? 2 : 4)
 
-    @Binding var projects: [ProjectEntity]
-    
+    @EnvironmentObject var vm: MenuViewModel
+
     var dotsDidTapped: (UUID) -> ()
-    
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVGrid(columns: columns, spacing: 16) {
                 Group {
                     PlaceholderTileView()
                         .foregroundStyle(Color(.tint))
-                    ForEach($projects) { $project in
+
+                    ForEach($vm.projects) { $project in
                         TileView(project: $project, dotsDidTapped: dotsDidTapped)
                     }
                     .foregroundStyle(Color(.white))
                 }
                 .cornerRadius(16.0)
-               
             }
             .padding(16)
         }
@@ -37,13 +37,15 @@ struct MenuScrollView: View {
 
 struct TileView: View {
     @Binding var project: ProjectEntity
+
     var dotsDidTapped: (UUID) -> ()
     var body: some View {
         ZStack(alignment: .top) {
-            KFImage.url(project.thumbnailURL)
-                .centerCropped()
-                .aspectRatio(1.0, contentMode: .fill)
-
+            NavigationLink(destination: Text(project.title ?? "nil")) {
+                KFImage.url(project.thumbnailURL)
+                    .centerCropped()
+                    .aspectRatio(1.0, contentMode: .fill)
+            }
             GeometryReader { geo in
                 VStack {
                     ZStack {
@@ -72,6 +74,7 @@ struct TileView: View {
 }
 
 struct PlaceholderTileView: View {
+    @State var isAddProjectViewPresented: Bool = false
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -90,12 +93,20 @@ struct PlaceholderTileView: View {
                 .padding(.vertical)
             }
         }
+        .onTapGesture {
+            isAddProjectViewPresented = true
+        }
         .aspectRatio(1.0, contentMode: .fill)
+        .sheet(isPresented: $isAddProjectViewPresented) {
+            AddProjectView()
+        }
     }
 }
 
 #Preview {
-    let preview = PersistenceController.shared.preview
-    let bindingArray: Binding<[ProjectEntity]> = .constant(preview)
-    return MenuScrollView(projects: bindingArray) { _ in }
+//    let preview = PersistenceController.shared.preview
+//    let bindingArray: Binding<[ProjectEntity]> = .constant(preview)
+    var vm = MenuViewModel()
+    vm.projects = PersistenceController.preview.fetchAllProjects()
+    return MenuScrollView { _ in }.environmentObject(vm)
 }

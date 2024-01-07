@@ -9,6 +9,10 @@
 import CoreData
 import Foundation
 
+public class ProjectEntity: NSManagedObject {
+
+}
+
 public extension ProjectEntity {
     @nonobjc class func fetchRequest() -> NSFetchRequest<ProjectEntity> {
         return NSFetchRequest<ProjectEntity>(entityName: "ProjectEntity")

@@ -15,25 +15,29 @@ struct MenuView: View {
     @StateObject var vm = MenuViewModel()
 
     var body: some View {
-        ZStack {
-            GeometryReader { geo in
-                VStack {
-                    UpperMenuView()
-                        .frame(height: geo.size.height * 2 / 5)
-                    MenuScrollView(projects: $vm.projects) { id in
-                        if let index = vm.findIndexForUUID(uuid: id) {
-                            vm.selectedProject = vm.projects[index]
+        NavigationView {
+            ZStack {
+                GeometryReader { geo in
+                    VStack {
+                        UpperMenuView()
+                            .frame(height: geo.size.height * 2 / 5)
+                        MenuScrollView { id in
+                            let project = PersistenceController.shared.fetchProject(withID: id)
+                            vm.selectedProject = project
                             isManageProjectSheetPresented = true
                         }
+                        .environmentObject(vm)
                     }
                 }
+                ManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
+                    .environmentObject(vm)
+                    .environment(\.managedObjectContext, context)
+                    .gesture(DragGesture().onEnded { value in
+                        if value.translation.height > 50 {
+                            isManageProjectSheetPresented = false
+                        }
+                    })
             }
-            ManageProjectSheet(isManageProjectSheetPresented: $isManageProjectSheetPresented, vm: vm)
-                .gesture(DragGesture().onEnded { value in
-                    if value.translation.height > 50 {
-                        isManageProjectSheetPresented = false
-                    }
-                })
         }
     }
 }
@@ -44,96 +48,19 @@ struct UpperMenuView: View {
     }
 }
 
-struct ManageProjectSheet: View {
-    @Binding var isManageProjectSheetPresented: Bool
-    @State var isAlertPresented: Bool = false
-    @ObservedObject var vm: MenuViewModel
 
-    @State var projectName: String = ""
-
-    var body: some View {
-        ZStack {
-            Color.gray.opacity(isManageProjectSheetPresented ? 0.7 : 0.0)
-                .animation(.spring())
-                .ignoresSafeArea()
-                .onTapGesture {
-                    isManageProjectSheetPresented = false
-                }
-                .allowsHitTesting(isManageProjectSheetPresented)
-            GeometryReader { geometry in
-                VStack {
-                    Spacer()
-
-                    VStack(spacing: 16) {
-                        Spacer()
-                        Text("Change project name")
-                            .foregroundStyle(Color.tint)
-                        HStack {
-                            Spacer()
-                            TextField("Project name", text: $projectName)
-                                .textFieldStyle(.roundedBorder)
-                                .padding(.horizontal, 32)
-                                .onChange(of: vm.selectedProject) { _ in
-                                    projectName = vm.selectedProject?.title ?? "nil"
-                                }
-                            Spacer()
-                        }
-
-                        Button("Back", role: .cancel) {
-                            isManageProjectSheetPresented = false
-                            vm.selectedProject?.title = projectName
-                            DispatchQueue.main.async {
-                                PersistenceController.shared.saveContext()
-                            }
-                        }.buttonStyle(.borderedProminent)
-
-                        Spacer()
-                        Button(role: .destructive, action: {
-                            isAlertPresented = true
-                        }, label: {
-                            Label("Delete project", systemImage: "trash")
-                        })
-                        .padding(.bottom)
-                        .buttonStyle(.borderedProminent)
-                        .alert("Are you sure you want to delete \(vm.selectedProject?.title ?? "nil")?", isPresented: $isAlertPresented) {
-                            Button("Go back", role: .cancel) {
-                                isAlertPresented = false
-                            }
-                            Button("Confirm", role: .destructive) {
-                                vm.projects.removeAll(where: { $0.id == vm.selectedProject?.id} )
-                                DispatchQueue.main.async {
-                                    PersistenceController.shared.deleteObject(object: vm.selectedProject)
-                                    PersistenceController.shared.saveContext()
-                                }
-                                isAlertPresented = false
-                                isManageProjectSheetPresented = false
-                            }
-                        }
-                        Spacer()
-                    }
-                    .frame(width: geometry.size.width, height: geometry.size.height / 2)
-                    .background(Color(.primary))
-                    .cornerRadius(10)
-                    .offset(y: isManageProjectSheetPresented ? 0 : geometry.size.height / 2)
-                    .animation(.spring())
-                }
-                .edgesIgnoringSafeArea(.all)
-            }
-        }
-    }
-}
 
 #Preview {
-    let project = PersistenceController.shared.preview.first!
+    let project = PersistenceController.preview.fetchAllProjects().first!
     let binding: Binding<ProjectEntity> = .constant(project)
     return TileView(project: binding) { _ in }
         .scaledToFit()
 }
 
 #Preview {
-    let preview = PersistenceController.shared.preview
-    let bindingArray: Binding<[ProjectEntity]> = .constant(preview)
-    return MenuScrollView(projects: bindingArray) { _ in }
+    var vm = MenuViewModel()
+    vm.projects = PersistenceController.preview.fetchAllProjects()
+    return MenuScrollView { _ in }.environmentObject(vm)
 }
 
 #Preview {

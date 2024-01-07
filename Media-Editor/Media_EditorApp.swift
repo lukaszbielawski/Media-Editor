@@ -10,13 +10,17 @@ import CoreData
 
 @main
 struct Media_EditorApp: App {
-    var context = PersistenceController.shared.persistentContainer.viewContext
+    @Environment(\.scenePhase) var scenePhase
+    var context = PersistenceController.shared.container.viewContext
     
     var body: some Scene {
         WindowGroup {
             MenuView()
                 .background(Color(.background))
                 .environment(\.managedObjectContext, context)
+        }
+        .onChange(of: scenePhase) { _ in
+            PersistenceController.shared.saveChanges()
         }
     }
 }

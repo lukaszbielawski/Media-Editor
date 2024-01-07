@@ -18,14 +18,19 @@
 		B21103542B496DEA00CA4981 /* MovieEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103532B496DEA00CA4981 /* MovieEntity.swift */; };
 		B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B21103552B496F2F00CA4981 /* Model.xcdatamodeld */; };
 		B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103592B49705900CA4981 /* PersistenceController.swift */; };
-		B21103632B49796100CA4981 /* ProjectEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103612B49796100CA4981 /* ProjectEntity+CoreDataClass.swift */; };
-		B21103642B49796100CA4981 /* ProjectEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103622B49796100CA4981 /* ProjectEntity+CoreDataProperties.swift */; };
+		B21103642B49796100CA4981 /* ProjectEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103622B49796100CA4981 /* ProjectEntity.swift */; };
 		B21103692B49856E00CA4981 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103682B49856E00CA4981 /* ViewExtensions.swift */; };
 		B211036A2B499D3D00CA4981 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2085C172B48671F004D904A /* Assets.xcassets */; };
 		B211036E2B499DE200CA4981 /* ex_movie.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B211036C2B499DE200CA4981 /* ex_movie.mp4 */; };
 		B211036F2B499DE200CA4981 /* ex_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B211036D2B499DE200CA4981 /* ex_image.jpg */; };
 		B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103702B49AB4500CA4981 /* MenuScrollView.swift */; };
 		B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103732B49C02300CA4981 /* MenuViewModel.swift */; };
+		B271509C2B4AC94600411F9A /* ManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */; };
+		B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509D2B4AD00500411F9A /* AddProjectView.swift */; };
+		B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */; };
+		B27150A22B4ADA6C00411F9A /* PHAssetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27150A12B4ADA6C00411F9A /* PHAssetExtensions.swift */; };
+		B27150A42B4AE77200411F9A /* ScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27150A32B4AE77200411F9A /* ScrollViewExtensions.swift */; };
+		B27150A62B4B03C400411F9A /* CGSizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27150A52B4B03C400411F9A /* CGSizeExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,13 +46,18 @@
 		B21103532B496DEA00CA4981 /* MovieEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieEntity.swift; sourceTree = "<group>"; };
 		B21103562B496F2F00CA4981 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		B21103592B49705900CA4981 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
-		B21103612B49796100CA4981 /* ProjectEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProjectEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		B21103622B49796100CA4981 /* ProjectEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProjectEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B21103622B49796100CA4981 /* ProjectEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntity.swift; sourceTree = "<group>"; };
 		B21103682B49856E00CA4981 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		B211036C2B499DE200CA4981 /* ex_movie.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ex_movie.mp4; sourceTree = "<group>"; };
 		B211036D2B499DE200CA4981 /* ex_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ex_image.jpg; sourceTree = "<group>"; };
 		B21103702B49AB4500CA4981 /* MenuScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScrollView.swift; sourceTree = "<group>"; };
 		B21103732B49C02300CA4981 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProjectSheetView.swift; sourceTree = "<group>"; };
+		B271509D2B4AD00500411F9A /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
+		B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModel.swift; sourceTree = "<group>"; };
+		B27150A12B4ADA6C00411F9A /* PHAssetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetExtensions.swift; sourceTree = "<group>"; };
+		B27150A32B4AE77200411F9A /* ScrollViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewExtensions.swift; sourceTree = "<group>"; };
+		B27150A52B4B03C400411F9A /* CGSizeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +119,8 @@
 			children = (
 				B2085C212B4867D7004D904A /* MenuView.swift */,
 				B21103702B49AB4500CA4981 /* MenuScrollView.swift */,
+				B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */,
+				B271509D2B4AD00500411F9A /* AddProjectView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -135,6 +147,9 @@
 			children = (
 				B211034A2B495A5B00CA4981 /* ImageExtensions.swift */,
 				B21103682B49856E00CA4981 /* ViewExtensions.swift */,
+				B27150A12B4ADA6C00411F9A /* PHAssetExtensions.swift */,
+				B27150A32B4AE77200411F9A /* ScrollViewExtensions.swift */,
+				B27150A52B4B03C400411F9A /* CGSizeExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -152,8 +167,7 @@
 			children = (
 				B21103552B496F2F00CA4981 /* Model.xcdatamodeld */,
 				B21103592B49705900CA4981 /* PersistenceController.swift */,
-				B21103612B49796100CA4981 /* ProjectEntity+CoreDataClass.swift */,
-				B21103622B49796100CA4981 /* ProjectEntity+CoreDataProperties.swift */,
+				B21103622B49796100CA4981 /* ProjectEntity.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -171,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				B21103732B49C02300CA4981 /* MenuViewModel.swift */,
+				B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -253,20 +268,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B21103642B49796100CA4981 /* ProjectEntity+CoreDataProperties.swift in Sources */,
+				B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */,
+				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
+				B21103642B49796100CA4981 /* ProjectEntity.swift in Sources */,
 				B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */,
 				B21103522B496C8700CA4981 /* PhotoEntity.swift in Sources */,
 				B21103542B496DEA00CA4981 /* MovieEntity.swift in Sources */,
 				B21103472B494F1400CA4981 /* MediaType.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
 				B2085C142B48671E004D904A /* Media_EditorApp.swift in Sources */,
+				B271509C2B4AC94600411F9A /* ManageProjectSheetView.swift in Sources */,
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
+				B27150A62B4B03C400411F9A /* CGSizeExtensions.swift in Sources */,
 				B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */,
 				B21103692B49856E00CA4981 /* ViewExtensions.swift in Sources */,
+				B27150A42B4AE77200411F9A /* ScrollViewExtensions.swift in Sources */,
 				B21103502B496B7700CA4981 /* Frameable.swift in Sources */,
 				B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */,
 				B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */,
-				B21103632B49796100CA4981 /* ProjectEntity+CoreDataClass.swift in Sources */,
+				B27150A22B4ADA6C00411F9A /* PHAssetExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,11 +423,12 @@
 				DEVELOPMENT_TEAM = J6U333HZ7J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow usage of your Photo Library to create a project";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -433,11 +454,12 @@
 				DEVELOPMENT_TEAM = J6U333HZ7J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow usage of your Photo Library to create a project";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
