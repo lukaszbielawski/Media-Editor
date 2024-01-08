@@ -30,11 +30,13 @@ struct AddProjectGridView: View {
         Array(repeating: GridItem(.flexible(), spacing: 4), count: UIDevice.current.userInterfaceIdiom == .phone ? 3 : 5)
 
     var body: some View {
+        
         VStack {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(vm.media) { media in
-                    AddProjectGridTileView(media: media)
-                        .environmentObject(vm)
+                    ZStack {
+                        AddProjectGridTileView(media: media)
+                    }
                 }
             }
         }

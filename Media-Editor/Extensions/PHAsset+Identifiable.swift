@@ -9,5 +9,8 @@ import Foundation
 import Photos
 
 extension PHAsset: Identifiable {
-
+    public typealias ID = Int
+    public var id: Int {
+        return hash
+    }
 }
