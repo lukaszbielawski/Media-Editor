@@ -47,7 +47,6 @@ struct ManageProjectSheetView: View {
                             isManageProjectSheetPresented = false
                             vm.selectedProject?.title = projectName
                             vm.updateUIAndSaveChanges(context: context)
-                            // TODO: edit
 
                         }.buttonStyle(.borderedProminent)
 
@@ -64,7 +63,6 @@ struct ManageProjectSheetView: View {
                                 isAlertPresented = false
                             }
                             Button("Confirm", role: .destructive) {
-                                // TODO: delete
                                 vm.deleteProject(vm.selectedProject!)
                                 vm.updateUIAndSaveChanges(context: context)
                                 

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Photos
 
 @main
 struct Media_EditorApp: App {

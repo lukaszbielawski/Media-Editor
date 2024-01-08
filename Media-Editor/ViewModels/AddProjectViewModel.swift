@@ -5,31 +5,32 @@
 //  Created by Łukasz Bielawski on 07/01/2024.
 //
 
+import Combine
 import Foundation
 import Photos
+import SwiftUI
 
 class AddProjectViewModel: ObservableObject {
-    @Published var media: [PHAsset] = []
-
-    func requestAuthorization() {
-        PHPhotoLibrary.requestAuthorization { [unowned self] status in
-            switch status {
-            case .authorized:
-                fetchMediaFromPhotoLibrary()
-            default:
-                print("Permission not granted")
-            }
-        }
+    @Published var media = [PHAsset]()
+    @Published private var photoService = PhotoLibraryService()
+    
+    private var subscription: AnyCancellable?
+    
+    init() {
+        setupSubscription()
+        photoService.requestAuthorization()
     }
-
-    private func fetchMediaFromPhotoLibrary() {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d", PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        fetchOptions.fetchLimit = 1000
-        let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
-        DispatchQueue.main.async { [self] in
-            media += (0 ..< fetchResult.count).map { fetchResult.object(at: $0) }
-        }
+    
+    private func setupSubscription() {
+        let mediaPublisher = photoService.getMediaPublisher()
+        subscription = mediaPublisher
+            .sink { [unowned self] fetchResult in
+                media = (0 ..< fetchResult.count).map { fetchResult.object(at: $0) }
+//                media = fetchResult
+            }
+    }
+    
+    func fetchPhoto(for asset: PHAsset, desiredSize: CGSize, contentMode: PHImageContentMode = .default) async throws -> UIImage {
+        try await photoService.fetchThumbnail(for: asset.localIdentifier, desiredSize: desiredSize, contentMode: contentMode)
     }
 }

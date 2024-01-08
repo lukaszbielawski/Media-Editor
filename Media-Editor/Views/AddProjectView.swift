@@ -32,21 +32,22 @@ struct AddProjectGridView: View {
     var body: some View {
         VStack {
             LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(vm.media, id: \.self) { media in
+                ForEach(vm.media) { media in
                     AddProjectGridTileView(media: media)
+                        .environmentObject(vm)
                 }
             }
         }
         .padding(4)
-        .onAppear {
-            vm.requestAuthorization()
-        }
     }
 }
 
 struct AddProjectGridTileView: View {
-    let media: PHAsset
     @State var thumbnail: UIImage?
+    @EnvironmentObject var vm: AddProjectViewModel
+    @State var fetchTask: Task<Void, Error>?
+
+    @State var media: PHAsset
     var body: some View {
         ZStack {
             Group {
@@ -65,19 +66,16 @@ struct AddProjectGridTileView: View {
             }
         }
         .onAppear {
-            media.getThumbnail(targetSize: .init(width: 100, height: 100), completion: { thumbnail in
-
-                if let thumbnail {
-                    let uuid = UUID()
-                    self.thumbnail = thumbnail
-                    media.getThumbnail(targetSize: [PHImageManagerMaximumSize, .init(width: 1000, height: 1000)].min()!, completion: { thumbnail in
-                        if let thumbnail {
-                            self.thumbnail = thumbnail
-                        }
-                    })
+            fetchTask = Task {
+                do {
+                    thumbnail = try await vm.fetchPhoto(for: media, desiredSize: .init(width: 100, height: 100))
+                    thumbnail = try await vm.fetchPhoto(for: media, desiredSize: PHImageManagerMaximumSize)
+                } catch {
+                    print(error)
                 }
-            })
+            }
         }.onDisappear {
+            fetchTask?.cancel()
             thumbnail = nil
         }
     }
