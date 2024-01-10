@@ -10,6 +10,7 @@ import Foundation
 enum PhotoError: Error, LocalizedError {
     case invalidLocalIdentifier(localIdentifier: String)
     case thumbnailError
+    case invalidMediaType
     case other
     
     var errorDescription: String? {
@@ -18,6 +19,8 @@ enum PhotoError: Error, LocalizedError {
             return "Asset with identifier: \(localIdentifier) was not found"
         case .thumbnailError:
             return "Thumbnail generation went wrong"
+        case .invalidMediaType:
+            return "Not supported media type"
         case .other:
             return "Unknown reason"
         }

@@ -78,7 +78,14 @@ struct PlaceholderTileView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                Color(.primary)
+//                Color(.primary)
+//                    .centerCropped()
+                Rectangle()
+                    .fill(Material.ultraThinMaterial)
+                    .background {
+                        Image("ex_image")
+                            .centerCropped()
+                    }
                     .centerCropped()
 
                 VStack {

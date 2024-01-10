@@ -17,4 +17,11 @@ extension View {
             .clipped()
         }
     }
+    
+    func roundedUpperCorners(_ cornerRadius: Double) -> some View {
+        self
+            .padding(.bottom, cornerRadius)
+            .cornerRadius(cornerRadius)
+            .padding(.bottom, -cornerRadius)
+    }
 }

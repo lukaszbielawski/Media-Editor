@@ -74,7 +74,7 @@ struct ManageProjectSheetView: View {
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height / 2)
                     .background(Color(.primary))
-                    .cornerRadius(10)
+                    .roundedUpperCorners(16)
                     .offset(y: isManageProjectSheetPresented ? 0 : geometry.size.height / 2)
                     .animation(.spring())
                 }

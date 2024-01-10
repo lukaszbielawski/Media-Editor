@@ -29,6 +29,7 @@ struct MenuView: View {
                         .environmentObject(vm)
                     }
                 }
+
                 ManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
                     .environmentObject(vm)
                     .environment(\.managedObjectContext, context)
@@ -47,8 +48,6 @@ struct UpperMenuView: View {
         Image(systemName: "globe")
     }
 }
-
-
 
 #Preview {
     let project = PersistenceController.preview.fetchAllProjects().first!
