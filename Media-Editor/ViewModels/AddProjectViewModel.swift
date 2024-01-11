@@ -13,7 +13,7 @@ import SwiftUI
 class AddProjectViewModel: ObservableObject {
     @Published var media = [PHAsset]()
     @Published private var photoService = PhotoLibraryService()
-    @Published var selectedAssets = Array<PHAsset>()
+    @Published var selectedAssets = [PHAsset]()
     @Published var projectType: ProjectType = .none
     
     private var subscription: AnyCancellable?
@@ -36,7 +36,6 @@ class AddProjectViewModel: ObservableObject {
     }
     
     func toggleMediaSelection(for asset: PHAsset) -> Bool {
-        
         if let index = selectedAssets.firstIndex(of: asset) {
             selectedAssets.remove(at: index)
             objectWillChange.send()
@@ -48,7 +47,6 @@ class AddProjectViewModel: ObservableObject {
             recalculateProjectType()
             return true
         }
-        
     }
     
     private func recalculateProjectType() {
@@ -56,7 +54,31 @@ class AddProjectViewModel: ObservableObject {
             projectType = .none
             return
         }
-        let mediaType = selectedAssets.contains { $0.mediaType == .video } ? PHAssetMediaType.video : PHAssetMediaType.image
+        let mediaType = selectedAssets.contains { $0.mediaType == .video } || selectedAssets.count > 1 ? PHAssetMediaType.video : PHAssetMediaType.image
         projectType = mediaType.toMediaType
+    }
+    
+    func createProject()  async throws -> ProjectEntity {
+        let container = PersistenceController.shared.container
+        let isMovie = projectType == ProjectType.movie
+        let projectEntity = ProjectEntity(id: UUID(), title: "New \(isMovie ? "movie" : "photo") project",
+                                          lastEditDate: Date.now, isMovie: isMovie, context: container.viewContext)
+        
+        try await withThrowingTaskGroup(of: String.self) { [unowned self] group in
+            for asset in selectedAssets {
+                group.addTask { [unowned self] in
+                    let (assetData, fileExtension)
+                        = try await photoService.fetchMediaDataAndExtensionFromPhotoLibrary(with: asset.localIdentifier)
+                    let savedFileURL = try await photoService.saveToDisk(data: assetData, extension: fileExtension)
+                    return savedFileURL.absoluteString.replacingOccurrences(of: "file://", with: "")
+                }
+            }
+            for try await absolutePath in group {
+                let mediaEntity = MediaEntity(filePath: absolutePath, projectEntity: projectEntity, context: container.viewContext)
+                projectEntity.projectEntityToMediaEntity?.insert(mediaEntity)
+            }
+            PersistenceController.shared.saveChanges()
+        }
+        return projectEntity
     }
 }

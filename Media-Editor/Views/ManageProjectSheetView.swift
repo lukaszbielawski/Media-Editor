@@ -10,21 +10,21 @@ import SwiftUI
 struct ManageProjectSheetView: View {
     @Binding var isManageProjectSheetPresented: Bool
     @State var isAlertPresented: Bool = false
-    @Environment(\.managedObjectContext) private var context
+    @FocusState private var isFocused: Bool
     @EnvironmentObject var vm: MenuViewModel
 
+    @State var sheetHeight: Double = 0.0
     @State var projectName: String = ""
 
     var body: some View {
         ZStack {
             Color.gray.opacity(isManageProjectSheetPresented ? 0.7 : 0.0)
-                .animation(.spring())
                 .ignoresSafeArea()
                 .onTapGesture {
                     isManageProjectSheetPresented = false
                 }
                 .allowsHitTesting(isManageProjectSheetPresented)
-            GeometryReader { geometry in
+            GeometryReader { geo in
                 VStack {
                     Spacer()
 
@@ -35,6 +35,7 @@ struct ManageProjectSheetView: View {
                         HStack {
                             Spacer()
                             TextField("Project name", text: $projectName)
+                                .focused($isFocused)
                                 .textFieldStyle(.roundedBorder)
                                 .padding(.horizontal, 32)
                                 .onChange(of: vm.selectedProject) { _ in
@@ -45,14 +46,14 @@ struct ManageProjectSheetView: View {
 
                         Button("Back", role: .cancel) {
                             isManageProjectSheetPresented = false
-                            vm.selectedProject?.title = projectName
-                            vm.updateUIAndSaveChanges(context: context)
-
+                            HapticService.shared.play(.light)
                         }.buttonStyle(.borderedProminent)
 
                         Spacer()
+                            .frame(maxHeight: .infinity)
                         Button(role: .destructive, action: {
                             isAlertPresented = true
+                            HapticService.shared.notify(.warning)
                         }, label: {
                             Label("Delete project", systemImage: "trash")
                         })
@@ -64,22 +65,38 @@ struct ManageProjectSheetView: View {
                             }
                             Button("Confirm", role: .destructive) {
                                 vm.deleteProject(vm.selectedProject!)
-                                vm.updateUIAndSaveChanges(context: context)
-                                
+                                vm.updateUIAndSaveChanges()
                                 isAlertPresented = false
                                 isManageProjectSheetPresented = false
+                                HapticService.shared.play(.medium)
                             }
                         }
                         Spacer()
+                            .frame(maxHeight: .infinity)
                     }
-                    .frame(width: geometry.size.width, height: geometry.size.height / 2)
-                    .background(Color(.primary))
+                    .background(Color(.primary).ignoresSafeArea())
                     .roundedUpperCorners(16)
-                    .offset(y: isManageProjectSheetPresented ? 0 : geometry.size.height / 2)
-                    .animation(.spring())
+                    .task {
+                        sheetHeight = geo.size.height
+                    }
+
+                    .animation(vm.keyboardAnimation ?? .spring(duration: 100.0), value: vm.keyboardHeight)
+                    .frame(width: geo.size.width, height: sheetHeight / 2 + vm.keyboardHeight)
+                    .animation(.spring(), value: isManageProjectSheetPresented) ///
+                    .offset(y: isManageProjectSheetPresented ? vm.keyboardHeight : sheetHeight / 2)
                 }
                 .edgesIgnoringSafeArea(.all)
             }
+        }
+        .onChange(of: isManageProjectSheetPresented) { isPresented in
+            if !isPresented {
+                isFocused = false
+                vm.selectedProject?.title = projectName
+                vm.updateUIAndSaveChanges()
+            }
+        }
+        .onTapGesture {
+            isFocused = false
         }
     }
 }

@@ -18,7 +18,6 @@ struct Media_EditorApp: App {
         WindowGroup {
             MenuView()
                 .background(Color(.background))
-                .environment(\.managedObjectContext, context)
         }
         .onChange(of: scenePhase) { _ in
             PersistenceController.shared.saveChanges()

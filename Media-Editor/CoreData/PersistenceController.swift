@@ -19,16 +19,9 @@ class PersistenceController {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
 
-        container.loadPersistentStores { [unowned self] _, error in
+        container.loadPersistentStores { _, error in
             if let error = error {
                 fatalError("Unresolved error \(error)")
-            }
-            if try! container.viewContext.count(for: ProjectEntity.fetchRequest()) == 0 {
-                _ = ProjectEntity(id: UUID(), title: "Preview Project I",
-                                                 lastEditDate: Date.now, isMovie: false, context: container.viewContext)
-
-                _ = ProjectEntity(id: UUID(), title: "Preview Project II",
-                                                  lastEditDate: Date.distantPast, isMovie: true, context: container.viewContext)
             }
         }
     }

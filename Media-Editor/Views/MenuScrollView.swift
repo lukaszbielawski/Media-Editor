@@ -20,11 +20,10 @@ struct MenuScrollView: View {
         ScrollView(showsIndicators: false) {
             LazyVGrid(columns: columns, spacing: 16) {
                 Group {
-                    PlaceholderTileView()
-                        .foregroundStyle(Color(.tint))
+                    MenuPlaceholderTileView()
 
                     ForEach($vm.projects) { $project in
-                        TileView(project: $project, dotsDidTapped: dotsDidTapped)
+                        MenuTileView(project: $project, dotsDidTapped: dotsDidTapped)
                     }
                     .foregroundStyle(Color(.white))
                 }
@@ -35,13 +34,13 @@ struct MenuScrollView: View {
     }
 }
 
-struct TileView: View {
+struct MenuTileView: View {
     @Binding var project: ProjectEntity
 
     var dotsDidTapped: (UUID) -> ()
     var body: some View {
         ZStack(alignment: .top) {
-            NavigationLink(destination: Text(project.title ?? "nil")) {
+            NavigationLink(destination: project.isMovie ? ProjectImageEditorView(project: project) : ProjectImageEditorView(project: project)) {
                 KFImage.url(project.thumbnailURL)
                     .centerCropped()
                     .aspectRatio(1.0, contentMode: .fill)
@@ -58,6 +57,7 @@ struct TileView: View {
                             Image(systemName: "ellipsis.circle.fill")
                                 .onTapGesture {
                                     dotsDidTapped(project.id!)
+                                    HapticService.shared.play(.light)
                                 }
                         }
                     }
@@ -73,13 +73,14 @@ struct TileView: View {
     }
 }
 
-struct PlaceholderTileView: View {
+struct MenuPlaceholderTileView: View {
     @State var isAddProjectViewPresented: Bool = false
+    @State var createdProject: ProjectEntity?
+    @EnvironmentObject var vm: MenuViewModel
+
     var body: some View {
         GeometryReader { geo in
             ZStack {
-//                Color(.primary)
-//                    .centerCropped()
                 Rectangle()
                     .fill(Material.ultraThinMaterial)
                     .background {
@@ -98,14 +99,36 @@ struct PlaceholderTileView: View {
                     Text("Create new project")
                 }
                 .padding(.vertical)
+                
+                NavigationLink(destination: ProjectImageEditorView(project: createdProject), isActive: .constant(createdProject != nil), label: {
+                    EmptyView()
+                })
             }
         }
+        .foregroundStyle(Color(.white))
+        .aspectRatio(1.0, contentMode: .fill)
         .onTapGesture {
             isAddProjectViewPresented = true
+            HapticService.shared.play(.medium)
         }
-        .aspectRatio(1.0, contentMode: .fill)
+        .onChange(of: createdProject) { project in
+            if project != nil {
+                isAddProjectViewPresented = false
+                DispatchQueue.main.async {
+                    vm.updateUIAndSaveChanges()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { 
+                    createdProject = nil
+                }
+                
+               
+            }
+        }
         .sheet(isPresented: $isAddProjectViewPresented) {
-            AddProjectView()
+            AddProjectView(createdProject: $createdProject)
+                .onDisappear {
+                    HapticService.shared.play(.medium)
+                }
         }
     }
 }
@@ -113,7 +136,7 @@ struct PlaceholderTileView: View {
 #Preview {
 //    let preview = PersistenceController.shared.preview
 //    let bindingArray: Binding<[ProjectEntity]> = .constant(preview)
-    var vm = MenuViewModel()
+    let vm = MenuViewModel()
     vm.projects = PersistenceController.preview.fetchAllProjects()
     return MenuScrollView { _ in }.environmentObject(vm)
 }

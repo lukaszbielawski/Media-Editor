@@ -10,7 +10,6 @@ import Kingfisher
 import SwiftUI
 
 struct MenuView: View {
-    @Environment(\.managedObjectContext) private var context
     @State var isManageProjectSheetPresented: Bool = false
     @StateObject var vm = MenuViewModel()
 
@@ -32,14 +31,13 @@ struct MenuView: View {
 
                 ManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
                     .environmentObject(vm)
-                    .environment(\.managedObjectContext, context)
                     .gesture(DragGesture().onEnded { value in
                         if value.translation.height > 50 {
                             isManageProjectSheetPresented = false
                         }
                     })
             }
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 
@@ -52,12 +50,12 @@ struct UpperMenuView: View {
 #Preview {
     let project = PersistenceController.preview.fetchAllProjects().first!
     let binding: Binding<ProjectEntity> = .constant(project)
-    return TileView(project: binding) { _ in }
+    return MenuTileView(project: binding) { _ in }
         .scaledToFit()
 }
 
 #Preview {
-    var vm = MenuViewModel()
+    let vm = MenuViewModel()
     vm.projects = PersistenceController.preview.fetchAllProjects()
     return MenuScrollView { _ in }.environmentObject(vm)
 }

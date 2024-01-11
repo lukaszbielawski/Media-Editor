@@ -11,7 +11,8 @@ import SwiftUI
 
 struct AddProjectView: View {
     @StateObject var vm = AddProjectViewModel()
-
+    @Binding var createdProject: ProjectEntity?
+    
     var body: some View {
         Text("Choose media to your project")
             .padding()
@@ -20,7 +21,7 @@ struct AddProjectView: View {
             ScrollView(showsIndicators: false) {
                 AddProjectGridView()
             }
-            AddProjectSummaryView()
+            AddProjectSummaryView(createdProject: $createdProject)
         }
         .environmentObject(vm)
         .edgesIgnoringSafeArea(.bottom)
@@ -120,6 +121,7 @@ struct AddProjectGridTileView: View {
             }
         }
         .onTapGesture {
+            HapticService.shared.play(.light)
             isSelected = vm.toggleMediaSelection(for: media)
         }
         .task {
@@ -135,6 +137,7 @@ struct AddProjectGridTileView: View {
 
 struct AddProjectSummaryView: View {
     @EnvironmentObject var vm: AddProjectViewModel
+    @Binding var createdProject: ProjectEntity?
     var totalHeight: Double { 100.0 + UIScreen.bottomSafeArea }
     var body: some View {
         ZStack {
@@ -143,19 +146,24 @@ struct AddProjectSummaryView: View {
                 .fill(Material.thickMaterial)
                 .frame(height: totalHeight)
                 .roundedUpperCorners(16)
-            AddProjectSummarySliderView()
+            AddProjectSummarySliderView(createdProject: $createdProject)
                 .padding(.bottom, UIScreen.bottomSafeArea)
         }
-        .animation(.linear, value: vm.projectType)
-//        .offset(y: vm.projectType == .none ? totalHeight : 0)
+        .animation(.spring(), value: vm.projectType)
+        .offset(y: vm.projectType == .none ? totalHeight : 0)
     }
 }
 
 struct AddProjectSummarySliderView: View {
     @EnvironmentObject var vm: AddProjectViewModel
+    
     @State var sliderOffset: Double = 0.0
     @State var sliderWidth: Double = 0.0
     @State var isInteractive: Bool = true
+    @State var alreadySwiped: Bool = false
+    @Binding var createdProject: ProjectEntity?
+    
+    
 
     var maxOffset: Double { return sliderWidth - sliderHeight }
     let sliderHeight = 50.0
@@ -169,17 +177,8 @@ struct AddProjectSummarySliderView: View {
                 .frame(maxWidth: 300, maxHeight: sliderHeight)
 
                 .overlay {
-                    ZStack {
-                        Label("Create a \(vm.projectType == .movie ? "movie" : "photo") project", systemImage: "chevron.right.2")
-                        Label("Create a \(vm.projectType == .movie ? "movie" : "photo") project", systemImage: "chevron.right.2")
-
-                            .foregroundStyle(LinearGradient(
-                                colors: [.white, vm.projectType == .movie ? .accent : .accent2],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            ))
-                    }
-                    .padding(.leading, 16)
+                    Label("Create a \(vm.projectType == .movie ? "movie" : "photo") project", systemImage: "chevron.right.2")
+                        .padding(.leading, 16)
                 }
                 .overlay {
                     GeometryReader { geo in
@@ -204,15 +203,27 @@ struct AddProjectSummarySliderView: View {
                 .gesture(
                     DragGesture()
                         .onChanged { value in
+                            guard !alreadySwiped else { return }
                             sliderOffset = min(max(value.translation.width, 0.0), maxOffset)
-                        }
-                        .onEnded { _ in
                             if sliderOffset > sliderWidth * 0.5 {
                                 withAnimation(Animation.easeOut(duration: (maxOffset - sliderOffset) / maxOffset)) {
                                     sliderOffset = maxOffset
                                 }
+                                HapticService.shared.notify(.success)
                                 isInteractive = false
-                            } else {
+                                alreadySwiped = true
+
+                                Task {
+                                    do {
+                                        createdProject = try await vm.createProject()
+                                    } catch {
+                                        print("There was error creating project: \(error)")
+                                    }
+                                }
+                            }
+                        }
+                        .onEnded { _ in
+                            if !alreadySwiped {
                                 withAnimation(Animation.easeOut(duration: sliderOffset / maxOffset)) {
                                     sliderOffset = 0.0
                                 }
@@ -228,11 +239,11 @@ struct AddProjectSummarySliderView: View {
 #Preview {
     ZStack {
         Color(uiColor: .primary)
-        AddProjectSummarySliderView()
-            .environmentObject(AddProjectViewModel())
+//        AddProjectSummarySliderView(isNavigationActive: .constant(false))
+//            .environmentObject(AddProjectViewModel())
     }
 }
 
-#Preview {
-    AddProjectView()
-}
+//#Preview {
+//    AddProjectView(isNavigationActive: .constant(false))
+//}
