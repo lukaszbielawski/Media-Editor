@@ -12,8 +12,16 @@ class PersistenceController {
     var container: NSPersistentContainer
 
     static let shared = PersistenceController()
+
+    let projectController: ProjectEntityController
+    let mediaController: MediaEntityController
+
     private init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Model")
+
+        let context = container.viewContext
+        projectController = ProjectEntityController(context: context)
+        mediaController = MediaEntityController(context: context)
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
@@ -26,41 +34,7 @@ class PersistenceController {
         }
     }
 
-    func fetchAllProjects() -> [ProjectEntity] {
-        let fetchRequest: NSFetchRequest<ProjectEntity> = ProjectEntity.fetchRequest()
-
-        do {
-            return try container.viewContext.fetch(fetchRequest)
-        } catch {
-            print("Failed to fetch movies: \(error)")
-        }
-        return []
-    }
-
-    func fetchProject(withID id: UUID) -> ProjectEntity? {
-        let fetchRequest: NSFetchRequest<ProjectEntity> = ProjectEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-
-        do {
-            let results = try container.viewContext.fetch(fetchRequest)
-            return results.first
-        } catch {
-            print("Error fetching object with ID \(id): \(error.localizedDescription)")
-            return nil
-        }
-    }
-
-    func saveChanges() {
-        let context = container.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
+    func saveChanges() {}
 
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)

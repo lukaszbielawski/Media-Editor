@@ -17,22 +17,35 @@ struct MenuScrollView: View {
     var dotsDidTapped: (UUID) -> ()
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            LazyVGrid(columns: columns, spacing: 16) {
-                Group {
-                    MenuPlaceholderTileView()
-
-                    ForEach($vm.projects) { $project in
-                        MenuTileView(project: $project, dotsDidTapped: dotsDidTapped)
+        GeometryReader { geo in
+            ScrollView(showsIndicators: false) {
+                UpperMenuView()
+                    .frame(height: geo.size.height * 2 / 5)
+                LazyVGrid(columns: columns, spacing: 16) {
+                    Group {
+                        MenuPlaceholderTileView()
+                        
+                        ForEach($vm.projects) { $project in
+                            MenuTileView(project: $project, dotsDidTapped: dotsDidTapped)
+                        }
+                        .foregroundStyle(Color(.white))
                     }
-                    .foregroundStyle(Color(.white))
+                    .cornerRadius(16.0)
                 }
-                .cornerRadius(16.0)
+                .padding(16)
             }
-            .padding(16)
         }
     }
+    }
+
+
+struct UpperMenuView: View {
+    var body: some View {
+        Image(systemName: "globe")
+        
+    }
 }
+
 
 struct MenuTileView: View {
     @Binding var project: ProjectEntity
@@ -48,7 +61,7 @@ struct MenuTileView: View {
             GeometryReader { geo in
                 VStack {
                     ZStack {
-                        Color(project.isMovie ? .accent2 : .accent)
+                        Color(project.isMovie ? .accent : .accent2)
                             .opacity(0.8)
                             .frame(height: geo.size.height * 0.2)
                         HStack {
@@ -76,6 +89,7 @@ struct MenuTileView: View {
 struct MenuPlaceholderTileView: View {
     @State var isAddProjectViewPresented: Bool = false
     @State var createdProject: ProjectEntity?
+    @State var activateNavigationLink: Bool = false
     @EnvironmentObject var vm: MenuViewModel
 
     var body: some View {
@@ -99,10 +113,12 @@ struct MenuPlaceholderTileView: View {
                     Text("Create new project")
                 }
                 .padding(.vertical)
-                
-                NavigationLink(destination: ProjectImageEditorView(project: createdProject), isActive: .constant(createdProject != nil), label: {
-                    EmptyView()
-                })
+
+                NavigationLink(
+                    destination: ProjectImageEditorView(project: createdProject),
+                    isActive: $activateNavigationLink, label: {
+                        EmptyView()
+                    })
             }
         }
         .foregroundStyle(Color(.white))
@@ -111,21 +127,21 @@ struct MenuPlaceholderTileView: View {
             isAddProjectViewPresented = true
             HapticService.shared.play(.medium)
         }
-        .onChange(of: createdProject) { project in
-            if project != nil {
-                isAddProjectViewPresented = false
-                DispatchQueue.main.async {
-                    vm.updateUIAndSaveChanges()
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { 
-                    createdProject = nil
-                }
-                
-               
-            }
-        }
+
         .sheet(isPresented: $isAddProjectViewPresented) {
-            AddProjectView(createdProject: $createdProject)
+            AddProjectView()
+                .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
+                    guard let value else { return }
+                    
+                    vm.projects.append(value)
+                    createdProject = value
+                    activateNavigationLink = true
+                    vm.objectWillChange.send()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        isAddProjectViewPresented = false
+                    }
+                }
                 .onDisappear {
                     HapticService.shared.play(.medium)
                 }
@@ -137,6 +153,6 @@ struct MenuPlaceholderTileView: View {
 //    let preview = PersistenceController.shared.preview
 //    let bindingArray: Binding<[ProjectEntity]> = .constant(preview)
     let vm = MenuViewModel()
-    vm.projects = PersistenceController.preview.fetchAllProjects()
+    vm.projects = PersistenceController.preview.projectController.fetchAll()
     return MenuScrollView { _ in }.environmentObject(vm)
 }

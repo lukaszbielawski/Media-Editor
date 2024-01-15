@@ -11,6 +11,9 @@ class ProjectEditorViewModel: ObservableObject {
     @Published var project: ProjectEntity
     @Published var media = [MediaEntity]()
     
+    
+    
+    
     init(project: ProjectEntity) {
         self.project = project
         if let mediaEntities = project.projectEntityToMediaEntity {
@@ -19,4 +22,5 @@ class ProjectEditorViewModel: ObservableObject {
             }
         }
     }
+
 }

@@ -16,7 +16,7 @@ extension PHAssetMediaType {
         case .video:
             return .movie
         default:
-            return .none
+            return .unknown
         }
     }
 }

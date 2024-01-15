@@ -10,5 +10,5 @@ import Foundation
 enum ProjectType {
     case photo
     case movie
-    case none
+    case unknown
 }

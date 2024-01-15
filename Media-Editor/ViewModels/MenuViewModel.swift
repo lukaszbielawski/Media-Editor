@@ -11,9 +11,10 @@ import SwiftUI
 
 class MenuViewModel: ObservableObject {
     @Published var selectedProject: ProjectEntity?
-    @Published var projects: [ProjectEntity] = PersistenceController.shared.fetchAllProjects()
+    @Published var projects: [ProjectEntity] = PersistenceController.shared.projectController.fetchAll()
     @Published var keyboardHeight: CGFloat = 0.0
     @Published var keyboardAnimation: Animation?
+    
     
     @Published private var keyboardNotificationService = KeyboardNotificationService()
     
@@ -41,30 +42,28 @@ class MenuViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func updateUIAndSaveChanges() {
-        objectWillChange.send()
-        let controller = PersistenceController.shared
-        controller.container.viewContext.perform {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0){
-                controller.saveChanges()
-            }
-            
-        }
-    }
-    
     func deleteProject(_ projectToDelete: ProjectEntity) {
         let index = projects.firstIndex { $0.id == projectToDelete.id }
         guard let index else { return }
-        do {
-            try projectToDelete.projectEntityToMediaEntity?.forEach { try deleteMediaFile(forEntity: $0) }
-        } catch {
-            print(error)
-        }
-//        projectToDelete.projectEntityToMediaEntity?.removeAll()
+        
         projects.remove(at: index)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            if PersistenceController.shared.projectController.delete(for: projectToDelete.id!) {
+                self?.objectWillChange.send()
+            }
+        }
     }
     
-    func deleteMediaFile(forEntity media: MediaEntity) throws {
-        try FileManager.default.removeItem(atPath: media.filePath!)
+    func updateProjectTitle(title: String) {
+        guard let selectedProject else { return }
+        if PersistenceController.shared.projectController.update(for: selectedProject.id!, entityToUpdate: { entity in
+            entity.title = title
+        }) {
+            DispatchQueue.main.async { [weak self] in
+                self?.objectWillChange.send()
+            }
+        }
     }
+    
+    
 }

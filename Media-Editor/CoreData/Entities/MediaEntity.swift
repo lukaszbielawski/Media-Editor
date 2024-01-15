@@ -17,14 +17,22 @@ public extension MediaEntity {
         return NSFetchRequest<MediaEntity>(entityName: "MediaEntity")
     }
 
-    @NSManaged var filePath: String?
+    @NSManaged var fileName: String?
     @NSManaged var mediaEntityToProjectEntity: ProjectEntity?
 }
 
 extension MediaEntity: Identifiable {
-    convenience init(filePath: String, projectEntity: ProjectEntity, context: NSManagedObjectContext) {
+    convenience init(fileName: String, projectEntity: ProjectEntity, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.filePath = filePath
+        self.fileName = fileName
         self.mediaEntityToProjectEntity = projectEntity
+    }
+}
+
+extension MediaEntity {
+    var absoluteFilePath: String {
+        print(self.fileName)
+        let mediaDirectoryPath: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("UserMedia")
+        return mediaDirectoryPath.appendingPathComponent(self.fileName!).absoluteString.replacingOccurrences(of: "file://", with: "")
     }
 }

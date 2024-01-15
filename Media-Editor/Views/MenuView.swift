@@ -10,23 +10,31 @@ import Kingfisher
 import SwiftUI
 
 struct MenuView: View {
-    @State var isManageProjectSheetPresented: Bool = false
     @StateObject var vm = MenuViewModel()
+
+    @State var isManageProjectSheetPresented: Bool = false
+    @State var performTransition = false {
+        didSet {
+            if oldValue == false {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    performTransition = false
+                }
+            }
+        }
+    }
+
+    @State var createdProjectType: ProjectType = .unknown
 
     var body: some View {
         NavigationView {
             ZStack {
-                GeometryReader { geo in
-                    VStack {
-                        UpperMenuView()
-                            .frame(height: geo.size.height * 2 / 5)
-                        MenuScrollView { id in
-                            let project = PersistenceController.shared.fetchProject(withID: id)
-                            vm.selectedProject = project
-                            isManageProjectSheetPresented = true
-                        }
-                        .environmentObject(vm)
+                VStack {
+                    MenuScrollView { id in
+                        let project = PersistenceController.shared.projectController.fetch(for: id)
+                        vm.selectedProject = project
+                        isManageProjectSheetPresented = true
                     }
+                    .environmentObject(vm)
                 }
 
                 ManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
@@ -37,18 +45,22 @@ struct MenuView: View {
                         }
                     })
             }
-        }.navigationViewStyle(.stack)
-    }
-}
-
-struct UpperMenuView: View {
-    var body: some View {
-        Image(systemName: "globe")
+        }.onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
+            guard value != nil else { return }
+            performTransition = true
+        }
+        .navigationViewStyle(.stack)
+        .overlay {
+            Color(createdProjectType == .movie ? .accent : .accent2)
+                .ignoresSafeArea()
+                .opacity(performTransition ? 1.0 : 0.0)
+                .animation(.easeOut(duration: 1.0), value: performTransition)
+        }
     }
 }
 
 #Preview {
-    let project = PersistenceController.preview.fetchAllProjects().first!
+    let project = PersistenceController.preview.projectController.fetchAll().first!
     let binding: Binding<ProjectEntity> = .constant(project)
     return MenuTileView(project: binding) { _ in }
         .scaledToFit()
@@ -56,12 +68,8 @@ struct UpperMenuView: View {
 
 #Preview {
     let vm = MenuViewModel()
-    vm.projects = PersistenceController.preview.fetchAllProjects()
+    vm.projects = PersistenceController.preview.projectController.fetchAll()
     return MenuScrollView { _ in }.environmentObject(vm)
-}
-
-#Preview {
-    UpperMenuView()
 }
 
 #Preview {

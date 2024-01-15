@@ -18,7 +18,9 @@ struct ManageProjectSheetView: View {
 
     var body: some View {
         ZStack {
-            Color.gray.opacity(isManageProjectSheetPresented ? 0.7 : 0.0)
+            Color.gray
+                .opacity(isManageProjectSheetPresented ? 0.7 : 0.0)
+                .animation(.spring(), value: isManageProjectSheetPresented)
                 .ignoresSafeArea()
                 .onTapGesture {
                     isManageProjectSheetPresented = false
@@ -65,7 +67,6 @@ struct ManageProjectSheetView: View {
                             }
                             Button("Confirm", role: .destructive) {
                                 vm.deleteProject(vm.selectedProject!)
-                                vm.updateUIAndSaveChanges()
                                 isAlertPresented = false
                                 isManageProjectSheetPresented = false
                                 HapticService.shared.play(.medium)
@@ -91,8 +92,7 @@ struct ManageProjectSheetView: View {
         .onChange(of: isManageProjectSheetPresented) { isPresented in
             if !isPresented {
                 isFocused = false
-                vm.selectedProject?.title = projectName
-                vm.updateUIAndSaveChanges()
+                vm.updateProjectTitle(title: projectName)
             }
         }
         .onTapGesture {

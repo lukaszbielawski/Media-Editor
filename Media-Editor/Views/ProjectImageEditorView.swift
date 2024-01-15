@@ -17,11 +17,12 @@ struct ProjectImageEditorView: View {
         ScrollView {
             ForEach(vm.project.media) { media in
                 HStack {
-//                    Image(uiImage: UIImage(contentsOfFile: media.filePath!)!)
-//                        .centerCropped()
-                    Text(media.filePath ?? "nil")
+                    Image(uiImage: UIImage(contentsOfFile: media.absoluteFilePath)!)
+    
+                        .centerCropped()
+                    Text(media.fileName ?? "nil")
                         .onAppear {
-                            print(media.filePath!)
+                            print(media.fileName!)
                         }
                 }
             }
@@ -30,7 +31,7 @@ struct ProjectImageEditorView: View {
 }
 
 #Preview {
-    let project = PersistenceController.preview.fetchAllProjects().first!
+    let project = PersistenceController.preview.projectController.fetchAll().first!
     let binding: Binding<ProjectEntity> = .constant(project)
     return MenuTileView(project: binding) { _ in }
 }

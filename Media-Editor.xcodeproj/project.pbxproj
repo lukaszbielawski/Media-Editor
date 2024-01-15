@@ -20,9 +20,6 @@
 		B2085C262B486DA8004D904A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B2085C252B486DA8004D904A /* Kingfisher */; };
 		B21103472B494F1400CA4981 /* ProjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103462B494F1400CA4981 /* ProjectType.swift */; };
 		B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B211034A2B495A5B00CA4981 /* ImageExtensions.swift */; };
-		B21103502B496B7700CA4981 /* Frameable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B211034F2B496B7700CA4981 /* Frameable.swift */; };
-		B21103522B496C8700CA4981 /* PhotoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103512B496C8700CA4981 /* PhotoEntity.swift */; };
-		B21103542B496DEA00CA4981 /* MovieEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103532B496DEA00CA4981 /* MovieEntity.swift */; };
 		B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B21103552B496F2F00CA4981 /* Model.xcdatamodeld */; };
 		B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103592B49705900CA4981 /* PersistenceController.swift */; };
 		B21103642B49796100CA4981 /* ProjectEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103622B49796100CA4981 /* ProjectEntity.swift */; };
@@ -32,6 +29,10 @@
 		B211036F2B499DE200CA4981 /* ex_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B211036D2B499DE200CA4981 /* ex_image.jpg */; };
 		B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103702B49AB4500CA4981 /* MenuScrollView.swift */; };
 		B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103732B49C02300CA4981 /* MenuViewModel.swift */; };
+		B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */; };
+		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
+		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
+		B24AD9052B55495B00BBD1E8 /* MediaEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */; };
 		B271509C2B4AC94600411F9A /* ManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */; };
 		B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509D2B4AD00500411F9A /* AddProjectView.swift */; };
 		B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */; };
@@ -59,9 +60,6 @@
 		B2085C212B4867D7004D904A /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		B21103462B494F1400CA4981 /* ProjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectType.swift; sourceTree = "<group>"; };
 		B211034A2B495A5B00CA4981 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
-		B211034F2B496B7700CA4981 /* Frameable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frameable.swift; sourceTree = "<group>"; };
-		B21103512B496C8700CA4981 /* PhotoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEntity.swift; sourceTree = "<group>"; };
-		B21103532B496DEA00CA4981 /* MovieEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieEntity.swift; sourceTree = "<group>"; };
 		B21103562B496F2F00CA4981 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		B21103592B49705900CA4981 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		B21103622B49796100CA4981 /* ProjectEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntity.swift; sourceTree = "<group>"; };
@@ -70,6 +68,10 @@
 		B211036D2B499DE200CA4981 /* ex_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ex_image.jpg; sourceTree = "<group>"; };
 		B21103702B49AB4500CA4981 /* MenuScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScrollView.swift; sourceTree = "<group>"; };
 		B21103732B49C02300CA4981 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatedPreferenceKey.swift; sourceTree = "<group>"; };
+		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
+		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
+		B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaEntityController.swift; sourceTree = "<group>"; };
 		B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProjectSheetView.swift; sourceTree = "<group>"; };
 		B271509D2B4AD00500411F9A /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModel.swift; sourceTree = "<group>"; };
@@ -116,14 +118,14 @@
 				B2085C172B48671F004D904A /* Assets.xcassets */,
 				B2085C132B48671E004D904A /* Media_EditorApp.swift */,
 				B2085C192B48671F004D904A /* Preview Content */,
+				B24AD8FA2B5531F900BBD1E8 /* PreferenceKeys */,
 				B211036B2B499DD000CA4981 /* Resources */,
 				B21103582B49703D00CA4981 /* CoreData */,
 				B2B2B10A2B4C026200E3E8A6 /* Errors */,
 				B21103442B494EC800CA4981 /* Enums */,
-				B211034E2B496B6E00CA4981 /* Protocols */,
+				B24AD8FD2B55328C00BBD1E8 /* Protocols */,
 				B21103482B495A4900CA4981 /* Extensions */,
 				B2B2B1072B4BF6CA00E3E8A6 /* Services */,
-				B21103452B494EFD00CA4981 /* Models */,
 				B21103722B49C01A00CA4981 /* ViewModels */,
 				B2085C232B4867E2004D904A /* Views */,
 			);
@@ -158,15 +160,6 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
-		B21103452B494EFD00CA4981 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B21103512B496C8700CA4981 /* PhotoEntity.swift */,
-				B21103532B496DEA00CA4981 /* MovieEntity.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		B21103482B495A4900CA4981 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,21 +175,13 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		B211034E2B496B6E00CA4981 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				B211034F2B496B7700CA4981 /* Frameable.swift */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
 		B21103582B49703D00CA4981 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
 				B21103552B496F2F00CA4981 /* Model.xcdatamodeld */,
+				B24AD9032B553E9600BBD1E8 /* Entities */,
+				B24AD9022B553E8A00BBD1E8 /* Controllers */,
 				B21103592B49705900CA4981 /* PersistenceController.swift */,
-				B21103622B49796100CA4981 /* ProjectEntity.swift */,
-				B200CB372B506A0D00BA3023 /* MediaEntity.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -218,6 +203,40 @@
 				B200CB3C2B506C3000BA3023 /* ProjectEditorViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B24AD8FA2B5531F900BBD1E8 /* PreferenceKeys */ = {
+			isa = PBXGroup;
+			children = (
+				B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */,
+			);
+			path = PreferenceKeys;
+			sourceTree = "<group>";
+		};
+		B24AD8FD2B55328C00BBD1E8 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		B24AD9022B553E8A00BBD1E8 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */,
+				B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		B24AD9032B553E9600BBD1E8 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				B21103622B49796100CA4981 /* ProjectEntity.swift */,
+				B200CB372B506A0D00BA3023 /* MediaEntity.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		B2B2B1072B4BF6CA00E3E8A6 /* Services */ = {
@@ -318,15 +337,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */,
+				B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */,
 				B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */,
 				B200CB2D2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift in Sources */,
+				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
 				B21103642B49796100CA4981 /* ProjectEntity.swift in Sources */,
+				B24AD9052B55495B00BBD1E8 /* MediaEntityController.swift in Sources */,
+				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */,
 				B2B2B1092B4BF6E200E3E8A6 /* PhotoLibraryService.swift in Sources */,
-				B21103522B496C8700CA4981 /* PhotoEntity.swift in Sources */,
-				B21103542B496DEA00CA4981 /* MovieEntity.swift in Sources */,
 				B21103472B494F1400CA4981 /* ProjectType.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
 				B2085C142B48671E004D904A /* Media_EditorApp.swift in Sources */,
@@ -344,7 +365,6 @@
 				B27150A42B4AE77200411F9A /* ScrollViewExtensions.swift in Sources */,
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,
 				B200CB352B505D0700BA3023 /* FlieError.swift in Sources */,
-				B21103502B496B7700CA4981 /* Frameable.swift in Sources */,
 				B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */,
 				B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */,
 			);
