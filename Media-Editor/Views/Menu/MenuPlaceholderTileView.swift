@@ -22,8 +22,6 @@ struct MenuPlaceholderTileView: View {
                         Image("ex_image")
                             .centerCropped()
                     }
-                    .centerCropped()
-
                 VStack {
                     Spacer()
                     Image(systemName: "plus")
@@ -45,26 +43,26 @@ struct MenuPlaceholderTileView: View {
         .foregroundStyle(Color(.white))
         .aspectRatio(1.0, contentMode: .fill)
         .onTapGesture {
-            isAddProjectViewPresented = true
-            HapticService.shared.play(.medium)
+            if !isAddProjectViewPresented {
+                HapticService.shared.play(.medium)
+                isAddProjectViewPresented = true
+            }
+            
         }
 
         .sheet(isPresented: $isAddProjectViewPresented) {
             AddProjectView()
                 .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
                     guard let value else { return }
-                    
+
                     vm.projects.append(value)
                     createdProject = value
                     activateNavigationLink = true
                     vm.objectWillChange.send()
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                         isAddProjectViewPresented = false
                     }
-                }
-                .onDisappear {
-                    HapticService.shared.play(.medium)
                 }
         }
     }

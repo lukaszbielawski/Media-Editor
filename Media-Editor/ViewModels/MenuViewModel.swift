@@ -9,12 +9,12 @@ import Combine
 import CoreData
 import SwiftUI
 
-class MenuViewModel: ObservableObject {
+@MainActor
+final class MenuViewModel: ObservableObject {
     @Published var selectedProject: ProjectEntity?
     @Published var projects: [ProjectEntity] = PersistenceController.shared.projectController.fetchAll()
     @Published var keyboardHeight: CGFloat = 0.0
     @Published var keyboardAnimation: Animation?
-    
     
     @Published private var keyboardNotificationService = KeyboardNotificationService()
     
@@ -25,16 +25,23 @@ class MenuViewModel: ObservableObject {
     }
     
     private func setupSubscribtions() {
-        let animationPublisher = keyboardNotificationService.animationPublisher
-        animationPublisher
+        keyboardNotificationService
+            .keyboardWillShowNotificationPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] value in
-                keyboardAnimation = value
+            .catch { error in
+                print(error)
+                return Empty<(Animation, CGFloat), Never>()
+            }
+            .assertNoFailure()
+            .sink { [weak self] animation, keyboardHeight in
+                guard let self else { return }
+                self.keyboardAnimation = animation
+                self.keyboardHeight = keyboardHeight
             }
             .store(in: &cancellables)
         
-        let keyboardHeightPublisher = keyboardNotificationService.keyboardHeightPublisher
-        keyboardHeightPublisher
+        keyboardNotificationService
+            .keyboardWillHideNotificationPublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] value in
                 keyboardHeight = value
@@ -59,11 +66,7 @@ class MenuViewModel: ObservableObject {
         if PersistenceController.shared.projectController.update(for: selectedProject.id!, entityToUpdate: { entity in
             entity.title = title
         }) {
-            DispatchQueue.main.async { [weak self] in
-                self?.objectWillChange.send()
-            }
+            objectWillChange.send()
         }
     }
-    
-    
 }

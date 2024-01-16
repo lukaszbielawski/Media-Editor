@@ -12,7 +12,7 @@ import Photos
 import SwiftUI
 
 @MainActor
-class AddProjectViewModel: ObservableObject {
+final class AddProjectViewModel: ObservableObject {
     @Published var media = [PHAsset]()
     @Published private var photoService = PhotoLibraryService()
     @Published var selectedAssets = [PHAsset]()
@@ -28,10 +28,11 @@ class AddProjectViewModel: ObservableObject {
     }
     
     private func setupSubscription() {
-        let mediaPublisher = photoService.getMediaPublisher()
-        subscription = mediaPublisher
-            .sink { [unowned self] fetchResult in
-                media = (0 ..< fetchResult.count).map { fetchResult.object(at: $0) }
+        subscription = photoService
+            .mediaPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] assets in
+                media = assets
             }
     }
     
@@ -40,17 +41,17 @@ class AddProjectViewModel: ObservableObject {
     }
     
     func toggleMediaSelection(for asset: PHAsset) -> Bool {
-        if let index = selectedAssets.firstIndex(of: asset) {
+        let index = selectedAssets.firstIndex(of: asset)
+            
+        if let index {
             selectedAssets.remove(at: index)
-            objectWillChange.send()
-            recalculateProjectType()
-            return false
         } else {
             selectedAssets.append(asset)
-            objectWillChange.send()
-            recalculateProjectType()
-            return true
         }
+        objectWillChange.send()
+        recalculateProjectType()
+        
+        return index == nil
     }
     
     private func recalculateProjectType() {
@@ -58,7 +59,7 @@ class AddProjectViewModel: ObservableObject {
             projectType = .unknown
             return
         }
-        let mediaType = selectedAssets.contains { $0.mediaType == .video } || selectedAssets.count > 1 ? PHAssetMediaType.video : PHAssetMediaType.image
+        let mediaType = selectedAssets.contains { $0.mediaType == .video } ? PHAssetMediaType.video : PHAssetMediaType.image
         projectType = mediaType.toMediaType
     }
     

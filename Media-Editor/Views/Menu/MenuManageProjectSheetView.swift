@@ -1,5 +1,5 @@
 //
-//  MenuManageProjectSheetView.swift
+//  ManageProjectSheetView.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 07/01/2024.
@@ -75,20 +75,25 @@ struct MenuManageProjectSheetView: View {
                         Spacer()
                             .frame(maxHeight: .infinity)
                     }
-                    .background(Color(.primary).ignoresSafeArea())
-                    .roundedUpperCorners(16)
+                    .background(
+                        Color(.primary).ignoresSafeArea()
+                        .roundedUpperCorners(16)
+                        
+                    )
+                    
                     .task {
                         sheetHeight = geo.size.height
                     }
 
                     .animation(vm.keyboardAnimation ?? .spring(duration: 100.0), value: vm.keyboardHeight)
-                    .frame(width: geo.size.width, height: sheetHeight / 2 + vm.keyboardHeight)
-                    .animation(.spring(), value: isManageProjectSheetPresented) ///
-                    .offset(y: isManageProjectSheetPresented ? vm.keyboardHeight : sheetHeight / 2)
+                    .frame(width: geo.size.width, height: sheetHeight / 2 + vm.keyboardHeight * 0.4)
+                    .animation(.spring(), value: isManageProjectSheetPresented)
+                    .offset(y: isManageProjectSheetPresented ? 0 : sheetHeight / 2)
                 }
                 .edgesIgnoringSafeArea(.all)
             }
         }
+        
         .onChange(of: isManageProjectSheetPresented) { isPresented in
             if !isPresented {
                 isFocused = false

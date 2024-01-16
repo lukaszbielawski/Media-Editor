@@ -5,14 +5,15 @@
 //  Created by Łukasz Bielawski on 08/01/2024.
 //
 
+import Combine
 import Foundation
 import Photos
 import UIKit
 
 class PhotoLibraryService: ObservableObject {
-    @Published var media: PHFetchResult<PHAsset> = .init()
+    var mediaPublisher = PassthroughSubject<[PHAsset], Never>()
     
-    var imageCachingManager = PHCachingImageManager()
+    private var imageCachingManager: PHCachingImageManager!
     
     func requestAuthorization() {
         PHPhotoLibrary.requestAuthorization { [unowned self] status in
@@ -25,20 +26,25 @@ class PhotoLibraryService: ObservableObject {
         }
     }
     
-    func getMediaPublisher() -> Published<PHFetchResult<PHAsset>>.Publisher {
-        return _media.projectedValue
-    }
-
     func fetchAllMediaFromPhotoLibrary() {
+        imageCachingManager = PHCachingImageManager()
         imageCachingManager.allowsCachingHighQualityImages = true
         let fetchOptions = PHFetchOptions()
         fetchOptions.includeHiddenAssets = false
         fetchOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d", PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        DispatchQueue.main.async { [unowned self] in
-            media = PHAsset.fetchAssets(with: fetchOptions)
-        }
+        mediaPublisher.send(
+            {
+                let fetchRequest = PHAsset.fetchAssets(with: fetchOptions)
+                var assets = [PHAsset]()
+                
+                fetchRequest.enumerateObjects { asset, _, _ in
+                    assets.append(asset)
+                }
+                return assets
+            }()
+        )
     }
     
     func fetchAsset(for localIdentifier: String) -> PHAsset? {
@@ -78,7 +84,7 @@ class PhotoLibraryService: ObservableObject {
         
         let resources = PHAssetResource.assetResources(for: asset)
         
-        guard let resource = resources.first else { throw PhotoError.noAssetResources(localIdentifier: localIdentifier)  }
+        guard let resource = resources.first else { throw PhotoError.noAssetResources(localIdentifier: localIdentifier) }
         
         let fileExtension = URL(fileURLWithPath: resource.originalFilename).pathExtension
         

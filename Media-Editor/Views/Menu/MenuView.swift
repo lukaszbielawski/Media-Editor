@@ -11,8 +11,10 @@ import SwiftUI
 
 struct MenuView: View {
     @StateObject var vm = MenuViewModel()
-
+    
+    @State var createdProjectType: ProjectType = .unknown
     @State var isManageProjectSheetPresented: Bool = false
+    
     @State var performTransition = false {
         didSet {
             if oldValue == false {
@@ -23,19 +25,18 @@ struct MenuView: View {
         }
     }
 
-    @State var createdProjectType: ProjectType = .unknown
+
 
     var body: some View {
         NavigationView {
             ZStack {
-                VStack {
-                    MenuScrollView { id in
-                        let project = PersistenceController.shared.projectController.fetch(for: id)
-                        vm.selectedProject = project
-                        isManageProjectSheetPresented = true
-                    }
-                    .environmentObject(vm)
+                MenuScrollView { id in
+                    let project = PersistenceController.shared.projectController.fetch(for: id)
+                    vm.selectedProject = project
+                    isManageProjectSheetPresented = true
                 }
+                .ignoresSafeArea(.keyboard)
+                .environmentObject(vm)
 
                 MenuManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
                     .environmentObject(vm)
@@ -45,8 +46,10 @@ struct MenuView: View {
                         }
                     })
             }
+
         }.onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
-            guard value != nil else { return }
+            guard let value else { return }
+            createdProjectType = value.isMovie ? .movie : .photo
             performTransition = true
         }
         .navigationViewStyle(.stack)
