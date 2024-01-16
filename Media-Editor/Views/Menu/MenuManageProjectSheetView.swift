@@ -1,5 +1,5 @@
 //
-//  ManageProjectSheetView.swift
+//  MenuManageProjectSheetView.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 07/01/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ManageProjectSheetView: View {
+struct MenuManageProjectSheetView: View {
     @Binding var isManageProjectSheetPresented: Bool
     @State var isAlertPresented: Bool = false
     @FocusState private var isFocused: Bool

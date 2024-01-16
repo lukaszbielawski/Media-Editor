@@ -33,7 +33,14 @@
 		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
 		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
 		B24AD9052B55495B00BBD1E8 /* MediaEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */; };
-		B271509C2B4AC94600411F9A /* ManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */; };
+		B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA9472B56B7C30081FBFD /* MenuUpperView.swift */; };
+		B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA9492B56B7F00081FBFD /* MenuTileView.swift */; };
+		B24EA94C2B56B8260081FBFD /* MenuPlaceholderTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA94B2B56B8260081FBFD /* MenuPlaceholderTileView.swift */; };
+		B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA94D2B56B8C20081FBFD /* AddProjectGridView.swift */; };
+		B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA94F2B56B8D50081FBFD /* AddProjectGridTileView.swift */; };
+		B24EA9522B56B8F10081FBFD /* AddProjectSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA9512B56B8F10081FBFD /* AddProjectSummaryView.swift */; };
+		B24EA9542B56B9070081FBFD /* AddProjectSummarySliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA9532B56B9070081FBFD /* AddProjectSummarySliderView.swift */; };
+		B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */; };
 		B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509D2B4AD00500411F9A /* AddProjectView.swift */; };
 		B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */; };
 		B27150A42B4AE77200411F9A /* ScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27150A32B4AE77200411F9A /* ScrollViewExtensions.swift */; };
@@ -72,7 +79,14 @@
 		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
 		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
 		B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaEntityController.swift; sourceTree = "<group>"; };
-		B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProjectSheetView.swift; sourceTree = "<group>"; };
+		B24EA9472B56B7C30081FBFD /* MenuUpperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuUpperView.swift; sourceTree = "<group>"; };
+		B24EA9492B56B7F00081FBFD /* MenuTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTileView.swift; sourceTree = "<group>"; };
+		B24EA94B2B56B8260081FBFD /* MenuPlaceholderTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPlaceholderTileView.swift; sourceTree = "<group>"; };
+		B24EA94D2B56B8C20081FBFD /* AddProjectGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectGridView.swift; sourceTree = "<group>"; };
+		B24EA94F2B56B8D50081FBFD /* AddProjectGridTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectGridTileView.swift; sourceTree = "<group>"; };
+		B24EA9512B56B8F10081FBFD /* AddProjectSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectSummaryView.swift; sourceTree = "<group>"; };
+		B24EA9532B56B9070081FBFD /* AddProjectSummarySliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectSummarySliderView.swift; sourceTree = "<group>"; };
+		B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManageProjectSheetView.swift; sourceTree = "<group>"; };
 		B271509D2B4AD00500411F9A /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModel.swift; sourceTree = "<group>"; };
 		B27150A32B4AE77200411F9A /* ScrollViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewExtensions.swift; sourceTree = "<group>"; };
@@ -143,11 +157,9 @@
 		B2085C232B4867E2004D904A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B2085C212B4867D7004D904A /* MenuView.swift */,
-				B21103702B49AB4500CA4981 /* MenuScrollView.swift */,
-				B271509B2B4AC94600411F9A /* ManageProjectSheetView.swift */,
-				B271509D2B4AD00500411F9A /* AddProjectView.swift */,
-				B200CB3A2B506B2700BA3023 /* ProjectImageEditorView.swift */,
+				B24EA9432B56B6D80081FBFD /* Menu */,
+				B24EA9462B56B7040081FBFD /* ProjectEditor */,
+				B24EA9442B56B6E70081FBFD /* AddProject */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -237,6 +249,39 @@
 				B200CB372B506A0D00BA3023 /* MediaEntity.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		B24EA9432B56B6D80081FBFD /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				B2085C212B4867D7004D904A /* MenuView.swift */,
+				B21103702B49AB4500CA4981 /* MenuScrollView.swift */,
+				B24EA9472B56B7C30081FBFD /* MenuUpperView.swift */,
+				B24EA9492B56B7F00081FBFD /* MenuTileView.swift */,
+				B24EA94B2B56B8260081FBFD /* MenuPlaceholderTileView.swift */,
+				B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		B24EA9442B56B6E70081FBFD /* AddProject */ = {
+			isa = PBXGroup;
+			children = (
+				B271509D2B4AD00500411F9A /* AddProjectView.swift */,
+				B24EA94D2B56B8C20081FBFD /* AddProjectGridView.swift */,
+				B24EA94F2B56B8D50081FBFD /* AddProjectGridTileView.swift */,
+				B24EA9512B56B8F10081FBFD /* AddProjectSummaryView.swift */,
+				B24EA9532B56B9070081FBFD /* AddProjectSummarySliderView.swift */,
+			);
+			path = AddProject;
+			sourceTree = "<group>";
+		};
+		B24EA9462B56B7040081FBFD /* ProjectEditor */ = {
+			isa = PBXGroup;
+			children = (
+				B200CB3A2B506B2700BA3023 /* ProjectImageEditorView.swift */,
+			);
+			path = ProjectEditor;
 			sourceTree = "<group>";
 		};
 		B2B2B1072B4BF6CA00E3E8A6 /* Services */ = {
@@ -338,20 +383,26 @@
 			files = (
 				B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */,
 				B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */,
+				B24EA9522B56B8F10081FBFD /* AddProjectSummaryView.swift in Sources */,
 				B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */,
+				B24EA94C2B56B8260081FBFD /* MenuPlaceholderTileView.swift in Sources */,
 				B200CB2D2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift in Sources */,
 				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
+				B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
 				B21103642B49796100CA4981 /* ProjectEntity.swift in Sources */,
 				B24AD9052B55495B00BBD1E8 /* MediaEntityController.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
+				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
 				B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */,
 				B2B2B1092B4BF6E200E3E8A6 /* PhotoLibraryService.swift in Sources */,
 				B21103472B494F1400CA4981 /* ProjectType.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
 				B2085C142B48671E004D904A /* Media_EditorApp.swift in Sources */,
-				B271509C2B4AC94600411F9A /* ManageProjectSheetView.swift in Sources */,
+				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
+				B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */,
+				B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */,
 				B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */,
 				B200CB3B2B506B2800BA3023 /* ProjectImageEditorView.swift in Sources */,
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
@@ -362,6 +413,7 @@
 				B2BD0E292B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift in Sources */,
 				B200CB392B506A0D00BA3023 /* MediaEntity.swift in Sources */,
 				B200CB3D2B506C3000BA3023 /* ProjectEditorViewModel.swift in Sources */,
+				B24EA9542B56B9070081FBFD /* AddProjectSummarySliderView.swift in Sources */,
 				B27150A42B4AE77200411F9A /* ScrollViewExtensions.swift in Sources */,
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,
 				B200CB352B505D0700BA3023 /* FlieError.swift in Sources */,

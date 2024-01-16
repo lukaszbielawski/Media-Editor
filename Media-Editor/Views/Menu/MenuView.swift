@@ -37,7 +37,7 @@ struct MenuView: View {
                     .environmentObject(vm)
                 }
 
-                ManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
+                MenuManageProjectSheetView(isManageProjectSheetPresented: $isManageProjectSheetPresented)
                     .environmentObject(vm)
                     .gesture(DragGesture().onEnded { value in
                         if value.translation.height > 50 {
@@ -57,19 +57,6 @@ struct MenuView: View {
                 .animation(.easeOut(duration: 1.0), value: performTransition)
         }
     }
-}
-
-#Preview {
-    let project = PersistenceController.preview.projectController.fetchAll().first!
-    let binding: Binding<ProjectEntity> = .constant(project)
-    return MenuTileView(project: binding) { _ in }
-        .scaledToFit()
-}
-
-#Preview {
-    let vm = MenuViewModel()
-    vm.projects = PersistenceController.preview.projectController.fetchAll()
-    return MenuScrollView { _ in }.environmentObject(vm)
 }
 
 #Preview {
