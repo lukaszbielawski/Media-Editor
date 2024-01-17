@@ -24,7 +24,7 @@ struct MenuScrollView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     Group {
                         MenuPlaceholderTileView()
-                        
+
                         ForEach($vm.projects) { $project in
                             MenuTileView(project: $project, dotsDidTapped: dotsDidTapped)
                         }
@@ -36,14 +36,7 @@ struct MenuScrollView: View {
             }
         }
     }
-    }
-
-
-
-
-
-
-
+}
 
 #Preview {
 //    let preview = PersistenceController.shared.preview

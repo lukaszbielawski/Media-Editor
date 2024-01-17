@@ -11,12 +11,12 @@ import SwiftUI
 
 @MainActor
 final class MenuViewModel: ObservableObject {
-    @Published var selectedProject: ProjectEntity?
-    @Published var projects: [ProjectEntity] = PersistenceController.shared.projectController.fetchAll()
+    @Published var selectedProject: ImageProjectEntity?
+    @Published var projects: [ImageProjectEntity] = PersistenceController.shared.projectController.fetchAll()
     @Published var keyboardHeight: CGFloat = 0.0
     @Published var keyboardAnimation: Animation?
     
-    @Published private var keyboardNotificationService = KeyboardNotificationService()
+    private var keyboardNotificationService = KeyboardNotificationService()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -49,7 +49,7 @@ final class MenuViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func deleteProject(_ projectToDelete: ProjectEntity) {
+    func deleteProject(_ projectToDelete: ImageProjectEntity) {
         let index = projects.firstIndex { $0.id == projectToDelete.id }
         guard let index else { return }
         

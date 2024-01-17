@@ -9,7 +9,7 @@ import CoreData
 import Foundation
 
 final class MediaEntityController: EntityController {
-    typealias Entity = MediaEntity
+    typealias Entity = PhotoEntity
     
     typealias PrimaryKey = String
     
@@ -19,8 +19,8 @@ final class MediaEntityController: EntityController {
     
     var context: NSManagedObjectContext
     
-    func fetch(for key: String) -> MediaEntity? {
-        let fetchRequest: NSFetchRequest<MediaEntity> = MediaEntity.fetchRequest()
+    func fetch(for key: String) -> PhotoEntity? {
+        let fetchRequest: NSFetchRequest<PhotoEntity> = PhotoEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "fileName == %@", key)
         
         do {
@@ -31,8 +31,8 @@ final class MediaEntityController: EntityController {
         }
     }
     
-    func fetchAll() -> [MediaEntity] {
-        let fetchRequest: NSFetchRequest<MediaEntity> = MediaEntity.fetchRequest()
+    func fetchAll() -> [PhotoEntity] {
+        let fetchRequest: NSFetchRequest<PhotoEntity> = PhotoEntity.fetchRequest()
         
         do {
             return try context.fetch(fetchRequest)
@@ -42,7 +42,7 @@ final class MediaEntityController: EntityController {
         }
     }
     
-    func update(for key: String, entityToUpdate: (MediaEntity) -> ()) -> Bool {
+    func update(for key: String, entityToUpdate: (PhotoEntity) -> ()) -> Bool {
         guard let entity = fetch(for: key) else { return false }
         entityToUpdate(entity)
         return saveChanges()
@@ -60,7 +60,7 @@ final class MediaEntityController: EntityController {
         }
     }
     
-    private func deleteMediaFile(for media: MediaEntity) throws {
+    private func deleteMediaFile(for media: PhotoEntity) throws {
         try FileManager.default.removeItem(atPath: media.absoluteFilePath)
     }
 }

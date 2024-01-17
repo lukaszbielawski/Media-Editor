@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MenuPlaceholderTileView: View {
     @State var isAddProjectViewPresented: Bool = false
-    @State var createdProject: ProjectEntity?
+    @State var createdProject: ImageProjectEntity?
     @State var activateNavigationLink: Bool = false
     @EnvironmentObject var vm: MenuViewModel
 
@@ -34,7 +34,7 @@ struct MenuPlaceholderTileView: View {
                 .padding(.vertical)
 
                 NavigationLink(
-                    destination: ProjectImageEditorView(project: createdProject),
+                    destination: ImageProjectView(project: createdProject),
                     isActive: $activateNavigationLink, label: {
                         EmptyView()
                     })

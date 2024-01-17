@@ -14,11 +14,19 @@ import SwiftUI
 @MainActor
 final class AddProjectViewModel: ObservableObject {
     @Published var media = [PHAsset]()
-    @Published private var photoService = PhotoLibraryService()
     @Published var selectedAssets = [PHAsset]()
+    @Published var createdProject: ImageProjectEntity? = nil
     @Published var projectType: ProjectType = .unknown
     
-    @Published var createdProject: ProjectEntity? = nil
+    private let photoService = PhotoLibraryService()
+    
+    private var calculatedProjectType: ProjectType {
+        if selectedAssets.isEmpty {
+            return .unknown
+        }
+        let mediaType = selectedAssets.contains { $0.mediaType == .video } ? PHAssetMediaType.video : PHAssetMediaType.image
+        return mediaType.toMediaType
+    }
     
     private var subscription: AnyCancellable?
     
@@ -49,18 +57,8 @@ final class AddProjectViewModel: ObservableObject {
             selectedAssets.append(asset)
         }
         objectWillChange.send()
-        recalculateProjectType()
-        
+        projectType = calculatedProjectType
         return index == nil
-    }
-    
-    private func recalculateProjectType() {
-        if selectedAssets.isEmpty {
-            projectType = .unknown
-            return
-        }
-        let mediaType = selectedAssets.contains { $0.mediaType == .video } ? PHAssetMediaType.video : PHAssetMediaType.image
-        projectType = mediaType.toMediaType
     }
     
     func runCreateProjectTask() async throws {
@@ -69,11 +67,11 @@ final class AddProjectViewModel: ObservableObject {
         }.value
     }
     
-    func createProject() async throws -> ProjectEntity {
+    func createProject() async throws -> ImageProjectEntity {
         let container = PersistenceController.shared.container
         let isMovie = projectType == ProjectType.movie
-        let projectEntity = ProjectEntity(id: UUID(), title: "New \(isMovie ? "movie" : "photo") project",
-                                          lastEditDate: Date.now, isMovie: isMovie, context: container.viewContext)
+        let projectEntity = ImageProjectEntity(id: UUID(), title: "New \(isMovie ? "movie" : "photo") project",
+                                          isMovie: isMovie, context: container.viewContext)
             
         try await withThrowingTaskGroup(of: String.self) { [unowned self] group in
             for asset in selectedAssets {
@@ -85,7 +83,7 @@ final class AddProjectViewModel: ObservableObject {
                 }
             }
             for try await fileName in group {
-                let mediaEntity = MediaEntity(fileName: fileName, projectEntity: projectEntity, context: container.viewContext)
+                let mediaEntity = PhotoEntity(fileName: fileName, projectEntity: projectEntity, context: container.viewContext)
                 projectEntity.projectEntityToMediaEntity?.insert(mediaEntity)
             }
               

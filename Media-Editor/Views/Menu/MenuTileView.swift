@@ -9,12 +9,12 @@ import SwiftUI
 import Kingfisher
 
 struct MenuTileView: View {
-    @Binding var project: ProjectEntity
+    @Binding var project: ImageProjectEntity
 
     var dotsDidTapped: (UUID) -> ()
     var body: some View {
         ZStack(alignment: .top) {
-            NavigationLink(destination: project.isMovie ? ProjectImageEditorView(project: project) : ProjectImageEditorView(project: project)) {
+            NavigationLink(destination: project.isMovie ? ImageProjectView(project: project) : ImageProjectView(project: project)) {
                 KFImage.url(project.thumbnailURL)
                     .centerCropped()
                     .aspectRatio(1.0, contentMode: .fill)

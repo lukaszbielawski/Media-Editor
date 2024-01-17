@@ -14,7 +14,6 @@ struct AddProjectSummarySliderView: View {
     @State var sliderWidth: Double = 0.0
     @State var isInteractive: Bool = true
     @State var alreadySwiped: Bool = false
-  
 
     var maxOffset: Double { return sliderWidth - sliderHeight }
     let sliderHeight = 50.0
@@ -22,13 +21,33 @@ struct AddProjectSummarySliderView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             Capsule(style: .circular)
-                .fill(Color(vm.projectType == .movie ? .accent : .accent2))
+                .fill(Color(
+                    {
+                        return switch vm.projectType {
+                        case .movie:
+                            .accent
+                        case .photo:
+                            .accent2
+                        case .unknown:
+                            .primary
+                        }
+                    }() as ColorResource
+                ))
                 .overlay(Material.ultraThinMaterial)
                 .clipShape(Capsule(style: .circular))
                 .frame(maxWidth: 300, maxHeight: sliderHeight)
 
                 .overlay {
-                    Label("Create a \(vm.projectType == .movie ? "movie" : "photo") project", systemImage: "chevron.right.2")
+                    Label({
+                        return switch vm.projectType {
+                        case .photo:
+                            "Create photo project"
+                        case .movie:
+                            "Create movie project"
+                        case .unknown:
+                            "Choose assets first"
+                        }
+                    }(), systemImage: "chevron.right.2")
                         .padding(.leading, 16)
                 }
                 .overlay {
@@ -59,19 +78,18 @@ struct AddProjectSummarySliderView: View {
 
                             sliderOffset = min(max(value.translation.width, 0.0), maxOffset)
                             if sliderOffset > sliderWidth * 0.5 {
-                                    
                                 DispatchQueue.main.async {
                                     alreadySwiped = true
                                     isInteractive = false
                                     HapticService.shared.notify(.success)
-                                    
+
                                     let animationDuration = (maxOffset - sliderOffset) / maxOffset
-                                    
+
                                     withAnimation(Animation.easeOut(duration: animationDuration)) {
                                         sliderOffset = maxOffset
                                     }
                                 }
-                                
+
                                 Task { try await vm.runCreateProjectTask() }
                             }
                         }

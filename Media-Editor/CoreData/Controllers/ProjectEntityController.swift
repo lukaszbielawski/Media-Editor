@@ -9,7 +9,7 @@ import CoreData
 import Foundation
 
 final class ProjectEntityController: EntityController {
-    typealias Entity = ProjectEntity
+    typealias Entity = ImageProjectEntity
     
     var context: NSManagedObjectContext
     
@@ -17,8 +17,8 @@ final class ProjectEntityController: EntityController {
         self.context = context
     }
     
-    func fetch(for key: UUID) -> ProjectEntity? {
-        let fetchRequest: NSFetchRequest<ProjectEntity> = ProjectEntity.fetchRequest()
+    func fetch(for key: UUID) -> ImageProjectEntity? {
+        let fetchRequest: NSFetchRequest<ImageProjectEntity> = ImageProjectEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", key as CVarArg)
 
         do {
@@ -30,8 +30,8 @@ final class ProjectEntityController: EntityController {
         }
     }
     
-    func fetchAll() -> [ProjectEntity] {
-        let fetchRequest: NSFetchRequest<ProjectEntity> = ProjectEntity.fetchRequest()
+    func fetchAll() -> [ImageProjectEntity] {
+        let fetchRequest: NSFetchRequest<ImageProjectEntity> = ImageProjectEntity.fetchRequest()
 
         do {
             return try context.fetch(fetchRequest)
@@ -41,7 +41,7 @@ final class ProjectEntityController: EntityController {
         }
     }
     
-    func update(for key: UUID, entityToUpdate: (ProjectEntity) -> ()) -> Bool {
+    func update(for key: UUID, entityToUpdate: (ImageProjectEntity) -> ()) -> Bool {
         guard let entity = fetch(for: key) else { return false }
         entityToUpdate(entity)
         return saveChanges()
