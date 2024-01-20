@@ -23,7 +23,7 @@ struct AddProjectSummarySliderView: View {
             Capsule(style: .circular)
                 .fill(Color(
                     {
-                        return switch vm.projectType {
+                        switch vm.projectType {
                         case .movie:
                             .accent
                         case .photo:
@@ -39,7 +39,7 @@ struct AddProjectSummarySliderView: View {
 
                 .overlay {
                     Label({
-                        return switch vm.projectType {
+                        switch vm.projectType {
                         case .photo:
                             "Create photo project"
                         case .movie:
@@ -50,14 +50,12 @@ struct AddProjectSummarySliderView: View {
                     }(), systemImage: "chevron.right.2")
                         .padding(.leading, 16)
                 }
-                .overlay {
-                    GeometryReader { geo in
-                        Color.clear
-                            .task {
-                                sliderWidth = geo.size.width
-                            }
+                .geometryAccesor { geo in
+                    DispatchQueue.main.async {
+                        sliderWidth = geo.size.width
                     }
                 }
+
             Capsule(style: .circular)
                 .fill(Color(vm.projectType == .movie ? .accent : .accent2))
                 .frame(width: sliderHeight + sliderOffset, height: sliderHeight)

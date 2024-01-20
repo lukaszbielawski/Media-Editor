@@ -15,15 +15,15 @@ final class MenuViewModel: ObservableObject {
     @Published var projects: [ImageProjectEntity] = PersistenceController.shared.projectController.fetchAll()
     @Published var keyboardHeight: CGFloat = 0.0
     @Published var keyboardAnimation: Animation?
-    
+
     private var keyboardNotificationService = KeyboardNotificationService()
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     init() {
         setupSubscribtions()
     }
-    
+
     private func setupSubscribtions() {
         keyboardNotificationService
             .keyboardWillShowNotificationPublisher
@@ -39,7 +39,7 @@ final class MenuViewModel: ObservableObject {
                 self.keyboardHeight = keyboardHeight
             }
             .store(in: &cancellables)
-        
+
         keyboardNotificationService
             .keyboardWillHideNotificationPublisher
             .receive(on: DispatchQueue.main)
@@ -48,11 +48,11 @@ final class MenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     func deleteProject(_ projectToDelete: ImageProjectEntity) {
         let index = projects.firstIndex { $0.id == projectToDelete.id }
         guard let index else { return }
-        
+
         projects.remove(at: index)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             if PersistenceController.shared.projectController.delete(for: projectToDelete.id!) {
@@ -60,7 +60,7 @@ final class MenuViewModel: ObservableObject {
             }
         }
     }
-    
+
     func updateProjectTitle(title: String) {
         guard let selectedProject else { return }
         if PersistenceController.shared.projectController.update(for: selectedProject.id!, entityToUpdate: { entity in

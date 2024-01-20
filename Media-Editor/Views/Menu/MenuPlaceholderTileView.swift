@@ -47,7 +47,6 @@ struct MenuPlaceholderTileView: View {
                 HapticService.shared.play(.medium)
                 isAddProjectViewPresented = true
             }
-            
         }
 
         .sheet(isPresented: $isAddProjectViewPresented) {

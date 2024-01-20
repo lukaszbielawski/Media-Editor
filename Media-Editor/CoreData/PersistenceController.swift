@@ -39,11 +39,16 @@ class PersistenceController {
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)
 
-        let firstProject = ImageProjectEntity(id: UUID(), title: "Preview Project I", isMovie: false, context: controller.container.viewContext)
+        let firstProject = ImageProjectEntity(id: UUID(),
+                                              title: "Preview Project I",
+                                              isMovie: false,
+                                              context: controller.container.viewContext)
 
-        let secondProject = ImageProjectEntity(id: UUID(), title: "Preview Project II", isMovie: true, context: controller.container.viewContext)
+        let secondProject = ImageProjectEntity(id: UUID(),
+                                               title: "Preview Project II",
+                                               isMovie: true,
+                                               context: controller.container.viewContext)
 
         return controller
     }()
-    
 }

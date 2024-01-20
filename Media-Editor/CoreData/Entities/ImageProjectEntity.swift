@@ -26,7 +26,13 @@ public extension ImageProjectEntity {
 }
 
 extension ImageProjectEntity: Identifiable {
-    convenience init(id: UUID, title: String, lastEditDate: Date? = nil, isMovie: Bool, context: NSManagedObjectContext, mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>()) {
+    convenience init(id: UUID,
+                     title: String,
+                     lastEditDate: Date? = nil,
+                     isMovie: Bool,
+                     context: NSManagedObjectContext,
+                     mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>())
+    {
         self.init(context: context)
         self.id = id
         self.title = title
@@ -45,26 +51,28 @@ extension ImageProjectEntity: Identifiable {
     }
 
     var sourcePath: URL {
-        return isMovie ? Bundle.main.url(forResource: "ex_image", withExtension: "jpg")! : Bundle.main.url(forResource: "ex_movie", withExtension: "mp4")!
+        return self.isMovie
+            ? Bundle.main.url(forResource: "ex_image", withExtension: "jpg")!
+            : Bundle.main.url(forResource: "ex_movie", withExtension: "mp4")!
     }
 
     var formattedDate: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy"
-        return dateFormatter.string(from: lastEditDate ?? Date.now )
+        return dateFormatter.string(from: self.lastEditDate ?? Date.now)
     }
-    
+
     func setFrame(width: Int, height: Int) {
         self.frameWidth = NSNumber(value: width)
         self.frameHeight = NSNumber(value: height)
     }
-    
+
     func getFrame() -> (width: CGFloat, height: CGFloat) {
         return (self.frameWidth?.doubleValue ?? -1.0, self.frameHeight?.doubleValue ?? -1.0)
     }
-    
+
     var isFrameLandscape: Bool {
-        let (width, height) = getFrame()
+        let (width, height) = self.getFrame()
         return width > height
     }
 }

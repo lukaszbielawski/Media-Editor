@@ -61,7 +61,9 @@ struct MenuManageProjectSheetView: View {
                         })
                         .padding(.bottom)
                         .buttonStyle(.borderedProminent)
-                        .alert("Are you sure you want to delete \(vm.selectedProject?.title ?? "nil")?", isPresented: $isAlertPresented) {
+                        .alert("Are you sure you want to delete \(vm.selectedProject?.title ?? "nil")?",
+                               isPresented: $isAlertPresented)
+                        {
                             Button("Go back", role: .cancel) {
                                 isAlertPresented = false
                             }
@@ -77,10 +79,9 @@ struct MenuManageProjectSheetView: View {
                     }
                     .background(
                         Color(.primary).ignoresSafeArea()
-                        .roundedUpperCorners(16)
-                        
+                            .roundedUpperCorners(16)
                     )
-                    
+
                     .task {
                         sheetHeight = geo.size.height
                     }
@@ -93,7 +94,7 @@ struct MenuManageProjectSheetView: View {
                 .edgesIgnoringSafeArea(.all)
             }
         }
-        
+
         .onChange(of: isManageProjectSheetPresented) { isPresented in
             if !isPresented {
                 isFocused = false

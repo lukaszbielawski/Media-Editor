@@ -5,16 +5,19 @@
 //  Created by Łukasz Bielawski on 16/01/2024.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct MenuTileView: View {
     @Binding var project: ImageProjectEntity
 
-    var dotsDidTapped: (UUID) -> ()
+    var dotsDidTapped: (UUID) -> Void
     var body: some View {
         ZStack(alignment: .top) {
-            NavigationLink(destination: project.isMovie ? ImageProjectView(project: project) : ImageProjectView(project: project)) {
+            NavigationLink(destination: project.isMovie
+                ? ImageProjectView(project: project)
+                : ImageProjectView(project: project))
+            {
                 KFImage.url(project.thumbnailURL)
                     .centerCropped()
                     .aspectRatio(1.0, contentMode: .fill)

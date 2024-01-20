@@ -19,7 +19,7 @@ extension UIScreen {
 
         return (keyWindow?.safeAreaInsets.bottom) ?? 0
     }
-    
+
     static var topSafeArea: CGFloat {
         let keyWindow = UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }

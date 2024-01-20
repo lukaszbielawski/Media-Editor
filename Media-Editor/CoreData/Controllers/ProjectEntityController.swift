@@ -10,13 +10,13 @@ import Foundation
 
 final class ProjectEntityController: EntityController {
     typealias Entity = ImageProjectEntity
-    
+
     var context: NSManagedObjectContext
-    
+
     init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
+
     func fetch(for key: UUID) -> ImageProjectEntity? {
         let fetchRequest: NSFetchRequest<ImageProjectEntity> = ImageProjectEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", key as CVarArg)
@@ -29,7 +29,7 @@ final class ProjectEntityController: EntityController {
             return nil
         }
     }
-    
+
     func fetchAll() -> [ImageProjectEntity] {
         let fetchRequest: NSFetchRequest<ImageProjectEntity> = ImageProjectEntity.fetchRequest()
 
@@ -40,20 +40,20 @@ final class ProjectEntityController: EntityController {
             return []
         }
     }
-    
-    func update(for key: UUID, entityToUpdate: (ImageProjectEntity) -> ()) -> Bool {
+
+    func update(for key: UUID, entityToUpdate: (ImageProjectEntity) -> Void) -> Bool {
         guard let entity = fetch(for: key) else { return false }
         entityToUpdate(entity)
         return saveChanges()
     }
-    
+
     func delete(for key: UUID) -> Bool {
         guard let entity = fetch(for: key) else { return false }
-        
+
         let success = entity.projectEntityToMediaEntity?
             .map { PersistenceController.shared.mediaController.delete(for: $0.fileName!) }
             .first { $0 == false } ?? true
-        
+
         if success {
             context.delete(entity)
             return saveChanges()

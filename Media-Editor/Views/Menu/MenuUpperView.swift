@@ -11,6 +11,5 @@ import SwiftUI
 struct MenuUpperView: View {
     var body: some View {
         Image(systemName: "globe")
-        
     }
 }

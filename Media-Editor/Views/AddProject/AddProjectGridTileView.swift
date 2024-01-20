@@ -5,8 +5,8 @@
 //  Created by Łukasz Bielawski on 16/01/2024.
 //
 
-import SwiftUI
 import Photos
+import SwiftUI
 
 struct AddProjectGridTileView: View {
     @State var thumbnail: UIImage?
@@ -73,8 +73,10 @@ struct AddProjectGridTileView: View {
         }
         .task {
             thumbnail = try? await vm.fetchPhoto(for: media, desiredSize:
-                .init(width: UIScreen.main.nativeBounds.width * (UIDevice.current.userInterfaceIdiom == .phone ? 0.33 : 0.2),
-                      height: UIScreen.main.nativeBounds.width * (UIDevice.current.userInterfaceIdiom == .phone ? 0.33 : 0.2)))
+                .init(width: UIScreen.main.nativeBounds.width *
+                    (UIDevice.current.userInterfaceIdiom == .phone ? 0.33 : 0.2),
+                    height: UIScreen.main.nativeBounds.width *
+                        (UIDevice.current.userInterfaceIdiom == .phone ? 0.33 : 0.2)))
 
         }.onDisappear {
             thumbnail = nil

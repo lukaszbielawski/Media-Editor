@@ -1,0 +1,17 @@
+disabled_rules:
+- opening_brace
+- force_cast
+- force_try
+- trailing_comma
+
+identifier_name:
+    excluded:
+    - vm
+    - vc
+    - id
+    - x
+    - y
+    - z
+    - i
+        
+    

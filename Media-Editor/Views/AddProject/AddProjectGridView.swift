@@ -11,7 +11,8 @@ struct AddProjectGridView: View {
     @EnvironmentObject var vm: AddProjectViewModel
 
     private let columns =
-        Array(repeating: GridItem(.flexible(), spacing: 4), count: UIDevice.current.userInterfaceIdiom == .phone ? 3 : 5)
+        Array(repeating: GridItem(.flexible(), spacing: 4),
+              count: UIDevice.current.userInterfaceIdiom == .phone ? 3 : 5)
 
     var body: some View {
         VStack {

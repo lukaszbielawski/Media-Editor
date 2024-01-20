@@ -10,11 +10,12 @@ import SwiftUI
 
 struct MenuScrollView: View {
     private let columns =
-        Array(repeating: GridItem(.flexible(), spacing: 16), count: UIDevice.current.userInterfaceIdiom == .phone ? 2 : 4)
+        Array(repeating: GridItem(.flexible(), spacing: 16),
+              count: UIDevice.current.userInterfaceIdiom == .phone ? 2 : 4)
 
     @EnvironmentObject var vm: MenuViewModel
 
-    var dotsDidTapped: (UUID) -> ()
+    var dotsDidTapped: (UUID) -> Void
 
     var body: some View {
         GeometryReader { geo in

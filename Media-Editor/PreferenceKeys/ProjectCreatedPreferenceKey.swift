@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ProjectCreatedPreferenceKey: PreferenceKey {
-    static var defaultValue: ImageProjectEntity? = nil
+    static var defaultValue: ImageProjectEntity?
 
     static func reduce(value: inout ImageProjectEntity?, nextValue: () -> ImageProjectEntity?) {
         value = nextValue()

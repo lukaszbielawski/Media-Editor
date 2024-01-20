@@ -18,7 +18,7 @@ protocol EntityController<Entity>: AnyObject {
 
     func fetch(for key: PrimaryKey) -> Entity?
     func fetchAll() -> [Entity]
-    func update(for key: PrimaryKey, entityToUpdate: (Entity) -> ()) -> Bool
+    func update(for key: PrimaryKey, entityToUpdate: (Entity) -> Void) -> Bool
     func delete(for key: PrimaryKey) -> Bool
 }
 

@@ -25,16 +25,17 @@ struct ImageProjectView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
     }
 
-    let lowerToolbarHeight = 100.0
-    @State var totalLowerToolbarHeight: Double? = nil
-
+    @State var totalLowerToolbarHeight: Double?
     @State var isSaved: Bool = false
-    @State var totalNavBarHeight: Double? = nil
+    @State var totalNavBarHeight: Double?
+
+    let lowerToolbarHeight = 100.0
 
     var body: some View {
         VStack(spacing: 0) {
-            ImageProjectPlaneView(totalNavBarHeight: $totalNavBarHeight, totalLowerToolbarHeight: $totalLowerToolbarHeight)
-            Color.mint
+            ImageProjectPlaneView(totalNavBarHeight: $totalNavBarHeight,
+                                  totalLowerToolbarHeight: $totalLowerToolbarHeight)
+            Color.accentColor
                 .frame(height: lowerToolbarHeight)
         }
         .background {
@@ -59,7 +60,7 @@ struct ImageProjectView: View {
                             isSaved = true
                         }
                     }
-                    .foregroundStyle(Color(.tint2))
+                    .foregroundStyle(Color.white)
             }
         }
     }
@@ -71,13 +72,13 @@ struct ImageProjectPlaneView: View {
     @State private var scale = 1.0
     @State private var lastScaleValue = 1.0
     @State private var geoProxy: GeometryProxy?
-    @State private var frameViewRect: CGRect? = nil
+    @State private var frameViewRect: CGRect?
     @State private var planeSize = CGSize()
     @State private var position = CGPoint()
     @State private var furthestPlanePointAllowed: CGPoint?
-    
-    @GestureState private var lastPosition: CGPoint? = nil
-    
+
+    @GestureState private var lastPosition: CGPoint?
+
     @Binding var totalNavBarHeight: Double?
     @Binding var totalLowerToolbarHeight: Double?
 
@@ -98,24 +99,19 @@ struct ImageProjectPlaneView: View {
 
                 .contentShape(Rectangle())
                 .zIndex(Double(Int.min + 1))
-                .overlay {
-                    GeometryReader { geo in
+                .geometryAccesor { geo in
+                    DispatchQueue.main.async {
+                        guard let totalLowerToolbarHeight else { return }
+                        print(geo.size)
+                        geoProxy = geo
+                        position = CGPoint(x: geo.size.width / 2, y: (geo.size.height) / 2)
 
-                        Color.clear
-                            .task {
-                                guard let totalLowerToolbarHeight else { return }
-                                print(geo.size)
-                                geoProxy = geo
-                                position = CGPoint(x: geo.size.width / 2, y: (geo.size.height + totalLowerToolbarHeight) / 2)
-
-                                furthestPlanePointAllowed = CGPoint(x: geo.size.width, y: geo.size.height + totalLowerToolbarHeight)
-                            }
-                            .border(Color.pink)
+                        furthestPlanePointAllowed =
+                            CGPoint(x: geo.size.width,
+                                    y: geo.size.height + totalLowerToolbarHeight)
                     }
                 }
-
             ImageProjectFrameView(totalLowerToolbarHeight: $totalLowerToolbarHeight, geo: geoProxy)
-                .border(Color.red)
                 .zIndex(Double(Int.min + 2))
                 .overlay {
                     Color.clear
@@ -128,7 +124,9 @@ struct ImageProjectPlaneView: View {
         .onPreferenceChange(ImageProjectFramePreferenceKey.self) { frameViewRect in
             guard let frameViewRect, let geoProxy else { return }
             self.frameViewRect = frameViewRect
-            planeSize = CGSize(width: frameViewRect.width + geoProxy.size.width * 2.0, height: frameViewRect.height + geoProxy.size.height * 2.0)
+            planeSize =
+                CGSize(width: frameViewRect.width + geoProxy.size.width * 2.0,
+                       height: frameViewRect.height + geoProxy.size.height * 2.0)
         }
         .gesture(
             DragGesture()
@@ -138,11 +136,23 @@ struct ImageProjectPlaneView: View {
                     newPosition.y += value.translation.height
 
                     position = {
-                        guard let furthestPlanePointAllowed, let frameViewRect, let totalNavBarHeight, let totalLowerToolbarHeight else { return newPosition }
+                        guard let furthestPlanePointAllowed,
+                              let frameViewRect,
+                              let totalNavBarHeight,
+                              let totalLowerToolbarHeight
+                        else {
+                            return newPosition
+                        }
+
                         let (newX, newY) = (newPosition.x, newPosition.y)
-                        let (maxX, maxY) = (furthestPlanePointAllowed.x.intFloor + frameViewRect.width.intFloor / 2,
-                                            furthestPlanePointAllowed.y.intFloor - totalLowerToolbarHeight.intFloor + frameViewRect.height.intFloor / 2)
-                        let (minX, minY) = (-frameViewRect.width.intFloor / 2, -frameViewRect.height.intFloor / 2 + totalNavBarHeight.intFloor)
+                        let (maxX, maxY) =
+                            (furthestPlanePointAllowed.x.intFloor + frameViewRect.width.intFloor / 2,
+                             furthestPlanePointAllowed.y.intFloor -
+                                 totalLowerToolbarHeight.intFloor + frameViewRect.height.intFloor / 2)
+                        print(totalNavBarHeight.intFloor)
+                        let (minX, minY) =
+                            (-frameViewRect.width.intFloor / 2,
+                             -frameViewRect.height.intFloor / 2 + totalNavBarHeight.intFloor)
 
                         if (minX + frameViewPadding...maxX -
                             frameViewPadding).contains(newX.intFloor),
@@ -190,7 +200,7 @@ struct ImageProjectFrameView: View {
     @State var frameHeight: CGFloat = 0.0
     @State var orientation: Image.Orientation = .up
 
-    @State var frameViewRect: CGRect? = nil
+    @State var frameViewRect: CGRect?
 
     private let framePaddingFactor: CGFloat = 0.05
     @Binding var totalLowerToolbarHeight: Double?
@@ -207,7 +217,9 @@ struct ImageProjectFrameView: View {
                         guard let totalLowerToolbarHeight else { return }
 
                         let (width, height) = vm.project.getFrame()
-                        let (geoWidth, geoHeight) = (geo.size.width * (1.0 - 2 * framePaddingFactor), (geo.size.height - totalLowerToolbarHeight) * (1.0 - 2 * framePaddingFactor))
+                        let (geoWidth, geoHeight) =
+                            (geo.size.width * (1.0 - 2 * framePaddingFactor),
+                             (geo.size.height - totalLowerToolbarHeight) * (1.0 - 2 * framePaddingFactor))
                         let aspectRatio = height / width
                         let geoAspectRatio = geoHeight / geoWidth
 
@@ -219,11 +231,17 @@ struct ImageProjectFrameView: View {
                             frameWidth = geoHeight / aspectRatio
                         }
 
-                        let centerPoint = CGPoint(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY - totalLowerToolbarHeight * 0.5)
+                        let centerPoint =
+                            CGPoint(x: geo.frame(in: .global).midX,
+                                    y: geo.frame(in: .global).midY - totalLowerToolbarHeight * 0.5)
 
-                        let topLeftCorner = CGPoint(x: centerPoint.x - frameWidth * 0.5, y: centerPoint.y - frameHeight * 0.5)
+                        let topLeftCorner =
+                            CGPoint(x: centerPoint.x - frameWidth * 0.5,
+                                    y: centerPoint.y - frameHeight * 0.5)
 
-                        frameViewRect = CGRect(origin: topLeftCorner, size: CGSize(width: frameWidth, height: frameHeight))
+                        frameViewRect =
+                            CGRect(origin: topLeftCorner,
+                                   size: CGSize(width: frameWidth, height: frameHeight))
                     }
                     .preference(key: ImageProjectFramePreferenceKey.self, value: frameViewRect)
             }
@@ -241,11 +259,3 @@ struct ImageProjectLayerView: View {
 //                    .zIndex(Double(positionZ))
     }
 }
-
-// #Preview {
-//    ImageProjectLayerView()
-// }
-//
-// #Preview {
-//    ImageProjectPlaneView()
-// }

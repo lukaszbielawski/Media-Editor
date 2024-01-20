@@ -35,8 +35,15 @@ struct PhotoModel: Identifiable {
     }
 
     var absoluteFilePath: String {
-        let mediaDirectoryPath: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("UserMedia")
-        return mediaDirectoryPath.appendingPathComponent(fileName).absoluteString.replacingOccurrences(of: "file://", with: "")
+        let mediaDirectoryPath: URL =
+            FileManager
+                .default
+                .urls(for: .documentDirectory, in: .userDomainMask)
+                .first!
+                .appendingPathComponent("UserMedia")
+        return mediaDirectoryPath
+            .appendingPathComponent(fileName)
+            .absoluteString.replacingOccurrences(of: "file://", with: "")
     }
 
     private func createCGImage(absoluteFilePath: String) throws -> CGImage? {

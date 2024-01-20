@@ -13,7 +13,7 @@ enum PhotoError: Error, LocalizedError {
     case thumbnailError
     case invalidMediaType
     case other
-    
+
     var errorDescription: String? {
         switch self {
         case .invalidLocalIdentifier(let localIdentifier):

@@ -13,13 +13,14 @@ struct NavBarAccessor: UIViewControllerRepresentable {
     private let proxyController = ViewController()
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<NavBarAccessor>) ->
-                              UIViewController {
+        UIViewController
+    {
         proxyController.callback = callback
         return proxyController
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavBarAccessor>) {
-    }
+    func updateUIViewController(_ uiViewController: UIViewController,
+                                context: UIViewControllerRepresentableContext<NavBarAccessor>) {}
 
     typealias UIViewControllerType = UIViewController
 
@@ -28,8 +29,8 @@ struct NavBarAccessor: UIViewControllerRepresentable {
 
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            if let navBar = self.navigationController {
-                self.callback(navBar.navigationBar)
+            if let navBar = navigationController {
+                callback(navBar.navigationBar)
             }
         }
     }

@@ -51,9 +51,15 @@ extension PhotoEntity: Identifiable {
 
 extension PhotoEntity {
     var absoluteFilePath: String {
-        let mediaDirectoryPath: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("UserMedia")
-        return mediaDirectoryPath.appendingPathComponent(self.fileName!).absoluteString.replacingOccurrences(of: "file://", with: "")
+        let mediaDirectoryPath: URL =
+            FileManager
+                .default
+                .urls(for: .documentDirectory, in: .userDomainMask)
+                .first!
+                .appendingPathComponent("UserMedia")
+        return mediaDirectoryPath
+            .appendingPathComponent(self.fileName!)
+            .absoluteString
+            .replacingOccurrences(of: "file://", with: "")
     }
-    
-  
 }

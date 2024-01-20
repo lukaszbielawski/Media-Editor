@@ -11,10 +11,10 @@ import SwiftUI
 
 struct MenuView: View {
     @StateObject var vm = MenuViewModel()
-    
+
     @State var createdProjectType: ProjectType = .unknown
     @State var isManageProjectSheetPresented: Bool = false
-    
+
     @State var performTransition = false {
         didSet {
             if oldValue == false {
@@ -24,8 +24,6 @@ struct MenuView: View {
             }
         }
     }
-
-
 
     var body: some View {
         NavigationView {

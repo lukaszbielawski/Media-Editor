@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ImageProjectFramePreferenceKey: PreferenceKey {
-    static var defaultValue: CGRect? = nil
+    static var defaultValue: CGRect?
 
     static func reduce(value: inout CGRect?, nextValue: () -> CGRect?) {
         value = nextValue()
