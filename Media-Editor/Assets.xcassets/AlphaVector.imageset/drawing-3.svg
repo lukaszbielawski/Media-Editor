@@ -1,0 +1,11 @@
+<svg width="29.999999999999996" height="29.999999999999996" xmlns="http://www.w3.org/2000/svg">
+ <title>Drawing</title>
+
+ <g>
+  <title>Layer 1</title>
+  <rect stroke-width="0" id="svg_1" height="15" width="15" y="0" x="0" stroke="#000" fill="#9d9d9d"/>
+  <rect stroke-width="0" id="svg_3" height="15" width="15" y="15" x="15" stroke="#000" fill="#9d9d9d"/>
+  <rect stroke-width="0" id="svg_4" height="15" width="15" x="15" stroke="#000" fill="#eeeef5" y="0"/>
+  <path id="svg_5" d="m0,15l15,0l0,15l-15,0l0,-15z" opacity="undefined" stroke-width="0" stroke="#000" fill="#eeeef5"/>
+ </g>
+</svg>

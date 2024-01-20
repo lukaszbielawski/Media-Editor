@@ -59,7 +59,7 @@ extension ImageProjectEntity: Identifiable {
         self.frameHeight = NSNumber(value: height)
     }
     
-    func getFrame() -> (CGFloat, CGFloat) {
+    func getFrame() -> (width: CGFloat, height: CGFloat) {
         return (self.frameWidth?.doubleValue ?? -1.0, self.frameHeight?.doubleValue ?? -1.0)
     }
     

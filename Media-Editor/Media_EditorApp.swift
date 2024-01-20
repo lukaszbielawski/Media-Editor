@@ -22,5 +22,6 @@ struct Media_EditorApp: App {
         .onChange(of: scenePhase) { _ in
             PersistenceController.shared.saveChanges()
         }
+        
     }
 }

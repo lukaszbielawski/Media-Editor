@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ImageProjectView: View {
     @StateObject var vm: ImageProjectViewModel
+    @Environment(\.dismiss) var dismiss
 
     init(project: ImageProjectEntity?) {
         _vm = StateObject(wrappedValue: ImageProjectViewModel(project: project!))
 
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithOpaqueBackground()
-        coloredAppearance.backgroundColor = UIColor(Color(.primary))
+        coloredAppearance.backgroundColor = UIColor(Color(.accent))
         coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.tint]
         coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.tint]
 
@@ -25,75 +26,137 @@ struct ImageProjectView: View {
     }
 
     let lowerToolbarHeight = 100.0
+    @State var totalLowerToolbarHeight: Double? = nil
+
+    @State var isSaved: Bool = false
+    @State var totalNavBarHeight: Double? = nil
 
     var body: some View {
-        ZStack {
-            Color(.background)
-                .zIndex(Double(Int.min))
-                .ignoresSafeArea()
-            VStack(spacing: 0) {
-                ImageProjectPlaneView()
-                Color.mint
-                    .frame(height: lowerToolbarHeight)
+        VStack(spacing: 0) {
+            ImageProjectPlaneView(totalNavBarHeight: $totalNavBarHeight, totalLowerToolbarHeight: $totalLowerToolbarHeight)
+            Color.mint
+                .frame(height: lowerToolbarHeight)
+        }
+        .background {
+            NavBarAccessor { navBar in
+                totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
             }
-            .environmentObject(vm)
-        }     .ignoresSafeArea()
+        }.onAppear {
+            totalLowerToolbarHeight = lowerToolbarHeight + UIScreen.bottomSafeArea
+        }
+        .navigationBarBackButtonHidden(true)
+        .environmentObject(vm)
+        .ignoresSafeArea()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Label(isSaved ? "Back" : "Save", systemImage: isSaved ? "chevron.left" : "square.and.arrow.down")
+                    .labelStyle(.titleAndIcon)
+                    .onTapGesture {
+                        if isSaved {
+                            dismiss()
+                        } else {
+                            // TODO: save action
+                            isSaved = true
+                        }
+                    }
+                    .foregroundStyle(Color(.tint2))
+            }
+        }
     }
 }
 
 struct ImageProjectPlaneView: View {
-    @EnvironmentObject var vm: ImageProjectViewModel
+    @EnvironmentObject private var vm: ImageProjectViewModel
 
-    @State var scale = 1.0
-    @State var lastScaleValue = 1.0
+    @State private var scale = 1.0
+    @State private var lastScaleValue = 1.0
+    @State private var geoProxy: GeometryProxy?
+    @State private var frameViewRect: CGRect? = nil
+    @State private var planeSize = CGSize()
+    @State private var position = CGPoint()
+    @State private var furthestPlanePointAllowed: CGPoint?
+    
+    @GestureState private var lastPosition: CGPoint? = nil
+    
+    @Binding var totalNavBarHeight: Double?
+    @Binding var totalLowerToolbarHeight: Double?
+
     let minScale = 1.0
-    let maxScale = 5.0
-    @State var geoProxy: GeometryProxy?
-    @State var dragged = false
+    let maxScale = 10.0
+    let previewMinScale = 0.2
+    let previewMaxScale = 20.0
 
-    @State var position = CGPoint()
-    @GestureState private var fingerPosition: CGPoint? = nil
-    @GestureState private var startPosition: CGPoint? = nil
+    let frameViewPadding = 16
 
     var body: some View {
         ZStack {
             Color.clear
+                .frame(minWidth: planeSize.width,
+                       maxWidth: .infinity,
+                       minHeight: planeSize.height,
+                       maxHeight: .infinity)
+
+                .contentShape(Rectangle())
                 .zIndex(Double(Int.min + 1))
                 .overlay {
                     GeometryReader { geo in
 
                         Color.clear
-
-                            .onAppear {
+                            .task {
+                                guard let totalLowerToolbarHeight else { return }
+                                print(geo.size)
                                 geoProxy = geo
-                                    position = CGPoint(x: geo.frame(in: .global).width / 2, y: geo.frame(in: .global).height / 2)
+                                position = CGPoint(x: geo.size.width / 2, y: (geo.size.height + totalLowerToolbarHeight) / 2)
 
-                                print(geo.frame(in: .global).midX, geo.frame(in: .global).midY)
-                                print(geo.safeAreaInsets)
+                                furthestPlanePointAllowed = CGPoint(x: geo.size.width, y: geo.size.height + totalLowerToolbarHeight)
                             }
+                            .border(Color.pink)
                     }
                 }
 
-            ImageProjectFrameView(geo: geoProxy)
+            ImageProjectFrameView(totalLowerToolbarHeight: $totalLowerToolbarHeight, geo: geoProxy)
+                .border(Color.red)
                 .zIndex(Double(Int.min + 2))
-//                ForEach(vm.media) { image in
-//                    if image.positionZ != nil {
-//                        ImageProjectLayerView(image: image)
-//                    }
-//                }
+                .overlay {
+                    Color.clear
+                        .border(Color.green)
+                        .padding(16)
+                }
         }
-   
+        .border(Color.blue)
         .position(position)
+        .onPreferenceChange(ImageProjectFramePreferenceKey.self) { frameViewRect in
+            guard let frameViewRect, let geoProxy else { return }
+            self.frameViewRect = frameViewRect
+            planeSize = CGSize(width: frameViewRect.width + geoProxy.size.width * 2.0, height: frameViewRect.height + geoProxy.size.height * 2.0)
+        }
         .gesture(
             DragGesture()
                 .onChanged { value in
-                    var newPosition = startPosition ?? position
+                    var newPosition = lastPosition ?? position
                     newPosition.x += value.translation.width
                     newPosition.y += value.translation.height
-                    dragged = true
-                    position = newPosition
+
+                    position = {
+                        guard let furthestPlanePointAllowed, let frameViewRect, let totalNavBarHeight, let totalLowerToolbarHeight else { return newPosition }
+                        let (newX, newY) = (newPosition.x, newPosition.y)
+                        let (maxX, maxY) = (furthestPlanePointAllowed.x.intFloor + frameViewRect.width.intFloor / 2,
+                                            furthestPlanePointAllowed.y.intFloor - totalLowerToolbarHeight.intFloor + frameViewRect.height.intFloor / 2)
+                        let (minX, minY) = (-frameViewRect.width.intFloor / 2, -frameViewRect.height.intFloor / 2 + totalNavBarHeight.intFloor)
+
+                        if (minX + frameViewPadding...maxX -
+                            frameViewPadding).contains(newX.intFloor),
+                            (minY + frameViewPadding...maxY - frameViewPadding).contains(newY.intFloor)
+                        {
+                            return newPosition
+                        } else {
+                            return position
+                        }
+
+                    }() as CGPoint
+                    print(position, UIScreen.topSafeArea.intFloor)
                 }
-                .updating($startPosition) { _, startPosition, _ in
+                .updating($lastPosition) { _, startPosition, _ in
                     startPosition = startPosition ?? position
                 }
         )
@@ -102,9 +165,11 @@ struct ImageProjectPlaneView: View {
         .gesture(
             MagnificationGesture()
                 .onChanged { value in
-                    let delta = value / lastScaleValue
-                    scale *= delta
-                    lastScaleValue = value
+                    DispatchQueue.main.async {
+                        let delta = value / lastScaleValue
+                        scale = min(max(scale * delta, previewMinScale), previewMaxScale)
+                        lastScaleValue = value
+                    }
                 }
                 .onEnded { _ in
                     if scale > maxScale {
@@ -125,21 +190,26 @@ struct ImageProjectFrameView: View {
     @State var frameHeight: CGFloat = 0.0
     @State var orientation: Image.Orientation = .up
 
-    private let padding: CGFloat = 0.05
+    @State var frameViewRect: CGRect? = nil
+
+    private let framePaddingFactor: CGFloat = 0.05
+    @Binding var totalLowerToolbarHeight: Double?
 
     var geo: GeometryProxy?
     var body: some View {
         if let geo {
             ZStack {
-                Image("alpha_pattern")
+                Image("AlphaVector")
                     .resizable(resizingMode: .tile)
                     .frame(width: frameWidth, height: frameHeight)
                     .shadow(radius: 10.0)
                     .onAppear {
+                        guard let totalLowerToolbarHeight else { return }
+
                         let (width, height) = vm.project.getFrame()
-                        let (geoWidth, geoHeight) = (geo.size.height * (1 - 2 * padding), geo.size.width * (1 - 2 * padding))
+                        let (geoWidth, geoHeight) = (geo.size.width * (1.0 - 2 * framePaddingFactor), (geo.size.height - totalLowerToolbarHeight) * (1.0 - 2 * framePaddingFactor))
                         let aspectRatio = height / width
-                        let geoAspectRatio = geoWidth / geoHeight
+                        let geoAspectRatio = geoHeight / geoWidth
 
                         if aspectRatio < geoAspectRatio {
                             frameWidth = geoWidth
@@ -148,7 +218,14 @@ struct ImageProjectFrameView: View {
                             frameHeight = geoHeight
                             frameWidth = geoHeight / aspectRatio
                         }
+
+                        let centerPoint = CGPoint(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY - totalLowerToolbarHeight * 0.5)
+
+                        let topLeftCorner = CGPoint(x: centerPoint.x - frameWidth * 0.5, y: centerPoint.y - frameHeight * 0.5)
+
+                        frameViewRect = CGRect(origin: topLeftCorner, size: CGSize(width: frameWidth, height: frameHeight))
                     }
+                    .preference(key: ImageProjectFramePreferenceKey.self, value: frameViewRect)
             }
         }
     }

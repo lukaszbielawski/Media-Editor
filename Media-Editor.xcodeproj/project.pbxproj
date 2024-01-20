@@ -29,6 +29,8 @@
 		B211036F2B499DE200CA4981 /* ex_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B211036D2B499DE200CA4981 /* ex_image.jpg */; };
 		B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103702B49AB4500CA4981 /* MenuScrollView.swift */; };
 		B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103732B49C02300CA4981 /* MenuViewModel.swift */; };
+		B22744BC2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22744BB2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift */; };
+		B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */; };
 		B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */; };
 		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
 		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
@@ -49,6 +51,8 @@
 		B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B2B10D2B4C17D800E3E8A6 /* PHAssetExtensions.swift */; };
 		B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BD0E262B4EC2F900D53B77 /* UIScreenExtensions.swift */; };
 		B2BD0E292B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */; };
+		B2CC6DFD2B59394A00A8D34D /* CGCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CC6DFC2B59394A00A8D34D /* CGCorners.swift */; };
+		B2CC6DFF2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */; };
 		B2F918A72B5811F400540F33 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* PhotoModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
 		B2F918AD2B58554300540F33 /* CGSizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */; };
@@ -77,6 +81,8 @@
 		B211036D2B499DE200CA4981 /* ex_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ex_image.jpg; sourceTree = "<group>"; };
 		B21103702B49AB4500CA4981 /* MenuScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScrollView.swift; sourceTree = "<group>"; };
 		B21103732B49C02300CA4981 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
+		B22744BB2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryFloatingPointExtensions.swift; sourceTree = "<group>"; };
+		B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarAccessor.swift; sourceTree = "<group>"; };
 		B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatedPreferenceKey.swift; sourceTree = "<group>"; };
 		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
 		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
@@ -97,6 +103,8 @@
 		B2B2B10D2B4C17D800E3E8A6 /* PHAssetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetExtensions.swift; sourceTree = "<group>"; };
 		B2BD0E262B4EC2F900D53B77 /* UIScreenExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtensions.swift; sourceTree = "<group>"; };
 		B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetMediaTypeExtensions.swift; sourceTree = "<group>"; };
+		B2CC6DFC2B59394A00A8D34D /* CGCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGCorners.swift; sourceTree = "<group>"; };
+		B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectFramePreferenceKey.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
 		B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtensions.swift; sourceTree = "<group>"; };
@@ -140,6 +148,7 @@
 				B211036B2B499DD000CA4981 /* Resources */,
 				B21103582B49703D00CA4981 /* CoreData */,
 				B2B2B10A2B4C026200E3E8A6 /* Errors */,
+				B22744BE2B5C19CA000740DF /* Utilities */,
 				B21103442B494EC800CA4981 /* Enums */,
 				B24AD8FD2B55328C00BBD1E8 /* Protocols */,
 				B21103482B495A4900CA4981 /* Extensions */,
@@ -187,6 +196,7 @@
 				B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */,
 				B200CB2C2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift */,
 				B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */,
+				B22744BB2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -221,10 +231,19 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		B22744BE2B5C19CA000740DF /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		B24AD8FA2B5531F900BBD1E8 /* PreferenceKeys */ = {
 			isa = PBXGroup;
 			children = (
 				B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */,
+				B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */,
 			);
 			path = PreferenceKeys;
 			sourceTree = "<group>";
@@ -313,6 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				B2F918A62B5811F400540F33 /* PhotoModel.swift */,
+				B2CC6DFC2B59394A00A8D34D /* CGCorners.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -411,10 +431,12 @@
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
 				B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */,
 				B2B2B1092B4BF6E200E3E8A6 /* PhotoLibraryService.swift in Sources */,
+				B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */,
 				B21103472B494F1400CA4981 /* ProjectType.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
 				B2085C142B48671E004D904A /* Media_EditorApp.swift in Sources */,
 				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
+				B22744BC2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift in Sources */,
 				B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */,
 				B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */,
 				B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */,
@@ -422,6 +444,7 @@
 				B2F918A72B5811F400540F33 /* PhotoModel.swift in Sources */,
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
 				B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */,
+				B2CC6DFD2B59394A00A8D34D /* CGCorners.swift in Sources */,
 				B200CB2F2B502C0800BA3023 /* HapticService.swift in Sources */,
 				B21103692B49856E00CA4981 /* ViewExtensions.swift in Sources */,
 				B24EA9562B56C5AE0081FBFD /* KeyboardError.swift in Sources */,
@@ -430,6 +453,7 @@
 				B200CB392B506A0D00BA3023 /* PhotoEntity.swift in Sources */,
 				B200CB3D2B506C3000BA3023 /* ImageProjectViewModel.swift in Sources */,
 				B24EA9542B56B9070081FBFD /* AddProjectSummarySliderView.swift in Sources */,
+				B2CC6DFF2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift in Sources */,
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,
 				B200CB352B505D0700BA3023 /* FlieError.swift in Sources */,
 				B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */,
