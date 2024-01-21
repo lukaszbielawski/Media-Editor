@@ -12,3 +12,14 @@ enum ProjectType {
     case movie
     case unknown
 }
+
+extension ProjectType {
+    var projectColor: ColorResource {
+        switch self {
+        case .photo:
+            return .accent
+        default:
+            return .accent2
+        }
+    }
+}

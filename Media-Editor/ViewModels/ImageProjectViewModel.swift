@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 final class ImageProjectViewModel: ObservableObject {
     @Published var project: ImageProjectEntity
     @Published var media = [PhotoModel]()
+    @Published var currentTool: ToolType = .none
 
     init(project: ImageProjectEntity) {
         self.project = project

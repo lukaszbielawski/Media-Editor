@@ -21,18 +21,7 @@ struct AddProjectSummarySliderView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             Capsule(style: .circular)
-                .fill(Color(
-                    {
-                        switch vm.projectType {
-                        case .movie:
-                            .accent
-                        case .photo:
-                            .accent2
-                        case .unknown:
-                            .primary
-                        }
-                    }() as ColorResource
-                ))
+                .fill(Color(vm.projectType.projectColor))
                 .overlay(Material.ultraThinMaterial)
                 .clipShape(Capsule(style: .circular))
                 .frame(maxWidth: 300, maxHeight: sliderHeight)
@@ -57,14 +46,14 @@ struct AddProjectSummarySliderView: View {
                 }
 
             Capsule(style: .circular)
-                .fill(Color(vm.projectType == .movie ? .accent : .accent2))
+                .fill(Color(vm.projectType.projectColor))
                 .frame(width: sliderHeight + sliderOffset, height: sliderHeight)
             Circle()
                 .fill(Color.white)
                 .frame(width: sliderHeight, height: sliderHeight)
                 .overlay {
                     Image(systemName: vm.projectType == .movie ? "film" : "photo")
-                        .foregroundStyle(Color(vm.projectType == .movie ? .accent : .accent2))
+                        .foregroundStyle(Color(vm.projectType.projectColor))
                 }
                 .offset(x: sliderOffset)
                 .allowsHitTesting(isInteractive)
