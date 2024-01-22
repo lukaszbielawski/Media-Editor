@@ -61,7 +61,8 @@ struct MenuManageProjectSheetView: View {
                         })
                         .padding(.bottom)
                         .buttonStyle(.borderedProminent)
-                        .alert("Are you sure you want to delete \(vm.selectedProject?.title ?? "nil")?",
+
+                        .alert("Are you sure you want to delete \(vm.selectedProject?.title ?? "")?",
                                isPresented: $isAlertPresented)
                         {
                             Button("Go back", role: .cancel) {

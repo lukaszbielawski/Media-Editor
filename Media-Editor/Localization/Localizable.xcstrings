@@ -1,0 +1,66 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@" : {
+
+    },
+    "%lld" : {
+
+    },
+    "Add photos to your project" : {
+
+    },
+    "Are you sure you want to delete %@?" : {
+
+    },
+    "Back" : {
+
+    },
+    "Center" : {
+
+    },
+    "Change project name" : {
+
+    },
+    "Choose media first" : {
+
+    },
+    "Choose media to your project" : {
+
+    },
+    "Confirm" : {
+
+    },
+    "Create movie project" : {
+
+    },
+    "Create new project" : {
+
+    },
+    "Create photo project" : {
+
+    },
+    "Delete project" : {
+
+    },
+    "Export" : {
+
+    },
+    "Go back" : {
+
+    },
+    "Project name" : {
+
+    },
+    "Redo" : {
+
+    },
+    "Save" : {
+
+    },
+    "Undo" : {
+
+    }
+  },
+  "version" : "1.0"
+}

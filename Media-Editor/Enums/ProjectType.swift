@@ -17,9 +17,9 @@ extension ProjectType {
     var projectColor: ColorResource {
         switch self {
         case .photo:
-            return .accent
-        default:
             return .accent2
+        default:
+            return .accent
         }
     }
 }

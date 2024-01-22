@@ -12,8 +12,8 @@ struct AddProjectGridTileView: View {
     @State var thumbnail: UIImage?
     @EnvironmentObject var vm: AddProjectViewModel
     @State var isSelected: Bool = false
-
     @State var media: PHAsset
+
     var body: some View {
         ZStack {
             ZStack {
@@ -65,6 +65,12 @@ struct AddProjectGridTileView: View {
                 } else {
                     EmptyView()
                 }
+            }
+        }
+        .contentShape(RoundedRectangle(cornerRadius: 4.0))
+        .onAppear {
+            if vm.selectedAssets.contains(where: { $0.localIdentifier == media.localIdentifier }) {
+                isSelected = true
             }
         }
         .onTapGesture {

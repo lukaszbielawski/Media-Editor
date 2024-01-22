@@ -59,11 +59,6 @@ struct ImageProjectPlaneView: View {
                 }
             ImageProjectFrameView(totalLowerToolbarHeight: $totalLowerToolbarHeight, geo: geoProxy)
                 .zIndex(Double(Int.min + 2))
-                .overlay {
-                    Color.clear
-                        .border(Color.green)
-                        .padding(16)
-                }
         }
         .position(position)
         .onPreferenceChange(ImageProjectFramePreferenceKey.self) { frameViewRect in

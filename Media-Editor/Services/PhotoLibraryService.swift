@@ -15,27 +15,37 @@ class PhotoLibraryService: ObservableObject {
 
     private var imageCachingManager: PHCachingImageManager!
 
-    func requestAuthorization() {
+    func requestAuthorization(projectType: Set<ProjectType>) {
         PHPhotoLibrary.requestAuthorization { [unowned self] status in
             switch status {
             case .authorized, .limited:
-                fetchAllMediaFromPhotoLibrary()
+                fetchAllMediaFromPhotoLibrary(projectType: projectType)
             default:
                 print("Permission not granted")
             }
         }
     }
 
-    func fetchAllMediaFromPhotoLibrary() {
+    func fetchAllMediaFromPhotoLibrary(projectType: Set<ProjectType>) {
         imageCachingManager = PHCachingImageManager()
         imageCachingManager.allowsCachingHighQualityImages = true
+
+        let cvargs: [CVarArg] = projectType
+            .map { type in
+                if type == .movie {
+                    return PHAssetMediaType.video.rawValue
+                } else {
+                    return PHAssetMediaType.image.rawValue
+                }
+            }
+
         let fetchOptions = PHFetchOptions()
         fetchOptions.includeHiddenAssets = false
         fetchOptions.predicate = NSPredicate(
             format: "mediaType == %d || mediaType == %d",
-            PHAssetMediaType.image.rawValue,
-            PHAssetMediaType.video.rawValue
+            cvargs
         )
+        
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 
         mediaPublisher.send(
@@ -157,5 +167,38 @@ class PhotoLibraryService: ObservableObject {
         } catch {
             throw FileError.store(url: fileURL)
         }
+    }
+
+    func saveAssetsAndGetFileNames(assets: [PHAsset], for projectEntity: ImageProjectEntity) async throws -> [String] {
+        let container = PersistenceController.shared.container
+
+        return try await withThrowingTaskGroup(of: String.self, returning: [String].self) { [unowned self] group in
+            var array = [String]()
+            for asset in assets {
+                group.addTask { [unowned self] in
+                    let (assetData, fileExtension)
+                        = try await fetchMediaDataAndExtensionFromPhotoLibrary(with: asset.localIdentifier)
+                    let savedFileURL = try await saveToDisk(data: assetData, extension: fileExtension)
+                    return savedFileURL.lastPathComponent
+                }
+            }
+            for try await fileName in group {
+                array.append(fileName)
+            }
+            return array
+        }
+    }
+
+    func insertMediaToProject(projectEntity: ImageProjectEntity, fileNames: [String]) throws {
+        let container = PersistenceController.shared.container
+
+        for fileName in fileNames {
+            let photoEntity = PhotoEntity(fileName: fileName,
+                                          projectEntity: projectEntity,
+                                          context: container.viewContext)
+
+            projectEntity.projectEntityToMediaEntity?.insert(photoEntity)
+        }
+        let _ = PersistenceController.shared.projectController.saveChanges()
     }
 }

@@ -22,6 +22,7 @@ public extension PhotoEntity {
     @NSManaged var positionZ: NSNumber?
     @NSManaged var scaleX: NSNumber?
     @NSManaged var scaleY: NSNumber?
+
     @NSManaged var mediaEntityToProjectEntity: ImageProjectEntity?
 }
 

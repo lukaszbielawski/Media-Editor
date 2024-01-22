@@ -12,7 +12,6 @@ struct AddProjectSummaryView: View {
     var totalHeight: Double { 100.0 + UIScreen.bottomSafeArea }
     var body: some View {
         ZStack {
-//            Color(.primary)
             Rectangle()
                 .fill(Material.thickMaterial)
                 .frame(height: totalHeight)

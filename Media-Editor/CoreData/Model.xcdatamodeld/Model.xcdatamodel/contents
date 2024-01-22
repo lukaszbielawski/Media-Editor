@@ -10,6 +10,7 @@
         <relationship name="projectEntityToMediaEntity" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoEntity" inverseName="mediaEntityToProjectEntity" inverseEntity="PhotoEntity"/>
     </entity>
     <entity name="PhotoEntity" representedClassName=".PhotoEntity" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="fileName" attributeType="String"/>
         <attribute name="positionX" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="positionY" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>

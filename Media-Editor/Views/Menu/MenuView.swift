@@ -46,7 +46,6 @@ struct MenuView: View {
             }
 
         }
-
         .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
             guard let value else { return }
             createdProjectType = value.isMovie ? .movie : .photo

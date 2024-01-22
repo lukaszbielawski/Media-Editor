@@ -18,6 +18,6 @@ struct ProjectToolTileViewModifier: ViewModifier {
             .frame(width: lowerToolbarHeight * (1 - 2 * padding), height: lowerToolbarHeight * (1 - 2 * padding))
             .padding(.vertical, padding * lowerToolbarHeight)
             .aspectRatio(1.0, contentMode: .fit)
-            .foregroundStyle(Color(.white))
+            .foregroundStyle(Color(.tint))
     }
 }

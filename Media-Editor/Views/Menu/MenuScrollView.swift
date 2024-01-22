@@ -29,7 +29,7 @@ struct MenuScrollView: View {
                         ForEach($vm.projects) { $project in
                             MenuTileView(project: $project, dotsDidTapped: dotsDidTapped)
                         }
-                        .foregroundStyle(Color(.white))
+                        .foregroundStyle(Color(.tint))
                     }
                     .cornerRadius(16.0)
                 }

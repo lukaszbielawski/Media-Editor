@@ -35,7 +35,7 @@ final class AddProjectViewModel: ObservableObject {
 
     init() {
         setupSubscription()
-        photoService.requestAuthorization()
+        photoService.requestAuthorization(projectType: [.movie, .photo])
     }
 
     private func setupSubscription() {
@@ -82,26 +82,10 @@ final class AddProjectViewModel: ObservableObject {
         let projectEntity = ImageProjectEntity(id: UUID(), title: "New \(isMovie ? "movie" : "photo") project",
                                                isMovie: isMovie, context: container.viewContext)
 
-        try await withThrowingTaskGroup(of: String.self) { [unowned self] group in
-            for asset in selectedAssets {
-                group.addTask { [unowned self] in
-                    let (assetData, fileExtension)
-                        = try await photoService.fetchMediaDataAndExtensionFromPhotoLibrary(with: asset.localIdentifier)
-                    let savedFileURL = try await photoService.saveToDisk(data: assetData, extension: fileExtension)
-                    return savedFileURL.lastPathComponent
-                }
-            }
-            for try await fileName in group {
-                let mediaEntity = PhotoEntity(fileName: fileName,
-                                              projectEntity: projectEntity,
-                                              context: container.viewContext)
-
-                projectEntity.projectEntityToMediaEntity?.insert(mediaEntity)
-            }
-
-            print(PersistenceController.shared.projectController.saveChanges())
-        }
-
+        let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedAssets, for: projectEntity)
+        try photoService.insertMediaToProject(projectEntity: projectEntity, fileNames: fileNames)
         return projectEntity
     }
+
+    
 }

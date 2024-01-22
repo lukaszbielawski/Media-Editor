@@ -16,7 +16,7 @@ struct ImageProjectView: View {
 
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithOpaqueBackground()
-        coloredAppearance.backgroundColor = UIColor(Color(.accent))
+        coloredAppearance.backgroundColor = UIColor(Color(.image))
         coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.tint]
         coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.tint]
 
@@ -38,7 +38,7 @@ struct ImageProjectView: View {
             ImageProjectPlaneView(totalNavBarHeight: $totalNavBarHeight,
                                   totalLowerToolbarHeight: $totalLowerToolbarHeight,
                                   centerButtonTapped: $centerButtonFunction)
-            ImageProjectToolsScrollView(lowerToolbarHeight: lowerToolbarHeight)
+            ImageProjectToolScrollView(lowerToolbarHeight: lowerToolbarHeight)
         }
         .background(Color(.primary))
         .background {
@@ -48,11 +48,11 @@ struct ImageProjectView: View {
         }.onAppear {
             totalLowerToolbarHeight = lowerToolbarHeight + UIScreen.bottomSafeArea
         }
-
         .navigationBarBackButtonHidden(true)
-        .statusBarHidden()
+        .modifier(StatusBarHiddenModifier())
         .environmentObject(vm)
         .ignoresSafeArea(edges: .top)
+
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
                 Label(isSaved ? "Back" : "Save", systemImage: isSaved ? "chevron.left" : "square.and.arrow.down")
@@ -65,7 +65,7 @@ struct ImageProjectView: View {
                             isSaved = true
                         }
                     }
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color(.tint))
             }
             ToolbarItemGroup(placement: .principal) {
                 HStack {
@@ -84,7 +84,7 @@ struct ImageProjectView: View {
                                 centerButtonFunction()
                             }
                     }
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color(.tint))
                 }.frame(maxWidth: .infinity)
             }
 
@@ -92,7 +92,7 @@ struct ImageProjectView: View {
                 Label("Export", systemImage: "square.and.arrow.up.on.square.fill")
                     .labelStyle(.titleAndIcon)
                     .onTapGesture {}
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color(.tint))
             }
         }
     }

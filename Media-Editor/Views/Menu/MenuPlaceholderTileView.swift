@@ -40,7 +40,7 @@ struct MenuPlaceholderTileView: View {
                     })
             }
         }
-        .foregroundStyle(Color(.white))
+        .foregroundStyle(Color(.tint))
         .aspectRatio(1.0, contentMode: .fill)
         .onTapGesture {
             if !isAddProjectViewPresented {

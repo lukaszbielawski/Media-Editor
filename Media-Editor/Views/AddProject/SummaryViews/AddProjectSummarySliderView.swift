@@ -27,16 +27,9 @@ struct AddProjectSummarySliderView: View {
                 .frame(maxWidth: 300, maxHeight: sliderHeight)
 
                 .overlay {
-                    Label({
-                        switch vm.projectType {
-                        case .photo:
-                            "Create photo project"
-                        case .movie:
-                            "Create movie project"
-                        case .unknown:
-                            "Choose assets first"
-                        }
-                    }(), systemImage: "chevron.right.2")
+                    Label(vm.projectType == .photo ? "Create photo project" :
+                            (vm.projectType == .movie ? "Create movie project" : "Choose media first")
+                          , systemImage: "chevron.right.2")
                         .padding(.leading, 16)
                 }
                 .geometryAccesor { geo in
@@ -49,7 +42,7 @@ struct AddProjectSummarySliderView: View {
                 .fill(Color(vm.projectType.projectColor))
                 .frame(width: sliderHeight + sliderOffset, height: sliderHeight)
             Circle()
-                .fill(Color.white)
+                .fill(Color(.tint))
                 .frame(width: sliderHeight, height: sliderHeight)
                 .overlay {
                     Image(systemName: vm.projectType == .movie ? "film" : "photo")

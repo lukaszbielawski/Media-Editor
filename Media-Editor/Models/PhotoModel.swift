@@ -10,8 +10,8 @@ import Foundation
 import ImageIO
 
 struct PhotoModel: Identifiable {
-    var id: String
-    private var fileName: String
+    var id: String { fileName }
+    var fileName: String
     var photoEntity: PhotoEntity
 
     var cgImage: CGImage!
@@ -24,7 +24,6 @@ struct PhotoModel: Identifiable {
     init(photoEntity: PhotoEntity) {
         self.photoEntity = photoEntity
         self.fileName = photoEntity.fileName!
-        self.id = fileName
 
         self.positionX = photoEntity.positionX!.doubleValue
         self.positionY = photoEntity.positionY!.doubleValue
