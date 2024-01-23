@@ -14,14 +14,14 @@ class PersistenceController {
     static let shared = PersistenceController()
 
     let projectController: ProjectEntityController
-    let mediaController: MediaEntityController
+    let photoController: PhotoEntityController
 
     private init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Model")
 
         let context = container.viewContext
         projectController = ProjectEntityController(context: context)
-        mediaController = MediaEntityController(context: context)
+        photoController = PhotoEntityController(context: context)
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")

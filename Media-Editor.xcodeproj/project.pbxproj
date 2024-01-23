@@ -41,7 +41,7 @@
 		B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */; };
 		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
 		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
-		B24AD9052B55495B00BBD1E8 /* MediaEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */; };
+		B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9042B55495B00BBD1E8 /* PhotoEntityController.swift */; };
 		B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA9472B56B7C30081FBFD /* MenuUpperView.swift */; };
 		B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA9492B56B7F00081FBFD /* MenuTileView.swift */; };
 		B24EA94C2B56B8260081FBFD /* MenuPlaceholderTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24EA94B2B56B8260081FBFD /* MenuPlaceholderTileView.swift */; };
@@ -58,7 +58,7 @@
 		B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB5912B5DA36700EBFB16 /* ImageProjectToolTileView.swift */; };
 		B25FB5942B5DA85400EBFB16 /* ToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB5932B5DA85400EBFB16 /* ToolType.swift */; };
 		B25FB5962B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */; };
-		B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewStyle.swift */; };
+		B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */; };
 		B2675FF72B5E79800072FD3D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B2675FF62B5E79800072FD3D /* Localizable.xcstrings */; };
 		B2675FF92B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2675FF82B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift */; };
 		B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */; };
@@ -69,6 +69,9 @@
 		B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B2B10D2B4C17D800E3E8A6 /* PHAssetExtensions.swift */; };
 		B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BD0E262B4EC2F900D53B77 /* UIScreenExtensions.swift */; };
 		B2BD0E292B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */; };
+		B2BF7A062B5FCF2F0031B8AA /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */; };
+		B2BF7A092B600D510031B8AA /* ImageProjectToolCaseAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */; };
+		B2BF7A0B2B6027C10031B8AA /* EditFrameToolModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A0A2B6027C10031B8AA /* EditFrameToolModifier.swift */; };
 		B2CC6DFF2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */; };
 		B2F918A72B5811F400540F33 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* PhotoModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
@@ -110,7 +113,7 @@
 		B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatedPreferenceKey.swift; sourceTree = "<group>"; };
 		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
 		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
-		B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaEntityController.swift; sourceTree = "<group>"; };
+		B24AD9042B55495B00BBD1E8 /* PhotoEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEntityController.swift; sourceTree = "<group>"; };
 		B24EA9472B56B7C30081FBFD /* MenuUpperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuUpperView.swift; sourceTree = "<group>"; };
 		B24EA9492B56B7F00081FBFD /* MenuTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTileView.swift; sourceTree = "<group>"; };
 		B24EA94B2B56B8260081FBFD /* MenuPlaceholderTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPlaceholderTileView.swift; sourceTree = "<group>"; };
@@ -127,7 +130,7 @@
 		B25FB5912B5DA36700EBFB16 /* ImageProjectToolTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolTileView.swift; sourceTree = "<group>"; };
 		B25FB5932B5DA85400EBFB16 /* ToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolType.swift; sourceTree = "<group>"; };
 		B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolDetailsView.swift; sourceTree = "<group>"; };
-		B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileViewStyle.swift; sourceTree = "<group>"; };
+		B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileViewModifier.swift; sourceTree = "<group>"; };
 		B2675FF62B5E79800072FD3D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		B2675FF82B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectImportPhotoView.swift; sourceTree = "<group>"; };
 		B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManageProjectSheetView.swift; sourceTree = "<group>"; };
@@ -138,6 +141,9 @@
 		B2B2B10D2B4C17D800E3E8A6 /* PHAssetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetExtensions.swift; sourceTree = "<group>"; };
 		B2BD0E262B4EC2F900D53B77 /* UIScreenExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtensions.swift; sourceTree = "<group>"; };
 		B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetMediaTypeExtensions.swift; sourceTree = "<group>"; };
+		B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
+		B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseAddView.swift; sourceTree = "<group>"; };
+		B2BF7A0A2B6027C10031B8AA /* EditFrameToolModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFrameToolModifier.swift; sourceTree = "<group>"; };
 		B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectFramePreferenceKey.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
@@ -256,6 +262,7 @@
 				B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */,
 				B22744BB2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift */,
 				B209366F2B5E95DD00757317 /* ColorExtensions.swift */,
+				B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -320,7 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */,
-				B24AD9042B55495B00BBD1E8 /* MediaEntityController.swift */,
+				B24AD9042B55495B00BBD1E8 /* PhotoEntityController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -376,8 +383,9 @@
 		B25FB5992B5DB9E900EBFB16 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewStyle.swift */,
+				B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */,
 				B20936772B5ED35900757317 /* StatusBarHiddenModifier.swift */,
+				B2BF7A0A2B6027C10031B8AA /* EditFrameToolModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -393,6 +401,7 @@
 		B2675FFA2B5E80F80072FD3D /* ToolViews */ = {
 			isa = PBXGroup;
 			children = (
+				B2BF7A072B600D060031B8AA /* case .add */,
 				B25FB5912B5DA36700EBFB16 /* ImageProjectToolTileView.swift */,
 				B25FB5882B5D76BC00EBFB16 /* ImageProjectToolScrollView.swift */,
 				B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */,
@@ -458,6 +467,14 @@
 				B2F918A82B58277E00540F33 /* CGImageError.swift */,
 			);
 			path = Errors;
+			sourceTree = "<group>";
+		};
+		B2BF7A072B600D060031B8AA /* case .add */ = {
+			isa = PBXGroup;
+			children = (
+				B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */,
+			);
+			path = "case .add";
 			sourceTree = "<group>";
 		};
 		B2F918A52B5811E400540F33 /* Models */ = {
@@ -573,6 +590,7 @@
 				B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */,
 				B24EA9522B56B8F10081FBFD /* AddProjectSummaryView.swift in Sources */,
 				B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */,
+				B2BF7A092B600D510031B8AA /* ImageProjectToolCaseAddView.swift in Sources */,
 				B24EA94C2B56B8260081FBFD /* MenuPlaceholderTileView.swift in Sources */,
 				B200CB2D2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift in Sources */,
 				B25FB5832B5D38E100EBFB16 /* ImageProjectPlaneView.swift in Sources */,
@@ -580,12 +598,13 @@
 				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
 				B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */,
+				B2BF7A0B2B6027C10031B8AA /* EditFrameToolModifier.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
 				B21103642B49796100CA4981 /* ImageProjectEntity.swift in Sources */,
-				B24AD9052B55495B00BBD1E8 /* MediaEntityController.swift in Sources */,
+				B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
-				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewStyle.swift in Sources */,
+				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */,
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
 				B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */,
 				B2B2B1092B4BF6E200E3E8A6 /* PhotoLibraryService.swift in Sources */,
@@ -620,6 +639,7 @@
 				B200CB3D2B506C3000BA3023 /* ImageProjectViewModel.swift in Sources */,
 				B20936722B5E970F00757317 /* ImageProjectImportPhotoSummaryGridView.swift in Sources */,
 				B24EA9542B56B9070081FBFD /* AddProjectSummarySliderView.swift in Sources */,
+				B2BF7A062B5FCF2F0031B8AA /* CGPointExtensions.swift in Sources */,
 				B209366A2B5E82B400757317 /* ImageProjectImportPhotoGridView.swift in Sources */,
 				B2CC6DFF2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift in Sources */,
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,

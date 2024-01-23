@@ -15,22 +15,18 @@ struct PhotoModel: Identifiable {
     var photoEntity: PhotoEntity
 
     var cgImage: CGImage!
-    var positionX: Double
-    var positionY: Double
     var positionZ: Int?
-    var scaleX: Double
-    var scaleY: Double
 
     init(photoEntity: PhotoEntity) {
         self.photoEntity = photoEntity
         self.fileName = photoEntity.fileName!
 
-        self.positionX = photoEntity.positionX!.doubleValue
-        self.positionY = photoEntity.positionY!.doubleValue
         self.positionZ = photoEntity.positionZ?.intValue
-        self.scaleX = photoEntity.scaleX!.doubleValue
-        self.scaleY = photoEntity.scaleY!.doubleValue
         self.cgImage = try! createCGImage(absoluteFilePath: absoluteFilePath)
+    }
+
+    func updateEntity() {
+        photoEntity.positionZ = positionZ != nil ? NSNumber(value: positionZ!) : nil
     }
 
     var absoluteFilePath: String {
@@ -62,4 +58,8 @@ struct PhotoModel: Identifiable {
 
         return cgImage
     }
+}
+
+extension PhotoModel: Equatable {
+
 }

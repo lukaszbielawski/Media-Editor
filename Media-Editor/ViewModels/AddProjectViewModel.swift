@@ -86,6 +86,4 @@ final class AddProjectViewModel: ObservableObject {
         try photoService.insertMediaToProject(projectEntity: projectEntity, fileNames: fileNames)
         return projectEntity
     }
-
-    
 }

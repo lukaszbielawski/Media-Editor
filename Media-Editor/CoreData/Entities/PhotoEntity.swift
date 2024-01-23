@@ -22,8 +22,9 @@ public extension PhotoEntity {
     @NSManaged var positionZ: NSNumber?
     @NSManaged var scaleX: NSNumber?
     @NSManaged var scaleY: NSNumber?
+    @NSManaged var rotation: NSNumber?
 
-    @NSManaged var mediaEntityToProjectEntity: ImageProjectEntity?
+    @NSManaged var photoEntityToImageProjectEntity: ImageProjectEntity?
 }
 
 extension PhotoEntity: Identifiable {
@@ -32,21 +33,25 @@ extension PhotoEntity: Identifiable {
                      context: NSManagedObjectContext,
                      scaleX: Double = 1.0,
                      scaleY: Double = 1.0,
+                     rotation: Double = 0.0,
                      positionX: Double = 0.0,
                      positionY: Double = 0.0,
                      positionZ: Int? = nil)
     {
         self.init(context: context)
         self.fileName = fileName
-        self.mediaEntityToProjectEntity = projectEntity
+        self.photoEntityToImageProjectEntity = projectEntity
         self.positionX = NSNumber(value: positionX)
         self.positionY = NSNumber(value: positionY)
 
         if let positionZ {
             self.positionZ = NSNumber(value: positionZ)
+        } else {
+            self.positionZ = nil
         }
         self.scaleX = NSNumber(value: scaleX)
         self.scaleY = NSNumber(value: scaleY)
+        self.rotation = NSNumber(value: rotation)
     }
 }
 

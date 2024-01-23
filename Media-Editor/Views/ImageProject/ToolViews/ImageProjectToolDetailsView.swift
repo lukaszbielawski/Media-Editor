@@ -10,6 +10,8 @@ import SwiftUI
 struct ImageProjectToolDetailsView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
+    @State var isDeleteImageAlertPresented: Bool = false
+
     let lowerToolbarHeight: Double
     let padding: Double
 
@@ -17,53 +19,12 @@ struct ImageProjectToolDetailsView: View {
         ZStack(alignment: .bottom) {
             Color(.image)
                 .frame(height: lowerToolbarHeight)
+
             switch vm.currentTool {
             case .add:
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ImageProjectToolTileView(iconName: "plus",
-                                                 lowerToolbarHeight: lowerToolbarHeight,
-                                                 padding: padding)
-                            .onTapGesture {
-                                vm.setupAddAssetsToProject()
-                                vm.isImportPhotoViewShown = true
-                            }
-                            .contentShape(Rectangle())
-                            .sheet(isPresented: $vm.isImportPhotoViewShown) {
-                                ImageProjectImportPhotoView()
-                                    .onDisappear {
-                                        vm.selectedPhotos.removeAll()
-                                    }
-                            }
-
-                        ForEach(vm.projectPhotos) { item in
-                            ZStack(alignment: .topTrailing) {
-                                Image(uiImage: UIImage(cgImage: item.cgImage))
-                                    .centerCropped()
-                                    .modifier(ProjectToolTileViewModifier(
-                                        lowerToolbarHeight: lowerToolbarHeight,
-                                        padding: padding))
-                                    .contentShape(Rectangle())
-                                Circle()
-                                    .fill(Color(.image))
-                                    .frame(width: 25, height: 25)
-                                    .padding(4.0)
-                                    .overlay {
-                                       Image(systemName: "trash")
-                                            .allowsHitTesting(false)
-                                    }
-                                    .padding(.top, padding * lowerToolbarHeight)
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        print("delete")
-                                    }
-                            }
-                        }
-
-                    }
-
-                }
-                .padding(.horizontal, padding * lowerToolbarHeight)
+                ImageProjectToolCaseAddView(lowerToolbarHeight: lowerToolbarHeight, padding: padding)
+//            case .layers:
+//                ImageProjectToolCaseAddView(lowerToolbarHeight: lowerToolbarHeight, padding: padding)
             default:
                 EmptyView()
             }

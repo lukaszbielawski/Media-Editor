@@ -17,8 +17,9 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
     @Published var currentTool: ToolType = .none
-
+    @Published var photoToDelete: PhotoModel?
     @Published var isImportPhotoViewShown: Bool = false
+    @Published var activeLayerPhoto: PhotoModel?
 
     private var subscription: AnyCancellable?
 
@@ -27,11 +28,11 @@ final class ImageProjectViewModel: ObservableObject {
     init(project: ImageProjectEntity) {
         self.project = project
 
-        if let mediaEntities = project.projectEntityToMediaEntity {
+        if let mediaEntities = project.imageProjectEntityToPhotoEntity {
             var isFirst = true
             for entity in mediaEntities {
                 if project.lastEditDate == nil && isFirst {
-                    entity.positionZ = 0
+                    entity.positionZ = 1
 
                     isFirst = false
                     let model = PhotoModel(photoEntity: entity)
@@ -40,12 +41,70 @@ final class ImageProjectViewModel: ObservableObject {
                     project.setFrame(width: model.cgImage.width, height: model.cgImage.height)
                     project.lastEditDate = Date.now
 
-//                    try? PersistenceController.shared.container.viewContext.save()
+                    try? PersistenceController.shared.container.viewContext.save()
                 } else {
                     projectPhotos.append(PhotoModel(photoEntity: entity))
                 }
             }
         }
+    }
+
+    func addPhotoLayer(photo: PhotoModel) {
+        var index = projectPhotos.firstIndex { $0.id == photo.id }
+        guard let index else { return }
+        projectPhotos[index].positionZ = (projectPhotos.compactMap { $0.positionZ }.max() ?? 0) + 1
+        print("xd")
+        projectPhotos[index].updateEntity()
+        _ = PersistenceController.shared.projectController.saveChanges()
+        activeLayerPhoto = projectPhotos[index]
+    }
+
+    func calculateLayerSize(photo: PhotoModel,
+                            geoSize: CGSize,
+                            framePaddingFactor: Double,
+                            totalLowerToolbarHeight: Double) -> CGSize
+    {
+        let frameSize = calculateFrameSize(geoSize: geoSize,
+                                           framePaddingFactor: framePaddingFactor,
+                                           totalLowerToolbarHeight: totalLowerToolbarHeight)
+
+        let projectFrame = project.getSize()
+
+        let scale = (x: Double(photo.cgImage.width) / projectFrame.width,
+                     y: Double(photo.cgImage.height) / projectFrame.height)
+
+        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
+
+        return layerSize
+    }
+
+    func calculateFrameSize(geoSize: CGSize, framePaddingFactor: Double, totalLowerToolbarHeight: Double) -> CGSize {
+        let (width, height) = (project.getSize().width, project.getSize().height)
+        let (geoWidth, geoHeight) =
+            (geoSize.width * (1.0 - 2 * framePaddingFactor),
+             (geoSize.height - totalLowerToolbarHeight) * (1.0 - 2 * framePaddingFactor))
+        let aspectRatio = height / width
+        let geoAspectRatio = geoHeight / geoWidth
+
+        if aspectRatio < geoAspectRatio {
+            return CGSize(width: geoWidth,
+                          height: geoWidth * aspectRatio)
+        } else {
+            return CGSize(width: geoHeight / aspectRatio, height: geoHeight)
+        }
+    }
+
+    func calculateFrameRect(frameSize: CGSize, geo: GeometryProxy, totalLowerToolbarHeight: Double) -> CGRect {
+        let centerPoint =
+            CGPoint(x: geo.frame(in: .global).midX,
+                    y: geo.frame(in: .global).midY - totalLowerToolbarHeight * 0.5)
+
+        let topLeftCorner =
+            CGPoint(x: centerPoint.x - frameSize.width * 0.5,
+                    y: centerPoint.y - frameSize.height * 0.5)
+
+        return CGRect(origin: topLeftCorner,
+                      size: frameSize)
     }
 
     func setupAddAssetsToProject() {
@@ -88,7 +147,7 @@ final class ImageProjectViewModel: ObservableObject {
         let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos, for: project)
         try photoService.insertMediaToProject(projectEntity: project, fileNames: fileNames)
 
-        guard let entities = project.projectEntityToMediaEntity else { return }
+        guard let entities = project.imageProjectEntityToPhotoEntity else { return }
         for entity in entities where !projectPhotos.contains(where: { $0.fileName == entity.fileName }) {
             projectPhotos.append(PhotoModel(photoEntity: entity))
         }

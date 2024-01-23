@@ -20,7 +20,7 @@ public extension ImageProjectEntity {
     @NSManaged var title: String?
     @NSManaged var lastEditDate: Date?
     @NSManaged var isMovie: Bool
-    @NSManaged var projectEntityToMediaEntity: Set<PhotoEntity>?
+    @NSManaged var imageProjectEntityToPhotoEntity: Set<PhotoEntity>?
     @NSManaged var frameWidth: NSNumber?
     @NSManaged var frameHeight: NSNumber?
 }
@@ -38,22 +38,18 @@ extension ImageProjectEntity: Identifiable {
         self.title = title
         self.lastEditDate = lastEditDate
         self.isMovie = isMovie
-        self.projectEntityToMediaEntity = mediaEntities
+        self.imageProjectEntityToPhotoEntity = mediaEntities
+        self.frameWidth = nil
+        self.frameHeight = nil
     }
 
     public var media: [PhotoEntity] {
-        guard let projectEntityToMediaEntity else { return [] }
-        return projectEntityToMediaEntity.sorted(by: { $0.id > $1.id })
+        guard let imageProjectEntityToPhotoEntity else { return [] }
+        return imageProjectEntityToPhotoEntity.sorted(by: { $0.id > $1.id })
     }
 
     var thumbnailURL: URL {
         return Bundle.main.url(forResource: "ex_image", withExtension: "jpg")!
-    }
-
-    var sourcePath: URL {
-        return self.isMovie
-            ? Bundle.main.url(forResource: "ex_image", withExtension: "jpg")!
-            : Bundle.main.url(forResource: "ex_movie", withExtension: "mp4")!
     }
 
     var formattedDate: String {
@@ -67,12 +63,7 @@ extension ImageProjectEntity: Identifiable {
         self.frameHeight = NSNumber(value: height)
     }
 
-    func getFrame() -> (width: CGFloat, height: CGFloat) {
-        return (self.frameWidth?.doubleValue ?? -1.0, self.frameHeight?.doubleValue ?? -1.0)
-    }
-
-    var isFrameLandscape: Bool {
-        let (width, height) = self.getFrame()
-        return width > height
+    func getSize() -> CGSize {
+        return CGSize(width: self.frameWidth?.doubleValue ?? -1.0, height: self.frameHeight?.doubleValue ?? -1.0)
     }
 }

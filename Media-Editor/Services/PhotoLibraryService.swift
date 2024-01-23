@@ -45,7 +45,7 @@ class PhotoLibraryService: ObservableObject {
             format: "mediaType == %d || mediaType == %d",
             cvargs
         )
-        
+
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 
         mediaPublisher.send(
@@ -157,10 +157,7 @@ class PhotoLibraryService: ObservableObject {
         }
 
         fileURL.appendPathComponent(UUID().uuidString)
-        print(fileExtension)
         fileURL = fileURL.appendingPathExtension(fileExtension)
-
-        print(fileURL)
         do {
             try data.write(to: fileURL)
             return fileURL
@@ -170,8 +167,6 @@ class PhotoLibraryService: ObservableObject {
     }
 
     func saveAssetsAndGetFileNames(assets: [PHAsset], for projectEntity: ImageProjectEntity) async throws -> [String] {
-        let container = PersistenceController.shared.container
-
         return try await withThrowingTaskGroup(of: String.self, returning: [String].self) { [unowned self] group in
             var array = [String]()
             for asset in assets {
@@ -197,8 +192,8 @@ class PhotoLibraryService: ObservableObject {
                                           projectEntity: projectEntity,
                                           context: container.viewContext)
 
-            projectEntity.projectEntityToMediaEntity?.insert(photoEntity)
+            projectEntity.imageProjectEntityToPhotoEntity?.insert(photoEntity)
         }
-        let _ = PersistenceController.shared.projectController.saveChanges()
+        _ = PersistenceController.shared.projectController.saveChanges()
     }
 }

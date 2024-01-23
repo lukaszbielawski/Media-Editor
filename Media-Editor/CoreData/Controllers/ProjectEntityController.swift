@@ -50,8 +50,8 @@ final class ProjectEntityController: EntityController {
     func delete(for key: UUID) -> Bool {
         guard let entity = fetch(for: key) else { return false }
 
-        let success = entity.projectEntityToMediaEntity?
-            .map { PersistenceController.shared.mediaController.delete(for: $0.fileName!) }
+        let success = entity.imageProjectEntityToPhotoEntity?
+            .map { PersistenceController.shared.photoController.delete(for: $0.fileName!) }
             .first { $0 == false } ?? true
 
         if success {

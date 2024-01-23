@@ -74,7 +74,6 @@ struct ImageProjectToolScrollView: View {
                 .offset(
                     x: padding * lowerToolbarHeight,
                     y: -(1 + 2 * padding) * lowerToolbarHeight * 0.5)
-//                -(1 - 2 * padding) * lowerToolbarHeight * 0.5
             }
         }
     }

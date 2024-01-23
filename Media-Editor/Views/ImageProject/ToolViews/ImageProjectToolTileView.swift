@@ -31,7 +31,6 @@ struct ImageProjectToolTileView: View {
                             .font(.footnote)
                     }
                 }
-                .allowsHitTesting(false)
             }
             .modifier(ProjectToolTileViewModifier(lowerToolbarHeight: lowerToolbarHeight, padding: padding))
     }

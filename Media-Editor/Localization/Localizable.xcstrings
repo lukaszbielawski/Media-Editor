@@ -13,7 +13,13 @@
     "Are you sure you want to delete %@?" : {
 
     },
+    "Are you sure you want to remove this image from the project?" : {
+
+    },
     "Back" : {
+
+    },
+    "Cancel" : {
 
     },
     "Center" : {
@@ -41,6 +47,9 @@
 
     },
     "Delete project" : {
+
+    },
+    "Deleting image" : {
 
     },
     "Export" : {
