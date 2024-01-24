@@ -68,9 +68,11 @@ struct ImageProjectPlaneView: View {
             ForEach(vm.projectPhotos.filter { $0.positionZ != nil }) { photo in
                 ImageProjectLayerView(geoSize: $geoSize,
                                       planeSize: $planeSize,
-                                      totalLowerToolbarHeight: $totalLowerToolbarHeight, image: photo,
+                                      totalLowerToolbarHeight: $totalLowerToolbarHeight,
+                                      totalNavBarHeight: $totalNavBarHeight,
+                                      image: photo,
                                       framePaddingFactor: framePaddingFactor)
-                .zIndex(Double(photo.positionZ ?? 0))
+                    .zIndex(Double(photo.positionZ ?? 0))
             }
         }
 
@@ -84,7 +86,7 @@ struct ImageProjectPlaneView: View {
         }
 
         .gesture(
-            DragGesture(coordinateSpace: .named("plane"))
+            DragGesture()
                 .onChanged { value in
                     var newPosition = lastPosition ?? position
                     newPosition.x += value.translation.width
