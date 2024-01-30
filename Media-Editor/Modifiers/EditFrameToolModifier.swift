@@ -12,14 +12,15 @@ struct EditFrameToolModifier: ViewModifier {
     let width: CGFloat
     let height: CGFloat
     let isActive: Bool
-    let position: CGPoint?
     let geoSize: CGSize
     let planeSize: CGSize
     var totalNavBarHeight: Double?
 
     @Binding var rotation: Angle?
+    @Binding var position: CGPoint?
 
     @GestureState var lastAngle: Angle?
+    @GestureState var lastPosition: CGPoint?
 
     @Binding var scaleX: Double?
     @Binding var scaleY: Double?
@@ -34,13 +35,11 @@ struct EditFrameToolModifier: ViewModifier {
 
                     .fill(Color(.image))
                     .padding(14)
-                    .frame(width: width * (scaleX ?? 1.0) + 42, height: height * (scaleY ?? 1.0) + 42)
+                    .frame(width: width * abs(scaleX ?? 1.0) + 42, height: height * abs(scaleY ?? 1.0) + 42)
                     .opacity(opacity)
                     .overlay {
                         content
-                            .scaleEffect(x: 1.0, y: (scaleY ?? 1.0) < 0 ? -1.0 : 1.0)
-                            .rotationEffect(.degrees(180 * min(0, scaleY ?? 0)))
-                            .scaleEffect(x: scaleX ?? 1.0, y: scaleY ?? 1.0)
+                            .modifier(LayerTransformationModifier(scaleX: scaleX, scaleY: scaleY))
                     }
                     .overlay(alignment: .topLeading) {
                         Image(systemName: "xmark")
@@ -58,9 +57,12 @@ struct EditFrameToolModifier: ViewModifier {
                             .clipShape(Circle())
                             .modifier(EditFrameResizeModifier(edge: .top))
                             .opacity(opacity)
-                            .gesture(DragGesture()
+                            .gesture(DragGesture(coordinateSpace: .global)
                                 .onChanged { value in
-                                    editAction(.topResize(translation: value.translation))
+
+                                }
+                                .updating($lastPosition) { _, lastPosition, _ in
+                                    lastPosition = lastPosition ?? position
                                 }
                                 .onEnded { _ in
                                     editAction(.save)
@@ -104,8 +106,8 @@ struct EditFrameToolModifier: ViewModifier {
 
                                     editAction(.rotation(angle: -newAngle))
                                 }
-                                .updating($lastAngle) { _, startAngle, _ in
-                                    startAngle = startAngle ?? rotation
+                                .updating($lastAngle) { _, lastAngle, _ in
+                                    lastAngle = lastAngle ?? rotation
                                 }
                                 .onEnded { _ in
                                     editAction(.save)
@@ -145,7 +147,7 @@ struct EditFrameToolModifier: ViewModifier {
                             .shadow(radius: 10.0)
                             .opacity(opacity)
                             .onTapGesture {
-                                self.scaleY! *= -1
+//                                self.scaleY! *= -1
                                 editAction(.flip)
                                 editAction(.save)
                             }
@@ -164,9 +166,7 @@ struct EditFrameToolModifier: ViewModifier {
                     }
             } else {
                 content
-                    .scaleEffect(x: 1.0, y: (scaleY ?? 1.0) < 0 ? -1.0 : 1.0)
-                    .rotationEffect(.degrees(180 * min(0, scaleY ?? 0)))
-                    .scaleEffect(x: scaleX ?? 1.0, y: scaleY ?? 1.0)
+                    .modifier(LayerTransformationModifier(scaleX: scaleX, scaleY: scaleY))
             }
         }
         .onChange(of: isActive) { value in
@@ -191,6 +191,17 @@ struct EditFrameCircleModifier: ViewModifier {
             .frame(width: 16, height: 16)
             .padding(10)
             .background(Circle().fill(Color(.image)))
+    }
+}
+
+struct LayerTransformationModifier: ViewModifier {
+    let scaleX: Double?
+    let scaleY: Double?
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(x: (scaleX ?? 1.0) < 0 ? -1.0 : 1.0, y: (scaleY ?? 1.0) < 0 ? -1.0 : 1.0)
+            .scaleEffect(x: abs(scaleX ?? 1.0), y: abs(scaleY ?? 1.0))
     }
 }
 

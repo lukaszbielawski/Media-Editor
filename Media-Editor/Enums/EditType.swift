@@ -14,9 +14,9 @@ enum EditType {
     case rotateLeft
     case flip
     case aspectResize(translation: CGSize)
-    case leadingResize(translation: CGSize)
-    case topResize(translation: CGSize)
-    case trailingResize(translation: CGSize)
-    case bottomResize(translation: CGSize)
+    case leadingResize(widthDiff: CGFloat)
+    case topResize(heightDiff: CGFloat)
+    case trailingResize(widthDiff: CGFloat)
+    case bottomResize(heightDiff: CGFloat)
     case save
 }

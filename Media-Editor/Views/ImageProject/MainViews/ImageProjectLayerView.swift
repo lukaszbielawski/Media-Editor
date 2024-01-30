@@ -38,11 +38,10 @@ struct ImageProjectLayerView: View {
                 .modifier(EditFrameToolModifier(width: layerSize?.width ?? 0,
                                                 height: layerSize?.height ?? 0,
                                                 isActive: vm.activeLayerPhoto == image,
-                                                position: position,
                                                 geoSize: geoSize,
                                                 planeSize: planeSize,
                                                 totalNavBarHeight: totalNavBarHeight,
-                                                rotation: $rotation,
+                                                rotation: $rotation, position: $position,
                                                 scaleX: $scaleX,
                                                 scaleY: $scaleY)
                     { editAction in
@@ -51,11 +50,15 @@ struct ImageProjectLayerView: View {
                             print("delete")
                         case .rotateLeft:
                             if rotation != nil {
-                                withAnimation {
-                                    let leftRadians = abs(rotation!.radians.truncatingRemainder(dividingBy: .pi / 2))
-                                    self.rotation! -= Angle(radians: .pi / 2 - leftRadians)
+                                withAnimation(.easeInOut(duration: 0.35)) {
+                                    self.rotation = Angle(radians:
+                                        ceil(self.rotation!.radians / (.pi * 0.495)) * (.pi * 0.5) - 0.5 * .pi)
                                 }
-                                image.photoEntity.rotation = NSNumber(value: rotation!.radians)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    image.photoEntity.rotation = NSNumber(value: rotation!.radians)
+                                    print(image.photoEntity.rotation)
+                                    _ = PersistenceController.shared.photoController.saveChanges()
+                                }
                             }
 
                         case .rotation(let angle):
@@ -63,11 +66,27 @@ struct ImageProjectLayerView: View {
                             image.photoEntity.rotation = NSNumber(value: rotation!.radians)
 
                         case .flip:
-                            let scaleY = image.photoEntity.scaleY
-                            guard let scaleY else { return }
-                            let newScale = NSNumber(value: Double(truncating: scaleY) * -1.0)
-                            image.photoEntity.scaleY = newScale
-                            self.scaleY = Double(truncating: scaleY) * -1.0
+                            let rotation = rotation?.normalizedRotation ?? 0.0
+                            print(rotation, "norm")
+                            if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation) ||
+                                ((.pi * 1.25)...(.pi * 1.75)).contains(rotation)
+                            {
+                                let scaleY = image.photoEntity.scaleY
+                                guard let scaleY else { return }
+
+                                let newScale = NSNumber(value: Double(truncating: scaleY) * -1.0)
+                                image.photoEntity.scaleY = newScale
+                                self.scaleY = Double(truncating: scaleY) * -1.0
+
+                            } else {
+                                let scaleX = image.photoEntity.scaleX
+                                guard let scaleX else { return }
+
+                                let newScale = NSNumber(value: Double(truncating: scaleX) * -1.0)
+                                image.photoEntity.scaleX = newScale
+                                self.scaleX = Double(truncating: scaleX) * -1.0
+                            }
+                            _ = PersistenceController.shared.photoController.saveChanges()
 
                         case .aspectResize(let translation):
                             guard let layerSize else { return }
@@ -78,28 +97,37 @@ struct ImageProjectLayerView: View {
                             ) * min(scaleX!, scaleY!)
                             guard layerSize.width * scale > 30, layerSize.height * scale > 30 else { return }
 
-                            // TODO: nie niwelować istniejących już scale != 1.0
-
-                            self.scaleX! = scale
-                            self.scaleY! = scale
-                            image.photoEntity.scaleX = NSNumber(value: scaleX!)
-                            image.photoEntity.scaleY = NSNumber(value: scaleY!)
+                            DispatchQueue.main.async {
+                                scaleX = scale
+                                scaleY = scale
+                                image.photoEntity.scaleX = NSNumber(value: scaleX!)
+                                image.photoEntity.scaleY = NSNumber(value: scaleY!)
+                            }
 
                         case .leadingResize:
                             print("leadingResize")
-                        case .topResize(let translation):
+                        case .topResize(let heightDiff):
                             guard let layerSize else { return }
 
-                            let scale = ((-translation.height + layerSize.height) / layerSize.height) * scaleY!
+                            let scale = ((-heightDiff + layerSize.height) / layerSize.height) * scaleY!
                             print("scale", scale)
                             guard layerSize.height * scale > 30 else { return }
 
-                            print(translation)
+                            
 
-                            // TODO: resize tylko w jedną stronę
 
-                            self.scaleY! = scale
-                            image.photoEntity.scaleY = NSNumber(value: scaleY!)
+
+
+
+
+//
+//                            DispatchQueue.main.async {
+//                                scaleY = scale
+//                                guard let position else { return }
+//                                image.photoEntity.scaleY = NSNumber(value: scaleY!)
+//                                image.photoEntity.positionX = (position.x - globalPosition.x) as NSNumber
+//                                image.photoEntity.positionY = (position.y - globalPosition.y) as NSNumber
+//                            }
 
                             print("x", scaleX!, "y", scaleY!)
                         case .trailingResize:
@@ -112,18 +140,13 @@ struct ImageProjectLayerView: View {
                     })
 
                 .onAppear {
-                    if image.photoEntity.positionX == 0.0 {
-                        position = globalPosition
-                        rotation = .zero
-                        scaleX = 1.0
-                        scaleY = 1.0
-                    } else {
-                        position = globalPosition + CGPoint(x: image.photoEntity.positionX as! Double,
-                                                            y: image.photoEntity.positionY as! Double)
-                        rotation = Angle(radians: image.photoEntity.rotation as! Double)
-                        scaleX = image.photoEntity.scaleX as? Double
-                        scaleY = image.photoEntity.scaleY as? Double
-                    }
+                    position = globalPosition +
+                        CGPoint(x: image.photoEntity.positionX as? Double ?? 0.0,
+                                y: image.photoEntity.positionY as? Double ?? 0.0)
+                    rotation = Angle(radians: image.photoEntity.rotation as? Double ?? .zero)
+                    print("init rotation", rotation)
+                    scaleX = image.photoEntity.scaleX as? Double ?? 1.0
+                    scaleY = image.photoEntity.scaleY as? Double ?? 1.0
                     layerSize = vm.calculateLayerSize(photo: image,
                                                       geoSize: geoSize,
                                                       framePaddingFactor: framePaddingFactor,
@@ -131,6 +154,7 @@ struct ImageProjectLayerView: View {
                 }
                 .rotationEffect(rotation ?? .zero)
                 .position(position ?? CGPoint())
+                .offset()
                 .onTapGesture {
                     if vm.activeLayerPhoto == image {
                         vm.activeLayerPhoto = nil
@@ -140,13 +164,15 @@ struct ImageProjectLayerView: View {
                 }
                 .gesture(
                     vm.activeLayerPhoto == image ?
-                        DragGesture(coordinateSpace: .local)
+                        DragGesture()
                         .onChanged { value in
 
                             var newPosition = lastPosition ?? position ?? CGPoint()
                             newPosition.x += value.translation.width
                             newPosition.y += value.translation.height
                             position = newPosition
+
+                            print("drag position", position)
 
                             guard let position else { return }
                             image.photoEntity.positionX = (position.x - globalPosition.x) as NSNumber

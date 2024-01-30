@@ -64,6 +64,7 @@
 		B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */; };
 		B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509D2B4AD00500411F9A /* AddProjectView.swift */; };
 		B27150A02B4AD62D00411F9A /* AddProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */; };
+		B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B285B23E2B6932AB00258E28 /* AngleExtensions.swift */; };
 		B2B2B1092B4BF6E200E3E8A6 /* PhotoLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B2B1082B4BF6E200E3E8A6 /* PhotoLibraryService.swift */; };
 		B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B2B10B2B4C026E00E3E8A6 /* PhotoError.swift */; };
 		B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B2B10D2B4C17D800E3E8A6 /* PHAssetExtensions.swift */; };
@@ -137,6 +138,7 @@
 		B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManageProjectSheetView.swift; sourceTree = "<group>"; };
 		B271509D2B4AD00500411F9A /* AddProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectView.swift; sourceTree = "<group>"; };
 		B271509F2B4AD62D00411F9A /* AddProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProjectViewModel.swift; sourceTree = "<group>"; };
+		B285B23E2B6932AB00258E28 /* AngleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleExtensions.swift; sourceTree = "<group>"; };
 		B2B2B1082B4BF6E200E3E8A6 /* PhotoLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryService.swift; sourceTree = "<group>"; };
 		B2B2B10B2B4C026E00E3E8A6 /* PhotoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoError.swift; sourceTree = "<group>"; };
 		B2B2B10D2B4C17D800E3E8A6 /* PHAssetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetExtensions.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				B22744BB2B5BFDA8000740DF /* BinaryFloatingPointExtensions.swift */,
 				B209366F2B5E95DD00757317 /* ColorExtensions.swift */,
 				B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */,
+				B285B23E2B6932AB00258E28 /* AngleExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -615,6 +618,7 @@
 				B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */,
 				B21103472B494F1400CA4981 /* ProjectType.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
+				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
 				B25FB5852B5D3AC100EBFB16 /* ImageProjectLayerView.swift in Sources */,
 				B2085C142B48671E004D904A /* MediaEditorApp.swift in Sources */,
 				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
