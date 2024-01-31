@@ -194,6 +194,6 @@ class PhotoLibraryService: ObservableObject {
 
             projectEntity.imageProjectEntityToPhotoEntity?.insert(photoEntity)
         }
-        _ = PersistenceController.shared.projectController.saveChanges()
+        PersistenceController.shared.saveChanges()
     }
 }

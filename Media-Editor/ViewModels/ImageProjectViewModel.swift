@@ -41,7 +41,7 @@ final class ImageProjectViewModel: ObservableObject {
                     project.setFrame(width: model.cgImage.width, height: model.cgImage.height)
                     project.lastEditDate = Date.now
 
-                    try? PersistenceController.shared.container.viewContext.save()
+                    PersistenceController.shared.saveChanges()
                 } else {
                     projectPhotos.append(PhotoModel(photoEntity: entity))
                 }
@@ -55,7 +55,7 @@ final class ImageProjectViewModel: ObservableObject {
         projectPhotos[index].positionZ = (projectPhotos.compactMap { $0.positionZ }.max() ?? 0) + 1
         print("xd")
         projectPhotos[index].updateEntity()
-        _ = PersistenceController.shared.projectController.saveChanges()
+        PersistenceController.shared.saveChanges()
         activeLayerPhoto = projectPhotos[index]
     }
 

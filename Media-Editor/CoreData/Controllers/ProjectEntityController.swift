@@ -41,24 +41,17 @@ final class ProjectEntityController: EntityController {
         }
     }
 
-    func update(for key: UUID, entityToUpdate: (ImageProjectEntity) -> Void) -> Bool {
-        guard let entity = fetch(for: key) else { return false }
+    func update(for key: UUID, entityToUpdate: (ImageProjectEntity) -> Void) {
+        guard let entity = fetch(for: key) else { return }
         entityToUpdate(entity)
-        return saveChanges()
     }
 
-    func delete(for key: UUID) -> Bool {
-        guard let entity = fetch(for: key) else { return false }
+    func delete(for key: UUID) {
+        guard let entity = fetch(for: key) else { return }
 
-        let success = entity.imageProjectEntityToPhotoEntity?
-            .map { PersistenceController.shared.photoController.delete(for: $0.fileName!) }
-            .first { $0 == false } ?? true
+        entity.imageProjectEntityToPhotoEntity?
+            .forEach { PersistenceController.shared.photoController.delete(for: $0.fileName!) }
 
-        if success {
-            context.delete(entity)
-            return saveChanges()
-        } else {
-            return false
-        }
+        context.delete(entity)
     }
 }

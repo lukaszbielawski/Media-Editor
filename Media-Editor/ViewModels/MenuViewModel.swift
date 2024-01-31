@@ -55,18 +55,18 @@ final class MenuViewModel: ObservableObject {
 
         projects.remove(at: index)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            if PersistenceController.shared.projectController.delete(for: projectToDelete.id!) {
-                self?.objectWillChange.send()
-            }
+            PersistenceController.shared.projectController.delete(for: projectToDelete.id!)
+            self?.objectWillChange.send()
+            PersistenceController.shared.saveChanges()
         }
     }
 
     func updateProjectTitle(title: String) {
         guard let selectedProject else { return }
-        if PersistenceController.shared.projectController.update(for: selectedProject.id!, entityToUpdate: { entity in
+        PersistenceController.shared.projectController.update(for: selectedProject.id!, entityToUpdate: { entity in
             entity.title = title
-        }) {
-            objectWillChange.send()
-        }
+        })
+        PersistenceController.shared.saveChanges()
+        objectWillChange.send()
     }
 }

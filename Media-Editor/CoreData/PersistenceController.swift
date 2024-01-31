@@ -34,7 +34,16 @@ class PersistenceController {
         }
     }
 
-    func saveChanges() {}
+    func saveChanges() {
+        if container.viewContext.hasChanges {
+            do {
+                try container.viewContext.save()
+            } catch {
+                let nserror = error as NSError
+                print("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
 
     static var preview: PersistenceController = {
         let controller = PersistenceController(inMemory: true)

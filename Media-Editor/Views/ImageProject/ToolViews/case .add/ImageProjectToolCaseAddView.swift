@@ -22,17 +22,17 @@ struct ImageProjectToolCaseAddView: View {
                     ImageProjectToolTileView(iconName: "plus",
                                              lowerToolbarHeight: lowerToolbarHeight,
                                              padding: padding)
-                    .onTapGesture {
-                        vm.setupAddAssetsToProject()
-                        vm.isImportPhotoViewShown = true
-                    }
-                    .contentShape(Rectangle())
-                    .sheet(isPresented: $vm.isImportPhotoViewShown) {
-                        ImageProjectImportPhotoView()
-                            .onDisappear {
-                                vm.selectedPhotos.removeAll()
-                            }
-                    }
+                        .onTapGesture {
+                            vm.setupAddAssetsToProject()
+                            vm.isImportPhotoViewShown = true
+                        }
+                        .contentShape(Rectangle())
+                        .sheet(isPresented: $vm.isImportPhotoViewShown) {
+                            ImageProjectImportPhotoView()
+                                .onDisappear {
+                                    vm.selectedPhotos.removeAll()
+                                }
+                        }
 
                     ForEach(vm.projectPhotos) { photo in
                         ZStack(alignment: .topTrailing) {
@@ -71,12 +71,9 @@ struct ImageProjectToolCaseAddView: View {
             Button("Confirm", role: .destructive) {
                 isDeleteImageAlertPresented = false
                 guard let photoToDelete = vm.photoToDelete else { return }
-                if PersistenceController.shared.photoController.delete(for: photoToDelete.fileName) {
-                    vm.projectPhotos.removeAll { $0.fileName == photoToDelete.fileName }
-//                    vm.objectWillChange.send()
-                    _ = PersistenceController.shared.photoController.saveChanges()
-                }
-
+                PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
+                vm.projectPhotos.removeAll { $0.fileName == photoToDelete.fileName }
+                PersistenceController.shared.saveChanges()
                 vm.photoToDelete = nil
             }
 

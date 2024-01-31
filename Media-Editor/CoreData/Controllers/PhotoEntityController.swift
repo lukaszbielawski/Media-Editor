@@ -42,21 +42,18 @@ final class PhotoEntityController: EntityController {
         }
     }
 
-    func update(for key: String, entityToUpdate: (PhotoEntity) -> Void) -> Bool {
-        guard let entity = fetch(for: key) else { return false }
+    func update(for key: String, entityToUpdate: (PhotoEntity) -> Void) {
+        guard let entity = fetch(for: key) else { return }
         entityToUpdate(entity)
-        return saveChanges()
     }
 
-    func delete(for key: String) -> Bool {
-        guard let entity = fetch(for: key) else { return false }
+    func delete(for key: String) {
+        guard let entity = fetch(for: key) else { return }
         do {
             try deleteMediaFile(for: entity)
             context.delete(entity)
-            return true
         } catch {
             print("Error removing media file from documents directory")
-            return false
         }
     }
 

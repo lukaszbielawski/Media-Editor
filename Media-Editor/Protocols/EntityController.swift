@@ -18,22 +18,6 @@ protocol EntityController<Entity>: AnyObject {
 
     func fetch(for key: PrimaryKey) -> Entity?
     func fetchAll() -> [Entity]
-    func update(for key: PrimaryKey, entityToUpdate: (Entity) -> Void) -> Bool
-    func delete(for key: PrimaryKey) -> Bool
-}
-
-extension EntityController {
-    func saveChanges() -> Bool {
-        if context.hasChanges {
-            do {
-                try context.save()
-                return true
-            } catch {
-                let nserror = error as NSError
-                print("Unresolved error \(nserror), \(nserror.userInfo)")
-                return false
-            }
-        }
-        return false
-    }
+    func update(for key: PrimaryKey, entityToUpdate: (Entity) -> Void)
+    func delete(for key: PrimaryKey)
 }

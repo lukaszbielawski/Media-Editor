@@ -73,7 +73,6 @@
 		B2BF7A062B5FCF2F0031B8AA /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */; };
 		B2BF7A092B600D510031B8AA /* ImageProjectToolCaseAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */; };
 		B2BF7A0B2B6027C10031B8AA /* EditFrameToolModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A0A2B6027C10031B8AA /* EditFrameToolModifier.swift */; };
-		B2BF7A0D2B605CC60031B8AA /* EditType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A0C2B605CC60031B8AA /* EditType.swift */; };
 		B2CC6DFF2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */; };
 		B2F918A72B5811F400540F33 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* PhotoModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
@@ -147,7 +146,6 @@
 		B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
 		B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseAddView.swift; sourceTree = "<group>"; };
 		B2BF7A0A2B6027C10031B8AA /* EditFrameToolModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFrameToolModifier.swift; sourceTree = "<group>"; };
-		B2BF7A0C2B605CC60031B8AA /* EditType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditType.swift; sourceTree = "<group>"; };
 		B2CC6DFE2B593A0100A8D34D /* ImageProjectFramePreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectFramePreferenceKey.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
@@ -250,7 +248,6 @@
 				B21103462B494F1400CA4981 /* ProjectType.swift */,
 				B25FB57E2B5D1BF900EBFB16 /* EdgeOffset.swift */,
 				B25FB5932B5DA85400EBFB16 /* ToolType.swift */,
-				B2BF7A0C2B605CC60031B8AA /* EditType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -609,7 +606,6 @@
 				B21103642B49796100CA4981 /* ImageProjectEntity.swift in Sources */,
 				B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
-				B2BF7A0D2B605CC60031B8AA /* EditType.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
 				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */,
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
