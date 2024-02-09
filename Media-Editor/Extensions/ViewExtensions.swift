@@ -25,7 +25,7 @@ extension View {
             .padding(.bottom, -cornerRadius)
     }
 
-    func geometryAccesor(proxy: @escaping (GeometryProxy) -> Void) -> some View {
+    func geometryAccessor(proxy: @escaping (GeometryProxy) -> Void) -> some View {
         self
             .overlay {
                 GeometryReader { geo in

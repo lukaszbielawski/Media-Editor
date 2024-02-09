@@ -8,14 +8,20 @@
 import CoreGraphics
 import Foundation
 import ImageIO
+import SwiftUI
 
-struct PhotoModel: Identifiable {
+class LayerModel: Identifiable, ObservableObject {
     var id: String { fileName }
     var fileName: String
     var photoEntity: PhotoEntity
-
     var cgImage: CGImage!
-    var positionZ: Int?
+
+    @Published var position: CGPoint?
+    @Published var positionZ: Int?
+    @Published var size: CGSize?
+    @Published var rotation: Angle?
+    @Published var scaleX: Double?
+    @Published var scaleY: Double?
 
     init(photoEntity: PhotoEntity) {
         self.photoEntity = photoEntity
@@ -60,6 +66,8 @@ struct PhotoModel: Identifiable {
     }
 }
 
-extension PhotoModel: Equatable {
-
+extension LayerModel: Equatable {
+    static func == (lhs: LayerModel, rhs: LayerModel) -> Bool {
+        return rhs.id == lhs.id
+    }
 }

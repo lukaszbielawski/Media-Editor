@@ -13,13 +13,22 @@ import SwiftUI
 @MainActor
 final class ImageProjectViewModel: ObservableObject {
     @Published var project: ImageProjectEntity
-    @Published var projectPhotos = [PhotoModel]()
+
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
     @Published var currentTool: ToolType = .none
-    @Published var photoToDelete: PhotoModel?
+
     @Published var isImportPhotoViewShown: Bool = false
-    @Published var activeLayerPhoto: PhotoModel?
+    @Published var centerButtonFunction: (() -> Void)?
+
+    @Published var workspaceSize: CGSize?
+
+    @Published var plane: PlaneModel = .init()
+    @Published var frame: FrameModel = .init()
+
+    @Published var projectLayers = [LayerModel]()
+    @Published var layerToDelete: LayerModel?
+    @Published var activeLayer: LayerModel?
 
     private var subscription: AnyCancellable?
 
@@ -35,76 +44,19 @@ final class ImageProjectViewModel: ObservableObject {
                     entity.positionZ = 1
 
                     isFirst = false
-                    let model = PhotoModel(photoEntity: entity)
-                    projectPhotos.append(model)
+                    let model = LayerModel(photoEntity: entity)
+                    projectLayers.append(model)
 
                     project.setFrame(width: model.cgImage.width, height: model.cgImage.height)
                     project.lastEditDate = Date.now
 
                     PersistenceController.shared.saveChanges()
                 } else {
-                    projectPhotos.append(PhotoModel(photoEntity: entity))
+                    projectLayers.append(LayerModel(photoEntity: entity))
                 }
             }
         }
-    }
-
-    func addPhotoLayer(photo: PhotoModel) {
-        var index = projectPhotos.firstIndex { $0.id == photo.id }
-        guard let index else { return }
-        projectPhotos[index].positionZ = (projectPhotos.compactMap { $0.positionZ }.max() ?? 0) + 1
-        print("xd")
-        projectPhotos[index].updateEntity()
-        PersistenceController.shared.saveChanges()
-        activeLayerPhoto = projectPhotos[index]
-    }
-
-    func calculateLayerSize(photo: PhotoModel,
-                            geoSize: CGSize,
-                            framePaddingFactor: Double,
-                            totalLowerToolbarHeight: Double) -> CGSize
-    {
-        let frameSize = calculateFrameSize(geoSize: geoSize,
-                                           framePaddingFactor: framePaddingFactor,
-                                           totalLowerToolbarHeight: totalLowerToolbarHeight)
-
-        let projectFrame = project.getSize()
-
-        let scale = (x: Double(photo.cgImage.width) / projectFrame.width,
-                     y: Double(photo.cgImage.height) / projectFrame.height)
-
-        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
-
-        return layerSize
-    }
-
-    func calculateFrameSize(geoSize: CGSize, framePaddingFactor: Double, totalLowerToolbarHeight: Double) -> CGSize {
-        let (width, height) = (project.getSize().width, project.getSize().height)
-        let (geoWidth, geoHeight) =
-            (geoSize.width * (1.0 - 2 * framePaddingFactor),
-             (geoSize.height - totalLowerToolbarHeight) * (1.0 - 2 * framePaddingFactor))
-        let aspectRatio = height / width
-        let geoAspectRatio = geoHeight / geoWidth
-
-        if aspectRatio < geoAspectRatio {
-            return CGSize(width: geoWidth,
-                          height: geoWidth * aspectRatio)
-        } else {
-            return CGSize(width: geoHeight / aspectRatio, height: geoHeight)
-        }
-    }
-
-    func calculateFrameRect(frameSize: CGSize, geo: GeometryProxy, totalLowerToolbarHeight: Double) -> CGRect {
-        let centerPoint =
-            CGPoint(x: geo.frame(in: .global).midX,
-                    y: geo.frame(in: .global).midY - totalLowerToolbarHeight * 0.5)
-
-        let topLeftCorner =
-            CGPoint(x: centerPoint.x - frameSize.width * 0.5,
-                    y: centerPoint.y - frameSize.height * 0.5)
-
-        return CGRect(origin: topLeftCorner,
-                      size: frameSize)
+        configureNavBar()
     }
 
     func setupAddAssetsToProject() {
@@ -119,6 +71,100 @@ final class ImageProjectViewModel: ObservableObject {
             .sink { [unowned self] assets in
                 self.libraryPhotos = assets
             }
+    }
+
+    func configureNavBar() {
+        let coloredAppearance = UINavigationBarAppearance()
+        coloredAppearance.configureWithOpaqueBackground()
+        coloredAppearance.backgroundColor = UIColor(Color(.image))
+        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.tint]
+        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.tint]
+
+        UINavigationBar.appearance().standardAppearance = coloredAppearance
+        UINavigationBar.appearance().compactAppearance = coloredAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+    }
+
+    func updateFramePosition(newPosition: CGPoint, tolerance: CGFloat? = nil) throws {
+        guard let furthestPlanePointAllowed = plane.furthestPlanePointAllowed,
+              let frameViewRect = frame.rect,
+              let totalNavBarHeight = plane.totalNavBarHeight,
+              let totalLowerToolbarHeight = plane.totalLowerToolbarHeight
+        else {
+            return
+        }
+        let maxOffset: Double = tolerance ?? frame.padding
+
+        let (newX, newY) = (newPosition.x, newPosition.y)
+        let (maxX, maxY) =
+            (furthestPlanePointAllowed.x + frameViewRect.width / 2,
+             furthestPlanePointAllowed.y -
+                 totalLowerToolbarHeight + frameViewRect.height / 2)
+        let (minX, minY) =
+            (-frameViewRect.width / 2,
+             -frameViewRect.height / 2 + totalNavBarHeight)
+
+        if minX + maxOffset > newX {
+            let diff = minX + maxOffset - newX
+            throw EdgeOverflowError.leading(offset: diff)
+        } else if maxX - maxOffset < newX {
+            let diff = newX - maxX + maxOffset
+
+            throw EdgeOverflowError.trailing(offset: diff)
+        }
+
+        if minY + maxOffset > newY {
+            let diff = minY + maxOffset - newY
+            throw EdgeOverflowError.top(offset: diff)
+        } else if maxY - maxOffset < newY {
+            let diff = newY - maxY + maxOffset
+            throw EdgeOverflowError.bottom(offset: diff)
+        }
+        plane.currentPosition = newPosition
+    }
+
+    func addPhotoLayer(photo: LayerModel) {
+        var index = projectLayers.firstIndex { $0.id == photo.id }
+        guard let index else { return }
+        projectLayers[index].positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
+
+        projectLayers[index].updateEntity()
+        PersistenceController.shared.saveChanges()
+        activeLayer = projectLayers[index]
+    }
+
+    func calculateLayerSize(photo: LayerModel) -> CGSize
+    {
+        guard let frameSize = frame.rect?.size else { return .zero }
+
+        let projectFrame = project.getSize()
+
+        let scale = (x: Double(photo.cgImage.width) / projectFrame.width,
+                     y: Double(photo.cgImage.height) / projectFrame.height)
+
+        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
+
+        return layerSize
+    }
+
+    func setupFrameRect() {
+        guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight, let workspaceSize else { return }
+
+        let (width, height) = (project.getSize().width, project.getSize().height)
+        let (geoWidth, geoHeight) =
+        (workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
+             (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
+        let aspectRatio = height / width
+        let geoAspectRatio = geoHeight / geoWidth
+
+        let frameSize = if aspectRatio < geoAspectRatio {
+            CGSize(width: geoWidth, height: geoWidth * aspectRatio)
+        } else {
+            CGSize(width: geoHeight / aspectRatio, height: geoHeight)
+        }
+
+        frame.rect = CGRect(origin: .zero,
+                            size: frameSize)
     }
 
     func fetchPhoto(for asset: PHAsset,
@@ -148,8 +194,8 @@ final class ImageProjectViewModel: ObservableObject {
         try photoService.insertMediaToProject(projectEntity: project, fileNames: fileNames)
 
         guard let entities = project.imageProjectEntityToPhotoEntity else { return }
-        for entity in entities where !projectPhotos.contains(where: { $0.fileName == entity.fileName }) {
-            projectPhotos.append(PhotoModel(photoEntity: entity))
+        for entity in entities where !projectLayers.contains(where: { $0.fileName == entity.fileName }) {
+            projectLayers.append(LayerModel(photoEntity: entity))
         }
     }
 }

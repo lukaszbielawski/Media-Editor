@@ -12,7 +12,6 @@ struct ImageProjectToolCaseAddView: View {
 
     @State var isDeleteImageAlertPresented: Bool = false
 
-    let lowerToolbarHeight: Double
     let padding: Double
 
     var body: some View {
@@ -20,7 +19,6 @@ struct ImageProjectToolCaseAddView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ImageProjectToolTileView(iconName: "plus",
-                                             lowerToolbarHeight: lowerToolbarHeight,
                                              padding: padding)
                         .onTapGesture {
                             vm.setupAddAssetsToProject()
@@ -34,12 +32,11 @@ struct ImageProjectToolCaseAddView: View {
                                 }
                         }
 
-                    ForEach(vm.projectPhotos) { photo in
+                    ForEach(vm.projectLayers) { photo in
                         ZStack(alignment: .topTrailing) {
                             Image(uiImage: UIImage(cgImage: photo.cgImage))
                                 .centerCropped()
                                 .modifier(ProjectToolTileViewModifier(
-                                    lowerToolbarHeight: lowerToolbarHeight,
                                     padding: padding))
                                 .contentShape(Rectangle())
                             Circle()
@@ -50,10 +47,10 @@ struct ImageProjectToolCaseAddView: View {
                                     Image(systemName: "trash")
                                         .foregroundStyle(Color(.tint))
                                 }
-                                .padding(.top, padding * lowerToolbarHeight)
+                                .padding(.top, padding * vm.plane.lowerToolbarHeight)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
-                                    vm.photoToDelete = photo
+                                    vm.layerToDelete = photo
                                     isDeleteImageAlertPresented = true
                                 }
                         }.onTapGesture {
@@ -65,21 +62,21 @@ struct ImageProjectToolCaseAddView: View {
         }.alert("Deleting image", isPresented: $isDeleteImageAlertPresented) {
             Button("Cancel", role: .cancel) {
                 isDeleteImageAlertPresented = false
-                vm.photoToDelete = nil
+                vm.layerToDelete = nil
             }
 
             Button("Confirm", role: .destructive) {
                 isDeleteImageAlertPresented = false
-                guard let photoToDelete = vm.photoToDelete else { return }
+                guard let photoToDelete = vm.layerToDelete else { return }
                 PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
-                vm.projectPhotos.removeAll { $0.fileName == photoToDelete.fileName }
+                vm.projectLayers.removeAll { $0.fileName == photoToDelete.fileName }
                 PersistenceController.shared.saveChanges()
-                vm.photoToDelete = nil
+                vm.layerToDelete = nil
             }
 
         } message: {
             Text("Are you sure you want to remove this image from the project?")
         }
-        .padding(.horizontal, padding * lowerToolbarHeight)
+        .padding(.horizontal, padding * vm.plane.lowerToolbarHeight)
     }
 }

@@ -13,7 +13,7 @@ struct ImageProjectToolTileView: View {
     var title: String?
     let iconName: String
 
-    let lowerToolbarHeight: Double
+//    let lowerToolbarHeight: Double
     let padding: Double
 
     var body: some View {
@@ -32,6 +32,6 @@ struct ImageProjectToolTileView: View {
                     }
                 }
             }
-            .modifier(ProjectToolTileViewModifier(lowerToolbarHeight: lowerToolbarHeight, padding: padding))
+            .modifier(ProjectToolTileViewModifier(padding: padding))
     }
 }

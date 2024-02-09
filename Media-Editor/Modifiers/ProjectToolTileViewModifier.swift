@@ -9,14 +9,14 @@ import Foundation
 import SwiftUI
 
 struct ProjectToolTileViewModifier: ViewModifier {
-    let lowerToolbarHeight: Double
+    @EnvironmentObject var vm: ImageProjectViewModel
     let padding: Double
 
     func body(content: Content) -> some View {
         content
-            .clipShape(RoundedRectangle(cornerRadius: padding * lowerToolbarHeight))
-            .frame(width: lowerToolbarHeight * (1 - 2 * padding), height: lowerToolbarHeight * (1 - 2 * padding))
-            .padding(.vertical, padding * lowerToolbarHeight)
+            .clipShape(RoundedRectangle(cornerRadius: padding * vm.plane.lowerToolbarHeight))
+            .frame(width: vm.plane.lowerToolbarHeight * (1 - 2 * padding), height: vm.plane.lowerToolbarHeight * (1 - 2 * padding))
+            .padding(.vertical, padding * vm.plane.lowerToolbarHeight)
             .aspectRatio(1.0, contentMode: .fit)
             .foregroundStyle(Color(.tint))
     }

@@ -12,17 +12,16 @@ struct ImageProjectToolDetailsView: View {
 
     @State var isDeleteImageAlertPresented: Bool = false
 
-    let lowerToolbarHeight: Double
     let padding: Double
 
     var body: some View {
         ZStack(alignment: .bottom) {
             Color(.image)
-                .frame(height: lowerToolbarHeight)
+                .frame(height: vm.plane.lowerToolbarHeight)
 
             switch vm.currentTool {
             case .add:
-                ImageProjectToolCaseAddView(lowerToolbarHeight: lowerToolbarHeight, padding: padding)
+                ImageProjectToolCaseAddView(padding: padding)
 //            case .layers:
 //                ImageProjectToolCaseAddView(lowerToolbarHeight: lowerToolbarHeight, padding: padding)
             default:

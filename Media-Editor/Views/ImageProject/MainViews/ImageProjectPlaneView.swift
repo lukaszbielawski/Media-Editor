@@ -10,140 +10,113 @@ import SwiftUI
 struct ImageProjectPlaneView: View {
     @EnvironmentObject private var vm: ImageProjectViewModel
 
-    @State private var scale = 1.0
-    @State private var lastScaleValue = 1.0
-    @State private var geoSize: CGSize?
-    @State private var geoProxy: GeometryProxy?
-    @State private var frameViewRect: CGRect?
-    @State private var planeSize: CGSize?
-    @State private var position = CGPoint()
-    @State private var furthestPlanePointAllowed: CGPoint?
-    @State private var initialPosition: CGPoint?
-
     @GestureState private var lastPosition: CGPoint?
 
-    @Binding var totalNavBarHeight: Double?
-    @Binding var totalLowerToolbarHeight: Double?
-    @Binding var centerButtonTapped: (() -> Void)?
+    let (minScale, maxScale) = (1.0, 10.0)
+    let (previewMinScale, previewMaxScale) = (0.2, 20.0)
 
-    let minScale = 0.5
-    let maxScale = 10.0
-    let previewMinScale = 0.2
-    let previewMaxScale = 20.0
-
-    let frameViewPadding = 16.0
-    private let framePaddingFactor: Double = 0.05
+    @State var lastScaleValue: Double? = 1.0
 
     var body: some View {
         ZStack {
             Color.clear
-                .frame(minWidth: planeSize?.width ?? 0,
+                .frame(minWidth: vm.plane.size?.width ?? 0,
                        maxWidth: .infinity,
-                       minHeight: planeSize?.height ?? 0,
+                       minHeight: vm.plane.size?.height ?? 0,
                        maxHeight: .infinity)
                 .contentShape(Rectangle())
                 .zIndex(Double(Int.min + 1))
-                .geometryAccesor { geo in
+                .geometryAccessor { workspaceGeoProxy in
                     DispatchQueue.main.async {
-                        guard let totalLowerToolbarHeight, let totalNavBarHeight else { return }
-                        geoSize = geo.size
-                        geoProxy = geo
-                        print(geo.size)
-                        position =
-                            CGPoint(x: geo.size.width / 2,
-                                    y: (geo.size.height - totalLowerToolbarHeight) / 2 + totalNavBarHeight)
-                        initialPosition = position
-                        centerButtonTapped = self.centerPerspective
-                        furthestPlanePointAllowed =
-                            CGPoint(x: geo.size.width,
-                                    y: geo.size.height + totalLowerToolbarHeight)
+                        vm.workspaceSize = workspaceGeoProxy.size
+                        vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
+                        vm.centerButtonFunction = centerPerspective
                     }
                 }
 
-            ImageProjectFrameView(totalLowerToolbarHeight: $totalLowerToolbarHeight,
-                                  geoProxy: $geoProxy,
-                                  framePaddingFactor: framePaddingFactor)
+            ImageProjectFrameView()
                 .zIndex(Double(Int.min + 2))
 
-            ForEach(vm.projectPhotos.filter { $0.positionZ != nil }) { photo in
-                ImageProjectLayerView(geoSize: $geoSize,
-                                      planeSize: $planeSize,
-                                      totalLowerToolbarHeight: $totalLowerToolbarHeight,
-                                      totalNavBarHeight: $totalNavBarHeight,
-                                      image: photo,
-                                      framePaddingFactor: framePaddingFactor)
-                    .zIndex(Double(photo.positionZ ?? 0))
+            ForEach(vm.projectLayers.filter { $0.positionZ != nil }) { layerModel in
+                ImageProjectLayerView(
+                    layerModel: layerModel
+                )
+                .zIndex(Double(layerModel.positionZ ?? 0))
             }
         }
+        .position(vm.plane.currentPosition ?? .zero)
+        .onChange(of: vm.frame.rect) { frameViewRect in
+            guard let frameViewRect, let workspaceSize = vm.workspaceSize else { return }
 
-        .position(position)
-        .onPreferenceChange(ImageProjectFramePreferenceKey.self) { frameViewRect in
-            guard let frameViewRect, let geoSize else { return }
-            self.frameViewRect = frameViewRect
-            planeSize =
-                CGSize(width: frameViewRect.width + geoSize.width * 2.0,
-                       height: frameViewRect.height + geoSize.height * 2.0)
+            vm.plane.size =
+                CGSize(width: frameViewRect.width + workspaceSize.width * 2.0,
+                       height: frameViewRect.height + workspaceSize.height * 2.0)
         }
 
         .gesture(
             DragGesture()
                 .onChanged { value in
-                    var newPosition = lastPosition ?? position
+                    guard let currentPosition = vm.plane.currentPosition else { return }
+                    var newPosition = lastPosition ?? currentPosition
                     newPosition.x += value.translation.width
                     newPosition.y += value.translation.height
 
-                    position = validatePosition(newPosition: newPosition,
-                                                frameViewPadding: 0).0 ?? position
+                    try? vm.updateFramePosition(newPosition: newPosition, tolerance: 0)
                 }
                 .updating($lastPosition) { _, startPosition, _ in
-                    startPosition = startPosition ?? position
+                    startPosition = startPosition ?? vm.plane.currentPosition
                 }
                 .onEnded { _ in
-                    let edge = validatePosition(newPosition: position,
-                                                frameViewPadding: frameViewPadding).1
-                    if let edge {
+                    guard let currentPosition = vm.plane.currentPosition else { return }
+                    do {
+                        try vm.updateFramePosition(newPosition: currentPosition)
+                    } catch let edgeError as EdgeOverflowError {
                         withAnimation(Animation.linear(duration: 0.2)) {
-                            switch edge {
+                            switch edgeError {
                             case .leading(let offset):
-                                position.x += offset
+                                vm.plane.currentPosition?.x += offset
                             case .trailing(let offset):
-                                position.x -= offset
+                                vm.plane.currentPosition?.x -= offset
                             case .top(let offset):
-                                position.y += offset
+                                vm.plane.currentPosition?.y += offset
                             case .bottom(let offset):
-                                position.y -= offset
+                                vm.plane.currentPosition?.y -= offset
                             }
                         }
+                    } catch {
+                        print(error)
                     }
                 }
         )
-        .scaleEffect(scale)
-        .animation(.bouncy(duration: 0.2), value: scale)
+        .scaleEffect(vm.plane.scale ?? 1.0)
+        .animation(.bouncy(duration: 0.2), value: vm.plane.scale)
         .highPriorityGesture(TapGesture(count: 2).onEnded {
+            guard let scale = vm.plane.scale else { return }
             if scale < 1.5 {
-                scale = 2.0
+                vm.plane.scale = 2.0
             } else {
-                scale = 1.0
+                vm.plane.scale = 1.0
             }
         })
-
         .onTapGesture {
-            vm.activeLayerPhoto = nil
+            vm.activeLayer = nil
         }
         .gesture(
             MagnificationGesture()
                 .onChanged { value in
                     DispatchQueue.main.async {
-                        let delta = value / lastScaleValue
-                        scale = min(max(scale * delta, previewMinScale), previewMaxScale)
+                        guard let scale = vm.plane.scale else { return }
+                        let delta = value / (lastScaleValue ?? 1.0)
+                        vm.plane.scale = min(max(scale * delta, previewMinScale), previewMaxScale)
                         lastScaleValue = value
                     }
                 }
                 .onEnded { _ in
+                    guard let scale = vm.plane.scale else { return }
                     if scale > maxScale {
-                        scale = min(maxScale, scale)
+                        vm.plane.scale = min(maxScale, scale)
                     } else {
-                        scale = max(minScale, scale)
+                        vm.plane.scale = max(minScale, scale)
                     }
 
                     lastScaleValue = 1.0
@@ -152,58 +125,19 @@ struct ImageProjectPlaneView: View {
     }
 
     private func centerPerspective() {
-        guard let initialPosition else { return }
-        let distance = hypot(position.x - initialPosition.x, position.y - initialPosition.y)
+        guard let initialPosition = vm.plane.initialPosition, let currentPosition = vm.plane.currentPosition else { return }
+        let distance = hypot(currentPosition.x - initialPosition.x, currentPosition.y - initialPosition.y)
 
         let animationDuration: Double = distance / 2000.0 + 0.2
 
         withAnimation(.easeInOut(duration: animationDuration)) {
-            position = initialPosition
+            vm.plane.currentPosition = initialPosition
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
             withAnimation(.linear(duration: 0.2)) {
-                scale = 1.0
+                vm.plane.scale = 1.0
             }
         }
-    }
-
-    func validatePosition(newPosition: CGPoint, frameViewPadding: Double) -> (CGPoint?, EdgeOffset?)
-    {
-        guard let furthestPlanePointAllowed,
-              let frameViewRect,
-              let totalNavBarHeight,
-              let totalLowerToolbarHeight
-        else {
-            return (newPosition, nil)
-        }
-
-        let (newX, newY) = (newPosition.x, newPosition.y)
-        let (maxX, maxY) =
-            (furthestPlanePointAllowed.x + frameViewRect.width / 2,
-             furthestPlanePointAllowed.y -
-                 totalLowerToolbarHeight + frameViewRect.height / 2)
-        let (minX, minY) =
-            (-frameViewRect.width / 2,
-             -frameViewRect.height / 2 + totalNavBarHeight)
-
-        if minX + frameViewPadding > newX {
-            let diff = minX + frameViewPadding - newX
-            return (nil, .leading(offset: diff))
-        } else if maxX - frameViewPadding < newX {
-            let diff = newX - maxX + frameViewPadding
-
-            return (nil, .trailing(offset: diff))
-        }
-
-        if minY + frameViewPadding > newY {
-            let diff = minY + frameViewPadding - newY
-            return (nil, .top(offset: diff))
-        } else if maxY - frameViewPadding < newY {
-            let diff = newY - maxY + frameViewPadding
-            return (nil, .bottom(offset: diff))
-        }
-
-        return (newPosition, nil)
     }
 }

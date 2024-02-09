@@ -9,35 +9,18 @@ import SwiftUI
 
 struct ImageProjectFrameView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
-    @State var frameSize: CGSize = .init()
     @State var orientation: Image.Orientation = .up
-    @State var frameViewRect: CGRect?
-
-    @Binding var totalLowerToolbarHeight: Double?
-
-    @Binding var geoProxy: GeometryProxy?
-
-    let framePaddingFactor: Double
 
     var body: some View {
-        if let geoProxy {
+        if vm.workspaceSize != nil {
             ZStack {
                 Image("AlphaVector")
                     .resizable(resizingMode: .tile)
-                    .frame(width: frameSize.width, height: frameSize.height)
+                    .frame(width: vm.frame.rect?.size.width ?? 0.0, height: vm.frame.rect?.size.height ?? 0.0)
                     .shadow(radius: 10.0)
                     .onAppear {
-                        guard let totalLowerToolbarHeight else { return }
-
-                        frameSize = vm.calculateFrameSize(geoSize: geoProxy.size,
-                                                          framePaddingFactor: framePaddingFactor,
-                                                          totalLowerToolbarHeight: totalLowerToolbarHeight)
-
-                        frameViewRect = vm.calculateFrameRect(frameSize: frameSize,
-                                                              geo: geoProxy,
-                                                              totalLowerToolbarHeight: totalLowerToolbarHeight)
+                        vm.setupFrameRect()
                     }
-                    .preference(key: ImageProjectFramePreferenceKey.self, value: frameViewRect)
             }
         }
     }

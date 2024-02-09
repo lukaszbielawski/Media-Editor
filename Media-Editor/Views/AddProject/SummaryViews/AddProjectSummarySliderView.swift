@@ -32,7 +32,7 @@ struct AddProjectSummarySliderView: View {
                           , systemImage: "chevron.right.2")
                         .padding(.leading, 16)
                 }
-                .geometryAccesor { geo in
+                .geometryAccessor { geo in
                     DispatchQueue.main.async {
                         sliderWidth = geo.size.width
                     }

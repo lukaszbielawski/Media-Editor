@@ -10,7 +10,7 @@ import SwiftUI
 struct ImageProjectToolScrollView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    let lowerToolbarHeight: CGFloat
+//    let lowerToolbarHeight: CGFloat
     let padding: Double = 0.1
 
     @State var opacity: Double = 1.0
@@ -27,7 +27,7 @@ struct ImageProjectToolScrollView: View {
                     }, label: {
                         ImageProjectToolTileView(title: tool.name,
                                                  iconName: tool.icon,
-                                                 lowerToolbarHeight: lowerToolbarHeight,
+
                                                  padding: padding)
                     })
                     .opacity(opacity)
@@ -42,13 +42,12 @@ struct ImageProjectToolScrollView: View {
                     opacity = 1
                 }
             }
-            .padding(.horizontal, padding * lowerToolbarHeight)
-            .frame(height: lowerToolbarHeight)
+            .padding(.horizontal, padding * vm.plane.lowerToolbarHeight)
+            .frame(height: vm.plane.lowerToolbarHeight)
             .background(Color(.image))
 
             if vm.currentTool != .none {
-                ImageProjectToolDetailsView(lowerToolbarHeight:
-                    lowerToolbarHeight, padding: padding)
+                ImageProjectToolDetailsView(padding: padding)
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.5)))
                     .environmentObject(vm)
 
@@ -67,13 +66,13 @@ struct ImageProjectToolScrollView: View {
                     })
                 }
 
-                .frame(width: lowerToolbarHeight * 0.5,
-                       height: lowerToolbarHeight * 0.5)
+                .frame(width: vm.plane.lowerToolbarHeight * 0.5,
+                       height: vm.plane.lowerToolbarHeight * 0.5)
 
                 .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.25)))
                 .offset(
-                    x: padding * lowerToolbarHeight,
-                    y: -(1 + 2 * padding) * lowerToolbarHeight * 0.5)
+                    x: padding * vm.plane.lowerToolbarHeight,
+                    y: -(1 + 2 * padding) * vm.plane.lowerToolbarHeight * 0.5)
             }
         }
     }

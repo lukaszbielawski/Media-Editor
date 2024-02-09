@@ -8,92 +8,37 @@
 import SwiftUI
 
 struct ImageProjectView: View {
-    @StateObject var vm: ImageProjectViewModel
     @Environment(\.dismiss) var dismiss
+
+    @StateObject var vm: ImageProjectViewModel
 
     init(project: ImageProjectEntity?) {
         _vm = StateObject(wrappedValue: ImageProjectViewModel(project: project!))
-
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithOpaqueBackground()
-        coloredAppearance.backgroundColor = UIColor(Color(.image))
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.tint]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.tint]
-
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().compactAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
     }
 
-    @State var totalLowerToolbarHeight: Double?
-    @State var isSaved: Bool = false
-    @State var totalNavBarHeight: Double?
-    @State var isArrowActive = (undo: true, redo: false)
-    @State var centerButtonFunction: (() -> Void)?
-
-    let lowerToolbarHeight = 100.0
-
     var body: some View {
-        VStack(spacing: 0) {
-            ImageProjectPlaneView(totalNavBarHeight: $totalNavBarHeight,
-                                  totalLowerToolbarHeight: $totalLowerToolbarHeight,
-                                  centerButtonTapped: $centerButtonFunction)
-            ImageProjectToolScrollView(lowerToolbarHeight: lowerToolbarHeight)
-        }
-        .background(Color(.primary))
-        .background {
-            NavBarAccessor { navBar in
-                totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
+        ZStack {
+            VStack(spacing: 0) {
+                ImageProjectPlaneView()
+                    .coordinateSpace(name: "plane")
+                ImageProjectToolScrollView()
             }
-        }.onAppear {
-            totalLowerToolbarHeight = lowerToolbarHeight + UIScreen.bottomSafeArea
-        }
-        .navigationBarBackButtonHidden(true)
-        .modifier(StatusBarHiddenModifier())
-        .environmentObject(vm)
-        .ignoresSafeArea(edges: .top)
-
-        .toolbar {
-            ToolbarItemGroup(placement: .topBarLeading) {
-                Label(isSaved ? "Back" : "Save", systemImage: isSaved ? "chevron.left" : "square.and.arrow.down")
-                    .labelStyle(.titleAndIcon)
-                    .onTapGesture {
-                        if isSaved {
-                            dismiss()
-                        } else {
-                            // TODO: save action
-                            isSaved = true
-                        }
-                    }
-                    .foregroundStyle(Color(.tint))
+            .background(Color(.primary))
+            .background {
+                NavBarAccessor { navBar in
+                    vm.plane.totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
+                }
             }
-            ToolbarItemGroup(placement: .principal) {
-                HStack {
-                    Group {
-                        Spacer().frame(width: 11)
-                        Label("Undo", systemImage: "arrowshape.turn.up.backward.fill")
-                            .opacity(isArrowActive.undo ? 1.0 : 0.5)
-                            .onTapGesture { print("undo") }
-                        Label("Redo", systemImage: "arrowshape.turn.up.forward.fill")
-                            .opacity(isArrowActive.redo ? 1.0 : 0.5)
-                            .onTapGesture { print("redo") }
-                        Spacer().frame(width: 22)
-                        Label("Center", systemImage: "camera.metering.center.weighted")
-                            .onTapGesture {
-                                guard let centerButtonFunction else { return }
-                                centerButtonFunction()
-                            }
-                    }
-                    .foregroundStyle(Color(.tint))
-                }.frame(maxWidth: .infinity)
+            .navigationBarBackButtonHidden(true)
+            .modifier(StatusBarHiddenModifier())
+            .ignoresSafeArea(edges: .top)
+            .onAppear {
+                vm.plane.totalLowerToolbarHeight = vm.plane.lowerToolbarHeight + UIScreen.bottomSafeArea
             }
 
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                Label("Export", systemImage: "square.and.arrow.up.on.square.fill")
-                    .labelStyle(.titleAndIcon)
-                    .onTapGesture {}
-                    .foregroundStyle(Color(.tint))
+            .toolbar {
+                ImageProjectViewToolbar()
             }
-        }
+        }   .environmentObject(vm)
     }
 }
