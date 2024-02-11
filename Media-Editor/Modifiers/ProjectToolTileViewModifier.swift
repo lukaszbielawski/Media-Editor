@@ -15,7 +15,8 @@ struct ProjectToolTileViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .clipShape(RoundedRectangle(cornerRadius: padding * vm.plane.lowerToolbarHeight))
-            .frame(width: vm.plane.lowerToolbarHeight * (1 - 2 * padding), height: vm.plane.lowerToolbarHeight * (1 - 2 * padding))
+            .frame(width: vm.plane.lowerToolbarHeight * (1 - 2 * padding),
+                   height: vm.plane.lowerToolbarHeight * (1 - 2 * padding))
             .padding(.vertical, padding * vm.plane.lowerToolbarHeight)
             .aspectRatio(1.0, contentMode: .fit)
             .foregroundStyle(Color(.tint))

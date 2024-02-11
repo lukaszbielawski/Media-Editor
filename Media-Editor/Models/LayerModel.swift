@@ -16,12 +16,30 @@ class LayerModel: Identifiable, ObservableObject {
     var photoEntity: PhotoEntity
     var cgImage: CGImage!
 
-    @Published var position: CGPoint?
-    @Published var positionZ: Int?
+    @Published var position: CGPoint? {
+        willSet {
+            photoEntity.positionX = newValue!.x as NSNumber
+            photoEntity.positionY = newValue!.y as NSNumber
+        }
+    }
+
+    @Published var positionZ: Int? {
+        willSet { photoEntity.positionZ = newValue as? NSNumber }
+    }
+
+    @Published var rotation: Angle? {
+        willSet { photoEntity.rotation = newValue!.radians as NSNumber }
+    }
+
+    @Published var scaleX: Double? {
+        willSet { photoEntity.scaleX = newValue! as NSNumber }
+    }
+
+    @Published var scaleY: Double? {
+        willSet { photoEntity.scaleY = newValue! as NSNumber }
+    }
+
     @Published var size: CGSize?
-    @Published var rotation: Angle?
-    @Published var scaleX: Double?
-    @Published var scaleY: Double?
 
     init(photoEntity: PhotoEntity) {
         self.photoEntity = photoEntity
@@ -29,10 +47,27 @@ class LayerModel: Identifiable, ObservableObject {
 
         self.positionZ = photoEntity.positionZ?.intValue
         self.cgImage = try! createCGImage(absoluteFilePath: absoluteFilePath)
+
+        self.position = CGPoint(x: photoEntity.positionX!.doubleValue, y: photoEntity.positionY!.doubleValue as Double)
+        self.rotation = Angle(radians: photoEntity.rotation as? Double ?? .zero)
+
+        self.scaleX = photoEntity.scaleX as? Double ?? 1.0
+        self.scaleY = photoEntity.scaleY as? Double ?? 1.0
     }
 
-    func updateEntity() {
-        photoEntity.positionZ = positionZ != nil ? NSNumber(value: positionZ!) : nil
+    func calculateLayerSize(frame: FrameModel) -> CGSize {
+        guard let frameSize = frame.rect?.size,
+              let project = photoEntity.photoEntityToImageProjectEntity
+        else { return .zero }
+
+        let projectFrame = project.getSize()
+
+        let scale = (x: Double(cgImage.width) / projectFrame.width,
+                     y: Double(cgImage.height) / projectFrame.height)
+
+        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
+
+        return layerSize
     }
 
     var absoluteFilePath: String {

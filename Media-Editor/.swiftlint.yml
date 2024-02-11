@@ -4,6 +4,7 @@ disabled_rules:
 - force_try
 - trailing_comma
 - function_body_length
+- type_body_length
 
 identifier_name:
     excluded:

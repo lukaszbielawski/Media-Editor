@@ -32,9 +32,9 @@ struct ImageProjectToolCaseAddView: View {
                                 }
                         }
 
-                    ForEach(vm.projectLayers) { photo in
+                    ForEach(vm.projectLayers) { layerModel in
                         ZStack(alignment: .topTrailing) {
-                            Image(uiImage: UIImage(cgImage: photo.cgImage))
+                            Image(uiImage: UIImage(cgImage: layerModel.cgImage))
                                 .centerCropped()
                                 .modifier(ProjectToolTileViewModifier(
                                     padding: padding))
@@ -50,11 +50,11 @@ struct ImageProjectToolCaseAddView: View {
                                 .padding(.top, padding * vm.plane.lowerToolbarHeight)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
-                                    vm.layerToDelete = photo
+                                    vm.layerToDelete = layerModel
                                     isDeleteImageAlertPresented = true
                                 }
                         }.onTapGesture {
-                            vm.addPhotoLayer(photo: photo)
+                            vm.showLayerOnScreen(layerModel: layerModel)
                         }
                     }
                 }

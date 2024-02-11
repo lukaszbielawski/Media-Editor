@@ -55,6 +55,4 @@ struct ImageProjectViewToolbar: ToolbarContent {
                 .foregroundStyle(Color(.tint))
         }
     }
-
-
 }

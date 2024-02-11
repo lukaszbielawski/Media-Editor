@@ -41,11 +41,10 @@ final class ImageProjectViewModel: ObservableObject {
             var isFirst = true
             for entity in mediaEntities {
                 if project.lastEditDate == nil && isFirst {
-                    entity.positionZ = 1
-
                     isFirst = false
                     let model = LayerModel(photoEntity: entity)
                     projectLayers.append(model)
+                    model.positionZ = 1
 
                     project.setFrame(width: model.cgImage.width, height: model.cgImage.height)
                     project.lastEditDate = Date.now
@@ -123,28 +122,10 @@ final class ImageProjectViewModel: ObservableObject {
         plane.currentPosition = newPosition
     }
 
-    func addPhotoLayer(photo: LayerModel) {
-        var index = projectLayers.firstIndex { $0.id == photo.id }
-        guard let index else { return }
-        projectLayers[index].positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
-
-        projectLayers[index].updateEntity()
+    func showLayerOnScreen(layerModel: LayerModel) {
+        layerModel.positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
         PersistenceController.shared.saveChanges()
-        activeLayer = projectLayers[index]
-    }
-
-    func calculateLayerSize(photo: LayerModel) -> CGSize
-    {
-        guard let frameSize = frame.rect?.size else { return .zero }
-
-        let projectFrame = project.getSize()
-
-        let scale = (x: Double(photo.cgImage.width) / projectFrame.width,
-                     y: Double(photo.cgImage.height) / projectFrame.height)
-
-        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
-
-        return layerSize
+        activeLayer = layerModel
     }
 
     func setupFrameRect() {
@@ -152,7 +133,7 @@ final class ImageProjectViewModel: ObservableObject {
 
         let (width, height) = (project.getSize().width, project.getSize().height)
         let (geoWidth, geoHeight) =
-        (workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
+            (workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
              (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
         let aspectRatio = height / width
         let geoAspectRatio = geoHeight / geoWidth

@@ -17,6 +17,8 @@ struct ImageProjectPlaneView: View {
 
     @State var lastScaleValue: Double? = 1.0
 
+//    @Namespace var plane
+
     var body: some View {
         ZStack {
             Color.clear
@@ -44,6 +46,7 @@ struct ImageProjectPlaneView: View {
                 .zIndex(Double(layerModel.positionZ ?? 0))
             }
         }
+       
         .position(vm.plane.currentPosition ?? .zero)
         .onChange(of: vm.frame.rect) { frameViewRect in
             guard let frameViewRect, let workspaceSize = vm.workspaceSize else { return }
@@ -52,11 +55,11 @@ struct ImageProjectPlaneView: View {
                 CGSize(width: frameViewRect.width + workspaceSize.width * 2.0,
                        height: frameViewRect.height + workspaceSize.height * 2.0)
         }
-
         .gesture(
-            DragGesture()
+            DragGesture(coordinateSpace: .local)
                 .onChanged { value in
                     guard let currentPosition = vm.plane.currentPosition else { return }
+                    print("plane pos", currentPosition)
                     var newPosition = lastPosition ?? currentPosition
                     newPosition.x += value.translation.width
                     newPosition.y += value.translation.height
@@ -125,7 +128,8 @@ struct ImageProjectPlaneView: View {
     }
 
     private func centerPerspective() {
-        guard let initialPosition = vm.plane.initialPosition, let currentPosition = vm.plane.currentPosition else { return }
+        guard let initialPosition = vm.plane.initialPosition,
+              let currentPosition = vm.plane.currentPosition else { return }
         let distance = hypot(currentPosition.x - initialPosition.x, currentPosition.y - initialPosition.y)
 
         let animationDuration: Double = distance / 2000.0 + 0.2

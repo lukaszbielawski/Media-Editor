@@ -22,10 +22,10 @@ struct ImageProjectEditingFrameView<Content: View>: View {
 
     @ViewBuilder var content: Content
 
+//    @Namespace var plane
+
     var isActive: Bool { vm.activeLayer == layerModel }
     let minDimension: Double = 40.0
-
-    var globalPosition: CGPoint { CGPoint(x: vm.plane.size?.width ?? 0 / 2, y: vm.plane.size?.height ?? 0 / 2) }
 
     var body: some View {
         ZStack {
@@ -34,7 +34,8 @@ struct ImageProjectEditingFrameView<Content: View>: View {
 
                     .fill(Color(.image))
                     .padding(14)
-                    .frame(width: (layerModel.size?.width ?? 0.0) * abs(layerModel.scaleX ?? 1.0) + 42, height: (layerModel.size?.height ?? 0.0) * abs(layerModel.scaleY ?? 1.0) + 42)
+                    .frame(width: (layerModel.size?.width ?? 0.0) * abs(layerModel.scaleX ?? 1.0) + 42,
+                           height: (layerModel.size?.height ?? 0.0) * abs(layerModel.scaleY ?? 1.0) + 42)
                     .opacity(opacity)
                     .overlay {
                         content
@@ -48,10 +49,8 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                             .opacity(opacity)
                             .contentShape(Circle())
                             .onTapGesture {
-                                layerModel.photoEntity.positionZ = nil
-                                let index = vm.projectLayers.firstIndex { $0.id == layerModel.id }
-                                guard let index else { return }
-                                vm.projectLayers[index].positionZ = nil
+                                layerModel.positionZ = nil
+                                vm.objectWillChange.send()
                                 PersistenceController.shared.saveChanges()
                             }
                     }
@@ -64,22 +63,32 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                             .opacity(opacity)
                             .gesture(DragGesture(coordinateSpace: .global)
                                 .onChanged { value in
-                                    guard let lastPosition, let layerSize = layerModel.size else { return }
+                                    guard let lastPosition,
+                                          let rotation = layerModel.rotation,
+                                          let layerSize = layerModel.size else { return }
 
-                                    let dragHeight = value.translation.height
-                                    var newScale = (lastScaleY ?? 1.0) - dragHeight / layerSize.height
+                                    let dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                                              dy: value.location.y - value.startLocation.y)
 
-                                    guard layerSize.height * newScale > minDimension else { return }
-                                    guard let position = layerModel.position else { return }
+                                    let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
+                                    let angleBetweenTopEdgeAndDragVector = dragVectorAngle + rotation
+
+                                    let dragLenght = hypot(dragVector.dx, dragVector.dy) *
+                                        sin(CGFloat(angleBetweenTopEdgeAndDragVector.radians))
+
+                                    let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
+                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
+
+                                    guard abs(layerSize.height * newScale) > minDimension,
+                                          newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
+
                                     DispatchQueue.main.async {
                                         layerModel.scaleY = newScale
-                                        layerModel.position?.y = lastPosition.y + dragHeight * 0.5
-
-                                        layerModel.photoEntity.scaleY = layerModel.scaleY as? NSNumber ?? 1.0
-                                        layerModel.photoEntity.positionX = (position.x - globalPosition.x) as NSNumber
-                                        layerModel.photoEntity.positionY = (position.y - globalPosition.y) as NSNumber
-
-//                                        editAction(.topResize)
+                                        layerModel.position =
+                                            CGPoint(x: lastPosition.x + dragLenght * 0.5
+                                                * sin(CGFloat(rotation.radians)),
+                                                y: lastPosition.y - dragLenght * 0.5
+                                                    * cos(CGFloat(rotation.radians)))
                                     }
                                 }
                                 .updating($lastPosition) { _, lastPosition, _ in
@@ -90,7 +99,6 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                 }
                                 .onEnded { _ in
                                     PersistenceController.shared.saveChanges()
-//                                    editAction(.save)
                                 }
                             )
                     }
@@ -104,46 +112,48 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                 if layerModel.rotation != nil {
                                     withAnimation(.easeInOut(duration: 0.35)) {
                                         layerModel.rotation = Angle(radians:
-                                            ceil(layerModel.rotation!.radians / (.pi * 0.495)) * (.pi * 0.5) - 0.5 * .pi)
+                                            ceil(layerModel.rotation!.radians /
+                                                (.pi * 0.495)) * (.pi * 0.5) - 0.5 * .pi)
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                        layerModel.photoEntity.rotation = NSNumber(value: layerModel.rotation!.radians)
                                         PersistenceController.shared.saveChanges()
                                     }
                                 }
                             }
                             .gesture(DragGesture(coordinateSpace: .global)
                                 .onChanged { value in
-                                    guard let position = layerModel.position,
+                                    guard let layerCenterPoint = layerModel.position,
                                           let totalNavBarHeight = vm.plane.totalNavBarHeight,
-                                          let layerSize = layerModel.size,
                                           let planeSize = vm.plane.size,
+                                          let planeCurrentPosition = vm.plane.currentPosition,
                                           let workspaceSize = vm.workspaceSize else { return }
-                                    let centerPoint = CGPoint(x: position.x - planeSize.width * 0.5,
-                                                              y: position.y - planeSize.height * 0.5)
 
-                                    let currentDragPoint =
-                                        CGPoint(x: value.location.x - workspaceSize.width / 2,
-                                                y: value.location.y - (workspaceSize.height + totalNavBarHeight) / 2)
+                                    print("center point of layer is", layerCenterPoint)
 
-                                    let previousDragPoint =
-                                        CGPoint(x: value.startLocation.x - workspaceSize.width / 2,
-                                                y: value.startLocation.y - (workspaceSize.height + totalNavBarHeight) / 2)
+                                    let currentDragPoint = CGPoint(x: value.location.x - planeCurrentPosition.x,
+                                                                   y: value.location.y - planeCurrentPosition.y)
+
+                                    let previousDragPoint = CGPoint(x: value.startLocation.x - planeCurrentPosition.x,
+                                                                    y: value.startLocation.y - planeCurrentPosition.y)
+
+//                                    print("drag current point of layer is", CGPoint(x: value.location.x - planeCurrentPosition.x,
+//                                                                                    y: value.location.y - planeCurrentPosition.y))
+//                                    print("drag previous point of layer is", CGPoint(x: value.startLocation.x - planeCurrentPosition.x,
+//                                                                                     y: value.startLocation.y - planeCurrentPosition.y))
 
                                     let currentAngle =
-                                        Angle(radians: atan2(currentDragPoint.x - centerPoint.x,
-                                                             currentDragPoint.y - centerPoint.y))
+                                        Angle(radians: atan2(currentDragPoint.x - layerCenterPoint.x,
+                                                             currentDragPoint.y - layerCenterPoint.y))
                                     let previousAngle =
-                                        Angle(radians: atan2(previousDragPoint.x - centerPoint.x,
-                                                             previousDragPoint.y - centerPoint.y))
+                                        Angle(radians: atan2(previousDragPoint.x - layerCenterPoint.x,
+                                                             previousDragPoint.y - layerCenterPoint.y))
 
                                     let angleDiff = currentAngle - previousAngle
 
                                     let newAngle = (lastAngle ?? layerModel.rotation ?? .zero) - angleDiff
-
+                                    print("newAngle", Angle(radians: newAngle.normalizedRotation).degrees)
                                     DispatchQueue.main.async {
                                         layerModel.rotation = newAngle
-                                        layerModel.photoEntity.rotation = NSNumber(value: layerModel.rotation!.radians)
                                     }
                                 }
                                 .updating($lastAngle) { _, lastAngle, _ in
@@ -160,6 +170,46 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                             .clipShape(Circle())
                             .modifier(EditFrameResizeModifier(edge: .trailing))
                             .opacity(opacity)
+                            .gesture(DragGesture(coordinateSpace: .global)
+                                .onChanged { value in
+                                    guard let lastPosition,
+                                          let rotation = layerModel.rotation,
+                                          let layerSize = layerModel.size else { return }
+
+                                    let dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                                              dy: value.location.y - value.startLocation.y)
+
+                                    let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
+                                    let angleBetweenTrailingEdgeAndDragVector = dragVectorAngle + rotation + Angle(radians: .pi * 1.5)
+
+                                    let dragLenght = hypot(dragVector.dx, dragVector.dy) *
+                                        sin(CGFloat(angleBetweenTrailingEdgeAndDragVector.radians))
+
+                                    let newScale = (lastScaleX ?? 1.0) - dragLenght / layerSize.width
+                                        * copysign(-1.0, layerModel.scaleX ?? 1.0)
+
+                                    guard abs(layerSize.width * newScale) > minDimension,
+                                          newScale * (layerModel.scaleX ?? 1.0) > 0.0 else { return }
+
+                                    DispatchQueue.main.async {
+                                        layerModel.scaleX = newScale
+                                        layerModel.position =
+                                            CGPoint(x: lastPosition.x - dragLenght * 0.5
+                                                * cos(CGFloat(rotation.radians)),
+                                                y: lastPosition.y - dragLenght * 0.5
+                                                    * sin(CGFloat(rotation.radians)))
+                                    }
+                                }
+                                .updating($lastPosition) { _, lastPosition, _ in
+                                    lastPosition = lastPosition ?? layerModel.position
+                                }
+                                .updating($lastScaleX) { _, lastScaleX, _ in
+                                    lastScaleX = lastScaleX ?? layerModel.scaleX
+                                }
+                                .onEnded { _ in
+                                    PersistenceController.shared.saveChanges()
+                                }
+                            )
                     }
                     // aspectScale
                     .overlay(alignment: .bottomTrailing) {
@@ -167,52 +217,66 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                             .modifier(EditFrameCircleModifier())
                             .shadow(radius: 10.0)
                             .opacity(opacity)
+
                             .gesture(DragGesture(coordinateSpace: .global)
                                 .onChanged { value in
                                     guard let lastPosition,
-                                          let lastScaleX,
-                                          let lastScaleY,
+                                          let rotation = layerModel.rotation,
                                           let layerSize = layerModel.size else { return }
 
-                                    print(layerModel.rotation?.normalizedRotation, "norm")
+                                    var dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                                              dy: value.location.y - value.startLocation.y)
 
-                                    var dragWidth = value.translation.width
-                                    var dragHeight = value.translation.height
-
-                                    print("dragWidth", dragWidth, "dragHeight", dragHeight)
+                                    let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
+                                    let angleBetweenCornerVectorAndDragVector =
+                                        dragVectorAngle + rotation + Angle(radians: 1.25 * .pi)
+//
+//                                    let dragLenght = hypot(dragVector.dx, dragVector.dy)
+//                                        * sin(CGFloat(angleBetweenBottomEdgeAndDragVector.radians))
+//
+//                                    let dragHeight =
+//
+//                                    let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
+//                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
+//                                    guard abs(layerSize.height * newScale) > minDimension else { return }
 
                                     let aspectRatio =
                                         abs((layerSize.width * (layerModel.scaleX ?? 1.0)) /
                                             (layerSize.height * (layerModel.scaleY ?? 1.0)))
 
-                                    let isWidthSmaller = dragHeight * aspectRatio > dragWidth
-
-                                    if isWidthSmaller {
-                                        dragHeight = dragWidth / aspectRatio
+                                    if dragVector.dy * aspectRatio > dragVector.dx {
+                                        dragVector.dy = dragVector.dx / aspectRatio
 
                                     } else {
-                                        dragWidth = dragHeight * aspectRatio
+                                        dragVector.dx = dragVector.dy * aspectRatio
                                     }
 
-                                    let newScaleX = lastScaleX + dragWidth / layerSize.width
-                                    let newScaleY = lastScaleY + dragHeight / layerSize.height
+                                    let newScaleX = (lastScaleX ?? 1.0) + dragVector.dx / layerSize.width
+                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
+                                    let newScaleY = (lastScaleY ?? 1.0) + dragVector.dy / layerSize.height
+                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
 
-                                    let newX = lastPosition.x + dragWidth * 0.5
-//                                    * cos(rotation?.normalizedRotation ?? (.pi * 0.5))
-                                    let newY = lastPosition.y + dragHeight * 0.5
-//                                    * cos(rotation?.normalizedRotation ?? 0)
+                                    guard abs(layerSize.width * newScaleX) > minDimension,
+                                          abs(layerSize.height * newScaleY) > minDimension,
+                                          newScaleX * (layerModel.scaleX ?? 1.0) > 0.0,
+                                          newScaleY * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
-                                    guard layerSize.width * newScaleX > minDimension,
-                                          layerSize.height * newScaleY > minDimension else { return }
+                                    print(aspectRatio)
 
                                     DispatchQueue.main.async {
                                         layerModel.scaleX = newScaleX
                                         layerModel.scaleY = newScaleY
-
-                                        layerModel.photoEntity.scaleX = layerModel.scaleX as? NSNumber ?? 1.0
-                                        layerModel.photoEntity.scaleY = layerModel.scaleX as? NSNumber ?? 1.0
+//                                        layerModel.position =
+//                                            CGPoint(x: lastPosition.x - dragLenght * 0.5
+//                                                * sin(CGFloat(rotation.radians)),
+//                                                y: lastPosition.y + dragLenght * 0.5
+//                                                    * cos(CGFloat(rotation.radians)))
+                                        layerModel.position =
+                                            CGPoint(x: lastPosition.x + dragVector.dx * 0.5,
+                                                    y: lastPosition.y + dragVector.dy * 0.5)
                                     }
                                 }
+
                                 .updating($lastPosition) { _, lastPosition, _ in
                                     lastPosition = lastPosition ?? layerModel.position
                                 }
@@ -224,7 +288,6 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                 }
                                 .onEnded { _ in
                                     PersistenceController.shared.saveChanges()
-//                                    editAction(.save)
                                 }
                             )
                     }
@@ -235,6 +298,46 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                             .clipShape(Circle())
                             .modifier(EditFrameResizeModifier(edge: .bottom))
                             .opacity(opacity)
+                            .gesture(DragGesture(coordinateSpace: .global)
+                                .onChanged { value in
+                                    guard let lastPosition,
+                                          let rotation = layerModel.rotation,
+                                          let layerSize = layerModel.size else { return }
+
+                                    let dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                                              dy: value.location.y - value.startLocation.y)
+
+                                    let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
+                                    let angleBetweenBottomEdgeAndDragVector =
+                                        dragVectorAngle + rotation + Angle(radians: .pi)
+
+                                    let dragLenght = hypot(dragVector.dx, dragVector.dy) *
+                                        sin(CGFloat(angleBetweenBottomEdgeAndDragVector.radians))
+
+                                    let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
+                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
+                                    guard abs(layerSize.height * newScale) > minDimension,
+                                          newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
+
+                                    DispatchQueue.main.async {
+                                        layerModel.scaleY = newScale
+                                        layerModel.position =
+                                            CGPoint(x: lastPosition.x - dragLenght * 0.5
+                                                * sin(CGFloat(rotation.radians)),
+                                                y: lastPosition.y + dragLenght * 0.5
+                                                    * cos(CGFloat(rotation.radians)))
+                                    }
+                                }
+                                .updating($lastPosition) { _, lastPosition, _ in
+                                    lastPosition = lastPosition ?? layerModel.position
+                                }
+                                .updating($lastScaleY) { _, lastScaleY, _ in
+                                    lastScaleY = lastScaleY ?? layerModel.scaleY
+                                }
+                                .onEnded { _ in
+                                    PersistenceController.shared.saveChanges()
+                                }
+                            )
                     }
                     // flip
                     .overlay(alignment: .bottomLeading) {
@@ -248,20 +351,10 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                 if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation) ||
                                     ((.pi * 1.25)...(.pi * 1.75)).contains(rotation)
                                 {
-                                    let scaleY = layerModel.photoEntity.scaleY
-                                    guard let scaleY else { return }
-
-                                    let newScale = NSNumber(value: Double(truncating: scaleY) * -1.0)
-                                    layerModel.photoEntity.scaleY = newScale
-                                    layerModel.scaleY = Double(truncating: scaleY) * -1.0
+                                    layerModel.scaleY? *= -1.0
 
                                 } else {
-                                    let scaleX = layerModel.photoEntity.scaleX
-                                    guard let scaleX else { return }
-
-                                    let newScale = NSNumber(value: Double(truncating: scaleX) * -1.0)
-                                    layerModel.photoEntity.scaleX = newScale
-                                    layerModel.scaleX = Double(truncating: scaleX) * -1.0
+                                    layerModel.scaleX? *= -1.0
                                 }
                                 PersistenceController.shared.saveChanges()
                             }
@@ -273,6 +366,48 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                             .clipShape(Circle())
                             .modifier(EditFrameResizeModifier(edge: .leading))
                             .opacity(opacity)
+                            .gesture(DragGesture(coordinateSpace: .global)
+                                .onChanged { value in
+                                    guard let lastPosition,
+                                          let rotation = layerModel.rotation,
+                                          let layerSize = layerModel.size else { return }
+
+                                    let dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                                              dy: value.location.y - value.startLocation.y)
+
+                                    let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
+                                    let angleBetweenLeadingEdgeAndDragVector =
+                                        dragVectorAngle + rotation + Angle(radians: .pi * 0.5)
+
+                                    let dragLenght = hypot(dragVector.dx, dragVector.dy) *
+                                        sin(CGFloat(angleBetweenLeadingEdgeAndDragVector.radians))
+
+                                    let newScale = (lastScaleX ?? 1.0) - dragLenght / layerSize.width
+                                        * copysign(-1.0, layerModel.scaleX ?? 1.0)
+
+                                    guard abs(layerSize.width * newScale) > minDimension,
+                                          newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
+                                    guard let position = layerModel.position else { return }
+
+                                    DispatchQueue.main.async {
+                                        layerModel.scaleX = newScale
+                                        layerModel.position =
+                                            CGPoint(x: lastPosition.x + dragLenght * 0.5
+                                                * cos(CGFloat(rotation.radians)),
+                                                y: lastPosition.y + dragLenght * 0.5
+                                                    * sin(CGFloat(rotation.radians)))
+                                    }
+                                }
+                                .updating($lastPosition) { _, lastPosition, _ in
+                                    lastPosition = lastPosition ?? layerModel.position
+                                }
+                                .updating($lastScaleX) { _, lastScaleX, _ in
+                                    lastScaleX = lastScaleX ?? layerModel.scaleX
+                                }
+                                .onEnded { _ in
+                                    PersistenceController.shared.saveChanges()
+                                }
+                            )
                     }
                     .onAppear {
                         withAnimation(.easeOut(duration: 0.35)) {
@@ -298,40 +433,3 @@ struct ImageProjectEditingFrameView<Content: View>: View {
         }
     }
 }
-
-//struct EditFrameCircleModifier: ViewModifier {
-//    func body(content: Content) -> some View {
-//        content
-//
-//            .frame(width: 16, height: 16)
-//            .padding(10)
-//            .background(Circle().fill(Color(.image)))
-//    }
-//}
-//
-//struct LayerTransformationModifier: ViewModifier {
-//    let scaleX: Double?
-//    let scaleY: Double?
-//
-//    func body(content: Content) -> some View {
-//        content
-//            .scaleEffect(x: scaleX ?? 1.0, y: scaleY ?? 1.0)
-//    }
-//}
-//
-//struct EditFrameResizeModifier: ViewModifier {
-//    let edge: Edge.Set
-//
-//    func body(content: Content) -> some View {
-//        ZStack {
-//            Circle()
-//                .fill(Color(.tint))
-//                .frame(width: 13, height: 13)
-//            content
-//                .frame(width: 14, height: 14)
-//                .padding(5)
-//        }
-//        .padding(edge, 2)
-//    }
-//}
-

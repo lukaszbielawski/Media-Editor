@@ -13,5 +13,3 @@ enum EdgeOverflowError: Error {
     case top(offset: Double)
     case bottom(offset: Double)
 }
-
-

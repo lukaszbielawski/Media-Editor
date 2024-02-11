@@ -14,4 +14,12 @@ extension Angle {
         ? self.radians.truncatingRemainder(dividingBy: 2 * .pi)
         : 2 * .pi + self.radians.truncatingRemainder(dividingBy: -2 * .pi)
     }
+
+    static func + (lhs: Angle, rhs: Angle) -> Angle {
+        return Angle(radians: lhs.radians + rhs.radians)
+    }
+
+    static func - (lhs: Angle, rhs: Angle) -> Angle {
+        return Angle(radians: lhs.radians - rhs.radians)
+    }
 }

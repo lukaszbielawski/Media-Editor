@@ -11,7 +11,7 @@ struct ImageProjectView: View {
     @Environment(\.dismiss) var dismiss
 
     @StateObject var vm: ImageProjectViewModel
-
+    
     init(project: ImageProjectEntity?) {
         _vm = StateObject(wrappedValue: ImageProjectViewModel(project: project!))
     }
@@ -20,7 +20,7 @@ struct ImageProjectView: View {
         ZStack {
             VStack(spacing: 0) {
                 ImageProjectPlaneView()
-                    .coordinateSpace(name: "plane")
+
                 ImageProjectToolScrollView()
             }
             .background(Color(.primary))

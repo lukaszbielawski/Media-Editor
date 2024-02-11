@@ -14,5 +14,3 @@ struct FrameModel {
     let padding: Double = 16.0
     let paddingFactor: Double = 0.05
 }
-
-
