@@ -224,36 +224,35 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                           let rotation = layerModel.rotation,
                                           let layerSize = layerModel.size else { return }
 
-                                    var dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                    let dragVector = CGVector(dx: value.location.x - value.startLocation.x,
                                                               dy: value.location.y - value.startLocation.y)
 
                                     let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
-                                    let angleBetweenCornerVectorAndDragVector =
-                                        dragVectorAngle + rotation + Angle(radians: 1.25 * .pi)
-//
-//                                    let dragLenght = hypot(dragVector.dx, dragVector.dy)
-//                                        * sin(CGFloat(angleBetweenBottomEdgeAndDragVector.radians))
-//
-//                                    let dragHeight =
-//
-//                                    let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
-//                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
-//                                    guard abs(layerSize.height * newScale) > minDimension else { return }
 
-                                    let aspectRatio =
-                                        abs((layerSize.width * (layerModel.scaleX ?? 1.0)) /
-                                            (layerSize.height * (layerModel.scaleY ?? 1.0)))
+                                    let angleBetweenTrailingEdgeAndDragVector =
+                                        dragVectorAngle + rotation + Angle(radians: .pi * 1.5)
+                                    let angleBetweenBottomEdgeAndDragVector =
+                                        dragVectorAngle + rotation + Angle(radians: .pi)
 
-                                    if dragVector.dy * aspectRatio > dragVector.dx {
-                                        dragVector.dy = dragVector.dx / aspectRatio
+                                    let dragWidth = hypot(dragVector.dx, dragVector.dy) *
+                                        sin(CGFloat(angleBetweenTrailingEdgeAndDragVector.radians))
+                                    let dragHeight = hypot(dragVector.dx, dragVector.dy) *
+                                        sin(CGFloat(angleBetweenBottomEdgeAndDragVector.radians))
 
-                                    } else {
-                                        dragVector.dx = dragVector.dy * aspectRatio
-                                    }
+                                    var normalizedWidth = -dragWidth * 0.5
+                                        * cos(CGFloat(rotation.radians))
+                                        - dragHeight * 0.5 * sin(CGFloat(rotation.radians))
 
-                                    let newScaleX = (lastScaleX ?? 1.0) + dragVector.dx / layerSize.width
-                                        * copysign(-1.0, layerModel.scaleY ?? 1.0)
-                                    let newScaleY = (lastScaleY ?? 1.0) + dragVector.dy / layerSize.height
+                                    var normalizedHeight = -dragWidth * 0.5
+                                        * sin(CGFloat(rotation.radians))
+                                        + dragHeight * 0.5 * cos(CGFloat(rotation.radians))
+
+                                    var newX = lastPosition.x + normalizedWidth
+                                    var newY = lastPosition.y + normalizedHeight
+
+                                    var newScaleX = (lastScaleX ?? 1.0) - dragWidth / layerSize.width
+                                        * copysign(-1.0, layerModel.scaleX ?? 1.0)
+                                    var newScaleY = (lastScaleY ?? 1.0) + dragHeight / layerSize.height
                                         * copysign(-1.0, layerModel.scaleY ?? 1.0)
 
                                     guard abs(layerSize.width * newScaleX) > minDimension,
@@ -261,19 +260,11 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                           newScaleX * (layerModel.scaleX ?? 1.0) > 0.0,
                                           newScaleY * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
-                                    print(aspectRatio)
-
                                     DispatchQueue.main.async {
                                         layerModel.scaleX = newScaleX
                                         layerModel.scaleY = newScaleY
-//                                        layerModel.position =
-//                                            CGPoint(x: lastPosition.x - dragLenght * 0.5
-//                                                * sin(CGFloat(rotation.radians)),
-//                                                y: lastPosition.y + dragLenght * 0.5
-//                                                    * cos(CGFloat(rotation.radians)))
                                         layerModel.position =
-                                            CGPoint(x: lastPosition.x + dragVector.dx * 0.5,
-                                                    y: lastPosition.y + dragVector.dy * 0.5)
+                                            CGPoint(x: newX, y: newY)
                                     }
                                 }
 
