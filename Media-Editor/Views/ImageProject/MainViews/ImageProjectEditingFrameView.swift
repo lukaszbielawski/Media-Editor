@@ -128,18 +128,11 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                           let planeCurrentPosition = vm.plane.currentPosition,
                                           let workspaceSize = vm.workspaceSize else { return }
 
-                                    print("center point of layer is", layerCenterPoint)
-
                                     let currentDragPoint = CGPoint(x: value.location.x - planeCurrentPosition.x,
                                                                    y: value.location.y - planeCurrentPosition.y)
 
                                     let previousDragPoint = CGPoint(x: value.startLocation.x - planeCurrentPosition.x,
                                                                     y: value.startLocation.y - planeCurrentPosition.y)
-
-//                                    print("drag current point of layer is", CGPoint(x: value.location.x - planeCurrentPosition.x,
-//                                                                                    y: value.location.y - planeCurrentPosition.y))
-//                                    print("drag previous point of layer is", CGPoint(x: value.startLocation.x - planeCurrentPosition.x,
-//                                                                                     y: value.startLocation.y - planeCurrentPosition.y))
 
                                     let currentAngle =
                                         Angle(radians: atan2(currentDragPoint.x - layerCenterPoint.x,
@@ -151,7 +144,7 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                     let angleDiff = currentAngle - previousAngle
 
                                     let newAngle = (lastAngle ?? layerModel.rotation ?? .zero) - angleDiff
-                                    print("newAngle", Angle(radians: newAngle.normalizedRotation).degrees)
+
                                     DispatchQueue.main.async {
                                         layerModel.rotation = newAngle
                                     }
@@ -180,7 +173,8 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                                               dy: value.location.y - value.startLocation.y)
 
                                     let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
-                                    let angleBetweenTrailingEdgeAndDragVector = dragVectorAngle + rotation + Angle(radians: .pi * 1.5)
+                                    let angleBetweenTrailingEdgeAndDragVector =
+                                        dragVectorAngle + rotation + Angle(radians: .pi * 1.5)
 
                                     let dragLenght = hypot(dragVector.dx, dragVector.dy) *
                                         sin(CGFloat(angleBetweenTrailingEdgeAndDragVector.radians))
@@ -224,7 +218,7 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                           let rotation = layerModel.rotation,
                                           let layerSize = layerModel.size else { return }
 
-                                    let dragVector = CGVector(dx: value.location.x - value.startLocation.x,
+                                    var dragVector = CGVector(dx: value.location.x - value.startLocation.x,
                                                               dy: value.location.y - value.startLocation.y)
 
                                     let dragVectorAngle = Angle(radians: -atan2(dragVector.dy, dragVector.dx))
@@ -234,26 +228,33 @@ struct ImageProjectEditingFrameView<Content: View>: View {
                                     let angleBetweenBottomEdgeAndDragVector =
                                         dragVectorAngle + rotation + Angle(radians: .pi)
 
-                                    let dragWidth = hypot(dragVector.dx, dragVector.dy) *
+                                    var dragWidth = hypot(dragVector.dx, dragVector.dy) *
                                         sin(CGFloat(angleBetweenTrailingEdgeAndDragVector.radians))
-                                    let dragHeight = hypot(dragVector.dx, dragVector.dy) *
+                                    var dragHeight = hypot(dragVector.dx, dragVector.dy) *
                                         sin(CGFloat(angleBetweenBottomEdgeAndDragVector.radians))
 
-                                    var normalizedWidth = -dragWidth * 0.5
-                                        * cos(CGFloat(rotation.radians))
-                                        - dragHeight * 0.5 * sin(CGFloat(rotation.radians))
+                                    let aspectRatio =
+                                        abs((lastScaleX ?? 1.0) * layerSize.width) /
+                                        abs((lastScaleY ?? 1.0) * layerSize.height)
 
-                                    var normalizedHeight = -dragWidth * 0.5
-                                        * sin(CGFloat(rotation.radians))
-                                        + dragHeight * 0.5 * cos(CGFloat(rotation.radians))
+                                    dragWidth = -dragHeight * aspectRatio
+                                    dragHeight = -dragWidth / aspectRatio
 
-                                    var newX = lastPosition.x + normalizedWidth
-                                    var newY = lastPosition.y + normalizedHeight
+                                    let displacementVector = CGVector(
+                                        dx: -dragWidth * 0.5
+                                            * cos(CGFloat(rotation.radians))
+                                            - dragHeight * 0.5 * sin(CGFloat(rotation.radians)),
+                                        dy: -dragWidth * 0.5
+                                            * sin(CGFloat(rotation.radians))
+                                            + dragHeight * 0.5 * cos(CGFloat(rotation.radians)))
 
                                     var newScaleX = (lastScaleX ?? 1.0) - dragWidth / layerSize.width
                                         * copysign(-1.0, layerModel.scaleX ?? 1.0)
                                     var newScaleY = (lastScaleY ?? 1.0) + dragHeight / layerSize.height
                                         * copysign(-1.0, layerModel.scaleY ?? 1.0)
+
+                                    var newX = lastPosition.x + displacementVector.dx
+                                    var newY = lastPosition.y + displacementVector.dy
 
                                     guard abs(layerSize.width * newScaleX) > minDimension,
                                           abs(layerSize.height * newScaleY) > minDimension,
