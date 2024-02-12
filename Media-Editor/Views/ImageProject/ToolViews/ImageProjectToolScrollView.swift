@@ -10,27 +10,21 @@ import SwiftUI
 struct ImageProjectToolScrollView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-//    let lowerToolbarHeight: CGFloat
-    let padding: Double = 0.1
-
     @State var opacity: Double = 1.0
-
-    let buttonHeight: Double = 22.0
 
     var body: some View {
         ZStack(alignment: .topLeading) {
             ScrollView(.horizontal, showsIndicators: false) {
-                ForEach(ToolType.allCases.filter { $0 != .none }) { tool in
-
-                    Button(action: {
-                        vm.currentTool = tool
-                    }, label: {
-                        ImageProjectToolTileView(title: tool.name,
-                                                 iconName: tool.icon,
-
-                                                 padding: padding)
-                    })
-                    .opacity(opacity)
+                HStack {
+                    ForEach(ToolType.allCases.filter { $0 != .none }) { tool in
+                        Button(action: {
+                            vm.currentTool = tool
+                        }, label: {
+                            ImageProjectToolTileView(title: tool.name,
+                                                     iconName: tool.icon)
+                        })
+                        .opacity(opacity)
+                    }
                 }
             }
             .opacity(opacity)
@@ -42,12 +36,12 @@ struct ImageProjectToolScrollView: View {
                     opacity = 1
                 }
             }
-            .padding(.horizontal, padding * vm.plane.lowerToolbarHeight)
+            .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
             .frame(height: vm.plane.lowerToolbarHeight)
             .background(Color(.image))
 
             if vm.currentTool != .none {
-                ImageProjectToolDetailsView(padding: padding)
+                ImageProjectToolDetailsView()
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.5)))
                     .environmentObject(vm)
 
@@ -71,8 +65,8 @@ struct ImageProjectToolScrollView: View {
 
                 .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.25)))
                 .offset(
-                    x: padding * vm.plane.lowerToolbarHeight,
-                    y: -(1 + 2 * padding) * vm.plane.lowerToolbarHeight * 0.5)
+                    x: vm.tools.paddingFactor * vm.plane.lowerToolbarHeight,
+                    y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
             }
         }
     }

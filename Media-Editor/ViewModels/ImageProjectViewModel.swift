@@ -25,6 +25,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var plane: PlaneModel = .init()
     @Published var frame: FrameModel = .init()
+    @Published var tools: ToolsModel = .init()
 
     @Published var projectLayers = [LayerModel]()
     @Published var layerToDelete: LayerModel?
@@ -36,6 +37,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     init(project: ImageProjectEntity) {
         self.project = project
+        configureNavBar()
 
         if let mediaEntities = project.imageProjectEntityToPhotoEntity {
             var isFirst = true
@@ -55,7 +57,6 @@ final class ImageProjectViewModel: ObservableObject {
                 }
             }
         }
-        configureNavBar()
     }
 
     func setupAddAssetsToProject() {
@@ -124,8 +125,23 @@ final class ImageProjectViewModel: ObservableObject {
 
     func showLayerOnScreen(layerModel: LayerModel) {
         layerModel.positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
+        if layerModel.positionZ != nil {
+            activeLayer = nil
+        } else {
+            activeLayer = layerModel
+        }
+
         PersistenceController.shared.saveChanges()
-        activeLayer = layerModel
+        objectWillChange.send()
+    }
+
+    func swapLayersPositionZ(lhs: LayerModel, rhs: LayerModel) {
+        guard let lhsIndex = lhs.positionZ, let rhsIndex = rhs.positionZ else { return }
+        lhs.positionZ = rhsIndex
+        rhs.positionZ = lhsIndex
+
+        PersistenceController.shared.saveChanges()
+        objectWillChange.send()
     }
 
     func setupFrameRect() {

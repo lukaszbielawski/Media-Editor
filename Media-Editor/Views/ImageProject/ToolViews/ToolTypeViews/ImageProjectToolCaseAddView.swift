@@ -12,14 +12,11 @@ struct ImageProjectToolCaseAddView: View {
 
     @State var isDeleteImageAlertPresented: Bool = false
 
-    let padding: Double
-
     var body: some View {
         ZStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ImageProjectToolTileView(iconName: "plus",
-                                             padding: padding)
+                    ImageProjectToolTileView(iconName: "plus")
                         .onTapGesture {
                             vm.setupAddAssetsToProject()
                             vm.isImportPhotoViewShown = true
@@ -31,13 +28,11 @@ struct ImageProjectToolCaseAddView: View {
                                     vm.selectedPhotos.removeAll()
                                 }
                         }
-
                     ForEach(vm.projectLayers) { layerModel in
                         ZStack(alignment: .topTrailing) {
                             Image(uiImage: UIImage(cgImage: layerModel.cgImage))
                                 .centerCropped()
-                                .modifier(ProjectToolTileViewModifier(
-                                    padding: padding))
+                                .modifier(ProjectToolTileViewModifier())
                                 .contentShape(Rectangle())
                             Circle()
                                 .fill(Color(.image))
@@ -47,7 +42,7 @@ struct ImageProjectToolCaseAddView: View {
                                     Image(systemName: "trash")
                                         .foregroundStyle(Color(.tint))
                                 }
-                                .padding(.top, padding * vm.plane.lowerToolbarHeight)
+                                .padding(.top, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     vm.layerToDelete = layerModel
@@ -77,6 +72,6 @@ struct ImageProjectToolCaseAddView: View {
         } message: {
             Text("Are you sure you want to remove this image from the project?")
         }
-        .padding(.horizontal, padding * vm.plane.lowerToolbarHeight)
+        .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }

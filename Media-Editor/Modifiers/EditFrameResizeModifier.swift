@@ -9,7 +9,10 @@ import Foundation
 import SwiftUI
 
 struct EditFrameResizeModifier: ViewModifier {
+    @EnvironmentObject var vm: ImageProjectViewModel
+
     let edge: Edge.Set
+    var planeScaleFactor: CGFloat { (vm.plane.scale ?? 1.0) - 1.0 }
 
     func body(content: Content) -> some View {
         ZStack {
@@ -20,6 +23,6 @@ struct EditFrameResizeModifier: ViewModifier {
                 .frame(width: 14, height: 14)
                 .padding(5)
         }
-        .padding(edge, 2)
+        .padding(edge, 2 - 0.2 * planeScaleFactor)
     }
 }

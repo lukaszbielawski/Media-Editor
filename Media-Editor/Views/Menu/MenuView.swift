@@ -43,8 +43,7 @@ struct MenuView: View {
                             isManageProjectSheetPresented = false
                         }
                     })
-            }
-
+            }.navigationBarHidden(true)
         }
         .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
             guard let value else { return }
@@ -52,6 +51,7 @@ struct MenuView: View {
             performTransition = true
         }
         .navigationViewStyle(.stack)
+
         .overlay {
             Color(createdProjectType == .movie ? .accent : .accent2)
                 .ignoresSafeArea()

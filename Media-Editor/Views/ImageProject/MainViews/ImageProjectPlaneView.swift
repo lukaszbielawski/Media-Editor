@@ -39,14 +39,13 @@ struct ImageProjectPlaneView: View {
             ImageProjectFrameView()
                 .zIndex(Double(Int.min + 2))
 
-            ForEach(vm.projectLayers.filter { $0.positionZ != nil }) { layerModel in
+            ForEach(vm.projectLayers.filter { ($0.positionZ ?? -1) > 0 }) { layerModel in
                 ImageProjectLayerView(
                     layerModel: layerModel
                 )
-                .zIndex(Double(layerModel.positionZ ?? 0))
+                .zIndex(Double(layerModel.positionZ ?? 1))
             }
         }
-       
         .position(vm.plane.currentPosition ?? .zero)
         .onChange(of: vm.frame.rect) { frameViewRect in
             guard let frameViewRect, let workspaceSize = vm.workspaceSize else { return }

@@ -10,6 +10,7 @@ import Foundation
 enum ToolType: String, CaseIterable, Identifiable {
     case none
     case add
+    case layers
 
     var id: String { return self.rawValue }
 }
@@ -19,6 +20,8 @@ extension ToolType {
         switch self {
         case .add:
             return "Add"
+        case .layers:
+            return "Layers"
         default:
             return ""
         }
@@ -28,6 +31,8 @@ extension ToolType {
         switch self {
         case .add:
             return "photo.badge.plus.fill"
+        case .layers:
+            return "square.3.layers.3d.top.filled"
         default:
             return ""
         }

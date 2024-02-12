@@ -15,7 +15,7 @@
 		B200CB3B2B506B2800BA3023 /* ImageProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB3A2B506B2700BA3023 /* ImageProjectView.swift */; };
 		B200CB3D2B506C3000BA3023 /* ImageProjectViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB3C2B506C3000BA3023 /* ImageProjectViewModel.swift */; };
 		B20507582B761E6A0060854D /* PlaneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20507572B761E6A0060854D /* PlaneModel.swift */; };
-		B205075A2B76334B0060854D /* ImageProjectViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20507592B76334B0060854D /* ImageProjectViewToolbar.swift */; };
+		B205075A2B76334B0060854D /* ImageProjectView+Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20507592B76334B0060854D /* ImageProjectView+Toolbar.swift */; };
 		B205075C2B764E470060854D /* FrameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205075B2B764E470060854D /* FrameModel.swift */; };
 		B20507602B769F120060854D /* EdgeOverflowError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B205075F2B769F120060854D /* EdgeOverflowError.swift */; };
 		B2085C142B48671E004D904A /* MediaEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2085C132B48671E004D904A /* MediaEditorApp.swift */; };
@@ -79,6 +79,9 @@
 		B2BD0E292B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */; };
 		B2BF7A062B5FCF2F0031B8AA /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */; };
 		B2BF7A092B600D510031B8AA /* ImageProjectToolCaseAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */; };
+		B2CCFD492B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */; };
+		B2CCFD4B2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */; };
+		B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */; };
 		B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* LayerModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
 		B2F918AD2B58554300540F33 /* CGSizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */; };
@@ -93,7 +96,7 @@
 		B200CB3A2B506B2700BA3023 /* ImageProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectView.swift; sourceTree = "<group>"; };
 		B200CB3C2B506C3000BA3023 /* ImageProjectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectViewModel.swift; sourceTree = "<group>"; };
 		B20507572B761E6A0060854D /* PlaneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaneModel.swift; sourceTree = "<group>"; };
-		B20507592B76334B0060854D /* ImageProjectViewToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectViewToolbar.swift; sourceTree = "<group>"; };
+		B20507592B76334B0060854D /* ImageProjectView+Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageProjectView+Toolbar.swift"; sourceTree = "<group>"; };
 		B205075B2B764E470060854D /* FrameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameModel.swift; sourceTree = "<group>"; };
 		B205075F2B769F120060854D /* EdgeOverflowError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeOverflowError.swift; sourceTree = "<group>"; };
 		B2085C102B48671E004D904A /* Media-Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Media-Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +160,9 @@
 		B2BD0E282B4EF1E100D53B77 /* PHAssetMediaTypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHAssetMediaTypeExtensions.swift; sourceTree = "<group>"; };
 		B2BF7A052B5FCF2F0031B8AA /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
 		B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseAddView.swift; sourceTree = "<group>"; };
+		B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageProjectEditingFrameView+Gestures.swift"; sourceTree = "<group>"; };
+		B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseLayersView.swift; sourceTree = "<group>"; };
+		B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsModel.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* LayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
 		B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtensions.swift; sourceTree = "<group>"; };
@@ -414,7 +420,7 @@
 		B2675FFA2B5E80F80072FD3D /* ToolViews */ = {
 			isa = PBXGroup;
 			children = (
-				B2BF7A072B600D060031B8AA /* case .add */,
+				B2BF7A072B600D060031B8AA /* ToolTypeViews */,
 				B25FB5912B5DA36700EBFB16 /* ImageProjectToolTileView.swift */,
 				B25FB5882B5D76BC00EBFB16 /* ImageProjectToolScrollView.swift */,
 				B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */,
@@ -429,8 +435,9 @@
 				B25FB5822B5D38E100EBFB16 /* ImageProjectPlaneView.swift */,
 				B25FB5862B5D3AE000EBFB16 /* ImageProjectFrameView.swift */,
 				B25FB5842B5D3AC100EBFB16 /* ImageProjectLayerView.swift */,
-				B20507592B76334B0060854D /* ImageProjectViewToolbar.swift */,
+				B20507592B76334B0060854D /* ImageProjectView+Toolbar.swift */,
 				B29415FC2B779F0B00F81596 /* ImageProjectEditingFrameView.swift */,
+				B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -485,12 +492,13 @@
 			path = Errors;
 			sourceTree = "<group>";
 		};
-		B2BF7A072B600D060031B8AA /* case .add */ = {
+		B2BF7A072B600D060031B8AA /* ToolTypeViews */ = {
 			isa = PBXGroup;
 			children = (
 				B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */,
+				B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */,
 			);
-			path = "case .add";
+			path = ToolTypeViews;
 			sourceTree = "<group>";
 		};
 		B2F918A52B5811E400540F33 /* Models */ = {
@@ -499,6 +507,7 @@
 				B2F918A62B5811F400540F33 /* LayerModel.swift */,
 				B20507572B761E6A0060854D /* PlaneModel.swift */,
 				B205075B2B764E470060854D /* FrameModel.swift */,
+				B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -621,6 +630,7 @@
 				B29416012B77FDD200F81596 /* LayerTransformationModifier.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
 				B21103642B49796100CA4981 /* ImageProjectEntity.swift in Sources */,
+				B2CCFD492B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift in Sources */,
 				B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
@@ -641,13 +651,14 @@
 				B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */,
 				B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */,
 				B25FB5872B5D3AE000EBFB16 /* ImageProjectFrameView.swift in Sources */,
-				B205075A2B76334B0060854D /* ImageProjectViewToolbar.swift in Sources */,
+				B205075A2B76334B0060854D /* ImageProjectView+Toolbar.swift in Sources */,
 				B20507602B769F120060854D /* EdgeOverflowError.swift in Sources */,
 				B200CB3B2B506B2800BA3023 /* ImageProjectView.swift in Sources */,
 				B2675FF92B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift in Sources */,
 				B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */,
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
 				B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */,
+				B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */,
 				B20936762B5EB7D000757317 /* ImageProjectPhotosImportedPreferenceKey.swift in Sources */,
 				B200CB2F2B502C0800BA3023 /* HapticService.swift in Sources */,
 				B21103692B49856E00CA4981 /* ViewExtensions.swift in Sources */,
@@ -662,6 +673,7 @@
 				B200CB392B506A0D00BA3023 /* PhotoEntity.swift in Sources */,
 				B200CB3D2B506C3000BA3023 /* ImageProjectViewModel.swift in Sources */,
 				B20936722B5E970F00757317 /* ImageProjectImportPhotoSummaryGridView.swift in Sources */,
+				B2CCFD4B2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift in Sources */,
 				B24EA9542B56B9070081FBFD /* AddProjectSummarySliderView.swift in Sources */,
 				B2BF7A062B5FCF2F0031B8AA /* CGPointExtensions.swift in Sources */,
 				B209366A2B5E82B400757317 /* ImageProjectImportPhotoGridView.swift in Sources */,

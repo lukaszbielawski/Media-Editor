@@ -13,14 +13,12 @@ struct ImageProjectToolTileView: View {
     var title: String?
     let iconName: String
 
-//    let lowerToolbarHeight: Double
-    let padding: Double
-
     var body: some View {
         Rectangle()
             .fill(Material.ultraThinMaterial)
             .overlay {
                 VStack {
+                    Spacer()
                     Image(iconName)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -30,8 +28,9 @@ struct ImageProjectToolTileView: View {
                         Text(title)
                             .font(.footnote)
                     }
-                }
+                    Spacer()
+                }  .padding(.vertical, 8)
             }
-            .modifier(ProjectToolTileViewModifier(padding: padding))
+            .modifier(ProjectToolTileViewModifier())
     }
 }

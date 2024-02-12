@@ -22,8 +22,6 @@ struct NavBarAccessor: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIViewController,
                                 context: UIViewControllerRepresentableContext<NavBarAccessor>) {}
 
-    typealias UIViewControllerType = UIViewController
-
     private class ViewController: UIViewController {
         var callback: (UINavigationBar) -> Void = { _ in }
 

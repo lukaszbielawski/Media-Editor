@@ -4,17 +4,21 @@
 //
 //  Created by Łukasz Bielawski on 09/02/2024.
 //
-
+//
+// import SwiftUI
+//
+// struct ImageProjectViewToolbar: ToolbarContent {
+//    @ObservedObject var vm: ImageProjectViewModel
+//
+//
+//    var body: some ToolbarContent {
+//
+//    }
+// }
 import SwiftUI
 
-struct ImageProjectViewToolbar: ToolbarContent {
-    @EnvironmentObject var vm: ImageProjectViewModel
-    @State var isSaved: Bool = false
-    @State var isArrowActive = (undo: true, redo: false)
-
-    @Environment(\.dismiss) var dismiss
-
-    var body: some ToolbarContent {
+extension ImageProjectView {
+    @ToolbarContentBuilder var imageProjectToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
             Label(isSaved ? "Back" : "Save", systemImage: isSaved ? "chevron.left" : "square.and.arrow.down")
                 .labelStyle(.titleAndIcon)
@@ -24,6 +28,7 @@ struct ImageProjectViewToolbar: ToolbarContent {
                     } else {
                         // TODO: save action
                         isSaved = true
+                        print(isSaved)
                     }
                 }
                 .foregroundStyle(Color(.tint))
@@ -47,7 +52,6 @@ struct ImageProjectViewToolbar: ToolbarContent {
                 .foregroundStyle(Color(.tint))
             }.frame(maxWidth: .infinity)
         }
-
         ToolbarItemGroup(placement: .topBarTrailing) {
             Label("Export", systemImage: "square.and.arrow.up.on.square.fill")
                 .labelStyle(.titleAndIcon)
