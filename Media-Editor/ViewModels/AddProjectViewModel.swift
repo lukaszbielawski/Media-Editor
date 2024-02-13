@@ -83,7 +83,7 @@ final class AddProjectViewModel: ObservableObject {
                                                isMovie: isMovie, context: container.viewContext)
 
         let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedAssets, for: projectEntity)
-        try photoService.insertMediaToProject(projectEntity: projectEntity, fileNames: fileNames)
+        try projectEntity.insertMediaToProject(fileNames: fileNames)
         return projectEntity
     }
 }

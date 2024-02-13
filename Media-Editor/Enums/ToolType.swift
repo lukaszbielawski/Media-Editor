@@ -11,6 +11,7 @@ enum ToolType: String, CaseIterable, Identifiable {
     case none
     case add
     case layers
+    case resize
 
     var id: String { return self.rawValue }
 }
@@ -22,6 +23,8 @@ extension ToolType {
             return "Add"
         case .layers:
             return "Layers"
+        case .resize:
+            return "Resize\nframe"
         default:
             return ""
         }
@@ -33,6 +36,8 @@ extension ToolType {
             return "photo.badge.plus.fill"
         case .layers:
             return "square.3.layers.3d.top.filled"
+        case .resize:
+            return "square.resize.up"
         default:
             return ""
         }

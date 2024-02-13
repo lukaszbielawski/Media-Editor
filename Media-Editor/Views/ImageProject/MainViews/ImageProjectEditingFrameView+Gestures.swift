@@ -11,9 +11,9 @@ extension ImageProjectEditingFrameView {
     var deleteGesture: some Gesture {
         TapGesture()
             .onEnded {
-                layerModel.positionZ = nil
-                vm.activeLayer = nil
-                isVisible = false
+                vm.layerToDelete = layerModel
+                vm.isDeleteImageAlertPresented = true
+
                 vm.objectWillChange.send()
                 PersistenceController.shared.saveChanges()
             }

@@ -29,6 +29,8 @@
 		B20936722B5E970F00757317 /* ImageProjectImportPhotoSummaryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20936712B5E970F00757317 /* ImageProjectImportPhotoSummaryGridView.swift */; };
 		B20936762B5EB7D000757317 /* ImageProjectPhotosImportedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20936752B5EB7D000757317 /* ImageProjectPhotosImportedPreferenceKey.swift */; };
 		B20936782B5ED35900757317 /* StatusBarHiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20936772B5ED35900757317 /* StatusBarHiddenModifier.swift */; };
+		B210F5FD2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B210F5FC2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift */; };
+		B210F5FF2B7B90DF0072AF7D /* ImageProjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B210F5FE2B7B90DF0072AF7D /* ImageProjectModel.swift */; };
 		B21103472B494F1400CA4981 /* ProjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103462B494F1400CA4981 /* ProjectType.swift */; };
 		B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B211034A2B495A5B00CA4981 /* ImageExtensions.swift */; };
 		B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B21103552B496F2F00CA4981 /* Model.xcdatamodeld */; };
@@ -111,6 +113,8 @@
 		B20936712B5E970F00757317 /* ImageProjectImportPhotoSummaryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectImportPhotoSummaryGridView.swift; sourceTree = "<group>"; };
 		B20936752B5EB7D000757317 /* ImageProjectPhotosImportedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectPhotosImportedPreferenceKey.swift; sourceTree = "<group>"; };
 		B20936772B5ED35900757317 /* StatusBarHiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarHiddenModifier.swift; sourceTree = "<group>"; };
+		B210F5FC2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseResizeView.swift; sourceTree = "<group>"; };
+		B210F5FE2B7B90DF0072AF7D /* ImageProjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectModel.swift; sourceTree = "<group>"; };
 		B21103462B494F1400CA4981 /* ProjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectType.swift; sourceTree = "<group>"; };
 		B211034A2B495A5B00CA4981 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
 		B21103562B496F2F00CA4981 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -497,6 +501,7 @@
 			children = (
 				B2BF7A082B600D510031B8AA /* ImageProjectToolCaseAddView.swift */,
 				B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */,
+				B210F5FC2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift */,
 			);
 			path = ToolTypeViews;
 			sourceTree = "<group>";
@@ -508,6 +513,7 @@
 				B20507572B761E6A0060854D /* PlaneModel.swift */,
 				B205075B2B764E470060854D /* FrameModel.swift */,
 				B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */,
+				B210F5FE2B7B90DF0072AF7D /* ImageProjectModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -642,6 +648,7 @@
 				B21103472B494F1400CA4981 /* ProjectType.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
 				B205075C2B764E470060854D /* FrameModel.swift in Sources */,
+				B210F5FF2B7B90DF0072AF7D /* ImageProjectModel.swift in Sources */,
 				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
 				B25FB5852B5D3AC100EBFB16 /* ImageProjectLayerView.swift in Sources */,
 				B2085C142B48671E004D904A /* MediaEditorApp.swift in Sources */,
@@ -684,6 +691,7 @@
 				B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */,
 				B29415FF2B77FD9600F81596 /* EditFrameCircleModifier.swift in Sources */,
 				B29416032B77FDF400F81596 /* EditFrameResizeModifier.swift in Sources */,
+				B210F5FD2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift in Sources */,
 				B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -69,5 +69,6 @@ struct ImageProjectToolScrollView: View {
                     y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
             }
         }
+        
     }
 }

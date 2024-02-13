@@ -12,13 +12,14 @@ import SwiftUI
 
 @MainActor
 final class ImageProjectViewModel: ObservableObject {
-    @Published var project: ImageProjectEntity
+    @Published var projectModel: ImageProjectModel
 
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
     @Published var currentTool: ToolType = .none
 
-    @Published var isImportPhotoViewShown: Bool = false
+    @Published var isImportPhotoViewShown = false
+    @Published var isDeleteImageAlertPresented = false
     @Published var centerButtonFunction: (() -> Void)?
 
     @Published var workspaceSize: CGSize?
@@ -35,26 +36,28 @@ final class ImageProjectViewModel: ObservableObject {
 
     private var photoService = PhotoLibraryService()
 
-    init(project: ImageProjectEntity) {
-        self.project = project
+    init(projectEntity: ImageProjectEntity) {
+        self.projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
         configureNavBar()
 
-        if let mediaEntities = project.imageProjectEntityToPhotoEntity {
-            var isFirst = true
-            for entity in mediaEntities {
-                if project.lastEditDate == nil && isFirst {
-                    isFirst = false
-                    let model = LayerModel(photoEntity: entity)
-                    projectLayers.append(model)
-                    model.positionZ = 1
+        let photoEntities = projectModel.photoEntities
 
-                    project.setFrame(width: model.cgImage.width, height: model.cgImage.height)
-                    project.lastEditDate = Date.now
+        var isFirst = true
+        for photoEntity in photoEntities {
+            let layerModel = LayerModel(photoEntity: photoEntity)
 
-                    PersistenceController.shared.saveChanges()
-                } else {
-                    projectLayers.append(LayerModel(photoEntity: entity))
-                }
+            if projectModel.lastEditDate == nil && isFirst {
+                isFirst = false
+                layerModel.positionZ = 1
+                projectLayers.append(layerModel)
+
+                projectModel.frameSize
+                    = CGSize(width: layerModel.cgImage.width, height: layerModel.cgImage.height)
+                projectModel.lastEditDate = Date.now
+
+                PersistenceController.shared.saveChanges()
+            } else {
+                projectLayers.append(layerModel)
             }
         }
     }
@@ -71,6 +74,19 @@ final class ImageProjectViewModel: ObservableObject {
             .sink { [unowned self] assets in
                 self.libraryPhotos = assets
             }
+    }
+
+    func calculateLayerSize(layerModel: LayerModel) -> CGSize {
+        guard let frameSize = frame.rect?.size,
+              let projectFrame = projectModel.frameSize
+        else { return .zero }
+
+        let scale = (x: Double(layerModel.cgImage.width) / projectFrame.width,
+                     y: Double(layerModel.cgImage.height) / projectFrame.height)
+
+        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
+
+        return layerSize
     }
 
     func configureNavBar() {
@@ -137,17 +153,20 @@ final class ImageProjectViewModel: ObservableObject {
 
     func swapLayersPositionZ(lhs: LayerModel, rhs: LayerModel) {
         guard let lhsIndex = lhs.positionZ, let rhsIndex = rhs.positionZ else { return }
-        lhs.positionZ = rhsIndex
-        rhs.positionZ = lhsIndex
+        lhs.positionZ = abs(rhsIndex) * Int(copysign(-1.0, Double(lhsIndex)))
+        rhs.positionZ = abs(lhsIndex) * Int(copysign(-1.0, Double(rhsIndex)))
 
         PersistenceController.shared.saveChanges()
         objectWillChange.send()
     }
 
     func setupFrameRect() {
-        guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight, let workspaceSize else { return }
+        guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight,
+              let workspaceSize,
+              let projectFrameSize = projectModel.frameSize
+        else { return }
 
-        let (width, height) = (project.getSize().width, project.getSize().height)
+        let (width, height) = (projectFrameSize.width, projectFrameSize.height)
         let (geoWidth, geoHeight) =
             (workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
              (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
@@ -186,13 +205,20 @@ final class ImageProjectViewModel: ObservableObject {
         return index == nil
     }
 
-    func addAssetsToProject() async throws {
-        let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos, for: project)
-        try photoService.insertMediaToProject(projectEntity: project, fileNames: fileNames)
+    func deleteLayer() {
+        guard let photoToDelete = layerToDelete else { return }
+        PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
+        projectLayers.removeAll { $0.fileName == photoToDelete.fileName }
+        PersistenceController.shared.saveChanges()
+        layerToDelete = nil
+    }
 
-        guard let entities = project.imageProjectEntityToPhotoEntity else { return }
-        for entity in entities where !projectLayers.contains(where: { $0.fileName == entity.fileName }) {
-            projectLayers.append(LayerModel(photoEntity: entity))
+    func addAssetsToProject() async throws {
+        let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos, for: projectModel.imageProjectEntity)
+        try projectModel.imageProjectEntity.insertMediaToProject(fileNames: fileNames)
+
+        for photoEntity in projectModel.photoEntities where !projectLayers.contains(where: { $0.fileName == photoEntity.fileName }) {
+            projectLayers.append(LayerModel(photoEntity: photoEntity))
         }
     }
 }

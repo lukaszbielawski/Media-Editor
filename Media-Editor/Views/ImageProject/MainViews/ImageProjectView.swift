@@ -16,7 +16,7 @@ struct ImageProjectView: View {
     @State var isArrowActive = (undo: true, redo: false)
 
     init(project: ImageProjectEntity?) {
-        _vm = StateObject(wrappedValue: ImageProjectViewModel(project: project!))
+        _vm = StateObject(wrappedValue: ImageProjectViewModel(projectEntity: project!))
 
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithOpaqueBackground()
@@ -49,6 +49,20 @@ struct ImageProjectView: View {
                 vm.plane.totalLowerToolbarHeight = vm.plane.lowerToolbarHeight + UIScreen.bottomSafeArea
             }
             .toolbar { imageProjectToolbar }
+            .alert("Deleting image", isPresented: $vm.isDeleteImageAlertPresented) {
+                Button("Cancel", role: .cancel) {
+                    vm.isDeleteImageAlertPresented = false
+                    vm.layerToDelete = nil
+                }
+
+                Button("Confirm", role: .destructive) {
+                    vm.isDeleteImageAlertPresented = false
+                    vm.deleteLayer()
+                }
+            } message: {
+                Text("Are you sure you want to remove this image from the project?")
+            }
+
         }.environmentObject(vm)
     }
 }

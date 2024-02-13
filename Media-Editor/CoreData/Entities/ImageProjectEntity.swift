@@ -58,11 +58,20 @@ extension ImageProjectEntity: Identifiable {
         return dateFormatter.string(from: self.lastEditDate ?? Date.now)
     }
 
-    func setFrame(width: Int, height: Int) {
-        self.frameWidth = NSNumber(value: width)
-        self.frameHeight = NSNumber(value: height)
+    func insertMediaToProject(fileNames: [String]) throws {
+        let container = PersistenceController.shared.container
+
+        for fileName in fileNames {
+            let photoEntity = PhotoEntity(fileName: fileName,
+                                          projectEntity: self,
+                                          context: container.viewContext)
+
+            imageProjectEntityToPhotoEntity?.insert(photoEntity)
+        }
+        PersistenceController.shared.saveChanges()
     }
 
+    
     func getSize() -> CGSize {
         return CGSize(width: self.frameWidth?.doubleValue ?? -1.0, height: self.frameHeight?.doubleValue ?? -1.0)
     }

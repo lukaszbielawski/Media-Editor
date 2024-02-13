@@ -183,17 +183,4 @@ class PhotoLibraryService: ObservableObject {
             return array
         }
     }
-
-    func insertMediaToProject(projectEntity: ImageProjectEntity, fileNames: [String]) throws {
-        let container = PersistenceController.shared.container
-
-        for fileName in fileNames {
-            let photoEntity = PhotoEntity(fileName: fileName,
-                                          projectEntity: projectEntity,
-                                          context: container.viewContext)
-
-            projectEntity.imageProjectEntityToPhotoEntity?.insert(photoEntity)
-        }
-        PersistenceController.shared.saveChanges()
-    }
 }

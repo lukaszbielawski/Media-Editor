@@ -13,9 +13,10 @@ import SwiftUI
 class LayerModel: Identifiable, ObservableObject {
     var id: String { fileName }
     var fileName: String
-    var photoEntity: PhotoEntity
     var cgImage: CGImage!
 
+    let photoEntity: PhotoEntity
+    
     @Published var position: CGPoint? {
         willSet {
             photoEntity.positionX = newValue!.x as NSNumber
@@ -54,22 +55,9 @@ class LayerModel: Identifiable, ObservableObject {
         self.scaleX = photoEntity.scaleX as? Double ?? 1.0
         self.scaleY = photoEntity.scaleY as? Double ?? 1.0
     }
+}
 
-    func calculateLayerSize(frame: FrameModel) -> CGSize {
-        guard let frameSize = frame.rect?.size,
-              let project = photoEntity.photoEntityToImageProjectEntity
-        else { return .zero }
-
-        let projectFrame = project.getSize()
-
-        let scale = (x: Double(cgImage.width) / projectFrame.width,
-                     y: Double(cgImage.height) / projectFrame.height)
-
-        let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
-
-        return layerSize
-    }
-
+extension LayerModel {
     var absoluteFilePath: String {
         let mediaDirectoryPath: URL =
             FileManager

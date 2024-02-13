@@ -30,7 +30,7 @@ struct ImageProjectLayerView: View {
             .rotationEffect(layerModel.rotation ?? .zero)
             .position((layerModel.position ?? .zero) + globalPosition)
             .onAppear {
-                layerModel.size = layerModel.calculateLayerSize(frame: vm.frame)
+                layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
                 vm.objectWillChange.send()
             }
             .onTapGesture {

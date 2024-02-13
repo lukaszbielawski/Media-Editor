@@ -10,8 +10,6 @@ import SwiftUI
 struct ImageProjectToolCaseAddView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    @State var isDeleteImageAlertPresented: Bool = false
-
     var body: some View {
         ZStack {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -46,7 +44,7 @@ struct ImageProjectToolCaseAddView: View {
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     vm.layerToDelete = layerModel
-                                    isDeleteImageAlertPresented = true
+                                    vm.isDeleteImageAlertPresented = true
                                 }
                         }.onTapGesture {
                             vm.showLayerOnScreen(layerModel: layerModel)
@@ -54,24 +52,11 @@ struct ImageProjectToolCaseAddView: View {
                     }
                 }
             }
-        }.alert("Deleting image", isPresented: $isDeleteImageAlertPresented) {
-            Button("Cancel", role: .cancel) {
-                isDeleteImageAlertPresented = false
-                vm.layerToDelete = nil
-            }
-
-            Button("Confirm", role: .destructive) {
-                isDeleteImageAlertPresented = false
-                guard let photoToDelete = vm.layerToDelete else { return }
-                PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
-                vm.projectLayers.removeAll { $0.fileName == photoToDelete.fileName }
-                PersistenceController.shared.saveChanges()
-                vm.layerToDelete = nil
-            }
-
-        } message: {
-            Text("Are you sure you want to remove this image from the project?")
         }
         .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
+}
+
+extension ImageProjectToolCaseAddView {
+
 }

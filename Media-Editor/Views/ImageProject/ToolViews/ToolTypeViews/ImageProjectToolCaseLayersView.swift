@@ -10,14 +10,15 @@ import SwiftUI
 struct ImageProjectToolCaseLayersView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    @State var isDeleteImageAlertPresented: Bool = false
-
     var body: some View {
         ZStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(vm.projectLayers.filter { $0.positionZ != nil }.sorted { abs($0.positionZ!) > abs($1.positionZ!) }) { layerModel in
-                        let filteredArray = vm.projectLayers.filter { $0.positionZ != nil }.sorted { abs($0.positionZ!) > abs($1.positionZ!) }
+                    let filteredArray = vm.projectLayers
+                        .filter { $0.positionZ != nil }
+                        .sorted { abs($0.positionZ!) > abs($1.positionZ!) }
+                    ForEach(filteredArray) { layerModel in
+
                         let index = filteredArray.firstIndex(of: layerModel)!
                         if let positionZ = layerModel.positionZ {
                             ZStack(alignment: .topTrailing) {
@@ -56,8 +57,10 @@ struct ImageProjectToolCaseLayersView: View {
                                             }
                                             .contentShape(Rectangle())
                                             .gesture(index != 0 ? TapGesture().onEnded {
-                                                vm.swapLayersPositionZ(lhs: filteredArray[index - 1], rhs: filteredArray[index])
+                                                vm.swapLayersPositionZ(lhs: filteredArray[index - 1],
+                                                                       rhs: filteredArray[index])
                                             } : nil)
+                                            .opacity(index != 0 ? 1.0 : 0.0)
 
                                         Spacer()
                                         Circle()
@@ -71,9 +74,9 @@ struct ImageProjectToolCaseLayersView: View {
                                             }
                                             .contentShape(Rectangle())
                                             .gesture(index != filteredArray.count - 1 ? TapGesture().onEnded {
-                                                vm.swapLayersPositionZ(lhs: filteredArray[index], rhs: filteredArray[index + 1])
+                                                vm.swapLayersPositionZ(lhs: filteredArray[index],
+                                                                       rhs: filteredArray[index + 1])
                                             } : nil)
-
                                             .opacity(index != filteredArray.count - 1 ? 1.0 : 0.0)
                                     }
                                     .padding(.bottom, -vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
