@@ -23,6 +23,8 @@ struct ImageProjectToolDetailsView: View {
                 ImageProjectToolCaseAddView()
             case .layers:
                 ImageProjectToolCaseLayersView()
+            case .resize:
+                ImageProjectToolCaseResizeView()
             default:
                 EmptyView()
             }

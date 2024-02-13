@@ -10,9 +10,6 @@ import SwiftUI
 struct ImageProjectFrameView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
     @State var orientation: Image.Orientation = .up
-    
-    let numberOfRows = 30
-       let numberOfColumns = 30
 
     var body: some View {
         if vm.workspaceSize != nil {
@@ -25,7 +22,6 @@ struct ImageProjectFrameView: View {
                         vm.setupFrameRect()
                     }
             }
-
         }
     }
 }

@@ -24,11 +24,17 @@ final class ImageProjectModel: ObservableObject {
         willSet { imageProjectEntity.imageProjectEntityToPhotoEntity = newValue }
     }
 
-    @Published var framePixelSize: CGSize? {
+    @Published var framePixelWidth: CGFloat? {
         willSet {
             guard let newValue else { return }
-            imageProjectEntity.frameWidth = NSNumber(value: newValue.width)
-            imageProjectEntity.frameHeight = NSNumber(value: newValue.height)
+            imageProjectEntity.frameWidth = NSNumber(value: newValue)
+        }
+    }
+
+    @Published var framePixelHeight: CGFloat? {
+        willSet {
+            guard let newValue else { return }
+            imageProjectEntity.frameHeight = NSNumber(value: newValue)
         }
     }
 
@@ -41,11 +47,12 @@ final class ImageProjectModel: ObservableObject {
         self.photoEntities = imageProjectEntity
             .imageProjectEntityToPhotoEntity
             ?? Set<PhotoEntity>()
-        if let frameWidth = imageProjectEntity.frameWidth?.intValue,
-           let frameHeight = imageProjectEntity.frameHeight?.intValue
-        {
-            self.framePixelSize = CGSize(width: frameWidth, height: frameHeight)
+        if let framePixelWidth = imageProjectEntity.frameWidth?.intValue,
+           let framePixelHeight = imageProjectEntity.frameHeight?.intValue {
+            self.framePixelWidth = CGFloat(framePixelWidth)
+            self.framePixelHeight = CGFloat(framePixelHeight)
         }
+
     }
 
     func insertPhotosEntityToProject(fileNames: [String]) throws {
@@ -63,9 +70,9 @@ final class ImageProjectModel: ObservableObject {
     }
 
     func insertPhotosToEntity(photo: PhotoEntity) {
-        var photoEntitiesCopy = self.photoEntities
+        var photoEntitiesCopy = photoEntities
         photoEntitiesCopy.insert(photo)
-        self.photoEntities = photoEntitiesCopy
+        photoEntities = photoEntitiesCopy
     }
 }
 
@@ -73,6 +80,4 @@ extension ImageProjectModel: Equatable {
     static func == (lhs: ImageProjectModel, rhs: ImageProjectModel) -> Bool {
         return lhs.imageProjectEntity.id == rhs.imageProjectEntity.id
     }
-    
-
 }

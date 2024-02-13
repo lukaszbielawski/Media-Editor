@@ -10,4 +10,5 @@ import SwiftUI
 
 struct ToolsModel {
     let paddingFactor: Double = 0.1
+
 }

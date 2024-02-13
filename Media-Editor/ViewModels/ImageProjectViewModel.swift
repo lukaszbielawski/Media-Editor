@@ -51,8 +51,8 @@ final class ImageProjectViewModel: ObservableObject {
                 layerModel.positionZ = 1
                 projectLayers.append(layerModel)
 
-                projectModel.framePixelSize
-                    = CGSize(width: layerModel.cgImage.width, height: layerModel.cgImage.height)
+                projectModel.framePixelWidth = CGFloat(layerModel.cgImage.width)
+                projectModel.framePixelHeight = CGFloat(layerModel.cgImage.height)
                 projectModel.lastEditDate = Date.now
 
                 PersistenceController.shared.saveChanges()
@@ -78,15 +78,25 @@ final class ImageProjectViewModel: ObservableObject {
 
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {
         guard let frameSize = frame.rect?.size,
-              let projectFrame = projectModel.framePixelSize
+              let projectPixelFrameWidth = projectModel.framePixelWidth,
+              let projectPixelFrameHeight = projectModel.framePixelHeight
         else { return .zero }
 
-        let scale = (x: Double(layerModel.cgImage.width) / projectFrame.width,
-                     y: Double(layerModel.cgImage.height) / projectFrame.height)
+        let scale = (x: Double(layerModel.cgImage.width) / projectPixelFrameWidth,
+                     y: Double(layerModel.cgImage.height) / projectPixelFrameHeight)
 
         let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
 
         return layerSize
+    }
+
+    func recalculateFrameAndLayersGeometry() {
+        setupFrameRect()
+
+        for layer in projectLayers {
+            layer.size = calculateLayerSize(layerModel: layer)
+        }
+        PersistenceController.shared.saveChanges()
     }
 
     func configureNavBar() {
@@ -163,20 +173,23 @@ final class ImageProjectViewModel: ObservableObject {
     func setupFrameRect() {
         guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight,
               let workspaceSize,
-              let projectFrameSize = projectModel.framePixelSize
+              let projectPixelFrameWidth = projectModel.framePixelWidth,
+              let projectPixelFrameHeight = projectModel.framePixelHeight
         else { return }
 
-        let (width, height) = (projectFrameSize.width, projectFrameSize.height)
-        let (geoWidth, geoHeight) =
+        let (pixelWidth, pixelHeight) = (projectPixelFrameWidth, projectPixelFrameHeight)
+
+        let (workspaceWidth, workspaceHeight) =
             (workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
              (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
-        let aspectRatio = height / width
-        let geoAspectRatio = geoHeight / geoWidth
 
-        let frameSize = if aspectRatio < geoAspectRatio {
-            CGSize(width: geoWidth, height: geoWidth * aspectRatio)
+        let aspectRatio = pixelHeight / pixelWidth
+        let workspaceAspectRatio = workspaceHeight / workspaceWidth
+
+        let frameSize = if aspectRatio < workspaceAspectRatio {
+            CGSize(width: workspaceWidth, height: workspaceWidth * aspectRatio)
         } else {
-            CGSize(width: geoHeight / aspectRatio, height: geoHeight)
+            CGSize(width: workspaceHeight / aspectRatio, height: workspaceHeight)
         }
 
         frame.rect = CGRect(origin: .zero,

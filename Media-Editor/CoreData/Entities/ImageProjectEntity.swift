@@ -57,8 +57,4 @@ extension ImageProjectEntity: Identifiable {
         dateFormatter.dateFormat = "MMM d, yyyy"
         return dateFormatter.string(from: self.lastEditDate ?? Date.now)
     }
-    
-    func getSize() -> CGSize {
-        return CGSize(width: self.frameWidth?.doubleValue ?? -1.0, height: self.frameHeight?.doubleValue ?? -1.0)
-    }
 }

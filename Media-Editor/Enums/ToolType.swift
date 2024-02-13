@@ -24,7 +24,7 @@ extension ToolType {
         case .layers:
             return "Layers"
         case .resize:
-            return "Resize\nframe"
+            return "Resize"
         default:
             return ""
         }

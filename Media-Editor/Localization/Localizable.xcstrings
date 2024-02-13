@@ -58,6 +58,9 @@
     "Go back" : {
 
     },
+    "height" : {
+
+    },
     "Project name" : {
 
     },
@@ -68,6 +71,9 @@
 
     },
     "Undo" : {
+
+    },
+    "width" : {
 
     }
   },
