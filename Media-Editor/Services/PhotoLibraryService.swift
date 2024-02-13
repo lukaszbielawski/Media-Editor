@@ -166,7 +166,7 @@ class PhotoLibraryService: ObservableObject {
         }
     }
 
-    func saveAssetsAndGetFileNames(assets: [PHAsset], for projectEntity: ImageProjectEntity) async throws -> [String] {
+    func saveAssetsAndGetFileNames(assets: [PHAsset]) async throws -> [String] {
         return try await withThrowingTaskGroup(of: String.self, returning: [String].self) { [unowned self] group in
             var array = [String]()
             for asset in assets {

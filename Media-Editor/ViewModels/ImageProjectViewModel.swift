@@ -51,7 +51,7 @@ final class ImageProjectViewModel: ObservableObject {
                 layerModel.positionZ = 1
                 projectLayers.append(layerModel)
 
-                projectModel.frameSize
+                projectModel.framePixelSize
                     = CGSize(width: layerModel.cgImage.width, height: layerModel.cgImage.height)
                 projectModel.lastEditDate = Date.now
 
@@ -78,7 +78,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {
         guard let frameSize = frame.rect?.size,
-              let projectFrame = projectModel.frameSize
+              let projectFrame = projectModel.framePixelSize
         else { return .zero }
 
         let scale = (x: Double(layerModel.cgImage.width) / projectFrame.width,
@@ -163,7 +163,7 @@ final class ImageProjectViewModel: ObservableObject {
     func setupFrameRect() {
         guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight,
               let workspaceSize,
-              let projectFrameSize = projectModel.frameSize
+              let projectFrameSize = projectModel.framePixelSize
         else { return }
 
         let (width, height) = (projectFrameSize.width, projectFrameSize.height)
@@ -214,8 +214,8 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func addAssetsToProject() async throws {
-        let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos, for: projectModel.imageProjectEntity)
-        try projectModel.imageProjectEntity.insertMediaToProject(fileNames: fileNames)
+        let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos)
+        try projectModel.insertPhotosEntityToProject(fileNames: fileNames)
 
         for photoEntity in projectModel.photoEntities where !projectLayers.contains(where: { $0.fileName == photoEntity.fileName }) {
             projectLayers.append(LayerModel(photoEntity: photoEntity))

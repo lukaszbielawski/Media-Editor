@@ -9,14 +9,22 @@ import Foundation
 
 @MainActor
 final class ImageProjectModel: ObservableObject {
-    let imageProjectEntity: ImageProjectEntity
+    private let imageProjectEntity: ImageProjectEntity
+    let isMovie: Bool
 
-    @Published var title: String?
-    @Published var lastEditDate: Date?
-    @Published var isMovie: Bool?
-    @Published var photoEntities: Set<PhotoEntity>
+    @Published var title: String? {
+        willSet { imageProjectEntity.title = newValue }
+    }
 
-    @Published var frameSize: CGSize? {
+    @Published var lastEditDate: Date? {
+        willSet { imageProjectEntity.lastEditDate = newValue }
+    }
+
+    @Published var photoEntities: Set<PhotoEntity> {
+        willSet { imageProjectEntity.imageProjectEntityToPhotoEntity = newValue }
+    }
+
+    @Published var framePixelSize: CGSize? {
         willSet {
             guard let newValue else { return }
             imageProjectEntity.frameWidth = NSNumber(value: newValue.width)
@@ -32,11 +40,39 @@ final class ImageProjectModel: ObservableObject {
         self.isMovie = false
         self.photoEntities = imageProjectEntity
             .imageProjectEntityToPhotoEntity
-             ?? Set<PhotoEntity>()
+            ?? Set<PhotoEntity>()
         if let frameWidth = imageProjectEntity.frameWidth?.intValue,
            let frameHeight = imageProjectEntity.frameHeight?.intValue
         {
-            self.frameSize = CGSize(width: frameWidth, height: frameHeight)
+            self.framePixelSize = CGSize(width: frameWidth, height: frameHeight)
         }
     }
+
+    func insertPhotosEntityToProject(fileNames: [String]) throws {
+        let container = PersistenceController.shared.container
+
+        for fileName in fileNames {
+            let photoEntity = PhotoEntity(fileName: fileName,
+                                          projectEntity: imageProjectEntity,
+                                          context: container.viewContext)
+
+            insertPhotosToEntity(photo: photoEntity)
+        }
+
+        PersistenceController.shared.saveChanges()
+    }
+
+    func insertPhotosToEntity(photo: PhotoEntity) {
+        var photoEntitiesCopy = self.photoEntities
+        photoEntitiesCopy.insert(photo)
+        self.photoEntities = photoEntitiesCopy
+    }
+}
+
+extension ImageProjectModel: Equatable {
+    static func == (lhs: ImageProjectModel, rhs: ImageProjectModel) -> Bool {
+        return lhs.imageProjectEntity.id == rhs.imageProjectEntity.id
+    }
+    
+
 }
