@@ -18,10 +18,6 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var libraryPhotos = [PHAsset]()
     @Published var currentTool: ToolType = .none
 
-    @Published var isImportPhotoViewShown = false
-    @Published var isDeleteImageAlertPresented = false
-    @Published var centerButtonFunction: (() -> Void)?
-
     @Published var workspaceSize: CGSize?
 
     @Published var plane: PlaneModel = .init()
@@ -230,7 +226,9 @@ final class ImageProjectViewModel: ObservableObject {
         let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos)
         try projectModel.insertPhotosEntityToProject(fileNames: fileNames)
 
-        for photoEntity in projectModel.photoEntities where !projectLayers.contains(where: { $0.fileName == photoEntity.fileName }) {
+        for photoEntity in projectModel.photoEntities
+            where !projectLayers.contains(where: { $0.fileName == photoEntity.fileName })
+        {
             projectLayers.append(LayerModel(photoEntity: photoEntity))
         }
     }

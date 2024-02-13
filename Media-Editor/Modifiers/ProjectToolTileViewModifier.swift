@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProjectToolTileViewModifier: ViewModifier {
     @EnvironmentObject var vm: ImageProjectViewModel
-    
+
     func body(content: Content) -> some View {
         content
             .clipShape(RoundedRectangle(cornerRadius: vm.tools.paddingFactor * vm.plane.lowerToolbarHeight))

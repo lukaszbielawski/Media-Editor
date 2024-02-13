@@ -53,7 +53,7 @@ struct ImageProjectImportPhotoSummaryGridView: View {
                         do {
                             try await vm.addAssetsToProject()
                             vm.selectedPhotos.removeAll()
-                            vm.isImportPhotoViewShown = false
+                            vm.tools.isImportPhotoViewShown = false
                         } catch {
                             print(error)
                         }

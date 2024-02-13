@@ -25,6 +25,8 @@ struct ImageProjectLayerView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: layerModel.size?.width ?? 0, height: layerModel.size?.height ?? 0)
+                    .opacity(vm.tools.layersOpacity)
+                    .animation(.easeInOut(duration: 0.35), value: vm.tools.layersOpacity)
             }
 
             .rotationEffect(layerModel.rotation ?? .zero)
@@ -42,7 +44,7 @@ struct ImageProjectLayerView: View {
             }
             .gesture(
                 vm.activeLayer == layerModel ?
-                DragGesture(coordinateSpace: .local)
+                    DragGesture(coordinateSpace: .local)
                     .onChanged { value in
 
                         var newPosition = lastPosition ?? layerModel.position ?? CGPoint()

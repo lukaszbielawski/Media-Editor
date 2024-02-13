@@ -49,14 +49,14 @@ struct ImageProjectView: View {
                 vm.plane.totalLowerToolbarHeight = vm.plane.lowerToolbarHeight + UIScreen.bottomSafeArea
             }
             .toolbar { imageProjectToolbar }
-            .alert("Deleting image", isPresented: $vm.isDeleteImageAlertPresented) {
+            .alert("Deleting image", isPresented: $vm.tools.isDeleteImageAlertPresented) {
                 Button("Cancel", role: .cancel) {
-                    vm.isDeleteImageAlertPresented = false
+                    vm.tools.isDeleteImageAlertPresented = false
                     vm.layerToDelete = nil
                 }
 
                 Button("Confirm", role: .destructive) {
-                    vm.isDeleteImageAlertPresented = false
+                    vm.tools.isDeleteImageAlertPresented = false
                     vm.deleteLayer()
                 }
             } message: {

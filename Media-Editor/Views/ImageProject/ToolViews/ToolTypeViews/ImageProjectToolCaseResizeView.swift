@@ -17,6 +17,9 @@ struct ImageProjectToolCaseResizeView: View {
         return formatter
     }()
 
+    let minPixels = 30
+    let maxPixels = 9999
+
     @State var pixelFrameWidthTextField: String = ""
     @State var pixelFrameHeightTextField: String = ""
     @State var pixelFrameSliderWidth: CGFloat?
@@ -31,80 +34,143 @@ struct ImageProjectToolCaseResizeView: View {
             {
                 VStack {
                     HStack {
-                        Slider(value: pixelFrameSliderWidth, in: 30 ... 9999, step: 1.0)
+                        Color.clear
+                            .frame(width: 16, height: 16)
+                            .overlay {
+                                Image(systemName: "minus")
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                pixelFrameSliderWidth.wrappedValue -= 1.0
+                            }
+                        Slider
+                            .withLog10Scale(value: pixelFrameSliderWidth,
+                                            in: CGFloat(minPixels) ... CGFloat(maxPixels))
                             .layoutPriority(1)
+                        Color.clear
+                            .frame(width: 16, height: 16)
+                            .overlay {
+                                Image(systemName: "plus")
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                pixelFrameSliderWidth.wrappedValue += 1.0
+                            }
                         TextField("width", text: $pixelFrameWidthTextField)
                             .keyboardType(.numberPad)
                             .autocorrectionDisabled()
                             .textFieldStyle(PlainTextFieldStyle())
                             .frame(minWidth: 50)
-                            .padding(.horizontal)
+                            .padding(.trailing)
                             .multilineTextAlignment(.center)
                             .focused($isFocused)
                             .onChange(of: pixelFrameWidthTextField) { newValue in
                                 if let number = Int(newValue) {
                                     let validatedNumber: Int
-                                    if number <= 30 {
-                                        validatedNumber = 30
-                                    } else if number >= 9999 {
-                                        validatedNumber = 9999
+                                    if number <= 0 {
+                                        validatedNumber = 1
+                                    } else if number >= maxPixels {
+                                        validatedNumber = maxPixels
                                     } else {
                                         validatedNumber = number
                                     }
-                                    vm.projectModel.framePixelWidth = CGFloat(validatedNumber)
-                                    pixelFrameWidthTextField = String(validatedNumber)
+                                    vm.projectModel.framePixelWidth = max(CGFloat(validatedNumber), 30)
+                                    pixelFrameSliderWidth.wrappedValue = max(CGFloat(validatedNumber), 30)
                                 } else {
-                                    pixelFrameWidthTextField = String(Int(vm.projectModel.framePixelWidth!))
+                                    pixelFrameWidthTextField = ""
                                 }
                                 vm.recalculateFrameAndLayersGeometry()
+                                vm.tools.centerButtonFunction?()
                             }
                             .onChange(of: pixelFrameSliderWidth.wrappedValue) { newValue in
                                 vm.projectModel.framePixelWidth = newValue
                                 pixelFrameWidthTextField = String(Int(newValue))
+
                                 vm.recalculateFrameAndLayersGeometry()
+                                vm.tools.centerButtonFunction?()
                             }
                     }
                     HStack {
-                        Slider(value: pixelFrameSliderHeight, in: 30 ... 9999, step: 1.0)
+                        Color.clear
+                            .frame(width: 16, height: 16)
+                            .overlay {
+                                Image(systemName: "minus")
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                pixelFrameSliderHeight.wrappedValue -= 1.0
+                            }
+                        Slider
+                            .withLog10Scale(value: pixelFrameSliderHeight,
+                                            in: CGFloat(minPixels) ... CGFloat(maxPixels))
                             .layoutPriority(1)
+                        Color.clear
+                            .frame(width: 16, height: 16)
+                            .overlay {
+                                Image(systemName: "plus")
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                pixelFrameSliderHeight.wrappedValue += 1.0
+                            }
                         TextField("height", text: $pixelFrameHeightTextField)
                             .keyboardType(.numberPad)
                             .autocorrectionDisabled()
                             .textFieldStyle(PlainTextFieldStyle())
                             .frame(minWidth: 50)
-                            .padding(.horizontal)
+                            .padding(.trailing)
                             .multilineTextAlignment(.center)
                             .focused($isFocused)
                             .onChange(of: pixelFrameHeightTextField) { newValue in
                                 if let number = Int(newValue) {
                                     let validatedNumber: Int
-                                    if number <= 30 {
-                                        validatedNumber = 30
-                                    } else if number >= 9999 {
-                                        validatedNumber = 9999
+                                    if number <= 0 {
+                                        validatedNumber = 1
+                                    } else if number >= maxPixels {
+                                        validatedNumber = maxPixels
                                     } else {
                                         validatedNumber = number
                                     }
-                                    vm.projectModel.framePixelHeight = CGFloat(validatedNumber)
-                                    pixelFrameHeightTextField = String(validatedNumber)
+                                    vm.projectModel.framePixelHeight = max(CGFloat(validatedNumber), 30)
+                                    pixelFrameSliderHeight.wrappedValue = max(CGFloat(validatedNumber), 30)
                                 } else {
-                                    pixelFrameHeightTextField = String(Int(vm.projectModel.framePixelHeight!))
+                                    pixelFrameHeightTextField = ""
                                 }
                                 vm.recalculateFrameAndLayersGeometry()
+                                vm.tools.centerButtonFunction?()
                             }
                             .onChange(of: pixelFrameSliderHeight.wrappedValue) { newValue in
                                 vm.projectModel.framePixelHeight = newValue
                                 pixelFrameHeightTextField = String(Int(newValue))
+
                                 vm.recalculateFrameAndLayersGeometry()
+                                vm.tools.centerButtonFunction?()
                             }
                     }
                 }
             }
-        }.onAppear {
+        }.onChange(of: isFocused) { newValue in
+            if newValue {
+                vm.tools.leftFloatingButtonAction = { isFocused = false }
+                vm.tools.leftFloatingButtonIcon = "keyboard.chevron.compact.down"
+            } else {
+                vm.tools.leftFloatingButtonAction = { vm.currentTool = .none }
+                vm.tools.leftFloatingButtonIcon = "arrow.uturn.backward"
+            }
+        }
+
+        .onAppear {
+            vm.tools.layersOpacity = 0.6
             pixelFrameHeightTextField = String(Int(vm.projectModel.framePixelHeight!))
             pixelFrameWidthTextField = String(Int(vm.projectModel.framePixelWidth!))
             pixelFrameSliderWidth = vm.projectModel.framePixelWidth!
             pixelFrameSliderHeight = vm.projectModel.framePixelHeight!
+        }
+        .onDisappear {
+            vm.tools.layersOpacity = 1.0
+        }
+        .onTapGesture {
+            isFocused = false
         }
         .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
         .padding(.bottom, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)

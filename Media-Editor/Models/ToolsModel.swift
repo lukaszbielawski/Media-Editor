@@ -11,4 +11,11 @@ import SwiftUI
 struct ToolsModel {
     let paddingFactor: Double = 0.1
 
+    var leftFloatingButtonAction: (() -> Void)?
+    var leftFloatingButtonIcon = "arrow.uturn.backward"
+
+    var isImportPhotoViewShown = false
+    var isDeleteImageAlertPresented = false
+    var layersOpacity = 1.0
+    var centerButtonFunction: (() -> Void)?
 }

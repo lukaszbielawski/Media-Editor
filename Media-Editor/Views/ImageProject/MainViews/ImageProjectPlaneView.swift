@@ -17,8 +17,6 @@ struct ImageProjectPlaneView: View {
 
     @State var lastScaleValue: Double? = 1.0
 
-//    @Namespace var plane
-
     var body: some View {
         ZStack {
             Color.clear
@@ -32,7 +30,7 @@ struct ImageProjectPlaneView: View {
                     DispatchQueue.main.async {
                         vm.workspaceSize = workspaceGeoProxy.size
                         vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
-                        vm.centerButtonFunction = centerPerspective
+                        vm.tools.centerButtonFunction = centerPerspective
                     }
                 }
 

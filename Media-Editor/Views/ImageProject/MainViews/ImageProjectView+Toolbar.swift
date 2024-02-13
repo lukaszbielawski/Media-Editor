@@ -5,16 +5,7 @@
 //  Created by Łukasz Bielawski on 09/02/2024.
 //
 //
-// import SwiftUI
-//
-// struct ImageProjectViewToolbar: ToolbarContent {
-//    @ObservedObject var vm: ImageProjectViewModel
-//
-//
-//    var body: some ToolbarContent {
-//
-//    }
-// }
+
 import SwiftUI
 
 extension ImageProjectView {
@@ -46,7 +37,7 @@ extension ImageProjectView {
                     Spacer().frame(width: 22)
                     Label("Center", systemImage: "camera.metering.center.weighted")
                         .onTapGesture {
-                            vm.centerButtonFunction?()
+                            vm.tools.centerButtonFunction?()
                         }
                 }
                 .foregroundStyle(Color(.tint))

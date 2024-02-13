@@ -17,10 +17,10 @@ struct ImageProjectToolCaseAddView: View {
                     ImageProjectToolTileView(iconName: "plus")
                         .onTapGesture {
                             vm.setupAddAssetsToProject()
-                            vm.isImportPhotoViewShown = true
+                            vm.tools.isImportPhotoViewShown = true
                         }
                         .contentShape(Rectangle())
-                        .sheet(isPresented: $vm.isImportPhotoViewShown) {
+                        .sheet(isPresented: $vm.tools.isImportPhotoViewShown) {
                             ImageProjectImportPhotoView()
                                 .onDisappear {
                                     vm.selectedPhotos.removeAll()
@@ -44,7 +44,7 @@ struct ImageProjectToolCaseAddView: View {
                                 .contentShape(Rectangle())
                                 .onTapGesture {
                                     vm.layerToDelete = layerModel
-                                    vm.isDeleteImageAlertPresented = true
+                                    vm.tools.isDeleteImageAlertPresented = true
                                 }
                         }.onTapGesture {
                             vm.showLayerOnScreen(layerModel: layerModel)

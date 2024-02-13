@@ -12,7 +12,6 @@ struct ImageProjectToolDetailsView: View {
 
     @State var isDeleteImageAlertPresented: Bool = false
 
-
     var body: some View {
         ZStack(alignment: .bottom) {
             Color(.image)

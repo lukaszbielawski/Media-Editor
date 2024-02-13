@@ -12,7 +12,7 @@ extension ImageProjectEditingFrameView {
         TapGesture()
             .onEnded {
                 vm.layerToDelete = layerModel
-                vm.isDeleteImageAlertPresented = true
+                vm.tools.isDeleteImageAlertPresented = true
 
                 vm.objectWillChange.send()
                 PersistenceController.shared.saveChanges()

@@ -50,10 +50,10 @@ struct ImageProjectToolScrollView: View {
 
                     Button(action: {
                         DispatchQueue.main.async {
-                            vm.currentTool = .none
+                            vm.tools.leftFloatingButtonAction?()
                         }
                     }, label: {
-                        Image(systemName: "arrow.uturn.backward")
+                        Image(systemName: vm.tools.leftFloatingButtonIcon)
                             .foregroundStyle(Color(.tint))
                             .contentShape(Rectangle())
                             .font(.title)
@@ -68,7 +68,9 @@ struct ImageProjectToolScrollView: View {
                     x: vm.tools.paddingFactor * vm.plane.lowerToolbarHeight,
                     y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
             }
+        }.onAppear {
+            vm.tools.leftFloatingButtonAction = { vm.currentTool = .none }
         }
-        
+
     }
 }
