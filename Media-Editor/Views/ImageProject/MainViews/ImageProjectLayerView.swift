@@ -10,9 +10,14 @@ import SwiftUI
 struct ImageProjectLayerView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    @GestureState private var lastPosition: CGPoint?
+    @GestureState var lastPosition: CGPoint?
 
     @StateObject var layerModel: LayerModel
+
+    @State var wasPreviousDragGestureFrameLockedForX = false
+    @State var wasPreviousDragGestureFrameLockedForY = false
+
+    let dragGestureTolerance = 10.0
 
     var globalPosition: CGPoint { CGPoint(x: vm.plane.size!.width / 2, y: vm.plane.size!.height / 2) }
 
@@ -40,24 +45,12 @@ struct ImageProjectLayerView: View {
                     vm.activeLayer = nil
                 } else {
                     vm.activeLayer = layerModel
+                    print(layerModel.rotation?.degrees, sin(layerModel.rotation!.radians * 2))
                 }
             }
             .gesture(
                 vm.activeLayer == layerModel ?
-                    DragGesture(coordinateSpace: .local)
-                    .onChanged { value in
-
-                        var newPosition = lastPosition ?? layerModel.position ?? CGPoint()
-                        newPosition.x += value.translation.width
-                        newPosition.y += value.translation.height
-                        layerModel.position = newPosition
-                        print("new position", newPosition)
-                    }
-                    .updating($lastPosition) { _, startPosition, _ in
-                        startPosition = startPosition ?? layerModel.position
-                    }.onEnded { _ in
-                        PersistenceController.shared.saveChanges()
-                    }
+                    layerDragGesture
                     : nil
             )
         }

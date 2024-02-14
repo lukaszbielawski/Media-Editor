@@ -77,10 +77,9 @@ final class AddProjectViewModel: ObservableObject {
     }
 
     func createProject() async throws -> ImageProjectEntity {
-        let container = PersistenceController.shared.container
         let isMovie = projectType == ProjectType.movie
         let projectEntity = ImageProjectEntity(id: UUID(), title: "New \(isMovie ? "movie" : "photo") project",
-                                               isMovie: isMovie, context: container.viewContext)
+                                               isMovie: isMovie)
         let projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
         let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedAssets)
         try projectModel.insertPhotosEntityToProject(fileNames: fileNames)

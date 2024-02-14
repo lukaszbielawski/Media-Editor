@@ -284,7 +284,7 @@ extension ImageProjectEditingFrameView {
     var flipGesture: some Gesture {
         TapGesture()
             .onEnded {
-                let rotation = layerModel.rotation?.normalizedRotation ?? 0.0
+                let rotation = layerModel.rotation?.normalizedRotationRadians ?? 0.0
                 print(rotation, "norm")
                 if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation) ||
                     ((.pi * 1.25)...(.pi * 1.75)).contains(rotation)

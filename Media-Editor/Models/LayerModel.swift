@@ -87,6 +87,76 @@ extension LayerModel {
 
         return cgImage
     }
+
+    func topLeftApexPosition(position newPosition: CGPoint? = nil) -> CGPoint {
+        let position = newPosition ?? self.position
+        guard let position, let size, let rotation, let scaleX, let scaleY else { return .zero }
+
+        let apexX = position.x + size.height * 0.5 * sin(rotation.radians) * abs(scaleY)
+            - size.width * 0.5 * cos(rotation.radians) * abs(scaleX)
+        let apexY = position.y - size.height * 0.5 * cos(rotation.radians) * abs(scaleY)
+            - size.width * 0.5 * sin(rotation.radians) * abs(scaleX)
+        return CGPoint(x: apexX, y: apexY)
+    }
+
+    func topRightApexPosition(position newPosition: CGPoint? = nil) -> CGPoint {
+        let position = newPosition ?? self.position
+        guard let position, let size, let rotation, let scaleX, let scaleY else { return .zero }
+
+        let apexX = position.x + size.height * 0.5 * sin(rotation.radians) * abs(scaleY)
+            + size.width * 0.5 * cos(rotation.radians) * abs(scaleX)
+        let apexY = position.y - size.height * 0.5 * cos(rotation.radians) * abs(scaleY)
+            + size.width * 0.5 * sin(rotation.radians) * abs(scaleX)
+        return CGPoint(x: apexX, y: apexY)
+    }
+
+    func bottomLeftApexPosition(position newPosition: CGPoint? = nil) -> CGPoint {
+        let position = newPosition ?? self.position
+        guard let position, let size, let rotation, let scaleX, let scaleY else { return .zero }
+
+        let apexX = position.x - size.height * 0.5 * sin(rotation.radians) * abs(scaleY)
+            - size.width * 0.5 * cos(rotation.radians) * abs(scaleX)
+        let apexY = position.y + size.height * 0.5 * cos(rotation.radians) * abs(scaleY)
+            - size.width * 0.5 * sin(rotation.radians) * abs(scaleX)
+        return CGPoint(x: apexX, y: apexY)
+    }
+
+    func bottomRightApexPosition(position newPosition: CGPoint? = nil) -> CGPoint {
+        let position = newPosition ?? self.position
+        guard let position, let size, let rotation, let scaleX, let scaleY else { return .zero }
+
+        let apexX = position.x - size.height * 0.5 * sin(rotation.radians) * abs(scaleY)
+            + size.width * 0.5 * cos(rotation.radians) * abs(scaleX)
+        let apexY = position.y + size.height * 0.5 * cos(rotation.radians) * abs(scaleY)
+            + size.width * 0.5 * sin(rotation.radians) * abs(scaleX)
+        return CGPoint(x: apexX, y: apexY)
+    }
+
+    func rotatedApexPositionFunction(apex: ApexType) -> ((CGPoint?) -> CGPoint) {
+        guard let rotation else { return { _ in .zero } }
+        let finalApex: ApexType
+        if (0.0...45.0).contains(rotation.normalizedRotationDegrees)
+            || (315.0...360.0).contains(rotation.normalizedRotationDegrees)
+        {
+            finalApex = apex
+        } else if (225.0...315.0).contains(rotation.normalizedRotationDegrees) {
+            finalApex = apex.nextType
+        } else if (135.0...225.0).contains(rotation.normalizedRotationDegrees) {
+            finalApex = apex.nextType.nextType
+        } else {
+            finalApex = apex.nextType.nextType.nextType
+        }
+        switch finalApex {
+        case .topLeft:
+            return topLeftApexPosition
+        case .topRight:
+            return topRightApexPosition
+        case .bottomRight:
+            return bottomRightApexPosition
+        case .bottomLeft:
+            return bottomLeftApexPosition
+        }
+    }
 }
 
 extension LayerModel: Equatable {

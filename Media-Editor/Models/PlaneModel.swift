@@ -19,6 +19,9 @@ struct PlaneModel {
     var size: CGSize?
     var scale: Double? = 1.0
 
+    var (minScale, maxScale) = (1.0, 10.0)
+    var (previewMinScale, previewMaxScale) = (0.2, 20.0)
+
     mutating func setupPlaneView(workspaceSize: CGSize) {
         guard let totalLowerToolbarHeight,
               let totalNavBarHeight else { return }

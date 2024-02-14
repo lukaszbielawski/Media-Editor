@@ -32,6 +32,14 @@ final class ImageProjectViewModel: ObservableObject {
 
     private var photoService = PhotoLibraryService()
 
+    var marginedWorkspaceSize: CGSize? {
+        guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight, let workspaceSize
+        else { return nil }
+
+        return CGSize(width: workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
+                      height: (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
+    }
+
     init(projectEntity: ImageProjectEntity) {
         self.projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
         configureNavBar()
@@ -168,27 +176,21 @@ final class ImageProjectViewModel: ObservableObject {
 
     func setupFrameRect() {
         guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight,
-              let workspaceSize,
-              let projectPixelFrameWidth = projectModel.framePixelWidth,
-              let projectPixelFrameHeight = projectModel.framePixelHeight
+              let pixelFrameWidth = projectModel.framePixelWidth,
+              let pixelFrameHeight = projectModel.framePixelHeight,
+              let marginedWorkspaceSize
         else { return }
 
-        let (pixelWidth, pixelHeight) = (projectPixelFrameWidth, projectPixelFrameHeight)
-
-        let (workspaceWidth, workspaceHeight) =
-            (workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
-             (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
-
-        let aspectRatio = pixelHeight / pixelWidth
-        let workspaceAspectRatio = workspaceHeight / workspaceWidth
+        let aspectRatio = pixelFrameHeight / pixelFrameWidth
+        let workspaceAspectRatio = marginedWorkspaceSize.height / marginedWorkspaceSize.width
 
         let frameSize = if aspectRatio < workspaceAspectRatio {
-            CGSize(width: workspaceWidth, height: workspaceWidth * aspectRatio)
+            CGSize(width: marginedWorkspaceSize.width, height: marginedWorkspaceSize.width * aspectRatio)
         } else {
-            CGSize(width: workspaceHeight / aspectRatio, height: workspaceHeight)
+            CGSize(width: marginedWorkspaceSize.height / aspectRatio, height: marginedWorkspaceSize.height)
         }
 
-        frame.rect = CGRect(origin: .zero,
+        frame.rect = CGRect(origin: CGPoint(x: -frameSize.width * 0.5, y: -frameSize.height * 0.5),
                             size: frameSize)
     }
 

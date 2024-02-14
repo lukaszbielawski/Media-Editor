@@ -30,10 +30,9 @@ extension ImageProjectEntity: Identifiable {
                      title: String,
                      lastEditDate: Date? = nil,
                      isMovie: Bool,
-                     context: NSManagedObjectContext,
                      mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>())
     {
-        self.init(context: context)
+        self.init(context: PersistenceController.shared.container.viewContext)
         self.id = id
         self.title = title
         self.lastEditDate = lastEditDate

@@ -50,13 +50,11 @@ class PersistenceController {
 
         let firstProject = ImageProjectEntity(id: UUID(),
                                               title: "Preview Project I",
-                                              isMovie: false,
-                                              context: controller.container.viewContext)
+                                              isMovie: false)
 
         let secondProject = ImageProjectEntity(id: UUID(),
                                                title: "Preview Project II",
-                                               isMovie: true,
-                                               context: controller.container.viewContext)
+                                               isMovie: true)
 
         return controller
     }()

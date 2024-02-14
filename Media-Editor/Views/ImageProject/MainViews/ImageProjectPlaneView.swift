@@ -12,9 +12,6 @@ struct ImageProjectPlaneView: View {
 
     @GestureState private var lastPosition: CGPoint?
 
-    let (minScale, maxScale) = (1.0, 10.0)
-    let (previewMinScale, previewMaxScale) = (0.2, 20.0)
-
     @State var lastScaleValue: Double? = 1.0
 
     var body: some View {
@@ -107,16 +104,16 @@ struct ImageProjectPlaneView: View {
                     DispatchQueue.main.async {
                         guard let scale = vm.plane.scale else { return }
                         let delta = value / (lastScaleValue ?? 1.0)
-                        vm.plane.scale = min(max(scale * delta, previewMinScale), previewMaxScale)
+                        vm.plane.scale = min(max(scale * delta, vm.plane.previewMinScale), vm.plane.previewMaxScale)
                         lastScaleValue = value
                     }
                 }
                 .onEnded { _ in
                     guard let scale = vm.plane.scale else { return }
-                    if scale > maxScale {
-                        vm.plane.scale = min(maxScale, scale)
+                    if scale > vm.plane.maxScale {
+                        vm.plane.scale = min(vm.plane.maxScale, scale)
                     } else {
-                        vm.plane.scale = max(minScale, scale)
+                        vm.plane.scale = max(vm.plane.minScale, scale)
                     }
 
                     lastScaleValue = 1.0
