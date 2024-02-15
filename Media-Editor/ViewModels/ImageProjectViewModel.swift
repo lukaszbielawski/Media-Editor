@@ -40,6 +40,8 @@ final class ImageProjectViewModel: ObservableObject {
                       height: (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
     }
 
+    typealias PathPoints = (startPoint: CGPoint, endPoint: CGPoint)
+
     init(projectEntity: ImageProjectEntity) {
         self.projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
         configureNavBar()
@@ -151,6 +153,29 @@ final class ImageProjectViewModel: ObservableObject {
             throw EdgeOverflowError.bottom(offset: diff)
         }
         plane.currentPosition = newPosition
+    }
+
+    func calculatePathPoints() -> (xPoints: PathPoints?, yPoints: PathPoints?) {
+        guard let workspaceSize, let planePosition = plane.currentPosition else { return (nil, nil) }
+
+        var xPoints: PathPoints?
+        var yPoints: PathPoints?
+
+        if let lineXPosition = plane.lineXPosition
+        {
+            let startPoint = CGPoint(x: lineXPosition + planePosition.x, y: 0)
+            let endPoint = CGPoint(x: lineXPosition + planePosition.x, y: workspaceSize.height)
+            xPoints = PathPoints(startPoint: startPoint, endPoint: endPoint)
+        }
+
+        if let lineYPosition = plane.lineYPosition
+        {
+            let startPoint = CGPoint(x: 0, y: lineYPosition + planePosition.y)
+            let endPoint = CGPoint(x: workspaceSize.width, y: lineYPosition + planePosition.y)
+            yPoints = PathPoints(startPoint: startPoint, endPoint: endPoint)
+        }
+
+        return (xPoints: xPoints, yPoints: yPoints)
     }
 
     func showLayerOnScreen(layerModel: LayerModel) {

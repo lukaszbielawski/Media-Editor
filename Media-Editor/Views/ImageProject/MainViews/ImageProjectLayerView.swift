@@ -45,7 +45,6 @@ struct ImageProjectLayerView: View {
                     vm.activeLayer = nil
                 } else {
                     vm.activeLayer = layerModel
-                    print(layerModel.rotation?.degrees, sin(layerModel.rotation!.radians * 2))
                 }
             }
             .gesture(

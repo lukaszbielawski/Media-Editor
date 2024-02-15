@@ -19,9 +19,14 @@ struct PlaneModel {
     var size: CGSize?
     var scale: Double? = 1.0
 
+    var lineXPosition: CGFloat?
+    var lineYPosition: CGFloat?
+
     var (minScale, maxScale) = (1.0, 10.0)
     var (previewMinScale, previewMaxScale) = (0.2, 20.0)
+}
 
+extension PlaneModel {
     mutating func setupPlaneView(workspaceSize: CGSize) {
         guard let totalLowerToolbarHeight,
               let totalNavBarHeight else { return }
@@ -34,5 +39,10 @@ struct PlaneModel {
         furthestPlanePointAllowed =
             CGPoint(x: workspaceSize.width,
                     y: workspaceSize.height + totalLowerToolbarHeight)
+    }
+
+    var offset: CGPoint {
+        guard let currentPosition, let initialPosition else { return .zero }
+        return (currentPosition - initialPosition)
     }
 }

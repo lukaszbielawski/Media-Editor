@@ -13,7 +13,9 @@ struct FrameModel {
 
     let padding: Double = 16.0
     let paddingFactor: Double = 0.05
+}
 
+extension FrameModel {
     var topLeftApexPosition: CGPoint {
         guard let rect else { return .zero }
         return CGPoint(x: rect.minX, y: rect.minY)

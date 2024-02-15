@@ -33,6 +33,24 @@ struct ImageProjectView: View {
         ZStack {
             VStack(spacing: 0) {
                 ImageProjectPlaneView()
+                    .overlay {
+                        Path { path in
+                            let points = vm.calculatePathPoints()
+                            if let xPoints = points.xPoints {
+                                path.move(to: xPoints.startPoint)
+                                path.addLine(to: xPoints.endPoint)
+                            }
+                            if let yPoints = points.yPoints {
+                                path.move(to: yPoints.startPoint)
+                                path.addLine(to: yPoints.endPoint)
+                            }
+                        }
+                        .stroke(Color(.movie), lineWidth: 1)
+                    }
+                    .onChange(of: vm.activeLayer) { _ in
+                        vm.plane.lineXPosition = nil
+                        vm.plane.lineYPosition = nil
+                    }
 
                 ImageProjectToolScrollView()
             }

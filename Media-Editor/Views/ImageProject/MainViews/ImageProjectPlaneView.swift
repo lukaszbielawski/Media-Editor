@@ -53,7 +53,7 @@ struct ImageProjectPlaneView: View {
             DragGesture(coordinateSpace: .local)
                 .onChanged { value in
                     guard let currentPosition = vm.plane.currentPosition else { return }
-                    print("plane pos", currentPosition)
+                    print("curr post", currentPosition)
                     var newPosition = lastPosition ?? currentPosition
                     newPosition.x += value.translation.width
                     newPosition.y += value.translation.height
