@@ -41,6 +41,12 @@ struct ImageProjectToolCaseLayersView: View {
                                         .contentShape(Rectangle())
                                         .onTapGesture {
                                             layerModel.positionZ = -positionZ
+                                            if vm.activeLayer == layerModel,
+                                               let positionZ = layerModel.positionZ,
+                                               positionZ <= 0
+                                            {
+                                                vm.activeLayer = nil
+                                            }
                                             vm.objectWillChange.send()
                                         }
 

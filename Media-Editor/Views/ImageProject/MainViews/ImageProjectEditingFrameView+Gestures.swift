@@ -8,18 +8,17 @@
 import SwiftUI
 
 extension ImageProjectEditingFrameView {
-    var deleteGesture: some Gesture {
+    func deleteGesture(layerModel: LayerModel) -> some Gesture {
         TapGesture()
             .onEnded {
                 vm.layerToDelete = layerModel
                 vm.tools.isDeleteImageAlertPresented = true
 
-                vm.objectWillChange.send()
                 PersistenceController.shared.saveChanges()
             }
     }
 
-    var topScaleGesture: some Gesture {
+    func topScaleGesture(layerModel: LayerModel) -> some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 guard let lastPosition,
@@ -65,23 +64,27 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    var halfPiRotationGesture: some Gesture {
+    func halfPiRotationGesture(layerModel: LayerModel) -> some Gesture {
         TapGesture()
             .onEnded {
-                if layerModel.rotation != nil {
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        layerModel.rotation = Angle(radians:
-                            ceil(layerModel.rotation!.radians /
-                                (.pi * 0.495)) * (.pi * 0.5) - 0.5 * .pi)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        PersistenceController.shared.saveChanges()
-                    }
+                guard let rotation = layerModel.rotation else { return }
+
+                var rotationChange: CGFloat
+
+                let times = abs(rotation.degrees) / 89.9
+                rotationChange = copysign(-1.0, rotation.degrees) * floor(times) * 90.0 - 90.0
+                print(rotationChange)
+                withAnimation(.easeInOut(duration: 0.35)) {
+                    layerModel.rotation = Angle(degrees: rotationChange)
+                    vm.activeLayer?.rotation = Angle(degrees: rotationChange)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    PersistenceController.shared.saveChanges()
                 }
             }
     }
 
-    var rotationGesture: some Gesture {
+    func rotationGesture(layerModel: LayerModel) -> some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 guard let layerCenterPoint = layerModel.position,
@@ -120,7 +123,7 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    var trailingScaleGesture: some Gesture {
+    func trailingScaleGesture(layerModel: LayerModel) -> some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 guard let lastPosition,
@@ -163,7 +166,7 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    var aspectScaleGesture: some Gesture {
+    func aspectScaleGesture(layerModel: LayerModel) -> some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 guard let lastPosition,
@@ -239,7 +242,7 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    var bottomScaleGesture: some Gesture {
+    func bottomScaleGesture(layerModel: LayerModel) -> some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 guard let lastPosition,
@@ -258,6 +261,7 @@ extension ImageProjectEditingFrameView {
 
                 let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
                     * copysign(-1.0, layerModel.scaleY ?? 1.0)
+                
                 guard abs(layerSize.height * newScale) > minDimension,
                       newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
@@ -281,7 +285,7 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    var flipGesture: some Gesture {
+    func flipGesture(layerModel: LayerModel) -> some Gesture {
         TapGesture()
             .onEnded {
                 let rotation = layerModel.rotation?.normalizedRotationRadians ?? 0.0
@@ -298,7 +302,7 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    var leadingScaleGesture: some Gesture {
+    func leadingScaleGesture(layerModel: LayerModel) -> some Gesture {
         DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 guard let lastPosition,
@@ -319,7 +323,7 @@ extension ImageProjectEditingFrameView {
                     * copysign(-1.0, layerModel.scaleX ?? 1.0)
 
                 guard abs(layerSize.width * newScale) > minDimension,
-                      newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
+                      newScale * (layerModel.scaleX ?? 1.0) > 0.0 else { return }
 
                 DispatchQueue.main.async {
                     layerModel.scaleX = newScale
@@ -339,5 +343,7 @@ extension ImageProjectEditingFrameView {
             .onEnded { _ in
                 PersistenceController.shared.saveChanges()
             }
+
+        
     }
 }

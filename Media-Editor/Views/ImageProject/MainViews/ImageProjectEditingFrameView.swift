@@ -8,127 +8,166 @@
 import Foundation
 import SwiftUI
 
-struct ImageProjectEditingFrameView<Content: View>: View {
+struct ImageProjectEditingFrameView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
     @ObservedObject var layerModel: LayerModel
-
-    @State var opacity = 0.0
-    @State var isVisible = false
 
     @GestureState var lastAngle: Angle?
     @GestureState var lastPosition: CGPoint?
     @GestureState var lastScaleX: Double?
     @GestureState var lastScaleY: Double?
 
-    @ViewBuilder var content: Content
+    @State var offset: CGFloat = 0.0
 
-    var isActive: Bool { vm.activeLayer == layerModel }
     let minDimension: Double = 40.0
-
-    var planeScaleFactor: CGFloat { (vm.plane.scale ?? 1.0) - 1.0 }
 
     var body: some View {
         ZStack {
-            if isVisible {
-                RoundedRectangle(cornerRadius: 2.0)
-                    .fill(Color(.image))
-                    .padding(14 + 0.2 * planeScaleFactor)
-                    .frame(width: (layerModel.size?.width ?? 0.0) * abs(layerModel.scaleX ?? 1.0) + 42,
-                           height: (layerModel.size?.height ?? 0.0) * abs(layerModel.scaleY ?? 1.0) + 42)
-                    .opacity(opacity)
-                    .overlay {
-                        content
-                            .modifier(LayerTransformationModifier(scaleX: layerModel.scaleX, scaleY: layerModel.scaleY))
-                    }
-                    // delete
-                    .overlay(alignment: .topLeading) {
-                        Image(systemName: "xmark")
-                            .modifier(EditFrameCircleModifier())
-                            .shadow(radius: 10.0)
-                            .opacity(opacity)
-                            .contentShape(Circle())
-                            .gesture(deleteGesture)
-                    }
-                    // rotation
-                    .overlay(alignment: .topTrailing) {
-                        Image(systemName: "crop.rotate")
-                            .modifier(EditFrameCircleModifier())
-                            .shadow(radius: 10.0)
-                            .opacity(opacity)
-                            .gesture(halfPiRotationGesture)
-                            .gesture(rotationGesture)
-                    }
-                    // aspectScale
-                    .overlay(alignment: .bottomTrailing) {
-                        Image(systemName: "arrow.up.left.and.arrow.down.right")
-                            .modifier(EditFrameCircleModifier())
-                            .shadow(radius: 10.0)
-                            .opacity(opacity)
-                            .gesture(aspectScaleGesture)
-                    }
-                    // flip
-                    .overlay(alignment: .bottomLeading) {
-                        Image(systemName: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill")
-                            .modifier(EditFrameCircleModifier())
-                            .shadow(radius: 10.0)
-                            .opacity(opacity)
-                            .gesture(flipGesture)
-                    }
-                    // topScale
-                    .overlay(alignment: Alignment(horizontal: .center, vertical: .top)) {
-                        Circle()
-                            .strokeBorder(Color(.image), lineWidth: 2)
-                            .clipShape(Circle())
-                            .modifier(EditFrameResizeModifier(edge: .top))
-                            .opacity(opacity)
-                            .gesture(topScaleGesture)
-                    }
-                    // bottomScale
-                    .overlay(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
-                        Circle()
-                            .strokeBorder(Color(.image), lineWidth: 2)
-                            .clipShape(Circle())
-                            .modifier(EditFrameResizeModifier(edge: .bottom))
-                            .opacity(opacity)
-                            .gesture(bottomScaleGesture)
-                    }
-                    // leadingScale
-                    .overlay(alignment: Alignment(horizontal: .leading, vertical: .center)) {
-                        Circle()
-                            .strokeBorder(Color(.image), lineWidth: 2)
-                            .clipShape(Circle())
-                            .modifier(EditFrameResizeModifier(edge: .leading))
-                            .opacity(opacity)
-                            .gesture(leadingScaleGesture)
-                    }
-                    // trailingScale
-                    .overlay(alignment: Alignment(horizontal: .trailing, vertical: .center)) {
-                        Circle()
-                            .strokeBorder(Color(.image), lineWidth: 2)
-                            .clipShape(Circle())
-                            .modifier(EditFrameResizeModifier(edge: .trailing))
-                            .opacity(opacity)
-                            .gesture(trailingScaleGesture)
-                    }
-                    .onAppear {
-                        withAnimation(.easeOut(duration: 0.35)) {
-                            opacity = 1.0
+            if let currentPosition = vm.plane.currentPosition,
+               let layerPosition = layerModel.position,
+               let marginedWorkspaceSize = vm.marginedWorkspaceSize
+            {
+                let layerWidth = (layerModel.size?.width ?? 0.0)
+                    * abs(layerModel.scaleX ?? 1.0)
+                    * (vm.plane.scale ?? 1.0)
+                let layerHeight = (layerModel.size?.height ?? 0.0)
+                    * abs(layerModel.scaleY ?? 1.0)
+                    * (vm.plane.scale ?? 1.0)
+                let isFrameBig = layerWidth > marginedWorkspaceSize.width * 0.8 ||
+                    layerHeight > marginedWorkspaceSize.height * 0.8
+                ZStack {
+                    Color
+                        .clear
+                        .border(Color(.image), width: 2)
+                        .padding(isFrameBig ? 16.0 : 40.0)
+                        .frame(width: layerWidth +
+                            (isFrameBig ? 32.0 : 80.0),
+                            height: layerHeight +
+                                (isFrameBig ? 32.0 : 80.0))
+                        .overlay(alignment: .topLeading) {
+                            ZStack(alignment: .topLeading) {
+                                if !isFrameBig {
+                                    Rectangle()
+                                        .foregroundStyle(Color(.image))
+                                        .frame(width: 2, height: 24 / sin(.pi * 0.25))
+                                        .rotationEffect(Angle(radians: .pi * 1.75), anchor: .topLeading)
+                                        .padding(.top, 16.0)
+                                        .padding(.leading, 16.0)
+                                        .offset(y: 1.5)
+                                }
+                                Image(systemName: "xmark")
+                                    .modifier(EditFrameCircleModifier())
+                                    .shadow(radius: 10.0)
+                                    .contentShape(Circle())
+                                    .gesture(deleteGesture(layerModel: layerModel))
+                            }
                         }
-                    }
-            } else {
-                content
-                    .modifier(LayerTransformationModifier(scaleX: layerModel.scaleX, scaleY: layerModel.scaleY))
-            }
-        }
-        .onChange(of: isActive) { value in
-            if value {
-                isVisible = true
-            } else {
-                withAnimation(.easeOut(duration: 0.35)) {
-                    opacity = 0.0
+                        // rotation
+                        .overlay(alignment: .topTrailing) {
+                            ZStack(alignment: .topTrailing) {
+                                if !isFrameBig {
+                                    Rectangle()
+                                        .foregroundStyle(Color(.image))
+                                        .frame(width: 2, height: 24 / sin(.pi * 0.25))
+                                        .rotationEffect(Angle(radians: .pi * 0.25), anchor: .topTrailing)
+                                        .padding(.top, 16.0)
+                                        .padding(.trailing, 16.0)
+                                        .offset(y: 1.5)
+                                }
+                                Image(systemName: "crop.rotate")
+                                    .modifier(EditFrameCircleModifier())
+                                    .shadow(radius: 10.0)
+                                    .gesture(halfPiRotationGesture(layerModel: layerModel))
+                                    .gesture(rotationGesture(layerModel: layerModel))
+                            }
+                        }
+                        // aspectScale
+                        .overlay(alignment: .bottomTrailing) {
+                            ZStack(alignment: .bottomTrailing) {
+                                if !isFrameBig {
+                                    Rectangle()
+                                        .foregroundStyle(Color(.image))
+                                        .frame(width: 2, height: 24 / sin(.pi * 0.25))
+                                        .rotationEffect(Angle(radians: .pi * 1.75), anchor: .bottomTrailing)
+                                        .padding(.bottom, 16.0)
+                                        .padding(.trailing, 16.0)
+                                        .offset(y: -1.5)
+                                }
+                                Image(systemName: "arrow.up.left.and.arrow.down.right")
+                                    .modifier(EditFrameCircleModifier())
+                                    .shadow(radius: 10.0)
+                                    .gesture(aspectScaleGesture(layerModel: layerModel))
+                            }
+                        }
+                        // flip
+                        .overlay(alignment: .bottomLeading) {
+                            ZStack(alignment: .bottomLeading) {
+                                if !isFrameBig {
+                                    Rectangle()
+                                        .foregroundStyle(Color(.image))
+                                        .frame(width: 2, height: 24 / sin(.pi * 0.25))
+                                        .rotationEffect(Angle(radians: .pi * 0.25), anchor: .bottomLeading)
+                                        .padding(.bottom, 16.0)
+                                        .padding(.leading, 16.0)
+                                        .offset(y: -1.5)
+                                }
+                                Image(systemName: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill")
+                                    .modifier(EditFrameCircleModifier())
+                                    .shadow(radius: 10.0)
+                                    .gesture(flipGesture(layerModel: layerModel))
+                            }
+                        }
+                        // topScale
+                        .overlay(alignment: Alignment(horizontal: .center, vertical: .top)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(topScaleGesture(layerModel: layerModel))
+                        }
+                        // bottomScale
+                        .overlay(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(bottomScaleGesture(layerModel: layerModel))
+                        }
+                        // leadingScale
+                        .overlay(alignment: Alignment(horizontal: .leading, vertical: .center)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(leadingScaleGesture(layerModel: layerModel))
+                        }
+                        // trailingScale
+                        .overlay(alignment: Alignment(horizontal: .trailing, vertical: .center)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(trailingScaleGesture(layerModel: layerModel))
+                        }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                    isVisible = false
+                .rotationEffect(layerModel.rotation ?? .zero)
+                .position(CGPoint(x: (layerPosition.x + currentPosition.x) * (vm.plane.scale ?? 1.0),
+                                  y: (layerPosition.y + currentPosition.y) * (vm.plane.scale ?? 1.0)))
+                //                CGPoint(x: workspaceSize.width / 2,
+                //                        y: (workspaceSize.height - totalLowerToolbarHeight) / 2 + totalNavBarHeight)
+                .onAppear {
+                    if isFrameBig {
+                        offset = 0.0
+                    } else {
+                        offset = 24.0
+                    }
+                }
+                .onChange(of: isFrameBig) { isBig in
+                    if isBig {
+                        offset = 0.0
+                    } else {
+                        offset = 24.0
+                    }
                 }
             }
         }

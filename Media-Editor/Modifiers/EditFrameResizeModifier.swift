@@ -11,18 +11,17 @@ import SwiftUI
 struct EditFrameResizeModifier: ViewModifier {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    let edge: Edge.Set
-    var planeScaleFactor: CGFloat { (vm.plane.scale ?? 1.0) - 1.0 }
+    @Binding var offset: CGFloat
 
     func body(content: Content) -> some View {
         ZStack {
             Circle()
                 .fill(Color(.tint))
-                .frame(width: 13, height: 13)
+                .frame(width: 10.5, height: 10.5)
             content
-                .frame(width: 14, height: 14)
-                .padding(5)
+                .frame(width: 11, height: 11)
+                .padding(11 + offset)
         }
-        .padding(edge, 2 - 0.2 * planeScaleFactor)
+        .contentShape(Rectangle().size(width: 50, height: 50))
     }
 }

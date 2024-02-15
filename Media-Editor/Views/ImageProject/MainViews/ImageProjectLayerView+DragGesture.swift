@@ -252,6 +252,7 @@ extension ImageProjectLayerView {
                         let frameComponent = frameRect.size.width * 0.5
 
                         newX = draggedLayerComponent + frameComponent
+                        touchPositionX = nil
                         isXChanged = true
                     }
                     // leading - frameLeading
@@ -265,10 +266,11 @@ extension ImageProjectLayerView {
                         let frameComponent = -frameRect.size.width * 0.5
 
                         newX = draggedLayerComponent + frameComponent
+                        touchPositionX = nil
                         isXChanged = true
                     }
 
-                    // top - top
+                    // top - frameTop
                     if abs(draggedLayerTopLeftApexPosition.y - frameRect.minY) < dragGestureTolerance {
                         let draggedLayerComponent = 0.0
                             - draggedLayerWidth * 0.5 * sin(draggedLayerRotation.radians)
@@ -279,9 +281,10 @@ extension ImageProjectLayerView {
                         let frameComponent = -frameRect.size.height * 0.5
 
                         newY = draggedLayerComponent + frameComponent
+                        touchPositionY = nil
                         isYChanged = true
                     }
-                    // bottom - bottom
+                    // bottom - frameBottom
                     else if abs(draggedLayerBottomRightApexPosition.y - frameRect.maxY) < dragGestureTolerance {
                         let draggedLayerComponent = 0.0
                             + draggedLayerWidth * 0.5 * sin(draggedLayerRotation.radians)
@@ -292,6 +295,7 @@ extension ImageProjectLayerView {
                         let frameComponent = frameRect.size.height * 0.5
 
                         newY = draggedLayerComponent + frameComponent
+                        touchPositionY = nil
                         isYChanged = true
                     }
                 }

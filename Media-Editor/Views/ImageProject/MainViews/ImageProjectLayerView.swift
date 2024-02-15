@@ -19,39 +19,36 @@ struct ImageProjectLayerView: View {
 
     let dragGestureTolerance = 10.0
 
-    var globalPosition: CGPoint { CGPoint(x: vm.plane.size!.width / 2, y: vm.plane.size!.height / 2) }
-
     var body: some View {
         if vm.plane.size != nil,
            layerModel.photoEntity.positionX != nil
         {
-            ImageProjectEditingFrameView(layerModel: layerModel) {
-                Image(decorative: layerModel.cgImage, scale: 1.0, orientation: .up)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: layerModel.size?.width ?? 0, height: layerModel.size?.height ?? 0)
-                    .opacity(vm.tools.layersOpacity)
-                    .animation(.easeInOut(duration: 0.35), value: vm.tools.layersOpacity)
-            }
-
-            .rotationEffect(layerModel.rotation ?? .zero)
-            .position((layerModel.position ?? .zero) + globalPosition)
-            .onAppear {
-                layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
-                vm.objectWillChange.send()
-            }
-            .onTapGesture {
-                if vm.activeLayer == layerModel {
-                    vm.activeLayer = nil
-                } else {
-                    vm.activeLayer = layerModel
+            Image(decorative: layerModel.cgImage, scale: 1.0, orientation: .up)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: layerModel.size?.width ?? 0, height: layerModel.size?.height ?? 0)
+                .scaleEffect(x: layerModel.scaleX ?? 1.0, y: layerModel.scaleY ?? 1.0)
+                .rotationEffect(layerModel.rotation ?? .zero)
+                .position((layerModel.position ?? .zero) + vm.plane.globalPosition)
+                .opacity(vm.tools.layersOpacity)
+                .animation(.easeInOut(duration: 0.35), value: vm.tools.layersOpacity)
+                .onAppear {
+                    layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
+                    vm.objectWillChange.send()
                 }
-            }
-            .gesture(
-                vm.activeLayer == layerModel ?
-                    layerDragGesture
-                    : nil
-            )
+                .onTapGesture {
+                    if vm.activeLayer == layerModel {
+                        vm.activeLayer = nil
+                    } else {
+                        vm.activeLayer = layerModel
+                        vm.objectWillChange.send()
+                    }
+                }
+                .gesture(
+                    vm.activeLayer == layerModel ?
+                        layerDragGesture
+                        : nil
+                )
         }
     }
 }

@@ -41,8 +41,8 @@ extension PlaneModel {
                     y: workspaceSize.height + totalLowerToolbarHeight)
     }
 
-    var offset: CGPoint {
-        guard let currentPosition, let initialPosition else { return .zero }
-        return (currentPosition - initialPosition)
+    var globalPosition: CGPoint {
+        guard let size else { return .zero }
+        return CGPoint(x: size.width / 2, y: size.height / 2)
     }
 }

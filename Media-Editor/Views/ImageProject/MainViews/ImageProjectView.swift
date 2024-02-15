@@ -14,6 +14,8 @@ struct ImageProjectView: View {
 
     @State var isSaved: Bool = false
     @State var isArrowActive = (undo: true, redo: false)
+    @State var isEditingFrameVisible = false
+    @State var editingFrameOpacity: CGFloat = 1.0
 
     init(project: ImageProjectEntity?) {
         _vm = StateObject(wrappedValue: ImageProjectViewModel(projectEntity: project!))
@@ -32,25 +34,37 @@ struct ImageProjectView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                ImageProjectPlaneView()
-                    .overlay {
-                        Path { path in
-                            let points = vm.calculatePathPoints()
-                            if let xPoints = points.xPoints {
-                                path.move(to: xPoints.startPoint)
-                                path.addLine(to: xPoints.endPoint)
-                            }
-                            if let yPoints = points.yPoints {
-                                path.move(to: yPoints.startPoint)
-                                path.addLine(to: yPoints.endPoint)
-                            }
+                ZStack {
+                    ImageProjectPlaneView()
+
+                    if let layerModel = vm.activeLayer, let positionZ = layerModel.positionZ, positionZ > 0 {
+                        ImageProjectEditingFrameView(layerModel: layerModel)
+                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+                            .zIndex(Double(Int.max) - 2)
+                    }
+
+                    Path { path in
+                        let points = vm.calculatePathPoints()
+                        if let xPoints = points.xPoints {
+                            path.move(to: CGPoint(x: xPoints.startPoint.x * (vm.plane.scale ?? 1.0),
+                                                  y: xPoints.startPoint.y * (vm.plane.scale ?? 1.0)))
+                            path.addLine(to: CGPoint(x: xPoints.endPoint.x * (vm.plane.scale ?? 1.0),
+                                                     y: xPoints.endPoint.y * (vm.plane.scale ?? 1.0)))
                         }
-                        .stroke(Color(.movie), lineWidth: 1)
+                        if let yPoints = points.yPoints {
+                            path.move(to: CGPoint(x: yPoints.startPoint.x * (vm.plane.scale ?? 1.0),
+                                                  y: yPoints.startPoint.y * (vm.plane.scale ?? 1.0)))
+                            path.addLine(to: CGPoint(x: yPoints.endPoint.x * (vm.plane.scale ?? 1.0),
+                                                     y: yPoints.endPoint.y * (vm.plane.scale ?? 1.0)))
+                        }
                     }
-                    .onChange(of: vm.activeLayer) { _ in
-                        vm.plane.lineXPosition = nil
-                        vm.plane.lineYPosition = nil
-                    }
+                    .stroke(Color(.movie), lineWidth: 1)
+                    .allowsHitTesting(false)
+                }
+                .onChange(of: vm.activeLayer) { _ in
+                    vm.plane.lineXPosition = nil
+                    vm.plane.lineYPosition = nil
+                }
 
                 ImageProjectToolScrollView()
             }
@@ -75,6 +89,9 @@ struct ImageProjectView: View {
 
                 Button("Confirm", role: .destructive) {
                     vm.tools.isDeleteImageAlertPresented = false
+                    if vm.activeLayer == vm.layerToDelete {
+                        vm.activeLayer = nil
+                    }
                     vm.deleteLayer()
                 }
             } message: {
