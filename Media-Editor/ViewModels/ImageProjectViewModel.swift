@@ -161,15 +161,13 @@ final class ImageProjectViewModel: ObservableObject {
         var xPoints: PathPoints?
         var yPoints: PathPoints?
 
-        if let lineXPosition = plane.lineXPosition
-        {
+        if let lineXPosition = plane.lineXPosition {
             let startPoint = CGPoint(x: lineXPosition + planePosition.x, y: 0)
             let endPoint = CGPoint(x: lineXPosition + planePosition.x, y: workspaceSize.height)
             xPoints = PathPoints(startPoint: startPoint, endPoint: endPoint)
         }
 
-        if let lineYPosition = plane.lineYPosition
-        {
+        if let lineYPosition = plane.lineYPosition {
             let startPoint = CGPoint(x: 0, y: lineYPosition + planePosition.y)
             let endPoint = CGPoint(x: workspaceSize.width, y: lineYPosition + planePosition.y)
             yPoints = PathPoints(startPoint: startPoint, endPoint: endPoint)
@@ -200,8 +198,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func setupFrameRect() {
-        guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight,
-              let pixelFrameWidth = projectModel.framePixelWidth,
+        guard let pixelFrameWidth = projectModel.framePixelWidth,
               let pixelFrameHeight = projectModel.framePixelHeight,
               let marginedWorkspaceSize
         else { return }

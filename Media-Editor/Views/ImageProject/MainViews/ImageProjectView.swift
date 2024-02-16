@@ -45,19 +45,33 @@ struct ImageProjectView: View {
 
                     Path { path in
                         let points = vm.calculatePathPoints()
+                        guard let planeScale = vm.plane.scale,
+                              let workspaceSize = vm.workspaceSize else { return }
                         if let xPoints = points.xPoints {
-                            path.move(to: CGPoint(x: xPoints.startPoint.x * (vm.plane.scale ?? 1.0),
-                                                  y: xPoints.startPoint.y * (vm.plane.scale ?? 1.0)))
-                            path.addLine(to: CGPoint(x: xPoints.endPoint.x * (vm.plane.scale ?? 1.0),
-                                                     y: xPoints.endPoint.y * (vm.plane.scale ?? 1.0)))
+                            path.move(to: CGPoint(x: xPoints.startPoint.x * planeScale
+                                                  - workspaceSize.width * 0.5 * (planeScale - 1.0),
+                                                  y: 0))
+                            path.addLine(to: CGPoint(x: xPoints.endPoint.x * planeScale
+                                                     - workspaceSize.width * 0.5 * (planeScale - 1.0),
+                                                     y: workspaceSize.height))
                         }
                         if let yPoints = points.yPoints {
-                            path.move(to: CGPoint(x: yPoints.startPoint.x * (vm.plane.scale ?? 1.0),
-                                                  y: yPoints.startPoint.y * (vm.plane.scale ?? 1.0)))
-                            path.addLine(to: CGPoint(x: yPoints.endPoint.x * (vm.plane.scale ?? 1.0),
-                                                     y: yPoints.endPoint.y * (vm.plane.scale ?? 1.0)))
+                            path.move(to: CGPoint(x: 0,
+                                                  y: yPoints.startPoint.y * planeScale
+                                                  - workspaceSize.height * 0.5 * (planeScale - 1.0)))
+                            path.addLine(to: CGPoint(x: workspaceSize.width,
+                                                     y: yPoints.endPoint.y * planeScale
+                                                     - workspaceSize.height * 0.5 * (planeScale - 1.0)))
                         }
                     }
+//                    .position(CGPoint(
+//                        x: (layerPosition.x + planeCurrentPosition.x
+//                        ) * planeScale
+//                            - workspaceSize.width * 0.5 * (planeScale - 1.0),
+//                        y: (layerPosition.y + planeCurrentPosition.y) * planeScale
+//                            - workspaceSize.height * 0.5 * (planeScale - 1.0)
+//                    )
+//                    )
                     .stroke(Color(.movie), lineWidth: 1)
                     .allowsHitTesting(false)
                 }

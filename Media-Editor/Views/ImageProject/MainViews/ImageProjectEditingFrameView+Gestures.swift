@@ -261,7 +261,7 @@ extension ImageProjectEditingFrameView {
 
                 let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
                     * copysign(-1.0, layerModel.scaleY ?? 1.0)
-                
+
                 guard abs(layerSize.height * newScale) > minDimension,
                       newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
@@ -343,7 +343,5 @@ extension ImageProjectEditingFrameView {
             .onEnded { _ in
                 PersistenceController.shared.saveChanges()
             }
-
-        
     }
 }

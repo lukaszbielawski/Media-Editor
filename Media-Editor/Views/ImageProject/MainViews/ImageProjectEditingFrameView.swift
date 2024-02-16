@@ -23,16 +23,19 @@ struct ImageProjectEditingFrameView: View {
 
     var body: some View {
         ZStack {
-            if let currentPosition = vm.plane.currentPosition,
+            if let planeCurrentPosition = vm.plane.currentPosition,
                let layerPosition = layerModel.position,
-               let marginedWorkspaceSize = vm.marginedWorkspaceSize
+               let marginedWorkspaceSize = vm.marginedWorkspaceSize,
+               let workspaceSize = vm.workspaceSize,
+               let planeScale = vm.plane.scale
+
             {
-                let layerWidth = (layerModel.size?.width ?? 0.0)
+                let layerWidth = ceil((layerModel.size?.width ?? 0.0)
                     * abs(layerModel.scaleX ?? 1.0)
-                    * (vm.plane.scale ?? 1.0)
-                let layerHeight = (layerModel.size?.height ?? 0.0)
+                    * planeScale)
+                let layerHeight = ceil((layerModel.size?.height ?? 0.0)
                     * abs(layerModel.scaleY ?? 1.0)
-                    * (vm.plane.scale ?? 1.0)
+                    * planeScale)
                 let isFrameBig = layerWidth > marginedWorkspaceSize.width * 0.8 ||
                     layerHeight > marginedWorkspaceSize.height * 0.8
                 ZStack {
@@ -151,10 +154,18 @@ struct ImageProjectEditingFrameView: View {
                         }
                 }
                 .rotationEffect(layerModel.rotation ?? .zero)
-                .position(CGPoint(x: (layerPosition.x + currentPosition.x) * (vm.plane.scale ?? 1.0),
-                                  y: (layerPosition.y + currentPosition.y) * (vm.plane.scale ?? 1.0)))
-                //                CGPoint(x: workspaceSize.width / 2,
-                //                        y: (workspaceSize.height - totalLowerToolbarHeight) / 2 + totalNavBarHeight)
+                .position(CGPoint(
+                    x: (layerPosition.x + planeCurrentPosition.x
+                    ) * planeScale
+                        - workspaceSize.width * 0.5 * (planeScale - 1.0),
+                    y: (layerPosition.y + planeCurrentPosition.y) * planeScale
+                        - workspaceSize.height * 0.5 * (planeScale - 1.0)
+                )
+                )
+                .onChange(of: vm.plane.scale) { _ in
+                    print(layerPosition)
+                    print(planeCurrentPosition)
+                }
                 .onAppear {
                     if isFrameBig {
                         offset = 0.0
