@@ -24,6 +24,8 @@ struct PlaneModel {
 
     var (minScale, maxScale) = (1.0, 10.0)
     var (previewMinScale, previewMaxScale) = (0.2, 20.0)
+
+    let minDimension = 30.0
 }
 
 extension PlaneModel {

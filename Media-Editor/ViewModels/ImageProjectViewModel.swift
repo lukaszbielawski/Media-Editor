@@ -16,7 +16,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
-    @Published var currentTool: ToolType = .none
+    @Published var currentTool: (any Tool)?
 
     @Published var workspaceSize: CGSize?
 
@@ -27,6 +27,10 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var projectLayers = [LayerModel]()
     @Published var layerToDelete: LayerModel?
     @Published var activeLayer: LayerModel?
+
+    @Published var projectFilters: [FilterType] = []
+
+    let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
     private var subscription: AnyCancellable?
 
@@ -261,7 +265,8 @@ final class ImageProjectViewModel: ObservableObject {
         guard let frameSize = frame.rect?.size,
               let framePixelWidth = projectModel.framePixelWidth,
               let framePixelHeight = projectModel.framePixelHeight else { return }
-        await photoService.exportPhotosToFile(photos: projectLayers,
-                                              contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight))
+        await photoService.exportPhotosToFile(
+            photos: projectLayers,
+            contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight))
     }
 }

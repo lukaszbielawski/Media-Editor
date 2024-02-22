@@ -17,6 +17,7 @@ class LayerModel: Identifiable, ObservableObject {
 
     let photoEntity: PhotoEntity
 
+
     @Published var position: CGPoint? {
         willSet {
             photoEntity.positionX = newValue!.x as NSNumber

@@ -3,12 +3,9 @@
     "author" : "xcode",
     "version" : 1
   },
-  "properties" : {
-    "symbol-rendering-intent" : "hierarchical"
-  },
   "symbols" : [
     {
-      "filename" : "square.resize.up.svg",
+      "filename" : "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill.svg",
       "idiom" : "universal"
     }
   ]

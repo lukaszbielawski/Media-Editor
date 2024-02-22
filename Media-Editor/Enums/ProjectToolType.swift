@@ -1,5 +1,5 @@
 //
-//  ToolType.swift
+//  ProjectToolType.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 21/01/2024.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-enum ToolType: String, CaseIterable, Identifiable {
-    case none
+enum ProjectToolType: String, Tool {
     case add
     case layers
     case resize
@@ -16,7 +15,7 @@ enum ToolType: String, CaseIterable, Identifiable {
     var id: String { return self.rawValue }
 }
 
-extension ToolType {
+extension ProjectToolType {
     var name: String {
         switch self {
         case .add:

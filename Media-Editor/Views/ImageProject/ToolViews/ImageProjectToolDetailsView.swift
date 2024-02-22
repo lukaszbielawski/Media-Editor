@@ -16,17 +16,26 @@ struct ImageProjectToolDetailsView: View {
         ZStack(alignment: .bottom) {
             Color(.image)
                 .frame(height: vm.plane.lowerToolbarHeight)
+            if let currentTool = vm.currentTool as? ProjectToolType {
+                switch currentTool {
+                case .add:
+                    ImageProjectToolCaseAddView()
 
-            switch vm.currentTool {
-            case .add:
-                ImageProjectToolCaseAddView()
-            case .layers:
-                ImageProjectToolCaseLayersView()
-            case .resize:
-                ImageProjectToolCaseResizeView()
-            default:
-                EmptyView()
+                case .layers:
+                    ImageProjectToolCaseLayersView()
+
+                case .resize:
+                    ImageProjectToolCaseResizeView()
+                }
+            } else if let currentTool = vm.currentTool as? LayerToolType {
+                switch currentTool {
+                case .filters:
+                    ImageProjectToolCaseFlipView()
+                case .flip:
+                    ImageProjectToolCaseFlipView()
+                }
             }
+
         }
     }
 }

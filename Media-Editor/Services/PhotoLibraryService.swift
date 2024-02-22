@@ -248,9 +248,9 @@ class PhotoLibraryService: ObservableObject {
                 context.restoreGState()
             }
 
-            guard let resultImage = context.makeImage() else { return }
+            guard let resultCGImage = context.makeImage() else { return }
 
-            let resultUIImage = UIImage(cgImage: resultImage)
+            let resultUIImage = UIImage(cgImage: resultCGImage)
 
             UIImageWriteToSavedPhotosAlbum(resultUIImage, nil, nil, nil)
             print("success")

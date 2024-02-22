@@ -5,46 +5,50 @@
 //  Created by Łukasz Bielawski on 21/01/2024.
 //
 
+import Combine
 import SwiftUI
 
 struct ImageProjectToolScrollView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    @State var opacity: Double = 1.0
-
     var body: some View {
         ZStack(alignment: .topLeading) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(ToolType.allCases.filter { $0 != .none }) { tool in
-                        Button(action: {
-                            vm.currentTool = tool
-                        }, label: {
-                            ImageProjectToolTileView(title: tool.name,
-                                                     iconName: tool.icon)
-                        })
-                        .opacity(opacity)
+                    if vm.activeLayer == nil {
+                        ForEach(ProjectToolType.allCases) { tool in
+                            Button(action: {
+                                vm.currentTool = tool
+                            }, label: {
+                                ImageProjectToolTileView(title: tool.name,
+                                                         iconName: tool.icon)
+
+                            })
+                        }
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    } else {
+                        ForEach(LayerToolType.allCases) { tool in
+                            Button(action: {
+                                vm.currentTool = tool
+                            }, label: {
+                                ImageProjectToolTileView(title: tool.name,
+                                                         iconName: tool.icon)
+
+                            })
+                        }
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     }
-                }
-            }
-            .opacity(opacity)
-            .animation(.easeInOut(duration: 0.5), value: opacity)
-            .onChange(of: vm.currentTool) { tool in
-                if tool != .none {
-                    opacity = 0.0
-                } else {
-                    opacity = 1
                 }
             }
             .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
             .frame(height: vm.plane.lowerToolbarHeight)
             .background(Color(.image))
 
-            if vm.currentTool != .none {
+            if vm.currentTool != nil {
                 ImageProjectToolDetailsView()
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.5)))
+                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .zIndex(Double(Int.max - 5))
                     .environmentObject(vm)
-
                 ZStack {
                     Circle().fill(Color(.image))
 
@@ -59,11 +63,9 @@ struct ImageProjectToolScrollView: View {
                             .font(.title)
                     })
                 }
-
+                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                 .frame(width: vm.plane.lowerToolbarHeight * 0.5,
                        height: vm.plane.lowerToolbarHeight * 0.5)
-
-                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.25)))
                 .offset(
                     x: vm.tools.paddingFactor * vm.plane.lowerToolbarHeight,
                     y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
@@ -71,6 +73,5 @@ struct ImageProjectToolScrollView: View {
         }.onAppear {
             vm.tools.leftFloatingButtonAction = { vm.currentTool = .none }
         }
-
     }
 }

@@ -19,8 +19,6 @@ struct ImageProjectEditingFrameView: View {
 
     @State var offset: CGFloat = 0.0
 
-    let minDimension: Double = 40.0
-
     var body: some View {
         ZStack {
             if let planeCurrentPosition = vm.plane.currentPosition,
@@ -58,8 +56,9 @@ struct ImageProjectEditingFrameView: View {
                                         .padding(.leading, 16.0)
                                         .offset(y: 1.5)
                                 }
-                                Image(systemName: "xmark")
+                                Image(systemName: "trash")
                                     .modifier(EditFrameCircleModifier())
+                                    .rotationEffect(-layerModel.rotation!)
                                     .shadow(radius: 10.0)
                                     .contentShape(Circle())
                                     .gesture(deleteGesture(layerModel: layerModel))
@@ -79,6 +78,7 @@ struct ImageProjectEditingFrameView: View {
                                 }
                                 Image(systemName: "crop.rotate")
                                     .modifier(EditFrameCircleModifier())
+                                    .rotationEffect(-layerModel.rotation!)
                                     .shadow(radius: 10.0)
                                     .gesture(halfPiRotationGesture(layerModel: layerModel))
                                     .gesture(rotationGesture(layerModel: layerModel))
@@ -102,7 +102,7 @@ struct ImageProjectEditingFrameView: View {
                                     .gesture(aspectScaleGesture(layerModel: layerModel))
                             }
                         }
-                        // flip
+                        // move
                         .overlay(alignment: .bottomLeading) {
                             ZStack(alignment: .bottomLeading) {
                                 if !isFrameBig {
@@ -114,10 +114,11 @@ struct ImageProjectEditingFrameView: View {
                                         .padding(.leading, 16.0)
                                         .offset(y: -1.5)
                                 }
-                                Image(systemName: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill")
+                                Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
+                                    .rotationEffect(-layerModel.rotation!)
                                     .modifier(EditFrameCircleModifier())
                                     .shadow(radius: 10.0)
-                                    .gesture(flipGesture(layerModel: layerModel))
+                                    .gesture(moveGesture(layerModel: layerModel))
                             }
                         }
                         // topScale

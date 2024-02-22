@@ -54,7 +54,7 @@ struct MenuPlaceholderTileView: View {
                 .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
                     guard let value else { return }
 
-                    vm.projects.append(value)
+                    vm.projects.insert(value, at: 0)
                     createdProject = value
                     activateNavigationLink = true
                     vm.objectWillChange.send()

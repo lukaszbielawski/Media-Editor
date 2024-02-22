@@ -56,7 +56,3 @@ struct ImageProjectToolCaseAddView: View {
         .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }
-
-extension ImageProjectToolCaseAddView {
-
-}

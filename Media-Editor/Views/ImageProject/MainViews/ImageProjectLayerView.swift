@@ -49,6 +49,11 @@ struct ImageProjectLayerView: View {
                         layerDragGesture
                         : nil
                 )
+                .onReceive(vm.performLayerDragPublisher) { translation in
+                    if vm.activeLayer == layerModel {
+                        layerDragGestureFunction(translation)
+                    }
+                }
         }
     }
 }

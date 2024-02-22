@@ -37,7 +37,7 @@ extension ImageProjectEditingFrameView {
                 let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
                     * copysign(-1.0, layerModel.scaleY ?? 1.0)
 
-                guard abs(layerSize.height * newScale) > minDimension,
+                guard abs(layerSize.height * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
                 let newX = lastPosition.x + dragLenght * 0.5
@@ -143,7 +143,7 @@ extension ImageProjectEditingFrameView {
                 let newScale = (lastScaleX ?? 1.0) - dragLenght / layerSize.width
                     * copysign(-1.0, layerModel.scaleX ?? 1.0)
 
-                guard abs(layerSize.width * newScale) > minDimension,
+                guard abs(layerSize.width * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleX ?? 1.0) > 0.0 else { return }
 
                 DispatchQueue.main.async {
@@ -215,8 +215,8 @@ extension ImageProjectEditingFrameView {
                 let newX = lastPosition.x + displacementVector.dx
                 let newY = lastPosition.y + displacementVector.dy
 
-                guard abs(layerSize.width * newScaleX) > minDimension,
-                      abs(layerSize.height * newScaleY) > minDimension,
+                guard abs(layerSize.width * newScaleX) > vm.plane.minDimension,
+                      abs(layerSize.height * newScaleY) > vm.plane.minDimension,
                       newScaleX * (layerModel.scaleX ?? 1.0) > 0.0,
                       newScaleY * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
@@ -262,7 +262,7 @@ extension ImageProjectEditingFrameView {
                 let newScale = (lastScaleY ?? 1.0) + dragLenght / layerSize.height
                     * copysign(-1.0, layerModel.scaleY ?? 1.0)
 
-                guard abs(layerSize.height * newScale) > minDimension,
+                guard abs(layerSize.height * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
                 DispatchQueue.main.async {
@@ -285,20 +285,17 @@ extension ImageProjectEditingFrameView {
             }
     }
 
-    func flipGesture(layerModel: LayerModel) -> some Gesture {
-        TapGesture()
-            .onEnded {
-                let rotation = layerModel.rotation?.normalizedRotationRadians ?? 0.0
-                print(rotation, "norm")
-                if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation) ||
-                    ((.pi * 1.25)...(.pi * 1.75)).contains(rotation)
-                {
-                    layerModel.scaleY? *= -1.0
-
-                } else {
-                    layerModel.scaleX? *= -1.0
-                }
-                PersistenceController.shared.saveChanges()
+    func moveGesture(layerModel: LayerModel) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                guard let rotation = layerModel.rotation,
+                      let planeScale = vm.plane.scale else { return }
+                let width = value.translation.width * cos(CGFloat(rotation.radians))
+                    - value.translation.height * sin(CGFloat(rotation.radians))
+                let height = value.translation.width * sin(CGFloat(rotation.radians))
+                    + value.translation.height * cos(CGFloat(rotation.radians))
+                vm.performLayerDragPublisher.send(CGSize(width: width / planeScale,
+                                                         height: height / planeScale))
             }
     }
 
@@ -322,7 +319,7 @@ extension ImageProjectEditingFrameView {
                 let newScale = (lastScaleX ?? 1.0) - dragLenght / layerSize.width
                     * copysign(-1.0, layerModel.scaleX ?? 1.0)
 
-                guard abs(layerSize.width * newScale) > minDimension,
+                guard abs(layerSize.width * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleX ?? 1.0) > 0.0 else { return }
 
                 DispatchQueue.main.async {
