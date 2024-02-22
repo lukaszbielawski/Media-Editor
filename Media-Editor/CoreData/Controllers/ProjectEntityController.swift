@@ -32,6 +32,8 @@ final class ProjectEntityController: EntityController {
 
     func fetchAll() -> [ImageProjectEntity] {
         let fetchRequest: NSFetchRequest<ImageProjectEntity> = ImageProjectEntity.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "lastEditDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
 
         do {
             return try context.fetch(fetchRequest)

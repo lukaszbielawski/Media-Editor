@@ -241,7 +241,6 @@
 		B2085C232B4867E2004D904A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B25FB58C2B5D858C00EBFB16 /* Shared */,
 				B24EA9432B56B6D80081FBFD /* Menu */,
 				B24EA9462B56B7040081FBFD /* ImageProject */,
 				B24EA9442B56B6E70081FBFD /* AddProject */,
@@ -401,13 +400,6 @@
 				B2675FFC2B5E81200072FD3D /* ImportPhotoViews */,
 			);
 			path = ImageProject;
-			sourceTree = "<group>";
-		};
-		B25FB58C2B5D858C00EBFB16 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Shared;
 			sourceTree = "<group>";
 		};
 		B25FB5992B5DB9E900EBFB16 /* Modifiers */ = {

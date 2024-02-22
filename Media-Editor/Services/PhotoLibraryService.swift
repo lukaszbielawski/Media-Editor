@@ -6,6 +6,7 @@
 //
 
 import Combine
+import CoreGraphics
 import Foundation
 import Photos
 import UIKit
@@ -181,6 +182,78 @@ class PhotoLibraryService: ObservableObject {
                 array.append(fileName)
             }
             return array
+        }
+    }
+
+    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize) async {
+        Task {
+            guard let context = CGContext(data: nil,
+                                          width: Int(contextPixelSize.width),
+                                          height: Int(contextPixelSize.height),
+                                          bitsPerComponent: 8,
+                                          bytesPerRow: 0,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+            else { return }
+
+            context.setFillColor(UIColor.systemMint.cgColor)
+            context.fill(CGRect(origin: .zero, size: contextPixelSize))
+
+            for photo in photos where photo.positionZ != nil && photo.positionZ! > 0 {
+                guard let scaleX = photo.scaleX,
+                      let scaleY = photo.scaleY,
+                      let rotation = photo.rotation,
+                      let position = photo.position
+                else { continue }
+
+                context.saveGState()
+
+                let centerTranslation =
+                    CGSize(width: photo.pixelSize.width * 0.5,
+                           height: photo.pixelSize.height * 0.5)
+
+                let translationTransform = CGAffineTransform(
+                    translationX: contextPixelSize.width * 0.5
+                        - centerTranslation.width * scaleX
+                        + position.x * photo.pixelToDigitalWidthRatio,
+                    y:
+                    contextPixelSize.height * 0.5
+                        - centerTranslation.height * scaleY
+                        - position.y * photo.pixelToDigitalHeightRatio
+                )
+
+                let scaleTransform = CGAffineTransform(scaleX: scaleX, y: scaleY)
+                let rotationTransform = CGAffineTransform(rotationAngle: -rotation.radians)
+
+                let originTranslation = CGAffineTransform(translationX: -centerTranslation.width * scaleX,
+                                                          y: -centerTranslation.height * scaleY)
+                let reverseOriginTranslation = CGAffineTransform(translationX: centerTranslation.width * scaleX,
+                                                                 y: +centerTranslation.height * scaleY)
+
+                let resultTransform = CGAffineTransform.identity
+                    .concatenating(scaleTransform)
+                    .concatenating(originTranslation)
+                    .concatenating(rotationTransform)
+                    .concatenating(reverseOriginTranslation)
+                    .concatenating(translationTransform)
+
+                context.concatenate(resultTransform)
+
+                context.draw(photo.cgImage, in:
+                    CGRect(x: 0,
+                           y: 0,
+                           width: photo.pixelSize.width,
+                           height: photo.pixelSize.height))
+
+                context.restoreGState()
+            }
+
+            guard let resultImage = context.makeImage() else { return }
+
+            let resultUIImage = UIImage(cgImage: resultImage)
+
+            UIImageWriteToSavedPhotosAlbum(resultUIImage, nil, nil, nil)
+            print("success")
         }
     }
 }

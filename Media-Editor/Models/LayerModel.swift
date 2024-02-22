@@ -23,7 +23,7 @@ class LayerModel: Identifiable, ObservableObject {
             photoEntity.positionY = newValue!.y as NSNumber
         }
     }
-
+    
     @Published var positionZ: Int? {
         willSet { photoEntity.positionZ = newValue as? NSNumber }
     }
@@ -68,6 +68,20 @@ extension LayerModel {
         return mediaDirectoryPath
             .appendingPathComponent(fileName)
             .absoluteString.replacingOccurrences(of: "file://", with: "")
+    }
+
+    var pixelSize: CGSize {
+        return CGSize(width: cgImage.width, height: cgImage.height)
+    }
+
+    var pixelToDigitalWidthRatio: CGFloat {
+        guard let size else { return .zero }
+        return pixelSize.width / size.width
+    }
+
+    var pixelToDigitalHeightRatio: CGFloat {
+        guard let size else { return .zero }
+        return pixelSize.height / size.height
     }
 
     private func createCGImage(absoluteFilePath: String) throws -> CGImage? {

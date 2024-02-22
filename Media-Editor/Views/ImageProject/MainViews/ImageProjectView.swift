@@ -64,14 +64,6 @@ struct ImageProjectView: View {
                                                      - workspaceSize.height * 0.5 * (planeScale - 1.0)))
                         }
                     }
-//                    .position(CGPoint(
-//                        x: (layerPosition.x + planeCurrentPosition.x
-//                        ) * planeScale
-//                            - workspaceSize.width * 0.5 * (planeScale - 1.0),
-//                        y: (layerPosition.y + planeCurrentPosition.y) * planeScale
-//                            - workspaceSize.height * 0.5 * (planeScale - 1.0)
-//                    )
-//                    )
                     .stroke(Color(.movie), lineWidth: 1)
                     .allowsHitTesting(false)
                 }

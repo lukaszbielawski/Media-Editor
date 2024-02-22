@@ -256,4 +256,12 @@ final class ImageProjectViewModel: ObservableObject {
             projectLayers.append(LayerModel(photoEntity: photoEntity))
         }
     }
+
+    func exportProjectToPhotoLibrary() async {
+        guard let frameSize = frame.rect?.size,
+              let framePixelWidth = projectModel.framePixelWidth,
+              let framePixelHeight = projectModel.framePixelHeight else { return }
+        await photoService.exportPhotosToFile(photos: projectLayers,
+                                              contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight))
+    }
 }

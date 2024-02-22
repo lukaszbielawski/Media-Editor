@@ -46,7 +46,11 @@ extension ImageProjectView {
         ToolbarItemGroup(placement: .topBarTrailing) {
             Label("Export", systemImage: "square.and.arrow.up.on.square.fill")
                 .labelStyle(.titleAndIcon)
-                .onTapGesture {}
+                .onTapGesture {
+                    Task {
+                        await vm.exportProjectToPhotoLibrary()
+                    }
+                }
                 .foregroundStyle(Color(.tint))
         }
     }

@@ -11,6 +11,7 @@ enum CGImageError: Error {
     case dataFromFile
     case sourceCreation
     case imageFromSourceCreation
+    case contextCreation
 }
 
 extension CGImageError: LocalizedError {
@@ -22,6 +23,8 @@ extension CGImageError: LocalizedError {
             "Error while creating CGImageSource from Data occured"
         case .imageFromSourceCreation:
             "Error while creating CGImage from CGImageSource occured"
+        case .contextCreation:
+            "Error while creating CGContext"
         }
     }
 }
