@@ -10,10 +10,17 @@ import SwiftUI
 extension ImageProjectLayerView {
     var layerDragGesture: some Gesture {
         DragGesture(coordinateSpace: .local)
-            .onChanged { layerDragGestureFunction($0.translation) }
+            .onChanged {
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
+                layerDragGestureFunction($0.translation)
+            }
             .updating($lastPosition) { _, startPosition, _ in
                 startPosition = startPosition ?? layerModel.position
             }.onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }

@@ -8,9 +8,15 @@
 import Foundation
 import UIKit
 
-enum FilterType {
+enum FilterType: Identifiable, CaseIterable, Equatable {
+    static var allCases: [Self] {
+        return [.gaussianBlur(radius: 10.0), .colorInvert]
+       }
+
     case gaussianBlur(radius: CGFloat)
     case colorInvert
+
+    var id: String { self.filterName }
 
     var filterName: String {
         return switch self {
@@ -18,6 +24,49 @@ enum FilterType {
             "CIGaussianBlur"
         case .colorInvert:
             "CIColorInvert"
+        }
+    }
+
+    var filterShortName: String {
+        return switch self {
+        case .gaussianBlur:
+            "Blur"
+        case .colorInvert:
+            "Invert"
+        }
+    }
+
+    var parameterValueRange: ClosedRange<CGFloat>? {
+        return switch self {
+        case .gaussianBlur:
+            0.00...50.0
+        default:
+           nil
+        }
+    }
+
+    var parameterName: String? {
+        return switch self {
+        case .gaussianBlur:
+            "inputRadius"
+        default:
+            nil
+        }
+    }
+
+    var parameterDefaultValue: CGFloat? {
+        return switch self {
+        case .gaussianBlur:
+            10.0
+        default:
+            nil
+        }
+    }
+
+    var photoName: String {
+        return switch self {
+        default:
+            "FilterPreviewImageCaseNone"
         }
     }
 }

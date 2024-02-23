@@ -20,22 +20,32 @@ struct ImageProjectToolDetailsView: View {
                 switch currentTool {
                 case .add:
                     ImageProjectToolCaseAddView()
-
                 case .layers:
                     ImageProjectToolCaseLayersView()
-
                 case .resize:
                     ImageProjectToolCaseResizeView()
                 }
-            } else if let currentTool = vm.currentTool as? LayerToolType {
+            } else if let currentTool = vm.currentTool as? LayerToolType, vm.activeLayer != nil {
                 switch currentTool {
                 case .filters:
-                    ImageProjectToolCaseFlipView()
+                    ImageProjectToolCaseFiltersView()
+                        .onAppear {
+                            vm.tools.rightFloatingButtonIcon = "checkmark"
+                            vm.tools.rightFloatingButtonAction = {
+                                vm.currentTool = .none
+                            }
+                        }
                 case .flip:
                     ImageProjectToolCaseFlipView()
                 }
             }
 
+        }.onChange(of: vm.activeLayer == nil) { newValue in
+            guard newValue else { return }
+
+            if vm.currentTool is LayerToolType {
+                vm.currentTool = .none
+            }
         }
     }
 }

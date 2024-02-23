@@ -16,6 +16,8 @@ struct ImageProjectLayerView: View {
 
     @State var wasPreviousDragGestureFrameLockedForX = false
     @State var wasPreviousDragGestureFrameLockedForY = false
+    @State var gestureEnded = true
+
 
     let dragGestureTolerance = 10.0
 

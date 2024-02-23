@@ -17,6 +17,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
     @Published var currentTool: (any Tool)?
+    @Published var currentFilter: FilterType?
 
     @Published var workspaceSize: CGSize?
 
@@ -24,11 +25,14 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var frame: FrameModel = .init()
     @Published var tools: ToolsModel = .init()
 
-    @Published var projectLayers = [LayerModel]()
     @Published var layerToDelete: LayerModel?
     @Published var activeLayer: LayerModel?
 
-    @Published var projectFilters: [FilterType] = []
+    @Published var projectFilters: [FilterType] = .init()
+
+    @Published var projectLayers = [LayerModel]()
+    var redoLayers: [[LayerModel]] = .init()
+    var undoLayers: [[LayerModel]] = .init()
 
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
@@ -86,6 +90,34 @@ final class ImageProjectViewModel: ObservableObject {
             }
     }
 
+    func updateUndoLayers() {
+        if undoLayers.count > 5 {
+            undoLayers.removeFirst()
+        }
+        let copyArray = projectLayers.map { $0.copy() as! LayerModel }
+        undoLayers.append(copyArray)
+    }
+
+    func performUndo() {
+        guard undoLayers.count > 0 else { return }
+
+        print("undocount", undoLayers.count)
+
+        print("old", projectLayers.first!.scaleX)
+//        updateRedoLayers()
+        projectLayers = undoLayers.last!
+        print("new", projectLayers.first!.scaleX)
+        objectWillChange.send()
+    }
+
+    func updateRedoLayers() {
+        if redoLayers.count > 5 {
+            redoLayers.removeFirst()
+        }
+        let copyArray = projectLayers.map { $0.copy() as! LayerModel }
+        redoLayers.append(copyArray)
+    }
+
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {
         guard let frameSize = frame.rect?.size,
               let projectPixelFrameWidth = projectModel.framePixelWidth,
@@ -106,7 +138,6 @@ final class ImageProjectViewModel: ObservableObject {
         for layer in projectLayers {
             layer.size = calculateLayerSize(layerModel: layer)
         }
-        PersistenceController.shared.saveChanges()
     }
 
     func configureNavBar() {
@@ -181,6 +212,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func showLayerOnScreen(layerModel: LayerModel) {
+        updateUndoLayers()
         layerModel.positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
         if layerModel.positionZ != nil {
             activeLayer = nil
@@ -194,6 +226,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     func swapLayersPositionZ(lhs: LayerModel, rhs: LayerModel) {
         guard let lhsIndex = lhs.positionZ, let rhsIndex = rhs.positionZ else { return }
+        updateUndoLayers()
         lhs.positionZ = abs(rhsIndex) * Int(copysign(-1.0, Double(lhsIndex)))
         rhs.positionZ = abs(lhsIndex) * Int(copysign(-1.0, Double(rhsIndex)))
 
@@ -244,7 +277,8 @@ final class ImageProjectViewModel: ObservableObject {
 
     func deleteLayer() {
         guard let photoToDelete = layerToDelete else { return }
-        PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
+//        PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
+        updateUndoLayers()
         projectLayers.removeAll { $0.fileName == photoToDelete.fileName }
         PersistenceController.shared.saveChanges()
         layerToDelete = nil
@@ -262,8 +296,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func exportProjectToPhotoLibrary() async {
-        guard let frameSize = frame.rect?.size,
-              let framePixelWidth = projectModel.framePixelWidth,
+        guard let framePixelWidth = projectModel.framePixelWidth,
               let framePixelHeight = projectModel.framePixelHeight else { return }
         await photoService.exportPhotosToFile(
             photos: projectLayers,

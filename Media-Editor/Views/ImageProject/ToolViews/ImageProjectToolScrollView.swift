@@ -43,35 +43,6 @@ struct ImageProjectToolScrollView: View {
             .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
             .frame(height: vm.plane.lowerToolbarHeight)
             .background(Color(.image))
-
-            if vm.currentTool != nil {
-                ImageProjectToolDetailsView()
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                    .zIndex(Double(Int.max - 5))
-                    .environmentObject(vm)
-                ZStack {
-                    Circle().fill(Color(.image))
-
-                    Button(action: {
-                        DispatchQueue.main.async {
-                            vm.tools.leftFloatingButtonAction?()
-                        }
-                    }, label: {
-                        Image(systemName: vm.tools.leftFloatingButtonIcon)
-                            .foregroundStyle(Color(.tint))
-                            .contentShape(Rectangle())
-                            .font(.title)
-                    })
-                }
-                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                .frame(width: vm.plane.lowerToolbarHeight * 0.5,
-                       height: vm.plane.lowerToolbarHeight * 0.5)
-                .offset(
-                    x: vm.tools.paddingFactor * vm.plane.lowerToolbarHeight,
-                    y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
-            }
-        }.onAppear {
-            vm.tools.leftFloatingButtonAction = { vm.currentTool = .none }
         }
     }
 }

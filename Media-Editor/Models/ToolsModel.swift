@@ -13,6 +13,10 @@ struct ToolsModel {
 
     var leftFloatingButtonAction: (() -> Void)?
     var leftFloatingButtonIcon = "arrow.uturn.backward"
+    var rightFloatingButtonAction: (() -> Void)?
+    var rightFloatingButtonIcon = "checkmark"
+
+    var sliderPercentage: CGFloat?
 
     var isImportPhotoViewShown = false
     var isDeleteImageAlertPresented = false

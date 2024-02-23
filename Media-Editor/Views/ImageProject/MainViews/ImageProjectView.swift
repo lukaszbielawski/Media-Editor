@@ -72,7 +72,7 @@ struct ImageProjectView: View {
                     vm.plane.lineYPosition = nil
                 }
                 
-                ImageProjectToolScrollView()
+                ImageProjectToolView()
             }
             .background(Color(.primary))
             .background {

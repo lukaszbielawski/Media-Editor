@@ -11,6 +11,8 @@ import ImageIO
 import SwiftUI
 
 class LayerModel: Identifiable, ObservableObject {
+
+    
     var id: String { fileName }
     var fileName: String
     var cgImage: CGImage!
@@ -55,6 +57,12 @@ class LayerModel: Identifiable, ObservableObject {
 
         self.scaleX = photoEntity.scaleX as? Double ?? 1.0
         self.scaleY = photoEntity.scaleY as? Double ?? 1.0
+    }
+}
+
+extension LayerModel: NSCopying {
+    func copy(with zone: NSZone? = nil) -> Any {
+        return LayerModel(photoEntity: photoEntity)
     }
 }
 

@@ -13,8 +13,6 @@ extension ImageProjectEditingFrameView {
             .onEnded {
                 vm.layerToDelete = layerModel
                 vm.tools.isDeleteImageAlertPresented = true
-
-                PersistenceController.shared.saveChanges()
             }
     }
 
@@ -24,6 +22,11 @@ extension ImageProjectEditingFrameView {
                 guard let lastPosition,
                       let rotation = layerModel.rotation,
                       let layerSize = layerModel.size else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
 
                 let dragVector = CGVector(dx: (value.location.x - value.startLocation.x) / (vm.plane.scale ?? 1.0),
                                           dy: (value.location.y - value.startLocation.y) / (vm.plane.scale ?? 1.0))
@@ -60,6 +63,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleY = lastScaleY ?? layerModel.scaleY
             }
             .onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -68,6 +72,8 @@ extension ImageProjectEditingFrameView {
         TapGesture()
             .onEnded {
                 guard let rotation = layerModel.rotation else { return }
+
+                vm.updateUndoLayers()
 
                 var rotationChange: CGFloat
 
@@ -89,6 +95,11 @@ extension ImageProjectEditingFrameView {
             .onChanged { value in
                 guard let layerCenterPoint = layerModel.position,
                       let planeCurrentPosition = vm.plane.currentPosition else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
 
                 let currentDragPoint = CGPoint(x: value.location.x - planeCurrentPosition.x,
                                                y: value.location.y - planeCurrentPosition.y)
@@ -119,6 +130,7 @@ extension ImageProjectEditingFrameView {
                 lastAngle = lastAngle ?? layerModel.rotation
             }
             .onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -129,6 +141,11 @@ extension ImageProjectEditingFrameView {
                 guard let lastPosition,
                       let rotation = layerModel.rotation,
                       let layerSize = layerModel.size else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
 
                 let dragVector = CGVector(dx: (value.location.x - value.startLocation.x) / (vm.plane.scale ?? 1.0),
                                           dy: (value.location.y - value.startLocation.y) / (vm.plane.scale ?? 1.0))
@@ -162,6 +179,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleX = lastScaleX ?? layerModel.scaleX
             }
             .onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -172,6 +190,11 @@ extension ImageProjectEditingFrameView {
                 guard let lastPosition,
                       let rotation = layerModel.rotation,
                       let layerSize = layerModel.size else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
 
                 let dragVector = CGVector(dx: (value.location.x - value.startLocation.x) / (vm.plane.scale ?? 1.0),
                                           dy: (value.location.y - value.startLocation.y) / (vm.plane.scale ?? 1.0))
@@ -238,6 +261,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleY = lastScaleY ?? layerModel.scaleY
             }
             .onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -248,6 +272,11 @@ extension ImageProjectEditingFrameView {
                 guard let lastPosition,
                       let rotation = layerModel.rotation,
                       let layerSize = layerModel.size else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
 
                 let dragVector = CGVector(dx: (value.location.x - value.startLocation.x) / (vm.plane.scale ?? 1.0),
                                           dy: (value.location.y - value.startLocation.y) / (vm.plane.scale ?? 1.0))
@@ -281,6 +310,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleY = lastScaleY ?? layerModel.scaleY
             }
             .onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -290,12 +320,20 @@ extension ImageProjectEditingFrameView {
             .onChanged { value in
                 guard let rotation = layerModel.rotation,
                       let planeScale = vm.plane.scale else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
+
                 let width = value.translation.width * cos(CGFloat(rotation.radians))
                     - value.translation.height * sin(CGFloat(rotation.radians))
                 let height = value.translation.width * sin(CGFloat(rotation.radians))
                     + value.translation.height * cos(CGFloat(rotation.radians))
                 vm.performLayerDragPublisher.send(CGSize(width: width / planeScale,
                                                          height: height / planeScale))
+            }.onEnded { _ in
+                gestureEnded = true
             }
     }
 
@@ -305,6 +343,11 @@ extension ImageProjectEditingFrameView {
                 guard let lastPosition,
                       let rotation = layerModel.rotation,
                       let layerSize = layerModel.size else { return }
+
+                if gestureEnded {
+                    vm.updateUndoLayers()
+                    gestureEnded = false
+                }
 
                 let dragVector = CGVector(dx: (value.location.x - value.startLocation.x) / (vm.plane.scale ?? 1.0),
                                           dy: (value.location.y - value.startLocation.y) / (vm.plane.scale ?? 1.0))
@@ -338,6 +381,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleX = lastScaleX ?? layerModel.scaleX
             }
             .onEnded { _ in
+                gestureEnded = true
                 PersistenceController.shared.saveChanges()
             }
     }

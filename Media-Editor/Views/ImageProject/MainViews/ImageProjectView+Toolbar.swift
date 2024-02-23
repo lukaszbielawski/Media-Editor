@@ -30,7 +30,9 @@ extension ImageProjectView {
                     Spacer().frame(width: 11)
                     Label("Undo", systemImage: "arrowshape.turn.up.backward.fill")
                         .opacity(isArrowActive.undo ? 1.0 : 0.5)
-                        .onTapGesture { print("undo") }
+                        .onTapGesture {
+                            vm.performUndo()
+                        }
                     Label("Redo", systemImage: "arrowshape.turn.up.forward.fill")
                         .opacity(isArrowActive.redo ? 1.0 : 0.5)
                         .onTapGesture { print("redo") }

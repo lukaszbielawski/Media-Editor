@@ -18,6 +18,8 @@ struct ImageProjectToolCaseFlipView: View {
                         guard let layerModel = vm.activeLayer,
                               let rotation = layerModel.rotation else { return }
 
+                        vm.updateUndoLayers()
+
                         if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation.normalizedRotationRadians) ||
                             ((.pi * 1.25)...(.pi * 1.75)).contains(rotation.normalizedRotationRadians)
                         {
@@ -26,6 +28,8 @@ struct ImageProjectToolCaseFlipView: View {
                         } else {
                             layerModel.scaleX? *= -1.0
                         }
+
+                        PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())
                 ImageProjectToolTileView(iconName: "arrow.up.and.down.righttriangle.up.righttriangle.down.fill")
@@ -33,6 +37,8 @@ struct ImageProjectToolCaseFlipView: View {
                         guard let layerModel = vm.activeLayer,
                               let rotation = layerModel.rotation else { return }
 
+                        vm.updateUndoLayers()
+
                         if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation.normalizedRotationRadians) ||
                             ((.pi * 1.25)...(.pi * 1.75)).contains(rotation.normalizedRotationRadians)
                         {
@@ -41,6 +47,8 @@ struct ImageProjectToolCaseFlipView: View {
                         } else {
                             layerModel.scaleY? *= -1.0
                         }
+
+                        PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())
                 Spacer()
@@ -50,11 +58,3 @@ struct ImageProjectToolCaseFlipView: View {
         .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }
-
-//        TapGesture()
-//            .onEnded {
-//                let rotation = layerModel.rotation?.normalizedRotationRadians ?? 0.0
-//                print(rotation, "norm")
-//
-//                PersistenceController.shared.saveChanges()
-//            }
