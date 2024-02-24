@@ -17,18 +17,18 @@ struct ImageProjectToolCaseFlipView: View {
                     .onTapGesture {
                         guard let layerModel = vm.activeLayer,
                               let rotation = layerModel.rotation else { return }
+                        withAnimation {
+                            if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation.normalizedRotationRadians) ||
+                                ((.pi * 1.25)...(.pi * 1.75)).contains(rotation.normalizedRotationRadians)
+                            {
+                                layerModel.scaleY? *= -1.0
 
-                        vm.updateUndoLayers()
-
-                        if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation.normalizedRotationRadians) ||
-                            ((.pi * 1.25)...(.pi * 1.75)).contains(rotation.normalizedRotationRadians)
-                        {
-                            layerModel.scaleY? *= -1.0
-
-                        } else {
-                            layerModel.scaleX? *= -1.0
+                            } else {
+                                layerModel.scaleX? *= -1.0
+                            }
                         }
 
+                        vm.updateUndoLayers()
                         PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())
@@ -36,18 +36,18 @@ struct ImageProjectToolCaseFlipView: View {
                     .onTapGesture {
                         guard let layerModel = vm.activeLayer,
                               let rotation = layerModel.rotation else { return }
+                        withAnimation {
+                            if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation.normalizedRotationRadians) ||
+                                ((.pi * 1.25)...(.pi * 1.75)).contains(rotation.normalizedRotationRadians)
+                            {
+                                layerModel.scaleX? *= -1.0
 
-                        vm.updateUndoLayers()
-
-                        if ((.pi * 0.25)...(.pi * 0.75)).contains(rotation.normalizedRotationRadians) ||
-                            ((.pi * 1.25)...(.pi * 1.75)).contains(rotation.normalizedRotationRadians)
-                        {
-                            layerModel.scaleX? *= -1.0
-
-                        } else {
-                            layerModel.scaleY? *= -1.0
+                            } else {
+                                layerModel.scaleY? *= -1.0
+                            }
                         }
 
+                        vm.updateUndoLayers()
                         PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())

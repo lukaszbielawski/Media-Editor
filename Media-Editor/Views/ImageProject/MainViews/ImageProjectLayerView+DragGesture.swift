@@ -11,16 +11,12 @@ extension ImageProjectLayerView {
     var layerDragGesture: some Gesture {
         DragGesture(coordinateSpace: .local)
             .onChanged {
-                if gestureEnded {
-                    vm.updateUndoLayers()
-                    gestureEnded = false
-                }
                 layerDragGestureFunction($0.translation)
             }
             .updating($lastPosition) { _, startPosition, _ in
                 startPosition = startPosition ?? layerModel.position
             }.onEnded { _ in
-                gestureEnded = true
+                vm.updateUndoLayers()
                 PersistenceController.shared.saveChanges()
             }
     }

@@ -13,7 +13,6 @@ struct ImageProjectView: View {
     @Environment(\.dismiss) var dismiss
 
     @State var isSaved: Bool = false
-    @State var isArrowActive = (undo: true, redo: false)
     @State var isEditingFrameVisible = false
     @State var editingFrameOpacity: CGFloat = 1.0
 

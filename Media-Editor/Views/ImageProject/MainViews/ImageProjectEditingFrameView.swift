@@ -18,7 +18,6 @@ struct ImageProjectEditingFrameView: View {
     @GestureState var lastScaleY: Double?
 
     @State var offset: CGFloat = 0.0
-    @State var gestureEnded: Bool = true
 
     var body: some View {
         ZStack {

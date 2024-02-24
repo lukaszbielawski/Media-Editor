@@ -12,12 +12,10 @@ struct ImageProjectLayerView: View {
 
     @GestureState var lastPosition: CGPoint?
 
-    @StateObject var layerModel: LayerModel
+    @ObservedObject var layerModel: LayerModel
 
     @State var wasPreviousDragGestureFrameLockedForX = false
     @State var wasPreviousDragGestureFrameLockedForY = false
-    @State var gestureEnded = true
-
 
     let dragGestureTolerance = 10.0
 
@@ -37,6 +35,9 @@ struct ImageProjectLayerView: View {
                 .onAppear {
                     layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
                     vm.objectWillChange.send()
+                }
+                .onDisappear {
+                    print("image disappear")
                 }
                 .onTapGesture {
                     if vm.activeLayer == layerModel {

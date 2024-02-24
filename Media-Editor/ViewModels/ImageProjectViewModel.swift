@@ -31,8 +31,10 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var projectFilters: [FilterType] = .init()
 
     @Published var projectLayers = [LayerModel]()
-    var redoLayers: [[LayerModel]] = .init()
-    var undoLayers: [[LayerModel]] = .init()
+
+    var previousProjectLayers: [LayerModel] = .init()
+    @Published var redoLayers: [[LayerModel]] = .init()
+    @Published var undoLayers: [[LayerModel]] = .init()
 
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
@@ -51,12 +53,13 @@ final class ImageProjectViewModel: ObservableObject {
     typealias PathPoints = (startPoint: CGPoint, endPoint: CGPoint)
 
     init(projectEntity: ImageProjectEntity) {
-        self.projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
+        projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
         configureNavBar()
 
         let photoEntities = projectModel.photoEntities
 
         var isFirst = true
+
         for photoEntity in photoEntities {
             let layerModel = LayerModel(photoEntity: photoEntity)
 
@@ -74,6 +77,7 @@ final class ImageProjectViewModel: ObservableObject {
                 projectLayers.append(layerModel)
             }
         }
+        previousProjectLayers = makeProjectLayerCopy()
     }
 
     func setupAddAssetsToProject() {
@@ -94,28 +98,62 @@ final class ImageProjectViewModel: ObservableObject {
         if undoLayers.count > 5 {
             undoLayers.removeFirst()
         }
-        let copyArray = projectLayers.map { $0.copy() as! LayerModel }
-        undoLayers.append(copyArray)
+        redoLayers.removeAll()
+        undoLayers.append(previousProjectLayers)
+        previousProjectLayers = makeProjectLayerCopy()
+
+        objectWillChange.send()
     }
 
     func performUndo() {
         guard undoLayers.count > 0 else { return }
 
-        print("undocount", undoLayers.count)
-
-        print("old", projectLayers.first!.scaleX)
-//        updateRedoLayers()
-        projectLayers = undoLayers.last!
-        print("new", projectLayers.first!.scaleX)
-        objectWillChange.send()
+        let projectLayerCopy = makeProjectLayerCopy()
+        loadPreviousProjectLayerData(isUndo: true)
+        undoLayers.removeLast()
+        redoLayers.append(projectLayerCopy)
+        previousProjectLayers = makeProjectLayerCopy()
     }
 
-    func updateRedoLayers() {
-        if redoLayers.count > 5 {
-            redoLayers.removeFirst()
+    func performRedo() {
+        guard redoLayers.count > 0 else { return }
+
+        let projectLayerCopy = makeProjectLayerCopy()
+        loadPreviousProjectLayerData(isUndo: false)
+        redoLayers.removeLast()
+        undoLayers.append(projectLayerCopy)
+        previousProjectLayers = makeProjectLayerCopy()
+    }
+
+    private func makeProjectLayerCopy() -> [LayerModel] {
+        return projectLayers.map { $0.copy() as! LayerModel }
+    }
+
+    private func loadPreviousProjectLayerData(isUndo: Bool) {
+        let previousLayers = (isUndo ? undoLayers : redoLayers)
+        guard previousLayers.count > 0 else { return }
+
+        for previousLayer in previousLayers.last! {
+            if let layer = projectLayers.first(where: { $0.fileName == previousLayer.fileName }) {
+                layer.cgImage = previousLayer.cgImage
+                layer.positionZ = previousLayer.positionZ
+                let distanceDiff = hypot(layer.position!.x - previousLayer.position!.x,
+                                         layer.position!.y - previousLayer.position!.y)
+                let animationDuration: Double = distanceDiff / 2000.0 + 0.2
+
+                withAnimation(.easeInOut(duration: animationDuration)) {
+                    layer.position = previousLayer.position
+                }
+                withAnimation(.easeInOut(duration: 0.35)) {
+                    layer.rotation = previousLayer.rotation
+                    layer.scaleX = previousLayer.scaleX
+                    layer.scaleY = previousLayer.scaleY
+                    layer.size = calculateLayerSize(layerModel: previousLayer)
+                }
+            } else {
+                projectLayers.append(previousLayer)
+            }
         }
-        let copyArray = projectLayers.map { $0.copy() as! LayerModel }
-        redoLayers.append(copyArray)
     }
 
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {

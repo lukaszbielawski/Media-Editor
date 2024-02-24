@@ -28,6 +28,7 @@ struct ImageProjectPlaneView: View {
                         vm.workspaceSize = workspaceGeoProxy.size
                         vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
                         vm.tools.centerButtonFunction = centerPerspective
+                        vm.objectWillChange.send()
                     }
                 }
 

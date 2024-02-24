@@ -11,14 +11,11 @@ import ImageIO
 import SwiftUI
 
 class LayerModel: Identifiable, ObservableObject {
-
-    
     var id: String { fileName }
-    var fileName: String
+    let fileName: String
     var cgImage: CGImage!
 
     let photoEntity: PhotoEntity
-
 
     @Published var position: CGPoint? {
         willSet {
@@ -26,7 +23,7 @@ class LayerModel: Identifiable, ObservableObject {
             photoEntity.positionY = newValue!.y as NSNumber
         }
     }
-    
+
     @Published var positionZ: Int? {
         willSet { photoEntity.positionZ = newValue as? NSNumber }
     }

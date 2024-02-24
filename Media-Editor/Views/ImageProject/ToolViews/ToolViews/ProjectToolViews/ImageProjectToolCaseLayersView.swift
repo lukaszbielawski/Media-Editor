@@ -47,6 +47,7 @@ struct ImageProjectToolCaseLayersView: View {
                                             {
                                                 vm.activeLayer = nil
                                             }
+                                            vm.updateUndoLayers()
                                             vm.objectWillChange.send()
                                         }
 
