@@ -26,9 +26,9 @@ struct ImageProjectToolCaseAddView: View {
                                     vm.selectedPhotos.removeAll()
                                 }
                         }
-                    ForEach(vm.projectLayers) { layerModel in
+                    ForEach(vm.projectLayers.filter { !($0.toDelete ?? false)  }) { layerModel in
                         ZStack(alignment: .topTrailing) {
-                            Image(uiImage: UIImage(cgImage: layerModel.cgImage))
+                            Image(decorative: layerModel.cgImage, scale: 1.0)
                                 .centerCropped()
                                 .modifier(ProjectToolTileViewModifier())
                                 .contentShape(Rectangle())

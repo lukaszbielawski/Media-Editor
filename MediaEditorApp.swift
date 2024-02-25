@@ -12,7 +12,6 @@ import SwiftUI
 @main
 struct MediaEditorApp: App {
     @Environment(\.scenePhase) var scenePhase
-    var context = PersistenceController.shared.container.viewContext
 
     var body: some Scene {
         WindowGroup {

@@ -40,6 +40,10 @@ class LayerModel: Identifiable, ObservableObject {
         willSet { photoEntity.scaleY = newValue! as NSNumber }
     }
 
+    @Published var toDelete: Bool? {
+        willSet { photoEntity.toDelete = newValue! }
+    }
+
     @Published var size: CGSize?
 
     init(photoEntity: PhotoEntity) {
@@ -54,6 +58,8 @@ class LayerModel: Identifiable, ObservableObject {
 
         self.scaleX = photoEntity.scaleX as? Double ?? 1.0
         self.scaleY = photoEntity.scaleY as? Double ?? 1.0
+
+        self.toDelete = photoEntity.toDelete
     }
 }
 

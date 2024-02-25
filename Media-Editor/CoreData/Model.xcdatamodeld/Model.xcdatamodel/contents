@@ -17,6 +17,7 @@
         <attribute name="rotation" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="scaleX" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="scaleY" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="toDelete" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="photoEntityToImageProjectEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImageProjectEntity" inverseName="imageProjectEntityToPhotoEntity" inverseEntity="ImageProjectEntity"/>
     </entity>
 </model>

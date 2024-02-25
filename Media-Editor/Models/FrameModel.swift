@@ -13,6 +13,9 @@ struct FrameModel {
 
     let padding: Double = 16.0
     let paddingFactor: Double = 0.05
+
+    let minPixels = 30
+    let maxPixels = 9999
 }
 
 extension FrameModel {

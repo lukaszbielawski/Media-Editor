@@ -12,9 +12,3 @@ protocol Tool: Identifiable, CaseIterable, RawRepresentable, Equatable where Raw
     var name: String { get }
     var icon: String { get }
 }
-
-//extension Tool {
-//    static func ==(lhs: Self, rhs: Self) -> Bool {
-//           return false
-//       }
-//}

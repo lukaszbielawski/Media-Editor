@@ -16,13 +16,12 @@ extension ImageProjectLayerView {
             .updating($lastPosition) { _, startPosition, _ in
                 startPosition = startPosition ?? layerModel.position
             }.onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }
 
     func layerDragGestureFunction(_ translation: CGSize) {
-
         var newDraggedLayerPosition = lastPosition ?? layerModel.position ?? CGPoint()
         newDraggedLayerPosition.x += translation.width
         newDraggedLayerPosition.y += translation.height
@@ -316,7 +315,9 @@ extension ImageProjectLayerView {
         }
         else {
             if !wasPreviousDragGestureFrameLockedForX {
-                HapticService.shared.play(.medium)
+                if touchPositionX == nil {
+                    HapticService.shared.play(.medium)
+                }
                 wasPreviousDragGestureFrameLockedForX = true
             }
             vm.plane.lineXPosition = touchPositionX
@@ -328,9 +329,13 @@ extension ImageProjectLayerView {
         }
         else {
             if !wasPreviousDragGestureFrameLockedForY {
-                HapticService.shared.play(.medium)
+                if touchPositionY == nil {
+                    HapticService.shared.play(.medium)
+                }
+
                 wasPreviousDragGestureFrameLockedForY = true
             }
+
             vm.plane.lineYPosition = touchPositionY
         }
 

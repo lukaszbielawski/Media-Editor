@@ -32,9 +32,9 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var projectLayers = [LayerModel]()
 
-    var previousProjectLayers: [LayerModel] = .init()
-    @Published var redoLayers: [[LayerModel]] = .init()
-    @Published var undoLayers: [[LayerModel]] = .init()
+    var latestSnapshot: SnapshotModel!
+    @Published var redoModel: [SnapshotModel] = .init()
+    @Published var undoModel: [SnapshotModel] = .init()
 
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
@@ -62,8 +62,10 @@ final class ImageProjectViewModel: ObservableObject {
 
         for photoEntity in photoEntities {
             let layerModel = LayerModel(photoEntity: photoEntity)
-
-            if projectModel.lastEditDate == nil && isFirst {
+            if let toDelete = layerModel.toDelete, toDelete {
+                deletePhotoEntity(photoEntity: photoEntity)
+                projectModel.photoEntities.remove(photoEntity)
+            } else if projectModel.lastEditDate == nil && isFirst {
                 isFirst = false
                 layerModel.positionZ = 1
                 projectLayers.append(layerModel)
@@ -77,7 +79,7 @@ final class ImageProjectViewModel: ObservableObject {
                 projectLayers.append(layerModel)
             }
         }
-        previousProjectLayers = makeProjectLayerCopy()
+        latestSnapshot = createSnapshot()
     }
 
     func setupAddAssetsToProject() {
@@ -94,49 +96,51 @@ final class ImageProjectViewModel: ObservableObject {
             }
     }
 
-    func updateUndoLayers() {
-        if undoLayers.count > 5 {
-            undoLayers.removeFirst()
+    func updateLatestSnapshot() {
+        if undoModel.count > 5 {
+            undoModel.removeFirst()
         }
-        redoLayers.removeAll()
-        undoLayers.append(previousProjectLayers)
-        previousProjectLayers = makeProjectLayerCopy()
-
-        objectWillChange.send()
+        redoModel.removeAll()
+        undoModel.append(latestSnapshot)
+        latestSnapshot = createSnapshot()
     }
 
     func performUndo() {
-        guard undoLayers.count > 0 else { return }
+        guard undoModel.count > 0 else { return }
 
-        let projectLayerCopy = makeProjectLayerCopy()
+        let firstSnapshot = createSnapshot()
         loadPreviousProjectLayerData(isUndo: true)
-        undoLayers.removeLast()
-        redoLayers.append(projectLayerCopy)
-        previousProjectLayers = makeProjectLayerCopy()
+        undoModel.removeLast()
+        redoModel.append(firstSnapshot)
+        latestSnapshot = createSnapshot()
     }
 
     func performRedo() {
-        guard redoLayers.count > 0 else { return }
+        guard redoModel.count > 0 else { return }
 
-        let projectLayerCopy = makeProjectLayerCopy()
+        let projectLayerCopy = createSnapshot()
         loadPreviousProjectLayerData(isUndo: false)
-        redoLayers.removeLast()
-        undoLayers.append(projectLayerCopy)
-        previousProjectLayers = makeProjectLayerCopy()
+        redoModel.removeLast()
+        undoModel.append(projectLayerCopy)
+        latestSnapshot = createSnapshot()
     }
 
-    private func makeProjectLayerCopy() -> [LayerModel] {
-        return projectLayers.map { $0.copy() as! LayerModel }
+    private func createSnapshot() -> SnapshotModel {
+        let layers = projectLayers.map { $0.copy() as! LayerModel }
+        let projectModel = projectModel.copy() as! ImageProjectModel
+        return .init(layers: layers, projectModel: projectModel)
     }
 
     private func loadPreviousProjectLayerData(isUndo: Bool) {
-        let previousLayers = (isUndo ? undoLayers : redoLayers)
+        let previousLayers = (isUndo ? undoModel : redoModel)
         guard previousLayers.count > 0 else { return }
-
-        for previousLayer in previousLayers.last! {
+        
+        for previousLayer in previousLayers.last!.layers {
             if let layer = projectLayers.first(where: { $0.fileName == previousLayer.fileName }) {
                 layer.cgImage = previousLayer.cgImage
                 layer.positionZ = previousLayer.positionZ
+                layer.toDelete = previousLayer.toDelete
+
                 let distanceDiff = hypot(layer.position!.x - previousLayer.position!.x,
                                          layer.position!.y - previousLayer.position!.y)
                 let animationDuration: Double = distanceDiff / 2000.0 + 0.2
@@ -148,12 +152,22 @@ final class ImageProjectViewModel: ObservableObject {
                     layer.rotation = previousLayer.rotation
                     layer.scaleX = previousLayer.scaleX
                     layer.scaleY = previousLayer.scaleY
-                    layer.size = calculateLayerSize(layerModel: previousLayer)
+                    layer.size = self.calculateLayerSize(layerModel: previousLayer)
                 }
+
+
+
             } else {
                 projectLayers.append(previousLayer)
             }
         }
+        let previousProjectModel = previousLayers.last!.projectModel
+        withAnimation(.easeInOut(duration: 0.35)) {
+            projectModel.framePixelWidth = previousProjectModel.framePixelWidth
+            projectModel.framePixelHeight = previousProjectModel.framePixelHeight
+            recalculateFrameAndLayersGeometry()
+        }
+        PersistenceController.shared.saveChanges()
     }
 
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {
@@ -250,21 +264,21 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func showLayerOnScreen(layerModel: LayerModel) {
-        updateUndoLayers()
         layerModel.positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
+        layerModel.toDelete = false
         if layerModel.positionZ != nil {
             activeLayer = nil
         } else {
             activeLayer = layerModel
         }
-
+        updateLatestSnapshot()
         PersistenceController.shared.saveChanges()
         objectWillChange.send()
     }
 
     func swapLayersPositionZ(lhs: LayerModel, rhs: LayerModel) {
         guard let lhsIndex = lhs.positionZ, let rhsIndex = rhs.positionZ else { return }
-        updateUndoLayers()
+        updateLatestSnapshot()
         lhs.positionZ = abs(rhsIndex) * Int(copysign(-1.0, Double(lhsIndex)))
         rhs.positionZ = abs(lhsIndex) * Int(copysign(-1.0, Double(rhsIndex)))
 
@@ -313,13 +327,18 @@ final class ImageProjectViewModel: ObservableObject {
         return index == nil
     }
 
-    func deleteLayer() {
-        guard let photoToDelete = layerToDelete else { return }
-//        PersistenceController.shared.photoController.delete(for: photoToDelete.fileName)
-        updateUndoLayers()
-        projectLayers.removeAll { $0.fileName == photoToDelete.fileName }
+    private func deletePhotoEntity(photoEntity: PhotoEntity) {
+        guard let fileName = photoEntity.fileName else { return }
+        PersistenceController.shared.photoController.delete(for: fileName)
         PersistenceController.shared.saveChanges()
-        layerToDelete = nil
+    }
+
+    func deleteLayer() {
+        guard let layerToDelete else { return }
+        layerToDelete.toDelete = true
+        layerToDelete.positionZ = nil
+        updateLatestSnapshot()
+        PersistenceController.shared.saveChanges()
     }
 
     func addAssetsToProject() async throws {
@@ -333,11 +352,12 @@ final class ImageProjectViewModel: ObservableObject {
         }
     }
 
-    func exportProjectToPhotoLibrary() async {
+    func exportProjectToPhotoLibrary() {
         guard let framePixelWidth = projectModel.framePixelWidth,
               let framePixelHeight = projectModel.framePixelHeight else { return }
-        await photoService.exportPhotosToFile(
+        Task { photoService.exportPhotosToFile(
             photos: projectLayers,
             contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight))
+        }
     }
 }

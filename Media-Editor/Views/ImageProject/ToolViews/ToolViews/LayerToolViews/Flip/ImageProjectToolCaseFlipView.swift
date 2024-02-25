@@ -28,7 +28,7 @@ struct ImageProjectToolCaseFlipView: View {
                             }
                         }
 
-                        vm.updateUndoLayers()
+                        vm.updateLatestSnapshot()
                         PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())
@@ -47,7 +47,7 @@ struct ImageProjectToolCaseFlipView: View {
                             }
                         }
 
-                        vm.updateUndoLayers()
+                        vm.updateLatestSnapshot()
                         PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())

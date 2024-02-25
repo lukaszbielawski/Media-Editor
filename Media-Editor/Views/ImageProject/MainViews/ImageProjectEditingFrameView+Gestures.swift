@@ -58,7 +58,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleY = lastScaleY ?? layerModel.scaleY
             }
             .onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -78,7 +78,7 @@ extension ImageProjectEditingFrameView {
                     vm.activeLayer?.rotation = Angle(degrees: rotationChange)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    vm.updateUndoLayers()
+                    vm.updateLatestSnapshot()
                     PersistenceController.shared.saveChanges()
                 }
             }
@@ -119,7 +119,7 @@ extension ImageProjectEditingFrameView {
                 lastAngle = lastAngle ?? layerModel.rotation
             }
             .onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -163,7 +163,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleX = lastScaleX ?? layerModel.scaleX
             }
             .onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -240,7 +240,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleY = lastScaleY ?? layerModel.scaleY
             }
             .onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -284,7 +284,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleY = lastScaleY ?? layerModel.scaleY
             }
             .onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }
@@ -302,7 +302,7 @@ extension ImageProjectEditingFrameView {
                 vm.performLayerDragPublisher.send(CGSize(width: width / planeScale,
                                                          height: height / planeScale))
             }.onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
             }
     }
 
@@ -345,7 +345,7 @@ extension ImageProjectEditingFrameView {
                 lastScaleX = lastScaleX ?? layerModel.scaleX
             }
             .onEnded { _ in
-                vm.updateUndoLayers()
+                vm.updateLatestSnapshot()
                 PersistenceController.shared.saveChanges()
             }
     }

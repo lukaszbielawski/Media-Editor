@@ -185,7 +185,7 @@ class PhotoLibraryService: ObservableObject {
         }
     }
 
-    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize) async {
+    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize) {
         Task {
             guard let context = CGContext(data: nil,
                                           width: Int(contextPixelSize.width),

@@ -23,6 +23,7 @@ public extension PhotoEntity {
     @NSManaged var scaleX: NSNumber?
     @NSManaged var scaleY: NSNumber?
     @NSManaged var rotation: NSNumber?
+    @NSManaged var toDelete: Bool
 
     @NSManaged var photoEntityToImageProjectEntity: ImageProjectEntity?
 }
@@ -30,7 +31,6 @@ public extension PhotoEntity {
 extension PhotoEntity: Identifiable {
     convenience init(fileName: String,
                      projectEntity: ImageProjectEntity,
-                     context: NSManagedObjectContext,
                      scaleX: Double = 1.0,
                      scaleY: Double = 1.0,
                      rotation: Double = 0.0,
@@ -38,7 +38,7 @@ extension PhotoEntity: Identifiable {
                      positionY: Double = 0.0,
                      positionZ: Int? = nil)
     {
-        self.init(context: context)
+        self.init(context: PersistenceController.shared.container.viewContext)
         self.fileName = fileName
         self.photoEntityToImageProjectEntity = projectEntity
         self.positionX = NSNumber(value: positionX)
@@ -52,6 +52,7 @@ extension PhotoEntity: Identifiable {
         self.scaleX = NSNumber(value: scaleX)
         self.scaleY = NSNumber(value: scaleY)
         self.rotation = NSNumber(value: rotation)
+        self.toDelete = false
     }
 }
 

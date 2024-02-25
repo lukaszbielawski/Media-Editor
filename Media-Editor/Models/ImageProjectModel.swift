@@ -56,12 +56,9 @@ final class ImageProjectModel: ObservableObject {
     }
 
     func insertPhotosEntityToProject(fileNames: [String]) throws {
-        let container = PersistenceController.shared.container
-
         for fileName in fileNames {
             let photoEntity = PhotoEntity(fileName: fileName,
-                                          projectEntity: imageProjectEntity,
-                                          context: container.viewContext)
+                                          projectEntity: imageProjectEntity)
 
             insertPhotosToEntity(photo: photoEntity)
         }
@@ -74,6 +71,14 @@ final class ImageProjectModel: ObservableObject {
         photoEntitiesCopy.insert(photo)
         photoEntities = photoEntitiesCopy
     }
+}
+
+extension ImageProjectModel: NSCopying {
+    func copy(with zone: NSZone? = nil) -> Any {
+        return ImageProjectModel(imageProjectEntity: imageProjectEntity)
+    }
+    
+
 }
 
 extension ImageProjectModel: Equatable {

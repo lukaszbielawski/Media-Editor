@@ -22,7 +22,7 @@ struct ImageProjectToolCaseLayersView: View {
                         let index = filteredArray.firstIndex(of: layerModel)!
                         if let positionZ = layerModel.positionZ {
                             ZStack(alignment: .topTrailing) {
-                                Image(uiImage: UIImage(cgImage: layerModel.cgImage))
+                                Image(decorative: layerModel.cgImage, scale: 1.0)
                                     .centerCropped()
                                     .modifier(ProjectToolTileViewModifier())
                                     .contentShape(Rectangle())
@@ -47,7 +47,7 @@ struct ImageProjectToolCaseLayersView: View {
                                             {
                                                 vm.activeLayer = nil
                                             }
-                                            vm.updateUndoLayers()
+                                            vm.updateLatestSnapshot()
                                             vm.objectWillChange.send()
                                         }
 

@@ -51,7 +51,16 @@ struct ImageProjectLayerView: View {
                     vm.activeLayer == layerModel ?
                         layerDragGesture
                         : nil
-                )
+                ).onChange(of: vm.plane.lineYPosition) { newValue in
+                    if newValue != nil {
+                        HapticService.shared.play(.medium)
+                    }
+                }
+                .onChange(of: vm.plane.lineXPosition) { newValue in
+                    if newValue != nil {
+                        HapticService.shared.play(.medium)
+                    }
+                }
                 .onReceive(vm.performLayerDragPublisher) { translation in
                     if vm.activeLayer == layerModel {
                         layerDragGestureFunction(translation)
