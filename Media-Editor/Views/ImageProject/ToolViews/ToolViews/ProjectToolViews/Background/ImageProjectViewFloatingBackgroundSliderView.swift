@@ -51,10 +51,6 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                         sliderWidth = geo.size.width
                     }
                 }
-            Capsule(style: .circular)
-                .fill(Material.ultraThinMaterial)
-                .frame(width: sliderHeight + (sliderOffset ?? (maxOffset * defaultOffsetFactor)),
-                       height: sliderHeight)
             Circle()
                 .fill(Color(appearance == .light ? .image : .tint))
                 .overlay {
@@ -64,7 +60,7 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                     Text(percentage)
                         .foregroundStyle(Color(.image))
                 }
-                .offset(x: sliderOffset ?? (maxOffset * defaultOffsetFactor))
+                .offset(x: sliderOffset )
                 .gesture(
                     DragGesture()
                         .onChanged { value in
@@ -74,20 +70,14 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                             newOffset = min(max(newOffset, 0.0), maxOffset)
                             backgroundColor =
                                 backgroundColor.withAlpha(newOffset / maxOffset)
-                            vm.tools.debounceSaveSubject.send()
                         }
                         .updating($lastOffset) { _, lastOffset, _ in
                             lastOffset = lastOffset ?? sliderOffset
+                        }.onEnded { _ in
+                            vm.updateLatestSnapshot()
+                            PersistenceController.shared.saveChanges()
                         }
                 )
-        }
-        .onAppear {
-            cancellable =  vm.tools.debounceSaveSubject
-                .debounce(for: .seconds(0.3), scheduler: DispatchQueue.main)
-                .sink { _ in
-                    vm.updateLatestSnapshot()
-                    PersistenceController.shared.saveChanges()
-                }
         }
     }
 }

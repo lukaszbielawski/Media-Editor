@@ -41,7 +41,6 @@ struct ImageProjectResizeSliderView: View {
                                 in: CGFloat(vm.frame.minPixels) ... CGFloat(vm.frame.maxPixels))
             { editing in
                 if !editing {
-                    print("updateslider")
                     vm.updateLatestSnapshot()
                     PersistenceController.shared.saveChanges()
                 }
@@ -63,7 +62,6 @@ struct ImageProjectResizeSliderView: View {
             TextField(hint,
                       text: $pixelFrameDimensionTextField.onChange(textFieldChanged), onEditingChanged: { editing in
                           if !editing {
-                              print("updatetextfield")
                               vm.updateLatestSnapshot()
                               PersistenceController.shared.saveChanges()
                           }
@@ -87,7 +85,6 @@ struct ImageProjectResizeSliderView: View {
             cancellable = debounceSaveSubject
                 .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
                 .sink { _ in
-                    print("update")
                     vm.updateLatestSnapshot()
                     PersistenceController.shared.saveChanges()
                 }
@@ -111,14 +108,15 @@ struct ImageProjectResizeSliderView: View {
         } else {
             pixelFrameDimensionTextField = ""
         }
-        vm.recalculateFrameAndLayersGeometry()
+        withAnimation(.easeInOut(duration: 0.35)) {
+            vm.recalculateFrameAndLayersGeometry()
+        }
         vm.tools.centerButtonFunction?()
     }
 
     private func sliderChanged(newValue: CGFloat) {
         projectModelPixelFrameDimension = newValue
         pixelFrameDimensionTextField = String(Int(newValue))
-
         vm.recalculateFrameAndLayersGeometry()
         vm.tools.centerButtonFunction?()
     }

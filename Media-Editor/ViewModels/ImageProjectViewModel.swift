@@ -36,8 +36,10 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var redoModel: [SnapshotModel] = .init()
     @Published var undoModel: [SnapshotModel] = .init()
 
+
     @Published var isSnapshotCurrentlyLoading = false
 
+    let undoLimit = 50
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
     private var subscriptions: [AnyCancellable] = .init()
@@ -99,7 +101,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func updateLatestSnapshot() {
-        if undoModel.count > 5 {
+        if undoModel.count > undoLimit {
             undoModel.removeFirst()
         }
         redoModel.removeAll()

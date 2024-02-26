@@ -10,7 +10,6 @@ import SwiftUI
 
 struct ImageProjectToolColorTileView: View {
     @Environment(\.colorScheme) var appearance
-    @EnvironmentObject var vm: ImageProjectViewModel
     @Binding var color: Color
     var title: String?
 
