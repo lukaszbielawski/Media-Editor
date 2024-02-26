@@ -16,22 +16,14 @@ final class AddProjectViewModel: ObservableObject {
     @Published var media = [PHAsset]()
     @Published var selectedAssets = [PHAsset]()
     @Published var createdProject: ImageProjectEntity?
-    @Published var projectType: ProjectType = .unknown
 
     private let photoService = PhotoLibraryService()
-
-    private var calculatedProjectType: ProjectType {
-        if selectedAssets.isEmpty {
-            return .unknown
-        }
-        return .photo
-    }
 
     private var subscription: AnyCancellable?
 
     init() {
         setupSubscription()
-        photoService.requestAuthorization(projectType: [.movie, .photo])
+        photoService.requestAuthorization()
     }
 
     private func setupSubscription() {
@@ -62,7 +54,6 @@ final class AddProjectViewModel: ObservableObject {
             selectedAssets.append(asset)
         }
         objectWillChange.send()
-        projectType = calculatedProjectType
         return index == nil
     }
 
@@ -73,9 +64,7 @@ final class AddProjectViewModel: ObservableObject {
     }
 
     func createProject() async throws -> ImageProjectEntity {
-        let isMovie = projectType == ProjectType.movie
-        let projectEntity = ImageProjectEntity(id: UUID(), title: "New \(isMovie ? "movie" : "photo") project",
-                                               isMovie: isMovie)
+        let projectEntity = ImageProjectEntity(id: UUID(), title: "New photo project")
         let projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
         let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedAssets)
         try projectModel.insertPhotosEntityToProject(fileNames: fileNames)

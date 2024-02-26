@@ -24,10 +24,11 @@ struct ImageProjectPlaneView: View {
                 .contentShape(Rectangle())
                 .zIndex(Double(Int.min + 1))
                 .geometryAccessor { workspaceGeoProxy in
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        print("geo accessor")
                         vm.workspaceSize = workspaceGeoProxy.size
+                        vm.setupCenterButtonFunction()
                         vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
-                        vm.tools.centerButtonFunction = centerPerspective
                         vm.objectWillChange.send()
                     }
                 }
@@ -120,23 +121,5 @@ struct ImageProjectPlaneView: View {
                     lastScaleValue = 1.0
                 }
         )
-    }
-
-    private func centerPerspective() {
-        guard let initialPosition = vm.plane.initialPosition,
-              let currentPosition = vm.plane.currentPosition else { return }
-        let distance = hypot(currentPosition.x - initialPosition.x, currentPosition.y - initialPosition.y)
-
-        let animationDuration: Double = distance / 2000.0 + 0.2
-
-        withAnimation(.easeInOut(duration: animationDuration)) {
-            vm.plane.currentPosition = initialPosition
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
-            withAnimation(.linear(duration: 0.2)) {
-                vm.plane.scale = 1.0
-            }
-        }
     }
 }

@@ -12,9 +12,9 @@ import Combine
 struct ToolsModel {
     let paddingFactor: Double = 0.1
 
-    var leftFloatingButtonAction: (() -> Void)?
+
     var leftFloatingButtonIcon = "arrow.uturn.backward"
-    var rightFloatingButtonAction: (() -> Void)?
+
     var rightFloatingButtonIcon = "checkmark"
     
     var sliderPercentage: CGFloat?
@@ -22,7 +22,6 @@ struct ToolsModel {
     var isImportPhotoViewShown = false
     var isDeleteImageAlertPresented = false
     var layersOpacity = 1.0
-    var centerButtonFunction: (() -> Void)?
 
     var photoExportFormat: PhotoFormatType = .png
     var colorArray: [Color] = [

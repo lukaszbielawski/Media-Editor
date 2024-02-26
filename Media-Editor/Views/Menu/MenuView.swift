@@ -12,7 +12,6 @@ import SwiftUI
 struct MenuView: View {
     @StateObject var vm = MenuViewModel()
 
-    @State var createdProjectType: ProjectType = .unknown
     @State var isManageProjectSheetPresented: Bool = false
 
     @State var performTransition = false {
@@ -46,14 +45,13 @@ struct MenuView: View {
             }.navigationBarHidden(true)
         }
         .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
-            guard let value else { return }
-            createdProjectType = value.isMovie ? .movie : .photo
+            guard value != nil else { return }
             performTransition = true
         }
         .navigationViewStyle(.stack)
 
         .overlay {
-            Color(createdProjectType == .movie ? .accent : .accent2)
+            Color(.image)
                 .ignoresSafeArea()
                 .opacity(performTransition ? 1.0 : 0.0)
                 .animation(.easeOut(duration: 1.0), value: performTransition)

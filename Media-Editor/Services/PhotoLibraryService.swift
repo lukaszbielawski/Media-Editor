@@ -16,29 +16,22 @@ class PhotoLibraryService: ObservableObject {
 
     private var imageCachingManager: PHCachingImageManager!
 
-    func requestAuthorization(projectType: Set<ProjectType>) {
+    func requestAuthorization() {
         PHPhotoLibrary.requestAuthorization { [unowned self] status in
             switch status {
             case .authorized, .limited:
-                fetchAllMediaFromPhotoLibrary(projectType: projectType)
+                fetchAllMediaFromPhotoLibrary()
             default:
                 print("Permission not granted")
             }
         }
     }
 
-    func fetchAllMediaFromPhotoLibrary(projectType: Set<ProjectType>) {
+    func fetchAllMediaFromPhotoLibrary() {
         imageCachingManager = PHCachingImageManager()
         imageCachingManager.allowsCachingHighQualityImages = true
 
-        let cvargs: [CVarArg] = projectType
-            .map { type in
-                if type == .movie {
-                    return PHAssetMediaType.video.rawValue
-                } else {
-                    return PHAssetMediaType.image.rawValue
-                }
-            }
+        let cvargs: [CVarArg] = [PHAssetMediaType.image.rawValue]
 
         let fetchOptions = PHFetchOptions()
         fetchOptions.includeHiddenAssets = false

@@ -48,19 +48,19 @@ struct ImageProjectView: View {
                               let workspaceSize = vm.workspaceSize else { return }
                         if let xPoints = points.xPoints {
                             path.move(to: CGPoint(x: xPoints.startPoint.x * planeScale
-                                                  - workspaceSize.width * 0.5 * (planeScale - 1.0),
-                                                  y: 0))
+                                    - workspaceSize.width * 0.5 * (planeScale - 1.0),
+                                y: 0))
                             path.addLine(to: CGPoint(x: xPoints.endPoint.x * planeScale
-                                                     - workspaceSize.width * 0.5 * (planeScale - 1.0),
-                                                     y: workspaceSize.height))
+                                    - workspaceSize.width * 0.5 * (planeScale - 1.0),
+                                y: workspaceSize.height))
                         }
                         if let yPoints = points.yPoints {
                             path.move(to: CGPoint(x: 0,
                                                   y: yPoints.startPoint.y * planeScale
-                                                  - workspaceSize.height * 0.5 * (planeScale - 1.0)))
+                                                      - workspaceSize.height * 0.5 * (planeScale - 1.0)))
                             path.addLine(to: CGPoint(x: workspaceSize.width,
                                                      y: yPoints.endPoint.y * planeScale
-                                                     - workspaceSize.height * 0.5 * (planeScale - 1.0)))
+                                                         - workspaceSize.height * 0.5 * (planeScale - 1.0)))
                         }
                     }
                     .stroke(Color(.accent), lineWidth: 1)
@@ -70,7 +70,7 @@ struct ImageProjectView: View {
                     vm.plane.lineXPosition = nil
                     vm.plane.lineYPosition = nil
                 }
-                
+
                 ImageProjectToolView()
             }
             .background(Color(.primary))

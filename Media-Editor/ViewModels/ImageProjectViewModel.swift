@@ -36,13 +36,19 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var redoModel: [SnapshotModel] = .init()
     @Published var undoModel: [SnapshotModel] = .init()
 
-
     @Published var isSnapshotCurrentlyLoading = false
 
     let undoLimit = 50
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
-    private var subscriptions: [AnyCancellable] = .init()
+    var leftFloatingButtonFunctionType = FloatingButtonFunctionType.back
+    var rightFloatingButtonFunctionType = FloatingButtonFunctionType.confirm
+
+    var floatingButtonClickedSubject = PassthroughSubject<FloatingButtonFunctionType, Never>()
+
+    var centerButtonFunction: (() -> Void)?
+
+    private var cancellable: AnyCancellable?
 
     private var photoService = PhotoLibraryService()
 
@@ -86,18 +92,22 @@ final class ImageProjectViewModel: ObservableObject {
         latestSnapshot = createSnapshot()
     }
 
+    deinit {
+        print("viewmodel de init")
+    }
+
     func setupAddAssetsToProject() {
-        photoService.requestAuthorization(projectType: [.photo])
+        photoService.requestAuthorization()
         setupSubscription()
     }
 
     private func setupSubscription() {
-        photoService
+        cancellable = photoService
             .mediaPublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] assets in
                 self.libraryPhotos = assets
-            }.store(in: &subscriptions)
+            }
     }
 
     func updateLatestSnapshot() {
@@ -171,6 +181,30 @@ final class ImageProjectViewModel: ObservableObject {
             recalculateFrameAndLayersGeometry()
         }
         PersistenceController.shared.saveChanges()
+    }
+
+    func setupCenterButtonFunction() {
+        centerButtonFunction = { [weak self] in
+            self?.centerPerspective()
+        }
+    }
+
+    func centerPerspective() {
+        guard let initialPosition = plane.initialPosition,
+              let currentPosition = plane.currentPosition else { return }
+        let distance = hypot(currentPosition.x - initialPosition.x, currentPosition.y - initialPosition.y)
+
+        let animationDuration: Double = distance / 2000.0 + 0.2
+
+        withAnimation(.easeInOut(duration: animationDuration)) {
+            plane.currentPosition = initialPosition
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
+            withAnimation(.linear(duration: 0.2)) { [unowned self] in
+                self.plane.scale = 1.0
+            }
+        }
     }
 
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {

@@ -14,9 +14,7 @@ struct MenuTileView: View {
     var dotsDidTapped: (UUID) -> Void
     var body: some View {
         ZStack(alignment: .top) {
-            NavigationLink(destination: project.isMovie
-                ? ImageProjectView(project: project)
-                : ImageProjectView(project: project))
+            NavigationLink(destination: ImageProjectView(project: project))
             {
                 KFImage.url(project.thumbnailURL)
                     .centerCropped()
@@ -25,11 +23,11 @@ struct MenuTileView: View {
             GeometryReader { geo in
                 VStack {
                     ZStack {
-                        Color(project.isMovie ? .accent : .accent2)
+                        Color(.image)
                             .opacity(0.8)
                             .frame(height: geo.size.height * 0.2)
                         HStack {
-                            Image(systemName: project.isMovie ? "film" : "photo")
+                            Image(systemName: "photo")
                             Text(project.formattedDate)
                             Image(systemName: "ellipsis.circle.fill")
                                 .onTapGesture {

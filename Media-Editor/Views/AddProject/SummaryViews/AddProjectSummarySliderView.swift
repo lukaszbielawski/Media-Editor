@@ -21,15 +21,14 @@ struct AddProjectSummarySliderView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             Capsule(style: .circular)
-                .fill(Color(vm.projectType.projectColor))
+                .fill(Color(.image))
                 .overlay(Material.ultraThinMaterial)
                 .clipShape(Capsule(style: .circular))
                 .frame(maxWidth: 300, maxHeight: sliderHeight)
 
                 .overlay {
-                    Label(vm.projectType == .photo ? "Create photo project" :
-                            (vm.projectType == .movie ? "Create movie project" : "Choose media first")
-                          , systemImage: "chevron.right.2")
+                    Label("Create photo project",
+                          systemImage: "chevron.right.2")
                         .padding(.leading, 16)
                 }
                 .geometryAccessor { geo in
@@ -39,14 +38,14 @@ struct AddProjectSummarySliderView: View {
                 }
 
             Capsule(style: .circular)
-                .fill(Color(vm.projectType.projectColor))
+                .fill(Color(.image))
                 .frame(width: sliderHeight + sliderOffset, height: sliderHeight)
             Circle()
                 .fill(Color(.tint))
                 .frame(width: sliderHeight, height: sliderHeight)
                 .overlay {
-                    Image(systemName: vm.projectType == .movie ? "film" : "photo")
-                        .foregroundStyle(Color(vm.projectType.projectColor))
+                    Image(systemName: "photo")
+                        .foregroundStyle(Color(.image))
                 }
                 .offset(x: sliderOffset)
                 .allowsHitTesting(isInteractive)

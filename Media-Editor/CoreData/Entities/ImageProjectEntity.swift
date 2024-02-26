@@ -19,7 +19,6 @@ public extension ImageProjectEntity {
     @NSManaged var id: UUID?
     @NSManaged var title: String?
     @NSManaged var lastEditDate: Date?
-    @NSManaged var isMovie: Bool
     @NSManaged var imageProjectEntityToPhotoEntity: Set<PhotoEntity>?
     @NSManaged var frameWidth: NSNumber?
     @NSManaged var frameHeight: NSNumber?
@@ -31,14 +30,13 @@ extension ImageProjectEntity: Identifiable {
                      title: String,
                      lastEditDate: Date? = nil,
                      backgroundColorHex: String = "#FF000000",
-                     mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>(), isMovie: Bool)
+                     mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>())
     {
         self.init(context: PersistenceController.shared.container.viewContext)
         self.id = id
         self.title = title
         self.lastEditDate = lastEditDate
         self.backgroundColorHex = backgroundColorHex
-        self.isMovie = false
         self.imageProjectEntityToPhotoEntity = mediaEntities
         self.frameWidth = nil
         self.frameHeight = nil

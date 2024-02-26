@@ -84,7 +84,7 @@ struct ImageProjectResizeSliderView: View {
 
             cancellable = debounceSaveSubject
                 .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-                .sink { _ in
+                .sink { [unowned vm] _ in
                     vm.updateLatestSnapshot()
                     PersistenceController.shared.saveChanges()
                 }
@@ -111,13 +111,13 @@ struct ImageProjectResizeSliderView: View {
         withAnimation(.easeInOut(duration: 0.35)) {
             vm.recalculateFrameAndLayersGeometry()
         }
-        vm.tools.centerButtonFunction?()
+        vm.centerButtonFunction?()
     }
 
     private func sliderChanged(newValue: CGFloat) {
         projectModelPixelFrameDimension = newValue
         pixelFrameDimensionTextField = String(Int(newValue))
         vm.recalculateFrameAndLayersGeometry()
-        vm.tools.centerButtonFunction?()
+        vm.centerButtonFunction?()
     }
 }

@@ -34,9 +34,9 @@ struct ImageProjectToolDetailsView: View {
                         ImageProjectToolCaseFiltersView()
                             .onAppear {
                                 vm.tools.rightFloatingButtonIcon = "checkmark"
-                                vm.tools.rightFloatingButtonAction = {
-                                    vm.currentTool = .none
-                                }
+//                                vm.rightFloatingButtonAction = {
+//                                    vm.currentTool = .none
+//                                }
                             }
                     case .flip:
                         ImageProjectToolCaseFlipView()

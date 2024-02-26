@@ -39,8 +39,7 @@ struct ImageProjectToolCaseBackgroundView: View {
             cancellable =
                 colorPickerSubject
                     .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-                    .sink {
-                        print("update")
+                    .sink { [unowned vm] in
                         vm.updateLatestSnapshot()
                         PersistenceController.shared.saveChanges()
                         vm.objectWillChange.send()

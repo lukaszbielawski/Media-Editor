@@ -21,7 +21,7 @@ struct ImageProjectToolView: View {
                 HStack(spacing: 0) {
                     ImageProjectToolFloatingButtonView(
                         systemName: vm.tools.leftFloatingButtonIcon,
-                        action: vm.tools.leftFloatingButtonAction)
+                        buttonType: .left)
                         .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
 
                     if let currentTool = currentTool as? LayerToolType, currentTool == .filters {
@@ -32,16 +32,13 @@ struct ImageProjectToolView: View {
                         Spacer()
                         ImageProjectToolFloatingButtonView(
                             systemName: vm.tools.rightFloatingButtonIcon,
-                            action: vm.tools.rightFloatingButtonAction)
+                            buttonType: .right)
                     } else if let currentTool = currentTool as? ProjectToolType, currentTool == .background {
                         ImageProjectViewFloatingBackgroundSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5, backgroundColor: $vm.projectModel.backgroundColor)
                             .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                             .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                             .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                         Spacer()
-                        ImageProjectToolFloatingButtonView(
-                            systemName: vm.tools.rightFloatingButtonIcon,
-                            action: vm.tools.rightFloatingButtonAction)
                     }
 
                 }.offset(
@@ -50,8 +47,17 @@ struct ImageProjectToolView: View {
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
             }
         }
-        .onAppear {
-            vm.tools.leftFloatingButtonAction = { vm.currentTool = nil }
+        .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
+            guard let vm else { return }
+            switch functionType {
+            case .back:
+                vm.currentTool = nil
+            case .confirm:
+                vm.currentTool = nil
+            // TODO: confirm filter update
+            default:
+                break
+            }
         }
     }
 }

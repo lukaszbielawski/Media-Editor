@@ -38,7 +38,7 @@ final class ProjectEntityController: EntityController {
         do {
             return try context.fetch(fetchRequest)
         } catch {
-            print("Failed to fetch movies: \(error)")
+            print("Failed to fetch photos: \(error)")
             return []
         }
     }

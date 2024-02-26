@@ -73,7 +73,7 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                         }
                         .updating($lastOffset) { _, lastOffset, _ in
                             lastOffset = lastOffset ?? sliderOffset
-                        }.onEnded { _ in
+                        }.onEnded { [unowned vm] _ in
                             vm.updateLatestSnapshot()
                             PersistenceController.shared.saveChanges()
                         }

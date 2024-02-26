@@ -41,7 +41,7 @@ extension ImageProjectView {
                     Spacer().frame(width: 22)
                     Label("Center", systemImage: "camera.metering.center.weighted")
                         .onTapGesture {
-                            vm.tools.centerButtonFunction?()
+                            vm.centerButtonFunction?()
                         }
                 }
                 .foregroundStyle(Color(.tint))

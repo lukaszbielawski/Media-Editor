@@ -19,7 +19,7 @@ struct AddProjectSummaryView: View {
             AddProjectSummarySliderView()
                 .padding(.bottom, UIScreen.bottomSafeArea)
         }
-        .animation(.spring(), value: vm.projectType)
-        .offset(y: vm.projectType == .unknown ? totalHeight : 0)
+        .animation(.spring(), value: vm.selectedAssets.count == 0)
+        .offset(y: vm.selectedAssets.count == 0 ? totalHeight : 0)
     }
 }

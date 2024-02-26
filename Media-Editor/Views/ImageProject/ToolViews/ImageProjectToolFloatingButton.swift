@@ -12,7 +12,7 @@ struct ImageProjectToolFloatingButtonView: View {
 
     var color: ColorResource = .image
     var systemName: String = "arrow.uturn.backward"
-    var action: (() -> Void)?
+    let buttonType: FloatingButtonType
 
     var body: some View {
         ZStack {
@@ -20,7 +20,11 @@ struct ImageProjectToolFloatingButtonView: View {
 
             Button(action: {
                 DispatchQueue.main.async {
-                    action?()
+                    vm.floatingButtonClickedSubject.send(
+                        buttonType == .left ?
+                            vm.leftFloatingButtonFunctionType :
+                            vm.rightFloatingButtonFunctionType
+                    )
                 }
             }, label: {
                 Image(systemName: systemName)
@@ -32,6 +36,5 @@ struct ImageProjectToolFloatingButtonView: View {
         .frame(width: vm.plane.lowerToolbarHeight * 0.5,
                height: vm.plane.lowerToolbarHeight * 0.5)
         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-
     }
 }
