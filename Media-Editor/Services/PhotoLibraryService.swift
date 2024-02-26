@@ -185,7 +185,7 @@ class PhotoLibraryService: ObservableObject {
         }
     }
 
-    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize) {
+    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize, backgroundColor: CGColor, format photoFormatType: PhotoFormatType) {
         Task {
             guard let context = CGContext(data: nil,
                                           width: Int(contextPixelSize.width),
@@ -196,7 +196,7 @@ class PhotoLibraryService: ObservableObject {
                                           bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
             else { return }
 
-            context.setFillColor(UIColor.systemMint.cgColor)
+            context.setFillColor(backgroundColor)
             context.fill(CGRect(origin: .zero, size: contextPixelSize))
 
             for photo in photos where photo.positionZ != nil && photo.positionZ! > 0 {
@@ -239,6 +239,9 @@ class PhotoLibraryService: ObservableObject {
 
                 context.concatenate(resultTransform)
 
+                //                context.setBlendMode(.normal)
+                //                context.setAlpha(0.5) //opacity z layer modelu
+
                 context.draw(photo.cgImage, in:
                     CGRect(x: 0,
                            y: 0,
@@ -252,7 +255,15 @@ class PhotoLibraryService: ObservableObject {
 
             let resultUIImage = UIImage(cgImage: resultCGImage)
 
-            UIImageWriteToSavedPhotosAlbum(resultUIImage, nil, nil, nil)
+            let imageData = resultUIImage.pngData()
+
+            guard let imageData else { return }
+
+            let imageWithAlpha = UIImage(data: imageData)
+
+            guard let imageWithAlpha else { return }
+
+            UIImageWriteToSavedPhotosAlbum(photoFormatType == .png ? imageWithAlpha : resultUIImage, nil, nil, nil)
             print("success")
         }
     }

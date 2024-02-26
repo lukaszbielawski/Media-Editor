@@ -23,20 +23,22 @@ public extension ImageProjectEntity {
     @NSManaged var imageProjectEntityToPhotoEntity: Set<PhotoEntity>?
     @NSManaged var frameWidth: NSNumber?
     @NSManaged var frameHeight: NSNumber?
+    @NSManaged var backgroundColorHex: String
 }
 
 extension ImageProjectEntity: Identifiable {
     convenience init(id: UUID,
                      title: String,
                      lastEditDate: Date? = nil,
-                     isMovie: Bool,
-                     mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>())
+                     backgroundColorHex: String = "#FF000000",
+                     mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>(), isMovie: Bool)
     {
         self.init(context: PersistenceController.shared.container.viewContext)
         self.id = id
         self.title = title
         self.lastEditDate = lastEditDate
-        self.isMovie = isMovie
+        self.backgroundColorHex = backgroundColorHex
+        self.isMovie = false
         self.imageProjectEntityToPhotoEntity = mediaEntities
         self.frameWidth = nil
         self.frameHeight = nil

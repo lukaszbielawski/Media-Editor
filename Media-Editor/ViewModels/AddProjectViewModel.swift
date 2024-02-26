@@ -24,11 +24,7 @@ final class AddProjectViewModel: ObservableObject {
         if selectedAssets.isEmpty {
             return .unknown
         }
-        let mediaType = selectedAssets
-            .contains { $0.mediaType == .video }
-            ? PHAssetMediaType.video
-            : PHAssetMediaType.image
-        return mediaType.toMediaType
+        return .photo
     }
 
     private var subscription: AnyCancellable?

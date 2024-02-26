@@ -6,11 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 final class ImageProjectModel: ObservableObject {
     private let imageProjectEntity: ImageProjectEntity
-    let isMovie: Bool
 
     @Published var title: String? {
         willSet { imageProjectEntity.title = newValue }
@@ -38,21 +38,28 @@ final class ImageProjectModel: ObservableObject {
         }
     }
 
+    @Published var backgroundColor: Color {
+        willSet {
+            guard let hexString = newValue.hexString else { return }
+            imageProjectEntity.backgroundColorHex = hexString
+        }
+    }
+
     init(imageProjectEntity: ImageProjectEntity) {
         self.imageProjectEntity = imageProjectEntity
 
         self.title = imageProjectEntity.title
         self.lastEditDate = imageProjectEntity.lastEditDate
-        self.isMovie = false
+        self.backgroundColor = Color(hex: imageProjectEntity.backgroundColorHex)
         self.photoEntities = imageProjectEntity
             .imageProjectEntityToPhotoEntity
             ?? Set<PhotoEntity>()
         if let framePixelWidth = imageProjectEntity.frameWidth?.intValue,
-           let framePixelHeight = imageProjectEntity.frameHeight?.intValue {
+           let framePixelHeight = imageProjectEntity.frameHeight?.intValue
+        {
             self.framePixelWidth = CGFloat(framePixelWidth)
             self.framePixelHeight = CGFloat(framePixelHeight)
         }
-
     }
 
     func insertPhotosEntityToProject(fileNames: [String]) throws {
@@ -77,8 +84,6 @@ extension ImageProjectModel: NSCopying {
     func copy(with zone: NSZone? = nil) -> Any {
         return ImageProjectModel(imageProjectEntity: imageProjectEntity)
     }
-    
-
 }
 
 extension ImageProjectModel: Equatable {

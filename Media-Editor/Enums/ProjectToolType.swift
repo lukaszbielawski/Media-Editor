@@ -11,6 +11,7 @@ enum ProjectToolType: String, Tool {
     case add
     case layers
     case resize
+    case background
 
     var id: String { return self.rawValue }
 }
@@ -24,8 +25,8 @@ extension ProjectToolType {
             return "Layers"
         case .resize:
             return "Resize"
-        default:
-            return ""
+        case .background:
+            return "Background"
         }
     }
 
@@ -37,8 +38,8 @@ extension ProjectToolType {
             return "square.3.layers.3d.top.filled"
         case .resize:
             return "square.resize.up"
-        default:
-            return ""
+        case .background:
+            return "rectangle.checkered"
         }
     }
 }

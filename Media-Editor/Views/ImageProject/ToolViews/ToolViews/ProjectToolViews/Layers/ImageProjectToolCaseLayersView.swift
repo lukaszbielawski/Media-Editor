@@ -11,7 +11,6 @@ struct ImageProjectToolCaseLayersView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var body: some View {
-        ZStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     let filteredArray = vm.projectLayers
@@ -96,7 +95,5 @@ struct ImageProjectToolCaseLayersView: View {
                     }
                 }
             }
-        }
-        .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }

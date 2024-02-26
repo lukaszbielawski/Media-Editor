@@ -63,7 +63,7 @@ struct ImageProjectView: View {
                                                      - workspaceSize.height * 0.5 * (planeScale - 1.0)))
                         }
                     }
-                    .stroke(Color(.movie), lineWidth: 1)
+                    .stroke(Color(.accent), lineWidth: 1)
                     .allowsHitTesting(false)
                 }
                 .onChange(of: vm.activeLayer) { _ in

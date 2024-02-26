@@ -11,7 +11,6 @@ struct ImageProjectToolCaseFlipView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var body: some View {
-        ZStack {
             HStack {
                 ImageProjectToolTileView(iconName: "arrow.left.and.right.righttriangle.left.righttriangle.right.fill")
                     .onTapGesture {
@@ -53,8 +52,5 @@ struct ImageProjectToolCaseFlipView: View {
                     .contentShape(Rectangle())
                 Spacer()
             }
-        }
-
-        .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }

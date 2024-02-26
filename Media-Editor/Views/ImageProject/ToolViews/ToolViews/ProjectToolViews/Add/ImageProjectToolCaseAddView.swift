@@ -11,7 +11,6 @@ struct ImageProjectToolCaseAddView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var body: some View {
-        ZStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ImageProjectToolTileView(iconName: "plus")
@@ -52,7 +51,5 @@ struct ImageProjectToolCaseAddView: View {
                     }
                 }
             }
-        }
-        .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }

@@ -36,9 +36,11 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var redoModel: [SnapshotModel] = .init()
     @Published var undoModel: [SnapshotModel] = .init()
 
+    @Published var isSnapshotCurrentlyLoading = false
+
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
 
-    private var subscription: AnyCancellable?
+    private var subscriptions: [AnyCancellable] = .init()
 
     private var photoService = PhotoLibraryService()
 
@@ -83,17 +85,17 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func setupAddAssetsToProject() {
-        photoService.requestAuthorization(projectType: [ProjectType.photo])
+        photoService.requestAuthorization(projectType: [.photo])
         setupSubscription()
     }
 
     private func setupSubscription() {
-        subscription = photoService
+        photoService
             .mediaPublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] assets in
                 self.libraryPhotos = assets
-            }
+            }.store(in: &subscriptions)
     }
 
     func updateLatestSnapshot() {
@@ -134,7 +136,7 @@ final class ImageProjectViewModel: ObservableObject {
     private func loadPreviousProjectLayerData(isUndo: Bool) {
         let previousLayers = (isUndo ? undoModel : redoModel)
         guard previousLayers.count > 0 else { return }
-        
+
         for previousLayer in previousLayers.last!.layers {
             if let layer = projectLayers.first(where: { $0.fileName == previousLayer.fileName }) {
                 layer.cgImage = previousLayer.cgImage
@@ -155,14 +157,13 @@ final class ImageProjectViewModel: ObservableObject {
                     layer.size = self.calculateLayerSize(layerModel: previousLayer)
                 }
 
-
-
             } else {
                 projectLayers.append(previousLayer)
             }
         }
         let previousProjectModel = previousLayers.last!.projectModel
         withAnimation(.easeInOut(duration: 0.35)) {
+            projectModel.backgroundColor = previousProjectModel.backgroundColor
             projectModel.framePixelWidth = previousProjectModel.framePixelWidth
             projectModel.framePixelHeight = previousProjectModel.framePixelHeight
             recalculateFrameAndLayersGeometry()
@@ -176,8 +177,16 @@ final class ImageProjectViewModel: ObservableObject {
               let projectPixelFrameHeight = projectModel.framePixelHeight
         else { return .zero }
 
-        let scale = (x: Double(layerModel.cgImage.width) / projectPixelFrameWidth,
-                     y: Double(layerModel.cgImage.height) / projectPixelFrameHeight)
+        let validatedProjectPixelFrameWidth =
+            max(min(projectPixelFrameWidth, CGFloat(frame.maxPixels)),
+                CGFloat(frame.minPixels))
+
+        let validatedProjectPixelFrameHeight =
+            max(min(projectPixelFrameHeight, CGFloat(frame.maxPixels)),
+                CGFloat(frame.minPixels))
+
+        let scale = (x: Double(layerModel.cgImage.width) / validatedProjectPixelFrameWidth,
+                     y: Double(layerModel.cgImage.height) / validatedProjectPixelFrameHeight)
 
         let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
 
@@ -287,12 +296,20 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func setupFrameRect() {
-        guard let pixelFrameWidth = projectModel.framePixelWidth,
-              let pixelFrameHeight = projectModel.framePixelHeight,
+        guard let projectPixelFrameWidth = projectModel.framePixelWidth,
+              let projectPixelFrameHeight = projectModel.framePixelHeight,
               let marginedWorkspaceSize
         else { return }
 
-        let aspectRatio = pixelFrameHeight / pixelFrameWidth
+        let validatedProjectPixelFrameWidth =
+            max(min(projectPixelFrameWidth, CGFloat(frame.maxPixels)),
+                CGFloat(frame.minPixels))
+
+        let validatedProjectPixelFrameHeight =
+            max(min(projectPixelFrameHeight, CGFloat(frame.maxPixels)),
+                CGFloat(frame.minPixels))
+
+        let aspectRatio = validatedProjectPixelFrameHeight / validatedProjectPixelFrameWidth
         let workspaceAspectRatio = marginedWorkspaceSize.height / marginedWorkspaceSize.width
 
         let frameSize = if aspectRatio < workspaceAspectRatio {
@@ -357,7 +374,9 @@ final class ImageProjectViewModel: ObservableObject {
               let framePixelHeight = projectModel.framePixelHeight else { return }
         Task { photoService.exportPhotosToFile(
             photos: projectLayers,
-            contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight))
+            contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
+            backgroundColor: projectModel.backgroundColor.cgColor!,
+            format: tools.photoExportFormat)
         }
     }
 }

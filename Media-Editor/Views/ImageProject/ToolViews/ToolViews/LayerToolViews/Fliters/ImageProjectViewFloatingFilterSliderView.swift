@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct ImageProjectViewFloatingSliderView: View {
+struct ImageProjectViewFloatingFilterSliderView: View {
+    @Environment(\.colorScheme) var appearance
     @EnvironmentObject var vm: ImageProjectViewModel
 
     @GestureState var lastOffset: Double?
@@ -49,8 +50,11 @@ struct ImageProjectViewFloatingSliderView: View {
                     .frame(width: sliderHeight + (sliderOffset ?? (maxOffset * defaultOffsetFactor)),
                            height: sliderHeight)
                 Circle()
-                    .fill(Color(.tint))
+                    .fill(Color(appearance == .light ? .image : .tint))
                     .overlay {
+                        Circle()
+                            .fill(Color.tint)
+                            .padding(2)
                         Text(percentage)
                             .foregroundStyle(Color(.image))
                     }

@@ -25,7 +25,16 @@ struct ImageProjectToolView: View {
                         .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
 
                     if let currentTool = currentTool as? LayerToolType, currentTool == .filters {
-                        ImageProjectViewFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        ImageProjectViewFloatingFilterSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+                            .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                        Spacer()
+                        ImageProjectToolFloatingButtonView(
+                            systemName: vm.tools.rightFloatingButtonIcon,
+                            action: vm.tools.rightFloatingButtonAction)
+                    } else if let currentTool = currentTool as? ProjectToolType, currentTool == .background {
+                        ImageProjectViewFloatingBackgroundSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5, backgroundColor: $vm.projectModel.backgroundColor)
                             .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                             .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                             .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)

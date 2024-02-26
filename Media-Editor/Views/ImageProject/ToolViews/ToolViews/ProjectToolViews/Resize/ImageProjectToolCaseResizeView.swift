@@ -17,33 +17,32 @@ struct ImageProjectToolCaseResizeView: View {
         return formatter
     }()
 
-    let minPixels = 30
-    let maxPixels = 9999
-
     @State var pixelFrameWidthTextField: String = ""
     @State var pixelFrameHeightTextField: String = ""
-    @State var pixelFrameSliderWidth: CGFloat?
-    @State var pixelFrameSliderHeight: CGFloat?
 
     @FocusState var isFocused: Bool
 
     var body: some View {
         HStack {
-            if let pixelFrameSliderWidth = Binding($pixelFrameSliderWidth),
-               let pixelFrameSliderHeight = Binding($pixelFrameSliderHeight)
+            if let pixelFrameSliderWidth = Binding($vm.projectModel.framePixelWidth),
+               let pixelFrameSliderHeight = Binding($vm.projectModel.framePixelHeight)
             {
                 VStack {
                     ImageProjectResizeSliderView(
                         hint: "width",
                         pixelFrameSliderDimension: pixelFrameSliderWidth,
-                        pixelFrameDimensionTextField: $pixelFrameWidthTextField,
-                        projectModelPixelFrameDimension: $vm.projectModel.framePixelWidth)
+                        pixelFrameDimensionTextField:
+                        pixelFrameSliderWidth.toString(),
+                        projectModelPixelFrameDimension:
+                        $vm.projectModel.framePixelWidth)
                         .focused($isFocused)
                     ImageProjectResizeSliderView(
                         hint: "height",
                         pixelFrameSliderDimension: pixelFrameSliderHeight,
-                        pixelFrameDimensionTextField: $pixelFrameHeightTextField,
-                        projectModelPixelFrameDimension: $vm.projectModel.framePixelHeight)
+                        pixelFrameDimensionTextField:
+                        pixelFrameSliderHeight.toString(),
+                        projectModelPixelFrameDimension:
+                        $vm.projectModel.framePixelHeight)
                         .focused($isFocused)
                 }
             }
@@ -56,14 +55,6 @@ struct ImageProjectToolCaseResizeView: View {
                 vm.tools.leftFloatingButtonIcon = "arrow.uturn.backward"
             }
         }
-
-        .onAppear {
-            vm.tools.layersOpacity = 0.6
-            pixelFrameHeightTextField = String(Int(vm.projectModel.framePixelHeight!))
-            pixelFrameWidthTextField = String(Int(vm.projectModel.framePixelWidth!))
-            pixelFrameSliderWidth = vm.projectModel.framePixelWidth!
-            pixelFrameSliderHeight = vm.projectModel.framePixelHeight!
-        }
         .onDisappear {
             vm.tools.layersOpacity = 1.0
         }
@@ -71,6 +62,5 @@ struct ImageProjectToolCaseResizeView: View {
             isFocused = false
         }
         .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-        .padding(.bottom, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }

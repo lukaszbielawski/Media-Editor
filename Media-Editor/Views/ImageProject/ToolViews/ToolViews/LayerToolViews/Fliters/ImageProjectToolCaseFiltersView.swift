@@ -11,7 +11,6 @@ struct ImageProjectToolCaseFiltersView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var body: some View {
-        ZStack {
             HStack {
                 ForEach(FilterType.allCases) { filter in
                     ImageProjectToolFullTileView(title: filter.filterShortName, imageName: filter.photoName)
@@ -22,7 +21,5 @@ struct ImageProjectToolCaseFiltersView: View {
                 }
                 Spacer()
             }
-        }
-        .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
     }
 }

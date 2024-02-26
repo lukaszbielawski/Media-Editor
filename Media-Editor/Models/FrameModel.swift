@@ -10,6 +10,7 @@ import SwiftUI
 
 struct FrameModel {
     var rect: CGRect?
+//    var backgroundColor: Color = .clear
 
     let padding: Double = 16.0
     let paddingFactor: Double = 0.05

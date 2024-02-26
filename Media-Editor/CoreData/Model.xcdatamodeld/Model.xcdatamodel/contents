@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23B81" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ImageProjectEntity" representedClassName=".ImageProjectEntity" syncable="YES">
+        <attribute name="backgroundColorHex" attributeType="String" defaultValueString="#00FFFFFF"/>
         <attribute name="frameHeight" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="frameWidth" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="isMovie" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isMovie" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="lastEditDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="imageProjectEntityToPhotoEntity" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoEntity" inverseName="photoEntityToImageProjectEntity" inverseEntity="PhotoEntity"/>
     </entity>
     <entity name="PhotoEntity" representedClassName=".PhotoEntity" syncable="YES">
         <attribute name="fileName" attributeType="String"/>
+        <attribute name="opacity" attributeType="Double" defaultValueString="1" usesScalarValueType="YES"/>
         <attribute name="positionX" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="positionY" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="positionZ" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
