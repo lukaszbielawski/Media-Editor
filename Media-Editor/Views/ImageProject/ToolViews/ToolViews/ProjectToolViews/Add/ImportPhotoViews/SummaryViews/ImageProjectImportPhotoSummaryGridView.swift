@@ -25,9 +25,6 @@ struct ImageProjectImportPhotoSummaryGridView: View {
                         ForEach(vm.selectedPhotos, id: \.localIdentifier) { photo in
 
                             ImageProjectImportPhotoGridTileView(isThumbnail: true, image: photo)
-//                                .onTapGesture {
-//                                    vm.objectWillChange.send()
-//                                }
                         }
                         Spacer()
                             .id(last)

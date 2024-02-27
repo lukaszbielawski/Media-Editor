@@ -20,7 +20,7 @@ struct ImageProjectToolCaseBackgroundView: View {
                 ColorPicker(selection: $vm.projectModel.backgroundColor.onChange(colorPicked), label: { EmptyView() })
                     .labelsHidden()
                     .scaleEffect(vm.plane.lowerToolbarHeight *
-                        (1 - 2 * vm.tools.paddingFactor) / 28)
+                        (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
 
                 ImageProjectToolColorTileView(color: $vm.projectModel.backgroundColor, title: "Custom")
                     .allowsHitTesting(false)

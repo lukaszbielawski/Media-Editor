@@ -46,11 +46,16 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                     )
                 )
                 .clipShape(Capsule(style: .circular))
+                .overlay {
+                    Capsule(style: .circular)
+                        .strokeBorder(Color(.secondary), lineWidth: 2)
+                }
                 .geometryAccessor { geo in
                     DispatchQueue.main.async {
                         sliderWidth = geo.size.width
                     }
                 }
+
             Circle()
                 .fill(Color(appearance == .light ? .image : .tint))
                 .overlay {
@@ -60,7 +65,8 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                     Text(percentage)
                         .foregroundStyle(Color(.image))
                 }
-                .offset(x: sliderOffset )
+                .frame(width: sliderHeight, height: sliderHeight)
+                .offset(x: sliderOffset)
                 .gesture(
                     DragGesture()
                         .onChanged { value in
@@ -73,7 +79,7 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                         }
                         .updating($lastOffset) { _, lastOffset, _ in
                             lastOffset = lastOffset ?? sliderOffset
-                        }.onEnded { [unowned vm] _ in
+                        }.onEnded { _ in
                             vm.updateLatestSnapshot()
                             PersistenceController.shared.saveChanges()
                         }

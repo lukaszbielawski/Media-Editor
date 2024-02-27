@@ -7,7 +7,18 @@
 
 import Foundation
 
-enum PhotoFormatType {
+enum PhotoFormatType: CaseIterable {
     case png
     case jpeg
+}
+
+extension PhotoFormatType {
+    var toString: String {
+        switch self {
+        case .png:
+            ".PNG"
+        case .jpeg:
+            ".JPEG"
+        }
+    }
 }

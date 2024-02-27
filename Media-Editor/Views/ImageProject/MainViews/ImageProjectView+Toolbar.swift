@@ -52,7 +52,7 @@ extension ImageProjectView {
                 .labelStyle(.titleAndIcon)
                 .onTapGesture {
                     Task {
-                        await vm.exportProjectToPhotoLibrary()
+                        vm.isExportSheetPresented = true
                     }
                 }
                 .foregroundStyle(Color(.tint))

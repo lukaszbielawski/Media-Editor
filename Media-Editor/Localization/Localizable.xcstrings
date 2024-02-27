@@ -49,7 +49,19 @@
     "Export" : {
 
     },
+    "Export image" : {
+
+    },
+    "Export your photos" : {
+
+    },
+    "Format" : {
+
+    },
     "Go back" : {
+
+    },
+    "Image Format" : {
 
     },
     "Project name" : {
@@ -58,7 +70,13 @@
     "Redo" : {
 
     },
+    "Render Size" : {
+
+    },
     "Save" : {
+
+    },
+    "Size" : {
 
     },
     "Undo" : {

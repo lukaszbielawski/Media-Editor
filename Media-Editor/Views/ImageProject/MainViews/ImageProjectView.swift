@@ -15,6 +15,7 @@ struct ImageProjectView: View {
     @State var isSaved: Bool = false
     @State var isEditingFrameVisible = false
     @State var editingFrameOpacity: CGFloat = 1.0
+    @State private var isToastShown = (isShown: false, result: false)
 
     init(project: ImageProjectEntity?) {
         _vm = StateObject(wrappedValue: ImageProjectViewModel(projectEntity: project!))
@@ -73,6 +74,21 @@ struct ImageProjectView: View {
 
                 ImageProjectToolView()
             }
+            .overlay {
+                if isToastShown.isShown {
+                    let systemName =
+                        isToastShown.result ? "checkmark.seal.fill" : "xmark.seal.fill"
+                    ImageProjectToastView(systemName: systemName)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                }
+            }
+            .onReceive(vm.showImageExportResultToast) { result in
+                isToastShown = (true, result)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    isToastShown = (false, result)
+                }
+            }
             .background(Color(.primary))
             .background {
                 NavBarAccessor { navBar in
@@ -86,6 +102,9 @@ struct ImageProjectView: View {
                 vm.plane.totalLowerToolbarHeight = vm.plane.lowerToolbarHeight + UIScreen.bottomSafeArea
             }
             .toolbar { imageProjectToolbar }
+            .sheet(isPresented: $vm.isExportSheetPresented) {
+                ImageProjectExportPhotosView()
+            }
             .alert("Deleting image", isPresented: $vm.tools.isDeleteImageAlertPresented) {
                 Button("Cancel", role: .cancel) {
                     vm.tools.isDeleteImageAlertPresented = false

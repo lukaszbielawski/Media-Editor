@@ -178,86 +178,100 @@ class PhotoLibraryService: ObservableObject {
         }
     }
 
-    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize, backgroundColor: CGColor, format photoFormatType: PhotoFormatType) {
-        Task {
-            guard let context = CGContext(data: nil,
-                                          width: Int(contextPixelSize.width),
-                                          height: Int(contextPixelSize.height),
-                                          bitsPerComponent: 8,
-                                          bytesPerRow: 0,
-                                          space: CGColorSpaceCreateDeviceRGB(),
-                                          bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
-            else { return }
+    func exportPhotosToFile(photos: [LayerModel], contextPixelSize: CGSize, backgroundColor: CGColor) async throws -> CGImage {
+        guard let context = CGContext(data: nil,
+                                      width: Int(contextPixelSize.width),
+                                      height: Int(contextPixelSize.height),
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: 0,
+                                      space: CGColorSpaceCreateDeviceRGB(),
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        else { throw PhotoExportError.contextCreation }
 
-            context.setFillColor(backgroundColor)
-            context.fill(CGRect(origin: .zero, size: contextPixelSize))
+        context.setFillColor(backgroundColor)
+        context.fill(CGRect(origin: .zero, size: contextPixelSize))
 
-            for photo in photos where photo.positionZ != nil && photo.positionZ! > 0 {
-                guard let scaleX = photo.scaleX,
-                      let scaleY = photo.scaleY,
-                      let rotation = photo.rotation,
-                      let position = photo.position
-                else { continue }
+        for photo in photos where photo.positionZ != nil && photo.positionZ! > 0 {
+            guard let scaleX = photo.scaleX,
+                  let scaleY = photo.scaleY,
+                  let rotation = photo.rotation,
+                  let position = photo.position
+            else { continue }
 
-                context.saveGState()
+            context.saveGState()
 
-                let centerTranslation =
-                    CGSize(width: photo.pixelSize.width * 0.5,
-                           height: photo.pixelSize.height * 0.5)
+            let centerTranslation =
+                CGSize(width: photo.pixelSize.width * 0.5,
+                       height: photo.pixelSize.height * 0.5)
 
-                let translationTransform = CGAffineTransform(
-                    translationX: contextPixelSize.width * 0.5
-                        - centerTranslation.width * scaleX
-                        + position.x * photo.pixelToDigitalWidthRatio,
-                    y:
-                    contextPixelSize.height * 0.5
-                        - centerTranslation.height * scaleY
-                        - position.y * photo.pixelToDigitalHeightRatio
-                )
+            let translationTransform = CGAffineTransform(
+                translationX: contextPixelSize.width * 0.5
+                    - centerTranslation.width * scaleX
+                    + position.x * photo.pixelToDigitalWidthRatio,
+                y:
+                contextPixelSize.height * 0.5
+                    - centerTranslation.height * scaleY
+                    - position.y * photo.pixelToDigitalHeightRatio
+            )
 
-                let scaleTransform = CGAffineTransform(scaleX: scaleX, y: scaleY)
-                let rotationTransform = CGAffineTransform(rotationAngle: -rotation.radians)
+            let scaleTransform = CGAffineTransform(scaleX: scaleX, y: scaleY)
+            let rotationTransform = CGAffineTransform(rotationAngle: -rotation.radians)
 
-                let originTranslation = CGAffineTransform(translationX: -centerTranslation.width * scaleX,
-                                                          y: -centerTranslation.height * scaleY)
-                let reverseOriginTranslation = CGAffineTransform(translationX: centerTranslation.width * scaleX,
-                                                                 y: +centerTranslation.height * scaleY)
+            let originTranslation = CGAffineTransform(translationX: -centerTranslation.width * scaleX,
+                                                      y: -centerTranslation.height * scaleY)
+            let reverseOriginTranslation = CGAffineTransform(translationX: centerTranslation.width * scaleX,
+                                                             y: +centerTranslation.height * scaleY)
 
-                let resultTransform = CGAffineTransform.identity
-                    .concatenating(scaleTransform)
-                    .concatenating(originTranslation)
-                    .concatenating(rotationTransform)
-                    .concatenating(reverseOriginTranslation)
-                    .concatenating(translationTransform)
+            let resultTransform = CGAffineTransform.identity
+                .concatenating(scaleTransform)
+                .concatenating(originTranslation)
+                .concatenating(rotationTransform)
+                .concatenating(reverseOriginTranslation)
+                .concatenating(translationTransform)
 
-                context.concatenate(resultTransform)
+            context.concatenate(resultTransform)
 
-                //                context.setBlendMode(.normal)
-                //                context.setAlpha(0.5) //opacity z layer modelu
+            //                context.setBlendMode(.normal)
+            //                context.setAlpha(0.5) //opacity z layer modelu
 
-                context.draw(photo.cgImage, in:
-                    CGRect(x: 0,
-                           y: 0,
-                           width: photo.pixelSize.width,
-                           height: photo.pixelSize.height))
+            context.draw(photo.cgImage, in:
+                CGRect(x: 0,
+                       y: 0,
+                       width: photo.pixelSize.width,
+                       height: photo.pixelSize.height))
 
-                context.restoreGState()
-            }
+            context.restoreGState()
+        }
 
-            guard let resultCGImage = context.makeImage() else { return }
+        guard let resultCGImage = context.makeImage() else { throw PhotoExportError.contextImageMaking }
 
-            let resultUIImage = UIImage(cgImage: resultCGImage)
+        return resultCGImage
+    }
 
-            let imageData = resultUIImage.pngData()
+    func storeInPhotoAlbum(cgImage: CGImage, photoFormatType: PhotoFormatType, result: @escaping (Result<Bool, Error>) -> Void) throws {
+        let uiImage = UIImage(cgImage: cgImage)
 
-            guard let imageData else { return }
+        let imageData: Data?
 
-            let imageWithAlpha = UIImage(data: imageData)
+        if photoFormatType == .png {
+            imageData = uiImage.pngData()
+        } else {
+            imageData = uiImage.jpegData(compressionQuality: 1.0)
+        }
 
-            guard let imageWithAlpha else { return }
-
-            UIImageWriteToSavedPhotosAlbum(photoFormatType == .png ? imageWithAlpha : resultUIImage, nil, nil, nil)
-            print("success")
+        if let imageData {
+            PHPhotoLibrary.shared().performChanges({
+                let creationRequest = PHAssetCreationRequest.forAsset()
+                creationRequest.addResource(with: .photo, data: imageData, options: nil)
+            }, completionHandler: { success, error in
+                if let error {
+                    result(.failure(error))
+                } else {
+                    result(.success(success))
+                }
+            })
+        } else {
+            throw PhotoExportError.dataRetrieving
         }
     }
 }

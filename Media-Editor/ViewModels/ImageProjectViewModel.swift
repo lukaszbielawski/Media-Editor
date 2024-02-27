@@ -14,6 +14,7 @@ import SwiftUI
 final class ImageProjectViewModel: ObservableObject {
     @Published var projectModel: ImageProjectModel
 
+    @Published var previewPhoto: CGImage?
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
     @Published var currentTool: (any Tool)?
@@ -32,14 +33,16 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var projectLayers = [LayerModel]()
 
-    var latestSnapshot: SnapshotModel!
+    private var latestSnapshot: SnapshotModel!
     @Published var redoModel: [SnapshotModel] = .init()
     @Published var undoModel: [SnapshotModel] = .init()
 
     @Published var isSnapshotCurrentlyLoading = false
+    @Published var isExportSheetPresented = false
 
     let undoLimit = 50
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
+    let showImageExportResultToast = PassthroughSubject<Bool, Never>()
 
     var leftFloatingButtonFunctionType = FloatingButtonFunctionType.back
     var rightFloatingButtonFunctionType = FloatingButtonFunctionType.confirm
@@ -405,14 +408,81 @@ final class ImageProjectViewModel: ObservableObject {
         }
     }
 
-    func exportProjectToPhotoLibrary() {
+    func renderPhoto(renderSize: RenderSizeType, photoFormat: PhotoFormatType = .png) async {
         guard let framePixelWidth = projectModel.framePixelWidth,
               let framePixelHeight = projectModel.framePixelHeight else { return }
-        Task { photoService.exportPhotosToFile(
-            photos: projectLayers,
-            contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
-            backgroundColor: projectModel.backgroundColor.cgColor!,
-            format: tools.photoExportFormat)
+        do {
+            let renderedPhoto = try await photoService.exportPhotosToFile(
+                photos: projectLayers,
+                contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
+                backgroundColor: projectModel.backgroundColor.cgColor!)
+
+            let resizedFramePixelWidth: CGFloat
+            let resizedFramePixelHeight: CGFloat
+
+            if renderSize == .preview {
+                let aspectRatio = framePixelWidth / framePixelHeight
+
+                resizedFramePixelWidth = min(framePixelWidth, marginedWorkspaceSize!.width)
+                resizedFramePixelHeight = resizedFramePixelWidth / aspectRatio
+            } else {
+                resizedFramePixelWidth = framePixelWidth * renderSize.sizeFactor
+                resizedFramePixelHeight = framePixelHeight * renderSize.sizeFactor
+            }
+
+            guard let colorSpace = renderedPhoto.colorSpace else {
+                throw PhotoExportError.colorSpace
+            }
+
+            let context = CGContext(data: nil,
+                                    width: Int(resizedFramePixelWidth),
+                                    height: Int(resizedFramePixelHeight),
+                                    bitsPerComponent: renderedPhoto.bitsPerComponent,
+                                    bytesPerRow: 0,
+                                    space: colorSpace,
+                                    bitmapInfo: renderedPhoto.bitmapInfo.rawValue)
+
+            context?.draw(renderedPhoto,
+                          in: CGRect(
+                              origin: .zero,
+                              size: CGSize(width: resizedFramePixelWidth,
+                                           height: resizedFramePixelHeight)))
+
+            guard let resizedImage = context?.makeImage() else {
+                throw PhotoExportError.contextResizedImageMaking
+            }
+
+            if renderSize == .preview {
+                previewPhoto = resizedImage
+            } else {
+                let result = try await withCheckedThrowingContinuation { [unowned self] continuation in
+                    do {
+                        try photoService.storeInPhotoAlbum(
+                            cgImage: resizedImage,
+                            photoFormatType: photoFormat)
+                        { result in
+                            continuation.resume(with: result)
+                        }
+                    } catch {
+                        print(error)
+                        HapticService.shared.notify(.error)
+                        showImageExportResultToast.send(false)
+                    }
+                }
+
+                if result {
+                    HapticService.shared.notify(.success)
+                    showImageExportResultToast.send(true)
+                } else {                    HapticService.shared.notify(.error)
+                    showImageExportResultToast.send(false)
+                }
+                isExportSheetPresented = false
+            }
+
+        } catch {
+            isExportSheetPresented = false
+            showImageExportResultToast.send(false)
+            print(error)
         }
     }
 }

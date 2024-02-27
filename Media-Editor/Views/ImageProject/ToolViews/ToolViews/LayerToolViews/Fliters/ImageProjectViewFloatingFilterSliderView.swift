@@ -58,6 +58,7 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                         Text(percentage)
                             .foregroundStyle(Color(.image))
                     }
+                    .frame(width: sliderHeight, height: sliderHeight)
                     .offset(x: sliderOffset ?? (maxOffset * defaultOffsetFactor))
                     .gesture(
                         DragGesture()
@@ -76,6 +77,8 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                                 lastOffset = lastOffset ?? sliderOffset
                             }
                     )
+
+
             }
         }
     }

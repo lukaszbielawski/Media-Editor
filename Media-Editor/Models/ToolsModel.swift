@@ -5,18 +5,17 @@
 //  Created by Łukasz Bielawski on 12/02/2024.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 struct ToolsModel {
     let paddingFactor: Double = 0.1
 
-
     var leftFloatingButtonIcon = "arrow.uturn.backward"
 
     var rightFloatingButtonIcon = "checkmark"
-    
+
     var sliderPercentage: CGFloat?
 
     var isImportPhotoViewShown = false
