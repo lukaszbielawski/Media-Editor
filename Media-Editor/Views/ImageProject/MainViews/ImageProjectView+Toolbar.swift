@@ -19,7 +19,6 @@ extension ImageProjectView {
                     } else {
                         // TODO: save action
                         isSaved = true
-                        print(isSaved)
                     }
                 }
                 .foregroundStyle(Color(.tint))

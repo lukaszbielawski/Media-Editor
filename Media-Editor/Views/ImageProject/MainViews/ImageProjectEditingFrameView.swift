@@ -163,10 +163,6 @@ struct ImageProjectEditingFrameView: View {
                         - workspaceSize.height * 0.5 * (planeScale - 1.0)
                 )
                 )
-                .onChange(of: vm.plane.scale) { _ in
-                    print(layerPosition)
-                    print(planeCurrentPosition)
-                }
                 .onAppear {
                     if isFrameBig {
                         offset = 0.0

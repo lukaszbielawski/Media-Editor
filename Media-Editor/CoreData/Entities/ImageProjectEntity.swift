@@ -47,8 +47,21 @@ extension ImageProjectEntity: Identifiable {
         return imageProjectEntityToPhotoEntity.sorted(by: { $0.id > $1.id })
     }
 
+    var absoluteThumbnailFilePath: String {
+        let uuid = id!.uuidString
+        let mediaDirectoryPath: URL =
+            FileManager
+                .default
+                .urls(for: .documentDirectory, in: .userDomainMask)
+                .first!
+                .appendingPathComponent("ProjectThumbnails")
+        return mediaDirectoryPath
+            .appendingPathComponent(uuid)
+            .absoluteString.replacingOccurrences(of: "file://", with: "")
+    }
+
     var thumbnailURL: URL {
-        return Bundle.main.url(forResource: "ex_image", withExtension: "jpg")!
+        return URL(string: "file://" + absoluteThumbnailFilePath)!.appendingPathExtension("JPEG")
     }
 
     var formattedDate: String {

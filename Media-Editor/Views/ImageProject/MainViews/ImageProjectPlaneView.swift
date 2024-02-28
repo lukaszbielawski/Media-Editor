@@ -25,7 +25,6 @@ struct ImageProjectPlaneView: View {
                 .zIndex(Double(Int.min + 1))
                 .geometryAccessor { workspaceGeoProxy in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        print("geo accessor")
                         vm.workspaceSize = workspaceGeoProxy.size
                         vm.setupCenterButtonFunction()
                         vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
@@ -55,12 +54,11 @@ struct ImageProjectPlaneView: View {
             DragGesture(coordinateSpace: .local)
                 .onChanged { value in
                     guard let currentPosition = vm.plane.currentPosition else { return }
-                    print("curr post", currentPosition)
                     var newPosition = lastPosition ?? currentPosition
                     newPosition.x += value.translation.width
                     newPosition.y += value.translation.height
 
-                    try? vm.updateFramePosition(newPosition: newPosition, tolerance: 0)
+                    try? vm.updatePlanePosition(newPosition: newPosition, tolerance: 0)
                 }
                 .updating($lastPosition) { _, startPosition, _ in
                     startPosition = startPosition ?? vm.plane.currentPosition
@@ -68,7 +66,7 @@ struct ImageProjectPlaneView: View {
                 .onEnded { _ in
                     guard let currentPosition = vm.plane.currentPosition else { return }
                     do {
-                        try vm.updateFramePosition(newPosition: currentPosition)
+                        try vm.updatePlanePosition(newPosition: currentPosition)
                     } catch let edgeError as EdgeOverflowError {
                         withAnimation(Animation.linear(duration: 0.2)) {
                             switch edgeError {

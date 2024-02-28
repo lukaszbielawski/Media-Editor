@@ -77,8 +77,6 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                                 lastOffset = lastOffset ?? sliderOffset
                             }
                     )
-
-
             }
         }
     }

@@ -21,7 +21,6 @@
 		B2085C142B48671E004D904A /* MediaEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2085C132B48671E004D904A /* MediaEditorApp.swift */; };
 		B2085C1B2B48671F004D904A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2085C1A2B48671F004D904A /* Preview Assets.xcassets */; };
 		B2085C222B4867D7004D904A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2085C212B4867D7004D904A /* MenuView.swift */; };
-		B2085C262B486DA8004D904A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B2085C252B486DA8004D904A /* Kingfisher */; };
 		B209366A2B5E82B400757317 /* ImageProjectImportPhotoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20936692B5E82B400757317 /* ImageProjectImportPhotoGridView.swift */; };
 		B209366C2B5E8F3E00757317 /* ImageProjectImportPhotoSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B209366B2B5E8F3E00757317 /* ImageProjectImportPhotoSummary.swift */; };
 		B209366E2B5E912200757317 /* ImageProjectImportPhotoGridTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B209366D2B5E912200757317 /* ImageProjectImportPhotoGridTileView.swift */; };
@@ -46,7 +45,7 @@
 		B21C24EE2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */; };
 		B21C24F42B8B776B00DBE6B2 /* SnapshotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */; };
 		B21C24F72B8BA46300DBE6B2 /* PhotoFormatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */; };
-		B21C24F92B8BAA2600DBE6B2 /* ImageProjectViewFloatingBackgroundSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F82B8BAA2600DBE6B2 /* ImageProjectViewFloatingBackgroundSliderView.swift */; };
+		B21C24F92B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */; };
 		B21C24FB2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift */; };
 		B21C24FD2B8BB62E00DBE6B2 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */; };
 		B21C25002B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */; };
@@ -154,7 +153,7 @@
 		B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectResizeSliderView.swift; sourceTree = "<group>"; };
 		B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotModel.swift; sourceTree = "<group>"; };
 		B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFormatType.swift; sourceTree = "<group>"; };
-		B21C24F82B8BAA2600DBE6B2 /* ImageProjectViewFloatingBackgroundSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectViewFloatingBackgroundSliderView.swift; sourceTree = "<group>"; };
+		B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectFloatingBackgroundSliderView.swift; sourceTree = "<group>"; };
 		B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseBackgroundView.swift; sourceTree = "<group>"; };
 		B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorTileView.swift; sourceTree = "<group>"; };
@@ -227,7 +226,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2085C262B486DA8004D904A /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,7 +423,7 @@
 			isa = PBXGroup;
 			children = (
 				B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift */,
-				B21C24F82B8BAA2600DBE6B2 /* ImageProjectViewFloatingBackgroundSliderView.swift */,
+				B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */,
 			);
 			path = Background;
 			sourceTree = "<group>";
@@ -691,7 +689,6 @@
 			);
 			name = "Media-Editor";
 			packageProductDependencies = (
-				B2085C252B486DA8004D904A /* Kingfisher */,
 			);
 			productName = "Media-Editor";
 			productReference = B2085C102B48671E004D904A /* Media-Editor.app */;
@@ -722,7 +719,6 @@
 			);
 			mainGroup = B2085C072B48671E004D904A;
 			packageReferences = (
-				B2085C242B486DA8004D904A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = B2085C112B48671E004D904A /* Products */;
 			projectDirPath = "";
@@ -812,7 +808,7 @@
 				B2B20D222B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift in Sources */,
 				B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
-				B21C24F92B8BAA2600DBE6B2 /* ImageProjectViewFloatingBackgroundSliderView.swift in Sources */,
+				B21C24F92B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift in Sources */,
 				B205075C2B764E470060854D /* FrameModel.swift in Sources */,
 				B210F5FF2B7B90DF0072AF7D /* ImageProjectModel.swift in Sources */,
 				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
@@ -1084,25 +1080,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		B2085C242B486DA8004D904A /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.10.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B2085C252B486DA8004D904A /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B2085C242B486DA8004D904A /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		B21103552B496F2F00CA4981 /* Model.xcdatamodeld */ = {

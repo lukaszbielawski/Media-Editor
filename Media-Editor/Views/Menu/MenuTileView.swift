@@ -5,21 +5,16 @@
 //  Created by Łukasz Bielawski on 16/01/2024.
 //
 
-import Kingfisher
 import SwiftUI
 
 struct MenuTileView: View {
-    @Binding var project: ImageProjectEntity
+    let project: ImageProjectEntity
 
     var dotsDidTapped: (UUID) -> Void
+    @State var image: UIImage?
+
     var body: some View {
         ZStack(alignment: .top) {
-            NavigationLink(destination: ImageProjectView(project: project))
-            {
-                KFImage.url(project.thumbnailURL)
-                    .centerCropped()
-                    .aspectRatio(1.0, contentMode: .fill)
-            }
             GeometryReader { geo in
                 VStack {
                     ZStack {
@@ -39,10 +34,37 @@ struct MenuTileView: View {
                     Spacer()
                     HStack {
                         Text(project.title!)
+                            .padding(.horizontal, 4.0)
+                            .padding(4.0)
+                            .background(Color(.image), in: RoundedRectangle(cornerRadius: 8.0))
+                            .opacity(0.8)
+                            .foregroundStyle(Color(.tint))
                         Spacer()
-                    }.padding(.vertical)
+                    }.allowsHitTesting(false)
+                    .padding(.vertical, 8)
                         .padding(.leading, 8)
                 }
+            }
+            .aspectRatio(1.0, contentMode: .fill)
+            .background {
+                NavigationLink(destination: ImageProjectView(project: project)) {
+                    if let image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+
+                    } else {
+                        Image("PlaceholderImage")
+                            .resizable()
+                            .scaledToFill()
+                    }
+                }
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 16.0))
+        .onAppear {
+            if let imageData = try? Data(contentsOf: project.thumbnailURL) {
+                image = UIImage(data: imageData)
             }
         }
     }

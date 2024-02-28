@@ -19,7 +19,7 @@ struct MenuPlaceholderTileView: View {
                 Rectangle()
                     .fill(Material.ultraThinMaterial)
                     .background {
-                        Image("ex_image")
+                        Image("PlaceholderImage")
                             .centerCropped()
                     }
                 VStack {
@@ -42,6 +42,7 @@ struct MenuPlaceholderTileView: View {
         }
         .foregroundStyle(Color(.tint))
         .aspectRatio(1.0, contentMode: .fill)
+        .clipShape(RoundedRectangle(cornerRadius: 16.0))
         .onTapGesture {
             if !isAddProjectViewPresented {
                 HapticService.shared.play(.medium)

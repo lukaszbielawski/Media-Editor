@@ -42,7 +42,6 @@ struct ImageProjectResizeSliderView: View {
             { editing in
                 if !editing {
                     vm.updateLatestSnapshot()
-                    PersistenceController.shared.saveChanges()
                 }
             }
             .layoutPriority(1)
@@ -63,7 +62,6 @@ struct ImageProjectResizeSliderView: View {
                       text: $pixelFrameDimensionTextField.onChange(textFieldChanged), onEditingChanged: { editing in
                           if !editing {
                               vm.updateLatestSnapshot()
-                              PersistenceController.shared.saveChanges()
                           }
                       })
                       .keyboardType(.numberPad)
@@ -86,7 +84,6 @@ struct ImageProjectResizeSliderView: View {
                 .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
                 .sink { [unowned vm] _ in
                     vm.updateLatestSnapshot()
-                    PersistenceController.shared.saveChanges()
                 }
         }
     }
@@ -101,7 +98,6 @@ struct ImageProjectResizeSliderView: View {
             } else {
                 validatedNumber = number
             }
-            print(number)
             projectModelPixelFrameDimension = CGFloat(validatedNumber).rounded()
             pixelFrameSliderDimension = CGFloat(validatedNumber).rounded()
 

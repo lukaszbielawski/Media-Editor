@@ -17,7 +17,6 @@ extension ImageProjectLayerView {
                 startPosition = startPosition ?? layerModel.position
             }.onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 

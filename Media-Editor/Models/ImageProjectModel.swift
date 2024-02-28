@@ -11,6 +11,7 @@ import SwiftUI
 @MainActor
 final class ImageProjectModel: ObservableObject {
     private let imageProjectEntity: ImageProjectEntity
+    let id: UUID?
 
     @Published var title: String? {
         willSet { imageProjectEntity.title = newValue }
@@ -47,7 +48,7 @@ final class ImageProjectModel: ObservableObject {
 
     init(imageProjectEntity: ImageProjectEntity) {
         self.imageProjectEntity = imageProjectEntity
-
+        self.id = imageProjectEntity.id
         self.title = imageProjectEntity.title
         self.lastEditDate = imageProjectEntity.lastEditDate
         self.backgroundColor = Color(hex: imageProjectEntity.backgroundColorHex)
@@ -61,7 +62,9 @@ final class ImageProjectModel: ObservableObject {
             self.framePixelHeight = CGFloat(framePixelHeight)
         }
     }
+}
 
+extension ImageProjectModel {
     func insertPhotosEntityToProject(fileNames: [String]) throws {
         for fileName in fileNames {
             let photoEntity = PhotoEntity(fileName: fileName,
@@ -78,6 +81,12 @@ final class ImageProjectModel: ObservableObject {
         photoEntitiesCopy.insert(photo)
         photoEntities = photoEntitiesCopy
     }
+
+    var imageProjectThumbnailFolderName: String { "ProjectThumbnails" }
+
+    var thumbnailURL: URL { imageProjectEntity.thumbnailURL }
+
+    var absoluteThumbnailFilePath: String { imageProjectEntity.absoluteThumbnailFilePath }
 }
 
 extension ImageProjectModel: NSCopying {

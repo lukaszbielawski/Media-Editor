@@ -26,15 +26,19 @@ struct MenuScrollView: View {
                     Group {
                         MenuPlaceholderTileView()
 
-                        ForEach($vm.projects) { $project in
-                            MenuTileView(project: $project, dotsDidTapped: dotsDidTapped)
+                        ForEach(vm.projects
+                            .sorted { ($0.lastEditDate ?? Date.distantPast) > ($1.lastEditDate ?? Date.distantPast) },
+                            id: \.self)
+                        { project in
+                            MenuTileView(project: project, dotsDidTapped: dotsDidTapped)
                         }
                         .foregroundStyle(Color(.tint))
                     }
-                    .cornerRadius(16.0)
                 }
                 .padding(16)
             }
+        }.onAppear {
+            vm.objectWillChange.send()
         }
     }
 }

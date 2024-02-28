@@ -36,7 +36,7 @@ struct ImageProjectToolView: View {
                             buttonType: .right)
                     } else if let currentTool = currentTool as? ProjectToolType, currentTool == .background {
                         Spacer()
-                        ImageProjectViewFloatingBackgroundSliderView(
+                        ImageProjectFloatingBackgroundSliderView(
                             sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                             backgroundColor: $vm.projectModel.backgroundColor)
                             .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))

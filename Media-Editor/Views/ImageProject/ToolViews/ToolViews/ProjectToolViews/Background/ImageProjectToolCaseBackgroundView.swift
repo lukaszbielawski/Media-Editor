@@ -31,7 +31,6 @@ struct ImageProjectToolCaseBackgroundView: View {
                         vm.projectModel.backgroundColor = color
 
                         vm.updateLatestSnapshot()
-                        PersistenceController.shared.saveChanges()
                     }
             }
             Spacer()
@@ -41,7 +40,6 @@ struct ImageProjectToolCaseBackgroundView: View {
                     .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
                     .sink { [unowned vm] in
                         vm.updateLatestSnapshot()
-                        PersistenceController.shared.saveChanges()
                         vm.objectWillChange.send()
                     }
         }

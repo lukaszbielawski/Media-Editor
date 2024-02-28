@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-struct ImageProjectViewFloatingBackgroundSliderView: View {
+struct ImageProjectFloatingBackgroundSliderView: View {
     @Environment(\.colorScheme) var appearance
 
     @EnvironmentObject var vm: ImageProjectViewModel
@@ -81,7 +81,6 @@ struct ImageProjectViewFloatingBackgroundSliderView: View {
                             lastOffset = lastOffset ?? sliderOffset
                         }.onEnded { _ in
                             vm.updateLatestSnapshot()
-                            PersistenceController.shared.saveChanges()
                         }
                 )
         }

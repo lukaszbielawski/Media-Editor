@@ -28,7 +28,6 @@ struct ImageProjectToolCaseFlipView: View {
                         }
 
                         vm.updateLatestSnapshot()
-                        PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())
                 ImageProjectToolTileView(iconName: "arrow.up.and.down.righttriangle.up.righttriangle.down.fill")
@@ -47,7 +46,6 @@ struct ImageProjectToolCaseFlipView: View {
                         }
 
                         vm.updateLatestSnapshot()
-                        PersistenceController.shared.saveChanges()
                     }
                     .contentShape(Rectangle())
                 Spacer()

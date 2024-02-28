@@ -59,7 +59,6 @@ extension ImageProjectEditingFrameView {
             }
             .onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 
@@ -72,14 +71,12 @@ extension ImageProjectEditingFrameView {
 
                 let times = abs(rotation.degrees) / 89.9
                 rotationChange = copysign(-1.0, rotation.degrees) * floor(times) * 90.0 - 90.0
-                print(rotationChange)
                 withAnimation(.easeInOut(duration: 0.35)) {
                     layerModel.rotation = Angle(degrees: rotationChange)
                     vm.activeLayer?.rotation = Angle(degrees: rotationChange)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     vm.updateLatestSnapshot()
-                    PersistenceController.shared.saveChanges()
                 }
             }
     }
@@ -95,10 +92,6 @@ extension ImageProjectEditingFrameView {
 
                 let previousDragPoint = CGPoint(x: value.startLocation.x - planeCurrentPosition.x,
                                                 y: value.startLocation.y - planeCurrentPosition.y)
-
-                print("plane current", planeCurrentPosition)
-
-                print("current drag point", currentDragPoint)
 
                 let currentAngle =
                     Angle(radians: atan2(currentDragPoint.x - layerCenterPoint.x,
@@ -120,7 +113,6 @@ extension ImageProjectEditingFrameView {
             }
             .onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 
@@ -164,7 +156,6 @@ extension ImageProjectEditingFrameView {
             }
             .onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 
@@ -241,7 +232,6 @@ extension ImageProjectEditingFrameView {
             }
             .onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 
@@ -285,7 +275,6 @@ extension ImageProjectEditingFrameView {
             }
             .onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 
@@ -346,7 +335,6 @@ extension ImageProjectEditingFrameView {
             }
             .onEnded { _ in
                 vm.updateLatestSnapshot()
-                PersistenceController.shared.saveChanges()
             }
     }
 }

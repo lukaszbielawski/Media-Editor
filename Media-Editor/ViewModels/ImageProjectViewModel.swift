@@ -43,6 +43,7 @@ final class ImageProjectViewModel: ObservableObject {
     let undoLimit = 50
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
+    let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
 
     var leftFloatingButtonFunctionType = FloatingButtonFunctionType.back
     var rightFloatingButtonFunctionType = FloatingButtonFunctionType.confirm
@@ -96,7 +97,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     deinit {
-        print("viewmodel de init")
+        print("viewmodel deinit")
     }
 
     func setupAddAssetsToProject() {
@@ -120,6 +121,10 @@ final class ImageProjectViewModel: ObservableObject {
         redoModel.removeAll()
         undoModel.append(latestSnapshot)
         latestSnapshot = createSnapshot()
+
+        projectModel.lastEditDate = Date.now
+        PersistenceController.shared.saveChanges()
+        layoutChangedSubject.send()
     }
 
     func performUndo() {
@@ -183,7 +188,9 @@ final class ImageProjectViewModel: ObservableObject {
             projectModel.framePixelHeight = previousProjectModel.framePixelHeight
             recalculateFrameAndLayersGeometry()
         }
+        projectModel.lastEditDate = Date.now
         PersistenceController.shared.saveChanges()
+        layoutChangedSubject.send()
     }
 
     func setupCenterButtonFunction() {
@@ -252,7 +259,7 @@ final class ImageProjectViewModel: ObservableObject {
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
     }
 
-    func updateFramePosition(newPosition: CGPoint, tolerance: CGFloat? = nil) throws {
+    func updatePlanePosition(newPosition: CGPoint, tolerance: CGFloat? = nil) throws {
         guard let furthestPlanePointAllowed = plane.furthestPlanePointAllowed,
               let frameViewRect = frame.rect,
               let totalNavBarHeight = plane.totalNavBarHeight,
@@ -320,17 +327,14 @@ final class ImageProjectViewModel: ObservableObject {
             activeLayer = layerModel
         }
         updateLatestSnapshot()
-        PersistenceController.shared.saveChanges()
         objectWillChange.send()
     }
 
     func swapLayersPositionZ(lhs: LayerModel, rhs: LayerModel) {
         guard let lhsIndex = lhs.positionZ, let rhsIndex = rhs.positionZ else { return }
-        updateLatestSnapshot()
         lhs.positionZ = abs(rhsIndex) * Int(copysign(-1.0, Double(lhsIndex)))
         rhs.positionZ = abs(lhsIndex) * Int(copysign(-1.0, Double(rhsIndex)))
-
-        PersistenceController.shared.saveChanges()
+        updateLatestSnapshot()
         objectWillChange.send()
     }
 
@@ -394,7 +398,38 @@ final class ImageProjectViewModel: ObservableObject {
         layerToDelete.toDelete = true
         layerToDelete.positionZ = nil
         updateLatestSnapshot()
-        PersistenceController.shared.saveChanges()
+    }
+
+    func saveThumbnailToDisk() async {
+        guard let framePixelWidth = projectModel.framePixelWidth,
+              let framePixelHeight = projectModel.framePixelHeight,
+              let marginedWorkspaceWidth = marginedWorkspaceSize?.width else { return }
+        do {
+            let renderedPhoto = try await photoService.exportLayersToImage(
+                photos: projectLayers,
+                contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
+                backgroundColor: projectModel.backgroundColor.cgColor!)
+
+            let resizedPhoto = try await photoService.resizePhoto(
+                renderedPhoto: renderedPhoto,
+                renderSize: .preview,
+                photoFormat: .jpeg,
+                framePixelWidth: framePixelWidth,
+                framePixelHeight: framePixelHeight,
+                marginedWorkspaceWidth: marginedWorkspaceWidth)
+
+            guard let imageData = UIImage(cgImage: resizedPhoto).pngData() else {
+                throw PhotoExportError.dataRetrieving
+            }
+
+            _ = try await photoService.saveToDisk(
+                data: imageData,
+                extension: "JPEG",
+                folderName: projectModel.imageProjectThumbnailFolderName,
+                fileName: projectModel.id!.uuidString)
+        } catch {
+            print(error)
+        }
     }
 
     func addAssetsToProject() async throws {
@@ -410,70 +445,33 @@ final class ImageProjectViewModel: ObservableObject {
 
     func renderPhoto(renderSize: RenderSizeType, photoFormat: PhotoFormatType = .png) async {
         guard let framePixelWidth = projectModel.framePixelWidth,
-              let framePixelHeight = projectModel.framePixelHeight else { return }
+              let framePixelHeight = projectModel.framePixelHeight,
+              let marginedWorkspaceWidth = marginedWorkspaceSize?.width else { return }
         do {
-            let renderedPhoto = try await photoService.exportPhotosToFile(
+            let renderedPhoto = try await photoService.exportLayersToImage(
                 photos: projectLayers,
                 contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
                 backgroundColor: projectModel.backgroundColor.cgColor!)
 
-            let resizedFramePixelWidth: CGFloat
-            let resizedFramePixelHeight: CGFloat
+            let resizedPhoto = try await photoService.resizePhoto(
+                renderedPhoto: renderedPhoto,
+                renderSize: renderSize,
+                photoFormat: photoFormat,
+                framePixelWidth: framePixelWidth,
+                framePixelHeight: framePixelHeight,
+                marginedWorkspaceWidth: marginedWorkspaceWidth)
 
             if renderSize == .preview {
-                let aspectRatio = framePixelWidth / framePixelHeight
-
-                resizedFramePixelWidth = min(framePixelWidth, marginedWorkspaceSize!.width)
-                resizedFramePixelHeight = resizedFramePixelWidth / aspectRatio
+                previewPhoto = resizedPhoto
             } else {
-                resizedFramePixelWidth = framePixelWidth * renderSize.sizeFactor
-                resizedFramePixelHeight = framePixelHeight * renderSize.sizeFactor
-            }
-
-            guard let colorSpace = renderedPhoto.colorSpace else {
-                throw PhotoExportError.colorSpace
-            }
-
-            let context = CGContext(data: nil,
-                                    width: Int(resizedFramePixelWidth),
-                                    height: Int(resizedFramePixelHeight),
-                                    bitsPerComponent: renderedPhoto.bitsPerComponent,
-                                    bytesPerRow: 0,
-                                    space: colorSpace,
-                                    bitmapInfo: renderedPhoto.bitmapInfo.rawValue)
-
-            context?.draw(renderedPhoto,
-                          in: CGRect(
-                              origin: .zero,
-                              size: CGSize(width: resizedFramePixelWidth,
-                                           height: resizedFramePixelHeight)))
-
-            guard let resizedImage = context?.makeImage() else {
-                throw PhotoExportError.contextResizedImageMaking
-            }
-
-            if renderSize == .preview {
-                previewPhoto = resizedImage
-            } else {
-                let result = try await withCheckedThrowingContinuation { [unowned self] continuation in
-                    do {
-                        try photoService.storeInPhotoAlbum(
-                            cgImage: resizedImage,
-                            photoFormatType: photoFormat)
-                        { result in
-                            continuation.resume(with: result)
-                        }
-                    } catch {
-                        print(error)
-                        HapticService.shared.notify(.error)
-                        showImageExportResultToast.send(false)
-                    }
-                }
+                let result = try await photoService.storeInPhotoAlbumContinuation(
+                    resizedPhoto: resizedPhoto,
+                    photoFormat: photoFormat)
 
                 if result {
                     HapticService.shared.notify(.success)
                     showImageExportResultToast.send(true)
-                } else {                    HapticService.shared.notify(.error)
+                } else { HapticService.shared.notify(.error)
                     showImageExportResultToast.send(false)
                 }
                 isExportSheetPresented = false

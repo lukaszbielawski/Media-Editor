@@ -36,9 +36,6 @@ struct ImageProjectLayerView: View {
                     layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
                     vm.objectWillChange.send()
                 }
-                .onDisappear {
-                    print("image disappear")
-                }
                 .onTapGesture {
                     if vm.activeLayer == layerModel {
                         vm.activeLayer = nil

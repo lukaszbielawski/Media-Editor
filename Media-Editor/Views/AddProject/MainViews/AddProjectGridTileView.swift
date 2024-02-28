@@ -21,9 +21,8 @@ struct AddProjectGridTileView: View {
                     if let thumbnail {
                         Image(uiImage: thumbnail)
                             .centerCropped()
-
                     } else {
-                        Color(.primary)
+                        Color(.image)
                     }
                 }.aspectRatio(1.0, contentMode: .fill)
                     .cornerRadius(4.0)
@@ -43,27 +42,6 @@ struct AddProjectGridTileView: View {
                                 Text("\((vm.selectedAssets.firstIndex(of: media) ?? 0) + 1)")
                             }
                     }
-                } else if media.mediaType == .video {
-                    ZStack(alignment: .bottomTrailing) {
-                        Color(.primary)
-                            .opacity(isSelected ? 0.7 : 0)
-                            .aspectRatio(1.0, contentMode: .fill)
-                            .cornerRadius(4.0)
-
-                        HStack {
-                            Spacer()
-                                .frame(maxWidth: .infinity)
-                            Capsule()
-                                .fill(Color(.primary))
-                                .frame(height: 25)
-                                .padding(4.0)
-                                .overlay {
-                                    Text("\(media.formattedDuration)")
-                                }
-                        }
-                    }
-                } else {
-                    EmptyView()
                 }
             }
         }
