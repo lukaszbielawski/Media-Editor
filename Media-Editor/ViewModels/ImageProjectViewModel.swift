@@ -17,8 +17,11 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var previewPhoto: CGImage?
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
+
     @Published var currentTool: (any Tool)?
     @Published var currentFilter: FilterType?
+    @Published var currentCategory: FilterCategoryType?
+    @Published var originalCGImage: CGImage!
 
     @Published var workspaceSize: CGSize?
 
@@ -28,8 +31,6 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var layerToDelete: LayerModel?
     @Published var activeLayer: LayerModel?
-
-    @Published var projectFilters: [FilterType] = .init()
 
     @Published var projectLayers = [LayerModel]()
 
@@ -45,16 +46,17 @@ final class ImageProjectViewModel: ObservableObject {
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
     let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
 
-    var leftFloatingButtonFunctionType = FloatingButtonFunctionType.back
-    var rightFloatingButtonFunctionType = FloatingButtonFunctionType.confirm
+    var leftFloatingButtonActionType = FloatingButtonActionType.back
+    var rightFloatingButtonActionType = FloatingButtonActionType.confirm
 
-    var floatingButtonClickedSubject = PassthroughSubject<FloatingButtonFunctionType, Never>()
+    var floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
 
     var centerButtonFunction: (() -> Void)?
 
     private var cancellable: AnyCancellable?
 
-    private var photoService = PhotoLibraryService()
+    private var photoLibraryService = PhotoLibraryService()
+    private var photoExporterService = PhotoExporterService()
 
     var marginedWorkspaceSize: CGSize? {
         guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight, let workspaceSize
@@ -62,6 +64,14 @@ final class ImageProjectViewModel: ObservableObject {
 
         return CGSize(width: workspaceSize.width * (1.0 - 2 * frame.paddingFactor),
                       height: (workspaceSize.height - totalLowerToolbarHeight) * (1.0 - 2 * frame.paddingFactor))
+    }
+
+    var isInNewCGImagePreview: Bool {
+        if let currentTool = currentTool as? LayerToolType {
+            return currentTool == .filters
+        } else {
+            return false
+        }
     }
 
     typealias PathPoints = (startPoint: CGPoint, endPoint: CGPoint)
@@ -101,12 +111,12 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func setupAddAssetsToProject() {
-        photoService.requestAuthorization()
+        photoLibraryService.requestAuthorization()
         setupSubscription()
     }
 
     private func setupSubscription() {
-        cancellable = photoService
+        cancellable = photoLibraryService
             .mediaPublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] assets in
@@ -121,7 +131,6 @@ final class ImageProjectViewModel: ObservableObject {
         redoModel.removeAll()
         undoModel.append(latestSnapshot)
         latestSnapshot = createSnapshot()
-
         projectModel.lastEditDate = Date.now
         PersistenceController.shared.saveChanges()
         layoutChangedSubject.send()
@@ -135,6 +144,8 @@ final class ImageProjectViewModel: ObservableObject {
         undoModel.removeLast()
         redoModel.append(firstSnapshot)
         latestSnapshot = createSnapshot()
+
+        // TODO: poprawic logike undo do tych cgimagow
     }
 
     func performRedo() {
@@ -148,9 +159,18 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     private func createSnapshot() -> SnapshotModel {
-        let layers = projectLayers.map { $0.copy() as! LayerModel }
+        let layers = projectLayers.map { $0.copy(withCGImage: !isInNewCGImagePreview) as! LayerModel }
         let projectModel = projectModel.copy() as! ImageProjectModel
         return .init(layers: layers, projectModel: projectModel)
+    }
+
+    func saveNewCGImageOnDisk(for layer: LayerModel) async throws {
+        if let imageData = UIImage(cgImage: layer.cgImage).pngData() {
+            _ = try await photoLibraryService.saveToDisk(
+                data: imageData,
+                fileName: layer.fileName)
+            print("finished")
+        }
     }
 
     private func loadPreviousProjectLayerData(isUndo: Bool) {
@@ -159,9 +179,13 @@ final class ImageProjectViewModel: ObservableObject {
 
         for previousLayer in previousLayers.last!.layers {
             if let layer = projectLayers.first(where: { $0.fileName == previousLayer.fileName }) {
-                layer.cgImage = previousLayer.cgImage
                 layer.positionZ = previousLayer.positionZ
                 layer.toDelete = previousLayer.toDelete
+
+                layer.cgImage = previousLayer.cgImage
+                Task {
+                    try await saveNewCGImageOnDisk(for: previousLayer)
+                }
 
                 let distanceDiff = hypot(layer.position!.x - previousLayer.position!.x,
                                          layer.position!.y - previousLayer.position!.y)
@@ -191,6 +215,17 @@ final class ImageProjectViewModel: ObservableObject {
         projectModel.lastEditDate = Date.now
         PersistenceController.shared.saveChanges()
         layoutChangedSubject.send()
+    }
+
+    func deactivateLayer() {
+        disablePreviewCGImage()
+        activeLayer = nil
+    }
+
+    func disablePreviewCGImage() {
+        if isInNewCGImagePreview {
+            activeLayer?.cgImage = originalCGImage
+        }
     }
 
     func setupCenterButtonFunction() {
@@ -369,7 +404,7 @@ final class ImageProjectViewModel: ObservableObject {
                     desiredSize: CGSize,
                     contentMode: PHImageContentMode = .default) async throws -> UIImage
     {
-        try await photoService
+        try await photoLibraryService
             .fetchThumbnail(for: asset.localIdentifier,
                             desiredSize: desiredSize,
                             contentMode: contentMode)
@@ -405,12 +440,12 @@ final class ImageProjectViewModel: ObservableObject {
               let framePixelHeight = projectModel.framePixelHeight,
               let marginedWorkspaceWidth = marginedWorkspaceSize?.width else { return }
         do {
-            let renderedPhoto = try await photoService.exportLayersToImage(
+            let renderedPhoto = try await photoExporterService.exportLayersToImage(
                 photos: projectLayers,
                 contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
                 backgroundColor: projectModel.backgroundColor.cgColor!)
 
-            let resizedPhoto = try await photoService.resizePhoto(
+            let resizedPhoto = try await photoExporterService.resizePhoto(
                 renderedPhoto: renderedPhoto,
                 renderSize: .preview,
                 photoFormat: .jpeg,
@@ -422,7 +457,7 @@ final class ImageProjectViewModel: ObservableObject {
                 throw PhotoExportError.dataRetrieving
             }
 
-            _ = try await photoService.saveToDisk(
+            _ = try await photoLibraryService.saveToDisk(
                 data: imageData,
                 extension: "JPEG",
                 folderName: projectModel.imageProjectThumbnailFolderName,
@@ -433,7 +468,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func addAssetsToProject() async throws {
-        let fileNames = try await photoService.saveAssetsAndGetFileNames(assets: selectedPhotos)
+        let fileNames = try await photoLibraryService.saveAssetsAndGetFileNames(assets: selectedPhotos)
         try projectModel.insertPhotosEntityToProject(fileNames: fileNames)
 
         for photoEntity in projectModel.photoEntities
@@ -443,17 +478,37 @@ final class ImageProjectViewModel: ObservableObject {
         }
     }
 
+    func applyFilter() async {
+        guard let activeLayer,
+              let currentFilter else { return }
+        let cgImage = await Task<CGImage?, Never> { [unowned self] in
+            let ciImage = CIImage(cgImage: self.originalCGImage.copy()!)
+
+            let filter = currentFilter.createFilter(image: ciImage)
+
+            guard let outputImage = filter.outputImage else { return nil }
+
+            let context = CIContext(options: nil)
+            guard let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else { return nil }
+            return cgImage
+        }.value
+
+        activeLayer.cgImage = cgImage
+
+        objectWillChange.send()
+    }
+
     func renderPhoto(renderSize: RenderSizeType, photoFormat: PhotoFormatType = .png) async {
         guard let framePixelWidth = projectModel.framePixelWidth,
               let framePixelHeight = projectModel.framePixelHeight,
               let marginedWorkspaceWidth = marginedWorkspaceSize?.width else { return }
         do {
-            let renderedPhoto = try await photoService.exportLayersToImage(
+            let renderedPhoto = try await photoExporterService.exportLayersToImage(
                 photos: projectLayers,
                 contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
                 backgroundColor: projectModel.backgroundColor.cgColor!)
 
-            let resizedPhoto = try await photoService.resizePhoto(
+            let resizedPhoto = try await photoExporterService.resizePhoto(
                 renderedPhoto: renderedPhoto,
                 renderSize: renderSize,
                 photoFormat: photoFormat,
@@ -464,7 +519,7 @@ final class ImageProjectViewModel: ObservableObject {
             if renderSize == .preview {
                 previewPhoto = resizedPhoto
             } else {
-                let result = try await photoService.storeInPhotoAlbumContinuation(
+                let result = try await photoLibraryService.storeInPhotoAlbumContinuation(
                     resizedPhoto: resizedPhoto,
                     photoFormat: photoFormat)
 

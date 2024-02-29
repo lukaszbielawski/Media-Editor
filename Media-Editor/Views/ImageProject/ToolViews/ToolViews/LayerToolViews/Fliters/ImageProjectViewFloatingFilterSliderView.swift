@@ -5,6 +5,7 @@
 //  Created by Łukasz Bielawski on 23/02/2024.
 //
 
+import Combine
 import SwiftUI
 
 struct ImageProjectViewFloatingFilterSliderView: View {
@@ -15,6 +16,11 @@ struct ImageProjectViewFloatingFilterSliderView: View {
 
     @State var sliderOffset: Double?
     @State var sliderWidth: Double = 0.0
+
+    @State var sliderFactor: CGFloat?
+
+    @State private var debounceSliderSubject = PassthroughSubject<Void, Never>()
+    @State private var cancellable: AnyCancellable?
 
     var maxOffset: Double { return sliderWidth - sliderHeight }
     let sliderHeight: CGFloat
@@ -28,8 +34,8 @@ struct ImageProjectViewFloatingFilterSliderView: View {
             }
 
             var percentage: String {
-                if let sliderPercentage = vm.tools.sliderPercentage {
-                    return "\(Int(sliderPercentage))%"
+                if let sliderFactor {
+                    return "\(Int(sliderFactor.toPercentage))%"
                 } else {
                     return "\(Int(defaultOffsetFactor.toPercentage))%"
                 }
@@ -71,12 +77,29 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                                 sliderOffset = newOffset
                                 guard let sliderOffset else { return }
 
-                                vm.tools.sliderPercentage = (sliderOffset / maxOffset).toPercentage
+                                sliderFactor = (sliderOffset / maxOffset)
+                                debounceSliderSubject.send()
                             }
                             .updating($lastOffset) { _, lastOffset, _ in
                                 lastOffset = lastOffset ?? sliderOffset
                             }
                     )
+            }
+            .onAppear {
+                cancellable =
+                    debounceSliderSubject
+                        .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
+                        .sink { [unowned vm] in
+                            guard let currentFilter = vm.currentFilter,
+                                  let sliderFactor,
+                                  let filterParameterRangeAverage = currentFilter.parameterRangeAverage else { return }
+                            let newFilterValue = sliderFactor * filterParameterRangeAverage
+                            vm.currentFilter?.changeValue(value: newFilterValue)
+                            Task {
+                                await vm.applyFilter()
+                            }
+                            vm.objectWillChange.send()
+                        }
             }
         }
     }

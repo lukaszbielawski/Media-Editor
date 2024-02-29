@@ -38,7 +38,7 @@ struct ImageProjectLayerView: View {
                 }
                 .onTapGesture {
                     if vm.activeLayer == layerModel {
-                        vm.activeLayer = nil
+                        vm.deactivateLayer()
                     } else {
                         vm.activeLayer = layerModel
                         vm.objectWillChange.send()

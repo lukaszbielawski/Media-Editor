@@ -67,6 +67,14 @@ extension LayerModel: NSCopying {
     func copy(with zone: NSZone? = nil) -> Any {
         return LayerModel(photoEntity: photoEntity)
     }
+
+    func copy(withCGImage: Bool, with zone: NSZone? = nil) -> Any {
+        var layerModel = copy(with: zone) as! LayerModel
+        if withCGImage {
+            layerModel.cgImage = cgImage
+        }
+        return layerModel
+    }
 }
 
 extension LayerModel {

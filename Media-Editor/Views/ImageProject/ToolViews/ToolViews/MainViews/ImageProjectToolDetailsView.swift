@@ -21,12 +21,24 @@ struct ImageProjectToolDetailsView: View {
                     switch currentTool {
                     case .add:
                         ImageProjectToolCaseAddView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     case .layers:
                         ImageProjectToolCaseLayersView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     case .resize:
                         ImageProjectToolCaseResizeView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     case .background:
                         ImageProjectToolCaseBackgroundView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     }
                 } else if let currentTool = vm.currentTool as? LayerToolType, vm.activeLayer != nil {
                     switch currentTool {
@@ -34,12 +46,14 @@ struct ImageProjectToolDetailsView: View {
                         ImageProjectToolCaseFiltersView()
                             .onAppear {
                                 vm.tools.rightFloatingButtonIcon = "checkmark"
-//                                vm.rightFloatingButtonAction = {
-//                                    vm.currentTool = .none
-//                                }
+                                vm.leftFloatingButtonActionType = .back
+                                vm.rightFloatingButtonActionType = .confirm
                             }
                     case .flip:
                         ImageProjectToolCaseFlipView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     }
                 }
             }
@@ -50,6 +64,8 @@ struct ImageProjectToolDetailsView: View {
 
             if vm.currentTool is LayerToolType {
                 vm.currentTool = .none
+                vm.currentFilter = .none
+                vm.currentCategory = .none
             }
         }
     }

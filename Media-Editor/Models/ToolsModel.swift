@@ -16,8 +16,6 @@ struct ToolsModel {
 
     var rightFloatingButtonIcon = "checkmark"
 
-    var sliderPercentage: CGFloat?
-
     var isImportPhotoViewShown = false
     var isDeleteImageAlertPresented = false
     var layersOpacity = 1.0

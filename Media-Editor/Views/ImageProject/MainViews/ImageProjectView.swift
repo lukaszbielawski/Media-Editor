@@ -114,7 +114,7 @@ struct ImageProjectView: View {
                 Button("Confirm", role: .destructive) {
                     vm.tools.isDeleteImageAlertPresented = false
                     if vm.activeLayer == vm.layerToDelete {
-                        vm.activeLayer = nil
+                        vm.deactivateLayer()
                     }
                     vm.deleteLayer()
                 }

@@ -44,7 +44,7 @@ struct ImageProjectToolCaseLayersView: View {
                                                let positionZ = layerModel.positionZ,
                                                positionZ <= 0
                                             {
-                                                vm.activeLayer = nil
+                                                vm.deactivateLayer()
                                             }
                                             vm.updateLatestSnapshot()
                                             vm.objectWillChange.send()

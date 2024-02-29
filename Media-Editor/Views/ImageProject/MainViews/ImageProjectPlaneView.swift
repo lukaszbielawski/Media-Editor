@@ -96,7 +96,7 @@ struct ImageProjectPlaneView: View {
             }
         })
         .onTapGesture {
-            vm.activeLayer = nil
+            vm.deactivateLayer()
         }
         .gesture(
             MagnificationGesture()

@@ -11,12 +11,30 @@ import UIKit
 enum FilterType: Identifiable, CaseIterable, Equatable {
     static var allCases: [Self] {
         return [.gaussianBlur(radius: 10.0), .colorInvert]
-       }
+    }
 
     case gaussianBlur(radius: CGFloat)
     case colorInvert
 
     var id: String { self.filterName }
+
+    var category: FilterCategoryType {
+        return switch self {
+        case .gaussianBlur:
+            .blur
+        case .colorInvert:
+            .color
+        }
+    }
+
+    mutating func changeValue(value: CGFloat) {
+        switch self {
+        case .gaussianBlur:
+            self = .gaussianBlur(radius: value)
+        default:
+            break
+        }
+    }
 
     var filterName: String {
         return switch self {
@@ -27,7 +45,7 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
         }
     }
 
-    var filterShortName: String {
+    var shortName: String {
         return switch self {
         case .gaussianBlur:
             "Blur"
@@ -39,10 +57,16 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
     var parameterValueRange: ClosedRange<CGFloat>? {
         return switch self {
         case .gaussianBlur:
-            0.00...50.0
+            0.00 ... 50.0
         default:
-           nil
+            nil
         }
+    }
+
+    var parameterRangeAverage: CGFloat? {
+        guard let parameterValueRange else { return nil }
+        return (parameterValueRange.upperBound -
+                parameterValueRange.lowerBound) * 0.5
     }
 
     var parameterName: String? {
@@ -63,7 +87,7 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
         }
     }
 
-    var photoName: String {
+    var thumbnailName: String {
         return switch self {
         default:
             "FilterPreviewImageCaseNone"
@@ -77,6 +101,7 @@ extension FilterType {
         filter?.setValue(image, forKey: kCIInputImageKey)
         switch self {
         case .gaussianBlur(let radius):
+            print(radius)
             filter?.setValue(radius, forKey: kCIInputRadiusKey)
         case .colorInvert:
             break

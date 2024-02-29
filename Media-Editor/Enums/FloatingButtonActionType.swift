@@ -7,8 +7,9 @@
 
 import Foundation
 
-enum FloatingButtonFunctionType {
+enum FloatingButtonActionType {
     case back
     case confirm
     case hideKeyboard
+    case deselectCategory
 }

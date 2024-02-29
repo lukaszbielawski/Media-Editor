@@ -22,8 +22,8 @@ struct ImageProjectToolFloatingButtonView: View {
                 DispatchQueue.main.async {
                     vm.floatingButtonClickedSubject.send(
                         buttonType == .left ?
-                            vm.leftFloatingButtonFunctionType :
-                            vm.rightFloatingButtonFunctionType
+                            vm.leftFloatingButtonActionType :
+                            vm.rightFloatingButtonActionType
                     )
                 }
             }, label: {

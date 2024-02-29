@@ -52,14 +52,8 @@ struct ImageProjectToolView: View {
         }
         .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
             guard let vm else { return }
-            switch functionType {
-            case .back:
+            if functionType == . back {
                 vm.currentTool = nil
-            case .confirm:
-                vm.currentTool = nil
-            // TODO: confirm filter update
-            default:
-                break
             }
         }
     }

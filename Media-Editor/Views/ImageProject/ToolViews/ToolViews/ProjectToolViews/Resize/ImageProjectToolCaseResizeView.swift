@@ -51,15 +51,15 @@ struct ImageProjectToolCaseResizeView: View {
             vm.plane.lowerToolbarHeight)
         .onChange(of: isFocused) { [unowned vm] newValue in
             if newValue {
-                vm.leftFloatingButtonFunctionType = .hideKeyboard
+                vm.leftFloatingButtonActionType = .hideKeyboard
                 vm.tools.leftFloatingButtonIcon = "keyboard.chevron.compact.down"
             } else {
-                vm.leftFloatingButtonFunctionType = .back
+                vm.leftFloatingButtonActionType = .back
                 vm.tools.leftFloatingButtonIcon = "arrow.uturn.backward"
             }
         }
-        .onReceive(vm.floatingButtonClickedSubject) { functionType in
-            if functionType == .hideKeyboard {
+        .onReceive(vm.floatingButtonClickedSubject) { actionType in
+            if actionType == .hideKeyboard {
                 isFocused = false
             }
         }
