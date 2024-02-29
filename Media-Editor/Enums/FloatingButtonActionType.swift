@@ -11,5 +11,5 @@ enum FloatingButtonActionType {
     case back
     case confirm
     case hideKeyboard
-    case deselectCategory
+    case backToCategories
 }

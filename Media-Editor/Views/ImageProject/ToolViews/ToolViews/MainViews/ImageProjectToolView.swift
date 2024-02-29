@@ -24,7 +24,7 @@ struct ImageProjectToolView: View {
                         buttonType: .left)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
 
-                    if let currentTool = currentTool as? LayerToolType, currentTool == .filters {
+                    if vm.currentFilter != .none {
                         ImageProjectViewFloatingFilterSliderView(
                             sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
                             .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))

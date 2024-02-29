@@ -26,10 +26,13 @@ struct ImageProjectViewFloatingFilterSliderView: View {
     let sliderHeight: CGFloat
 
     var body: some View {
-        if let currentFilter = vm.currentFilter, currentFilter.parameterName != nil {
+        if let currentFilter = vm.currentFilter, currentFilter.parameterName != nil,
+           let parameterValueRange = currentFilter.parameterValueRange
+        {
             var defaultOffsetFactor: CGFloat {
                 let defaultValue = currentFilter.parameterDefaultValue!
-                let factor = defaultValue / currentFilter.parameterValueRange!.upperBound
+                let factor = (defaultValue - parameterValueRange.lowerBound) /
+                    (parameterValueRange.upperBound - parameterValueRange.lowerBound)
                 return factor
             }
 
@@ -93,14 +96,19 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                         .sink { [unowned vm] in
                             guard let currentFilter = vm.currentFilter,
                                   let sliderFactor,
-                                  let filterParameterRangeAverage = currentFilter.parameterRangeAverage else { return }
-                            let newFilterValue = sliderFactor * filterParameterRangeAverage
+                                  let parameterValueRange = currentFilter.parameterValueRange else { return }
+                            let newFilterValue = parameterValueRange.lowerBound +
+                                sliderFactor * (parameterValueRange.upperBound - parameterValueRange.lowerBound)
+
+                            print(newFilterValue)
+
                             vm.currentFilter?.changeValue(value: newFilterValue)
                             Task {
                                 await vm.applyFilter()
                             }
                             vm.objectWillChange.send()
                         }
+
             }.onReceive(vm.filterChangedSubject) {
                 resetValues()
             }

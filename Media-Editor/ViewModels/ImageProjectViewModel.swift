@@ -68,11 +68,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     var isInNewCGImagePreview: Bool {
-        if let currentTool = currentTool as? LayerToolType {
-            return currentTool == .filters
-        } else {
-            return false
-        }
+        return currentFilter != .none
     }
 
     typealias PathPoints = (startPoint: CGPoint, endPoint: CGPoint)
@@ -227,9 +223,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func disablePreviewCGImage() {
-        if isInNewCGImagePreview {
-            activeLayer?.cgImage = originalCGImage
-        }
+        activeLayer?.cgImage = originalCGImage
     }
 
     func setupCenterButtonFunction() {

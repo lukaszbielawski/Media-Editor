@@ -164,6 +164,8 @@ class PhotoLibraryService: ObservableObject {
             fileURL = fileURL.appendingPathExtension(fileExtension)
         }
 
+        print(fileURL)
+
         do {
             try data.write(to: fileURL)
             return fileURL

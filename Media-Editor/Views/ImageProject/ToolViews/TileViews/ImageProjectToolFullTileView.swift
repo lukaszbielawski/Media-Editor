@@ -12,6 +12,7 @@ struct ImageProjectToolFullTileView: View {
 
     var title: String?
     let imageName: String
+    var font: Font = .footnote
 
     var body: some View {
         Rectangle()
@@ -25,7 +26,9 @@ struct ImageProjectToolFullTileView: View {
                     if let title {
                         Text(title)
                             .foregroundStyle(Color(.tint))
-                            .font(.footnote)
+                            .font(font)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
                             .padding(4.0)
                             .frame(maxWidth: .infinity)
                             .background(Material.ultraThinMaterial)
