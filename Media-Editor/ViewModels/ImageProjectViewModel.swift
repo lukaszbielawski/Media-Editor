@@ -45,6 +45,7 @@ final class ImageProjectViewModel: ObservableObject {
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
     let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
+    let filterChangedSubject = PassthroughSubject<Void, Never>()
 
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
@@ -144,8 +145,6 @@ final class ImageProjectViewModel: ObservableObject {
         undoModel.removeLast()
         redoModel.append(firstSnapshot)
         latestSnapshot = createSnapshot()
-
-        // TODO: poprawic logike undo do tych cgimagow
     }
 
     func performRedo() {
@@ -169,7 +168,6 @@ final class ImageProjectViewModel: ObservableObject {
             _ = try await photoLibraryService.saveToDisk(
                 data: imageData,
                 fileName: layer.fileName)
-            print("finished")
         }
     }
 
@@ -183,6 +181,7 @@ final class ImageProjectViewModel: ObservableObject {
                 layer.toDelete = previousLayer.toDelete
 
                 layer.cgImage = previousLayer.cgImage
+
                 Task {
                     try await saveNewCGImageOnDisk(for: previousLayer)
                 }
@@ -219,6 +218,11 @@ final class ImageProjectViewModel: ObservableObject {
 
     func deactivateLayer() {
         disablePreviewCGImage()
+        if let activeLayer {
+            Task {
+                try await saveNewCGImageOnDisk(for: activeLayer)
+            }
+        }
         activeLayer = nil
     }
 
@@ -486,10 +490,14 @@ final class ImageProjectViewModel: ObservableObject {
 
             let filter = currentFilter.createFilter(image: ciImage)
 
-            guard let outputImage = filter.outputImage else { return nil }
+            guard let outputImage = filter.outputImage?.cropped(to: ciImage.extent) else { return nil }
 
-            let context = CIContext(options: nil)
-            guard let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else { return nil }
+            let context = CIContext()
+
+            let newExtent = ciImage.extent.insetBy(dx: -outputImage.extent.origin.x * 0.5,
+                                                   dy: -outputImage.extent.origin.y * 0.5)
+            guard let cgImage = context.createCGImage(outputImage, from: newExtent) else { return nil }
+
             return cgImage
         }.value
 

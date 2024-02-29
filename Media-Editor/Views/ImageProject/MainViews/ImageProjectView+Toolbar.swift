@@ -17,7 +17,6 @@ extension ImageProjectView {
                     if isSaved {
                         dismiss()
                     } else {
-                        // TODO: save action
                         isSaved = true
                     }
                 }

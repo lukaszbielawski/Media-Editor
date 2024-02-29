@@ -11,15 +11,15 @@ enum FilterCategoryType: CaseIterable, Identifiable {
 
     var id: String { shortName }
 
-    case blur
-    case color
+    case blurs
+    case colors
 
     var shortName: String {
         return switch self {
-        case .blur:
-            "Blur"
-        case .color:
-            "Invert"
+        case .blurs:
+            "Blurs"
+        case .colors:
+            "Colors"
         }
     }
 

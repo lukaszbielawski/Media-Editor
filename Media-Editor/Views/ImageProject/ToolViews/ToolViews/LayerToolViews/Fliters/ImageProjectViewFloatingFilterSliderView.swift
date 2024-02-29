@@ -86,6 +86,7 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                     )
             }
             .onAppear {
+                resetValues()
                 cancellable =
                     debounceSliderSubject
                         .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
@@ -100,7 +101,14 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                             }
                             vm.objectWillChange.send()
                         }
+            }.onReceive(vm.filterChangedSubject) {
+                resetValues()
             }
         }
+    }
+
+    private func resetValues() {
+        sliderOffset = nil
+        sliderFactor = nil
     }
 }

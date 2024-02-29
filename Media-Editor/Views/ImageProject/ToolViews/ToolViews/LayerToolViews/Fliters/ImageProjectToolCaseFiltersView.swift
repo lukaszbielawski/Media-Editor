@@ -30,6 +30,7 @@ struct ImageProjectToolCaseFiltersView: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             vm.currentFilter = filter
+                            vm.filterChangedSubject.send()
                             Task {
                                 await vm.applyFilter()
                             }
@@ -44,7 +45,7 @@ struct ImageProjectToolCaseFiltersView: View {
         }
         .onAppear {
             guard let activeLayer = vm.activeLayer else { return }
-            vm.originalCGImage = activeLayer.cgImage
+            vm.originalCGImage = activeLayer.cgImage?.copy()
         }
         .onReceive(vm.floatingButtonClickedSubject) { [unowned vm] actionType in
             guard let activeLayer = vm.activeLayer else { return }
@@ -55,7 +56,7 @@ struct ImageProjectToolCaseFiltersView: View {
                 vm.currentTool = .none
                 vm.currentCategory = .none
                 vm.currentFilter = .none
-                Task{
+                Task {
                     try? await vm.saveNewCGImageOnDisk(for: activeLayer)
                 }
                 vm.updateLatestSnapshot()

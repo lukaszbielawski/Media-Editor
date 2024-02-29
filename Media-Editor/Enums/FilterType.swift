@@ -8,36 +8,25 @@
 import Foundation
 import UIKit
 
-enum FilterType: Identifiable, CaseIterable, Equatable {
-    static var allCases: [Self] {
-        return [.gaussianBlur(radius: 10.0), .colorInvert]
-    }
-
+enum FilterType: CaseIterable, Equatable {
+    case boxBlur(radius: CGFloat)
     case gaussianBlur(radius: CGFloat)
     case colorInvert
 
-    var id: String { self.filterName }
-
     var category: FilterCategoryType {
         return switch self {
-        case .gaussianBlur:
-            .blur
+        case .boxBlur,
+             .gaussianBlur:
+            .blurs
         case .colorInvert:
-            .color
-        }
-    }
-
-    mutating func changeValue(value: CGFloat) {
-        switch self {
-        case .gaussianBlur:
-            self = .gaussianBlur(radius: value)
-        default:
-            break
+            .colors
         }
     }
 
     var filterName: String {
         return switch self {
+        case .boxBlur:
+            "CIBoxBlur"
         case .gaussianBlur:
             "CIGaussianBlur"
         case .colorInvert:
@@ -47,8 +36,10 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
 
     var shortName: String {
         return switch self {
+        case .boxBlur:
+            "Box"
         case .gaussianBlur:
-            "Blur"
+            "Gauss"
         case .colorInvert:
             "Invert"
         }
@@ -56,22 +47,18 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
 
     var parameterValueRange: ClosedRange<CGFloat>? {
         return switch self {
+        case .boxBlur:
+            0.00 ... 200.0
         case .gaussianBlur:
-            0.00 ... 50.0
+            0.00 ... 200.0
         default:
             nil
         }
     }
 
-    var parameterRangeAverage: CGFloat? {
-        guard let parameterValueRange else { return nil }
-        return (parameterValueRange.upperBound -
-                parameterValueRange.lowerBound) * 0.5
-    }
-
     var parameterName: String? {
         return switch self {
-        case .gaussianBlur:
+        case .boxBlur, .gaussianBlur:
             "inputRadius"
         default:
             nil
@@ -80,8 +67,10 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
 
     var parameterDefaultValue: CGFloat? {
         return switch self {
+        case .boxBlur:
+            20.0
         case .gaussianBlur:
-            10.0
+            20.0
         default:
             nil
         }
@@ -93,19 +82,52 @@ enum FilterType: Identifiable, CaseIterable, Equatable {
             "FilterPreviewImageCaseNone"
         }
     }
-}
 
-extension FilterType {
+    static var allCases: [Self] {
+        return [.boxBlur(radius: boxBlur(radius: 0.0).parameterDefaultValue!),
+                .gaussianBlur(radius: gaussianBlur(radius: 0.0).parameterDefaultValue!),
+                .colorInvert]
+    }
+
+    mutating func changeValue(value: CGFloat) {
+        switch self {
+        case .boxBlur:
+            self = .gaussianBlur(radius: value)
+        case .gaussianBlur:
+            self = .gaussianBlur(radius: value)
+        default:
+            break
+        }
+    }
+
     func createFilter(image: CIImage) -> CIFilter {
         let filter = CIFilter(name: filterName)
         filter?.setValue(image, forKey: kCIInputImageKey)
+
+        let extendFactor = hypot(image.extent.size.width, image.extent.size.height) / referenceDiagonalWidth
+
         switch self {
+        case .boxBlur(let radius):
+            filter?.setValue(radius * extendFactor, forKey: kCIInputRadiusKey)
         case .gaussianBlur(let radius):
-            print(radius)
-            filter?.setValue(radius, forKey: kCIInputRadiusKey)
+            filter?.setValue(radius * extendFactor, forKey: kCIInputRadiusKey)
         case .colorInvert:
             break
         }
         return filter!
+    }
+}
+
+extension FilterType: Identifiable {
+    var id: String { filterName }
+
+    var parameterRangeAverage: CGFloat? {
+        guard let parameterValueRange else { return nil }
+        return (parameterValueRange.upperBound -
+            parameterValueRange.lowerBound) * 0.5
+    }
+
+    var referenceDiagonalWidth: CGFloat {
+        return hypot(3000, 2000)
     }
 }
