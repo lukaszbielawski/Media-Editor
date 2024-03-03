@@ -49,7 +49,7 @@ class LayerModel: Identifiable, ObservableObject {
     init(photoEntity: PhotoEntity) {
         self.photoEntity = photoEntity
         self.fileName = photoEntity.fileName!
-
+        
         self.positionZ = photoEntity.positionZ?.intValue
         self.cgImage = try! createCGImage(absoluteFilePath: absoluteFilePath)
 
@@ -69,12 +69,14 @@ extension LayerModel: NSCopying {
     }
 
     func copy(withCGImage: Bool, with zone: NSZone? = nil) -> Any {
-        var layerModel = copy(with: zone) as! LayerModel
+        let layerModel = copy(with: zone) as! LayerModel
         if withCGImage {
             layerModel.cgImage = cgImage
         }
         return layerModel
     }
+
+    
 }
 
 extension LayerModel {

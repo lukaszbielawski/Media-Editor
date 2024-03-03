@@ -55,33 +55,81 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B6A496C6-6FDB-45E8-9CD2-8683F0C61C57"
+            uuid = "7A452DD4-BCE5-4E61-93CB-2BC1117FA3B9"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
+            filePath = "Media-Editor/Views/ImageProject/MainViews/ImageProjectLayerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "455"
-            endingLineNumber = "455"
-            landmarkName = "saveThumbnailToDisk()"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B0C6F9EA-229C-4E17-9B46-0A5F79C266CC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Models/LayerModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "init(photoEntity:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "89810ACF-8A6E-4224-B5F6-A7436164D6DB"
+            uuid = "17E58AE3-D982-4293-A4FD-69C771D52028"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolFloatingButton.swift"
+            filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "init(projectEntity:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "17E58AE3-D982-4293-A4FD-69C771D52028 - b47ffccd8c84c72e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Media_Editor.ImageProjectViewModel.init(projectEntity: Media_Editor.ImageProjectEntity) -&gt; Media_Editor.ImageProjectViewModel"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "3060">
+               </Location>
+               <Location
+                  uuid = "17E58AE3-D982-4293-A4FD-69C771D52028 - b47ffccd8c84c72e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Media_Editor.ImageProjectViewModel.init(projectEntity: Media_Editor.ImageProjectEntity) -&gt; Media_Editor.ImageProjectViewModel"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "87"
+                  endingLineNumber = "87"
+                  offsetFromSymbolStart = "2976">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

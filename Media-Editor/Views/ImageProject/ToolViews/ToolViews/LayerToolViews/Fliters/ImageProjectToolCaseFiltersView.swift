@@ -64,7 +64,7 @@ struct ImageProjectToolCaseFiltersView: View {
                 vm.currentCategory = .none
                 vm.currentFilter = .none
                 Task {
-                    try? await vm.saveNewCGImageOnDisk(for: activeLayer)
+                    try? await vm.saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
                 }
                 vm.updateLatestSnapshot()
             }

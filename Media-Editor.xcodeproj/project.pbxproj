@@ -53,6 +53,7 @@
 		B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */; };
 		B235D4052B8D402900D02790 /* FloatingButtonActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */; };
 		B235D40B2B8D4AD700D02790 /* FloatingButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */; };
+		B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */; };
 		B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */; };
 		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
 		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
@@ -163,6 +164,7 @@
 		B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarAccessor.swift; sourceTree = "<group>"; };
 		B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonActionType.swift; sourceTree = "<group>"; };
 		B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonType.swift; sourceTree = "<group>"; };
+		B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerSingleActionToolType.swift; sourceTree = "<group>"; };
 		B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatedPreferenceKey.swift; sourceTree = "<group>"; };
 		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
 		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 				B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */,
 				B275159C2B8DF7E200647D4E /* RenderSizeType.swift */,
 				B29586DE2B8F9A8600ECFFF4 /* FilterCategoryType.swift */,
+				B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -825,6 +828,7 @@
 				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
 				B2DB93822B8C7602003AB2D2 /* UIColorExtensions.swift in Sources */,
 				B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */,
+				B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */,
 				B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */,
 				B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */,
 				B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */,

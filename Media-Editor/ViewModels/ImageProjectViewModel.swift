@@ -82,22 +82,24 @@ final class ImageProjectViewModel: ObservableObject {
         var isFirst = true
 
         for photoEntity in photoEntities {
-            let layerModel = LayerModel(photoEntity: photoEntity)
-            if let toDelete = layerModel.toDelete, toDelete {
+            if photoEntity.toDelete {
                 deletePhotoEntity(photoEntity: photoEntity)
                 projectModel.photoEntities.remove(photoEntity)
-            } else if projectModel.lastEditDate == nil && isFirst {
-                isFirst = false
-                layerModel.positionZ = 1
-                projectLayers.append(layerModel)
-
-                projectModel.framePixelWidth = CGFloat(layerModel.cgImage.width)
-                projectModel.framePixelHeight = CGFloat(layerModel.cgImage.height)
-                projectModel.lastEditDate = Date.now
-
-                PersistenceController.shared.saveChanges()
             } else {
-                projectLayers.append(layerModel)
+                let layerModel = LayerModel(photoEntity: photoEntity)
+                if projectModel.lastEditDate == nil && isFirst {
+                    isFirst = false
+                    layerModel.positionZ = 1
+                    projectLayers.append(layerModel)
+
+                    projectModel.framePixelWidth = CGFloat(layerModel.cgImage.width)
+                    projectModel.framePixelHeight = CGFloat(layerModel.cgImage.height)
+                    projectModel.lastEditDate = Date.now
+
+                    PersistenceController.shared.saveChanges()
+                } else {
+                    projectLayers.append(layerModel)
+                }
             }
         }
         latestSnapshot = createSnapshot()
@@ -159,11 +161,11 @@ final class ImageProjectViewModel: ObservableObject {
         return .init(layers: layers, projectModel: projectModel)
     }
 
-    func saveNewCGImageOnDisk(for layer: LayerModel) async throws {
-        if let imageData = UIImage(cgImage: layer.cgImage).pngData() {
+    func saveNewCGImageOnDisk(fileName: String, cgImage: CGImage!) async throws {
+        if let imageData = UIImage(cgImage: cgImage).pngData() {
             _ = try await photoLibraryService.saveToDisk(
                 data: imageData,
-                fileName: layer.fileName)
+                fileName: fileName)
         }
     }
 
@@ -178,8 +180,8 @@ final class ImageProjectViewModel: ObservableObject {
 
                 layer.cgImage = previousLayer.cgImage
 
-                Task {
-                    try await saveNewCGImageOnDisk(for: previousLayer)
+                Task { [unowned self] in
+                    try await self.saveNewCGImageOnDisk(fileName: previousLayer.fileName, cgImage: previousLayer.cgImage)
                 }
 
                 let distanceDiff = hypot(layer.position!.x - previousLayer.position!.x,
@@ -212,18 +214,57 @@ final class ImageProjectViewModel: ObservableObject {
         layoutChangedSubject.send()
     }
 
+    func copyAndAppend() async {
+        guard let activeLayer else { return }
+
+        try? await createNewEntity(from: activeLayer)
+    }
+
+    func createNewEntity(from layer: LayerModel) async throws {
+        let projectEntity = projectModel.imageProjectEntity
+
+        guard let dotIndex = layer.fileName.lastIndex(of: ".") else { return }
+        let fileExtension = layer.fileName.suffix(from: dotIndex)
+
+        let newEntityFileName = UUID().uuidString + fileExtension
+
+        try await saveNewCGImageOnDisk(fileName: newEntityFileName, cgImage: layer.cgImage)
+
+        let newEntity = PhotoEntity(fileName: newEntityFileName, projectEntity: projectEntity)
+
+        let newLayer = LayerModel(photoEntity: newEntity)
+
+        newLayer.position = layer.position
+        newLayer.positionZ = layer.positionZ
+        newLayer.rotation = layer.rotation
+        newLayer.scaleX = layer.scaleX
+        newLayer.scaleY = layer.scaleY
+        newLayer.size = layer.size
+        newLayer.toDelete = layer.toDelete
+        newLayer.cgImage = layer.cgImage
+
+        newEntity.photoEntityToImageProjectEntity = projectEntity
+
+        projectLayers.append(newLayer)
+
+        showLayerOnScreen(layerModel: newLayer)
+        objectWillChange.send()
+    }
+
     func deactivateLayer() {
         disablePreviewCGImage()
         if let activeLayer {
             Task {
-                try await saveNewCGImageOnDisk(for: activeLayer)
+                try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
             }
         }
         activeLayer = nil
     }
 
     func disablePreviewCGImage() {
-        activeLayer?.cgImage = originalCGImage
+        if let originalCGImage {
+            activeLayer?.cgImage = originalCGImage
+        }
     }
 
     func setupCenterButtonFunction() {
@@ -354,11 +395,10 @@ final class ImageProjectViewModel: ObservableObject {
     func showLayerOnScreen(layerModel: LayerModel) {
         layerModel.positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
         layerModel.toDelete = false
-        if layerModel.positionZ != nil {
-            activeLayer = nil
-        } else {
-            activeLayer = layerModel
-        }
+
+        deactivateLayer()
+        activeLayer = layerModel
+
         updateLatestSnapshot()
         objectWillChange.send()
     }

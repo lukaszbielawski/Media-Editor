@@ -27,14 +27,26 @@ struct ImageProjectToolScrollView: View {
                         }
                         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     } else {
-                        ForEach(LayerToolType.allCases) { tool in
-                            Button(action: {
-                                vm.currentTool = tool
-                            }, label: {
-                                ImageProjectToolTileView(title: tool.name,
-                                                         iconName: tool.icon)
+                        Group {
+                            ForEach(LayerToolType.allCases) { tool in
+                                Button(action: {
+                                    vm.currentTool = tool
+                                }, label: {
+                                    ImageProjectToolTileView(title: tool.name,
+                                                             iconName: tool.icon)
 
-                            })
+                                })
+                            }
+                            ForEach(LayerSingleActionToolType.allCases) { tool in
+                                Button(action: {
+                                    Task {
+                                        await vm.copyAndAppend()
+                                    }
+                                }, label: {
+                                    ImageProjectToolTileView(title: tool.name,
+                                                             iconName: tool.icon)
+                                })
+                            }
                         }
                         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     }

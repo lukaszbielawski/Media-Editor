@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 final class ImageProjectModel: ObservableObject {
-    private let imageProjectEntity: ImageProjectEntity
+    let imageProjectEntity: ImageProjectEntity
     let id: UUID?
 
     @Published var title: String? {
