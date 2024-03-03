@@ -54,6 +54,10 @@
 		B235D4052B8D402900D02790 /* FloatingButtonActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */; };
 		B235D40B2B8D4AD700D02790 /* FloatingButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */; };
 		B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */; };
+		B2490C4F2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C4E2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift */; };
+		B2490C522B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */; };
+		B2490C542B94D3340071DDB1 /* ProjectSingleActionToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C532B94D3340071DDB1 /* ProjectSingleActionToolType.swift */; };
+		B2490C562B94EBE00071DDB1 /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C552B94EBE00071DDB1 /* CGRectExtensions.swift */; };
 		B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */; };
 		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
 		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
@@ -165,6 +169,10 @@
 		B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonActionType.swift; sourceTree = "<group>"; };
 		B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonType.swift; sourceTree = "<group>"; };
 		B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerSingleActionToolType.swift; sourceTree = "<group>"; };
+		B2490C4E2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolSettingsView.swift; sourceTree = "<group>"; };
+		B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectFloatingMergeSliderView.swift; sourceTree = "<group>"; };
+		B2490C532B94D3340071DDB1 /* ProjectSingleActionToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSingleActionToolType.swift; sourceTree = "<group>"; };
+		B2490C552B94EBE00071DDB1 /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
 		B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatedPreferenceKey.swift; sourceTree = "<group>"; };
 		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
 		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
@@ -322,12 +330,13 @@
 				B2B28BDC2B87A31400EC96B8 /* FilterType.swift */,
 				B25FB5932B5DA85400EBFB16 /* ProjectToolType.swift */,
 				B2B28BE12B87CC1A00EC96B8 /* LayerToolType.swift */,
+				B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */,
 				B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */,
 				B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */,
 				B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */,
 				B275159C2B8DF7E200647D4E /* RenderSizeType.swift */,
 				B29586DE2B8F9A8600ECFFF4 /* FilterCategoryType.swift */,
-				B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */,
+				B2490C532B94D3340071DDB1 /* ProjectSingleActionToolType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -350,6 +359,7 @@
 				B2B20D2B2B88F27A00E3E458 /* CGFloatExtensions.swift */,
 				B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */,
 				B2DB93812B8C7602003AB2D2 /* UIColorExtensions.swift */,
+				B2490C552B94EBE00071DDB1 /* CGRectExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -452,6 +462,14 @@
 				B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B2490C502B9485470071DDB1 /* Merge */ = {
+			isa = PBXGroup;
+			children = (
+				B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */,
+			);
+			path = Merge;
 			sourceTree = "<group>";
 		};
 		B24AD8FA2B5531F900BBD1E8 /* PreferenceKeys */ = {
@@ -609,6 +627,7 @@
 				B25FB5882B5D76BC00EBFB16 /* ImageProjectToolScrollView.swift */,
 				B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */,
 				B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */,
+				B2490C4E2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -618,6 +637,7 @@
 			children = (
 				B21C24F22B8B709F00DBE6B2 /* Fliters */,
 				B21C24F12B8B709600DBE6B2 /* Flip */,
+				B2490C502B9485470071DDB1 /* Merge */,
 			);
 			path = LayerToolViews;
 			sourceTree = "<group>";
@@ -798,6 +818,7 @@
 				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B20507582B761E6A0060854D /* PlaneModel.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
+				B2490C562B94EBE00071DDB1 /* CGRectExtensions.swift in Sources */,
 				B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
 				B275159B2B8DF55500647D4E /* ImageProjectExportPhotosView.swift in Sources */,
@@ -821,6 +842,7 @@
 				B21C24F92B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift in Sources */,
 				B205075C2B764E470060854D /* FrameModel.swift in Sources */,
 				B210F5FF2B7B90DF0072AF7D /* ImageProjectModel.swift in Sources */,
+				B2490C542B94D3340071DDB1 /* ProjectSingleActionToolType.swift in Sources */,
 				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
 				B2B20D2C2B88F27A00E3E458 /* CGFloatExtensions.swift in Sources */,
 				B25FB5852B5D3AC100EBFB16 /* ImageProjectLayerView.swift in Sources */,
@@ -831,9 +853,11 @@
 				B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */,
 				B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */,
 				B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */,
+				B2490C4F2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift in Sources */,
 				B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */,
 				B25FB5872B5D3AE000EBFB16 /* ImageProjectFrameView.swift in Sources */,
 				B27515A12B8E4D0D00647D4E /* ImageProjectToastView.swift in Sources */,
+				B2490C522B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift in Sources */,
 				B205075A2B76334B0060854D /* ImageProjectView+Toolbar.swift in Sources */,
 				B2B28BDD2B87A31400EC96B8 /* FilterType.swift in Sources */,
 				B20507602B769F120060854D /* EdgeOverflowError.swift in Sources */,

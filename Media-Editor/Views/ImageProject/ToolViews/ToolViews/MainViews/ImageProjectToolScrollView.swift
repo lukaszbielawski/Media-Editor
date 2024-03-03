@@ -25,6 +25,14 @@ struct ImageProjectToolScrollView: View {
 
                             })
                         }
+                        ForEach(ProjectSingleActionToolType.allCases) { tool in
+                            Button(action: {
+                                vm.performToolActionSubject.send(tool)
+                            }, label: {
+                                ImageProjectToolTileView(title: tool.name,
+                                                         iconName: tool.icon)
+                            })
+                        }
                         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     } else {
                         Group {
@@ -39,9 +47,7 @@ struct ImageProjectToolScrollView: View {
                             }
                             ForEach(LayerSingleActionToolType.allCases) { tool in
                                 Button(action: {
-                                    Task {
-                                        await vm.copyAndAppend()
-                                    }
+                                    vm.performToolActionSubject.send(tool)
                                 }, label: {
                                     ImageProjectToolTileView(title: tool.name,
                                                              iconName: tool.icon)
@@ -49,6 +55,19 @@ struct ImageProjectToolScrollView: View {
                             }
                         }
                         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    }
+                }
+            }
+            .onReceive(vm.performToolActionSubject) { [unowned vm] tool in
+                if let tool = tool as? LayerSingleActionToolType {
+                    if tool == .copy {
+                        Task {
+                            await vm.copyAndAppend()
+                        }
+                    }
+                } else if let tool = tool as? ProjectSingleActionToolType {
+                    if tool == .merge {
+                        vm.currentTool = tool
                     }
                 }
             }

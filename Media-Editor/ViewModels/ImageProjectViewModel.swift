@@ -34,18 +34,21 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var projectLayers = [LayerModel]()
 
-    private var latestSnapshot: SnapshotModel!
     @Published var redoModel: [SnapshotModel] = .init()
     @Published var undoModel: [SnapshotModel] = .init()
+
+    @Published var layersToMerge: [LayerModel] = .init()
 
     @Published var isSnapshotCurrentlyLoading = false
     @Published var isExportSheetPresented = false
 
+    private var latestSnapshot: SnapshotModel!
     let undoLimit = 50
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
     let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
     let filterChangedSubject = PassthroughSubject<Void, Never>()
+    let performToolActionSubject = PassthroughSubject<any Tool, Never>()
 
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
@@ -173,6 +176,18 @@ final class ImageProjectViewModel: ObservableObject {
         let previousLayers = (isUndo ? undoModel : redoModel)
         guard previousLayers.count > 0 else { return }
 
+        let loadedIDs = previousLayers.last!.layers.map { $0.id }
+        let toRemoveIDs = projectLayers.filter { !loadedIDs.contains($0.fileName) }.map { $0.id }
+
+        if let activeLayerID = activeLayer?.id, toRemoveIDs.contains(activeLayerID) {
+            deactivateLayer()
+        }
+
+        projectLayers.filter { toRemoveIDs.contains($0.id) }.forEach { layerToDelete in
+            layerToDelete.positionZ = nil
+            layerToDelete.toDelete = true
+        }
+
         for previousLayer in previousLayers.last!.layers {
             if let layer = projectLayers.first(where: { $0.fileName == previousLayer.fileName }) {
                 layer.positionZ = previousLayer.positionZ
@@ -216,8 +231,8 @@ final class ImageProjectViewModel: ObservableObject {
 
     func copyAndAppend() async {
         guard let activeLayer else { return }
-
-        try? await createNewEntity(from: activeLayer)
+        let layerCopy = activeLayer.copy(withCGImage: true) as! LayerModel
+        try? await createNewEntity(from: layerCopy)
     }
 
     func createNewEntity(from layer: LayerModel) async throws {
@@ -251,18 +266,127 @@ final class ImageProjectViewModel: ObservableObject {
         objectWillChange.send()
     }
 
+    func calculateBoundsForMergedLayers() -> (layerRect: CGRect?, pixelSize: CGSize?) {
+        var minX, minY, maxX, maxY: Double?
+
+        var minPixelToDigitalWidthRatio: CGFloat?
+        var minPixelToDigitalHeightRatio: CGFloat?
+        var maxPixelToDigitalWidthRatio: CGFloat?
+        var maxPixelToDigitalHeightRatio: CGFloat?
+
+        for layer in layersToMerge {
+            let (topLeftX, topLeftY) = (layer.topLeftApexPosition().x * layer.pixelToDigitalWidthRatio,
+                                        layer.topLeftApexPosition().y * layer.pixelToDigitalHeightRatio)
+            let (topRightX, topRightY) = (layer.topRightApexPosition().x * layer.pixelToDigitalWidthRatio,
+                                          layer.topRightApexPosition().y * layer.pixelToDigitalHeightRatio)
+            let (bottomLeftX, bottomLeftY) = (layer.bottomLeftApexPosition().x * layer.pixelToDigitalWidthRatio,
+                                              layer.bottomLeftApexPosition().y * layer.pixelToDigitalHeightRatio)
+            let (bottomRightX, bottomRightY) = (layer.bottomRightApexPosition().x * layer.pixelToDigitalWidthRatio,
+                                                layer.bottomRightApexPosition().y * layer.pixelToDigitalHeightRatio)
+
+            let prevMinX = minX
+            let prevMinY = minY
+            let prevMaxX = maxX
+            let prevMaxY = maxY
+
+            minX = min(minX ?? Double(Int.max), topLeftX, topRightX, bottomLeftX, bottomRightX)
+            minY = min(minY ?? Double(Int.max), topLeftY, topRightY, bottomLeftY, bottomRightY)
+            maxX = max(maxX ?? Double(Int.min), topLeftX, topRightX, bottomLeftX, bottomRightX)
+            maxY = max(maxY ?? Double(Int.min), topLeftY, topRightY, bottomLeftY, bottomRightY)
+
+            if prevMinX != minX {
+                minPixelToDigitalWidthRatio = layer.pixelToDigitalWidthRatio
+            }
+            if prevMaxX != maxX {
+                maxPixelToDigitalWidthRatio = layer.pixelToDigitalWidthRatio
+            }
+
+            if prevMinY != minY {
+                minPixelToDigitalHeightRatio = layer.pixelToDigitalHeightRatio
+            }
+            if prevMaxY != maxY {
+                maxPixelToDigitalHeightRatio = layer.pixelToDigitalHeightRatio
+            }
+        }
+
+        guard var minX, var minY, var maxX, var maxY,
+              let minPixelToDigitalWidthRatio, let minPixelToDigitalHeightRatio,
+              let maxPixelToDigitalWidthRatio, let maxPixelToDigitalHeightRatio else { return (nil, nil) }
+
+        let pixelSize = CGSize(width: maxX - minX, height: maxY - minY)
+
+        minX /= minPixelToDigitalWidthRatio
+        minY /= minPixelToDigitalHeightRatio
+        maxX /= maxPixelToDigitalWidthRatio
+        maxY /= maxPixelToDigitalHeightRatio
+
+        let layerRect = CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+
+        return (layerRect, pixelSize)
+    }
+
+    func mergeLayers() async throws {
+        guard layersToMerge.count > 1 else { return }
+
+        let (mergedLayerBounds, mergedLayersPixelSize) = calculateBoundsForMergedLayers()
+
+        guard let mergedLayersPixelSize, let mergedLayerBounds else { return }
+
+        print(mergedLayerBounds, mergedLayerBounds.midX, mergedLayerBounds.midY, mergedLayersPixelSize)
+
+        let mergedCGImage = try await photoExporterService
+            .exportLayersToImage(
+                photos: layersToMerge,
+                contextPixelSize: mergedLayersPixelSize,
+                backgroundColor: UIColor.clear.cgColor,
+                offsetFromCenter: CGPoint(x: -mergedLayerBounds.midX *
+                    mergedLayersPixelSize.width /
+                    mergedLayerBounds.width,
+                    y: -mergedLayerBounds.midY *
+                        mergedLayersPixelSize.height /
+                        mergedLayerBounds.height))
+
+        let mergedLayerFileName = UUID().uuidString + ".PNG"
+        try await saveNewCGImageOnDisk(fileName: mergedLayerFileName, cgImage: mergedCGImage)
+
+        let newEntity = PhotoEntity(fileName: mergedLayerFileName, projectEntity: projectModel.imageProjectEntity)
+        let mergedLayerModel = LayerModel(photoEntity: newEntity)
+        newEntity.photoEntityToImageProjectEntity = projectModel.imageProjectEntity
+
+        mergedLayerModel.position = CGPoint(x: mergedLayerBounds.midX, y: mergedLayerBounds.midY)
+
+        cleanupAfterMerge()
+
+        projectLayers.append(mergedLayerModel)
+
+        showLayerOnScreen(layerModel: mergedLayerModel)
+
+        updateLatestSnapshot()
+    }
+
+    func cleanupAfterMerge() {
+        for layerToDelete in layersToMerge {
+            layerToDelete.toDelete = true
+            layerToDelete.positionZ = nil
+        }
+        layersToMerge.removeAll()
+
+        currentTool = .none
+    }
+
     func deactivateLayer() {
+        //TODO: zrobic by nie zapisywalo sie na kazdej deaktywacji
         disablePreviewCGImage()
         if let activeLayer {
             Task {
-                try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
+//                try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
             }
         }
         activeLayer = nil
     }
 
     func disablePreviewCGImage() {
-        if let originalCGImage {
+        if let originalCGImage, isInNewCGImagePreview {
             activeLayer?.cgImage = originalCGImage
         }
     }

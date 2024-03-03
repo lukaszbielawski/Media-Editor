@@ -100,8 +100,6 @@ struct ImageProjectViewFloatingFilterSliderView: View {
                             let newFilterValue = parameterValueRange.lowerBound +
                                 sliderFactor * (parameterValueRange.upperBound - parameterValueRange.lowerBound)
 
-                            print(newFilterValue)
-
                             vm.currentFilter?.changeValue(value: newFilterValue)
                             Task {
                                 await vm.applyFilter()

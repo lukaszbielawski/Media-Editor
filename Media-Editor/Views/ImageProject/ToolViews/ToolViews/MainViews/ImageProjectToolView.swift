@@ -13,48 +13,15 @@ struct ImageProjectToolView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             ImageProjectToolScrollView()
-            if let currentTool = vm.currentTool {
+            if let currentTool = vm.currentTool, 
+                !(currentTool is LayerSingleActionToolType),
+                !(currentTool is ProjectSingleActionToolType) {
                 ImageProjectToolDetailsView()
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     .zIndex(Double(Int.max - 5))
                     .environmentObject(vm)
-                HStack(spacing: 0) {
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.leftFloatingButtonIcon,
-                        buttonType: .left)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-
-                    if vm.currentFilter != .none {
-                        ImageProjectViewFloatingFilterSliderView(
-                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                            .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                        Spacer()
-                        ImageProjectToolFloatingButtonView(
-                            systemName: vm.tools.rightFloatingButtonIcon,
-                            buttonType: .right)
-                    } else if let currentTool = currentTool as? ProjectToolType, currentTool == .background {
-                        Spacer()
-                        ImageProjectFloatingBackgroundSliderView(
-                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                            backgroundColor: $vm.projectModel.backgroundColor)
-                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                            .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                        Spacer()
-                    }
-                }.offset(
-                    y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
-                .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
             }
-        }
-        .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
-            guard let vm else { return }
-            if functionType == . back {
-                vm.currentTool = nil
-            }
+            ImageProjectToolSettingsView()
         }
     }
 }

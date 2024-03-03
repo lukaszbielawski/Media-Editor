@@ -49,7 +49,7 @@ class LayerModel: Identifiable, ObservableObject {
     init(photoEntity: PhotoEntity) {
         self.photoEntity = photoEntity
         self.fileName = photoEntity.fileName!
-        
+
         self.positionZ = photoEntity.positionZ?.intValue
         self.cgImage = try! createCGImage(absoluteFilePath: absoluteFilePath)
 
@@ -75,8 +75,6 @@ extension LayerModel: NSCopying {
         }
         return layerModel
     }
-
-    
 }
 
 extension LayerModel {

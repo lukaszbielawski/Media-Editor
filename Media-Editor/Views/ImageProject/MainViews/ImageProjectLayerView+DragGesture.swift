@@ -11,7 +11,10 @@ extension ImageProjectLayerView {
     var layerDragGesture: some Gesture {
         DragGesture(coordinateSpace: .local)
             .onChanged {
-                layerDragGestureFunction($0.translation)
+                if let currentTool = vm.currentTool as? ProjectSingleActionToolType, currentTool == .merge {}
+                else {
+                    layerDragGestureFunction($0.translation)
+                }
             }
             .updating($lastPosition) { _, startPosition, _ in
                 startPosition = startPosition ?? layerModel.position

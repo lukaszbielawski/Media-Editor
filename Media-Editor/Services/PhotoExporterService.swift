@@ -59,7 +59,7 @@ struct PhotoExporterService {
 
     func exportLayersToImage(photos: [LayerModel],
                              contextPixelSize: CGSize,
-                             backgroundColor: CGColor) async throws -> CGImage
+                             backgroundColor: CGColor, offsetFromCenter: CGPoint = .zero) async throws -> CGImage
     {
         return try await Task {
             guard let context = CGContext(data: nil,
@@ -93,11 +93,11 @@ struct PhotoExporterService {
                 let translationTransform = CGAffineTransform(
                     translationX: contextPixelSize.width * 0.5
                         - centerTranslation.width * scaleX
-                        + position.x * photo.pixelToDigitalWidthRatio,
+                    + position.x * photo.pixelToDigitalWidthRatio + offsetFromCenter.x,
                     y:
                     contextPixelSize.height * 0.5
                         - centerTranslation.height * scaleY
-                        - position.y * photo.pixelToDigitalHeightRatio
+                        - position.y * photo.pixelToDigitalHeightRatio - offsetFromCenter.y
                 )
 
                 let scaleTransform = CGAffineTransform(scaleX: scaleX, y: scaleY)
