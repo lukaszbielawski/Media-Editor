@@ -34,8 +34,9 @@ struct ImageProjectEditingFrameView: View {
                 let layerHeight = ceil((layerModel.size?.height ?? 0.0)
                     * abs(layerModel.scaleY ?? 1.0)
                     * planeScale)
-                let isFrameBig = layerWidth > marginedWorkspaceSize.width * 0.8 ||
-                    layerHeight > marginedWorkspaceSize.height * 0.8
+                let isFrameBig =
+                    (layerWidth > marginedWorkspaceSize.width * 0.8 && layerHeight > Double(2 * vm.frame.minPixels)) ||
+                    (layerHeight > marginedWorkspaceSize.height * 0.8 && layerWidth > Double(2 * vm.frame.minPixels))
                 ZStack {
                     Color
                         .clear

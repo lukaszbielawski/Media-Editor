@@ -45,7 +45,9 @@ struct ImageProjectToolCaseAddView: View {
                                     vm.layerToDelete = layerModel
                                     vm.tools.isDeleteImageAlertPresented = true
                                 }
-                        }.onTapGesture {
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
                             vm.showLayerOnScreen(layerModel: layerModel)
                         }
                     }

@@ -56,9 +56,9 @@ struct ImageProjectToolCaseFiltersView: View {
         .onReceive(vm.floatingButtonClickedSubject) { [unowned vm] actionType in
             guard let activeLayer = vm.activeLayer else { return }
             if actionType == .backToCategories {
+                vm.disablePreviewCGImage()
                 vm.currentCategory = .none
                 vm.currentFilter = .none
-                vm.disablePreviewCGImage()
             } else if actionType == .confirm {
                 vm.currentTool = .none
                 vm.currentCategory = .none

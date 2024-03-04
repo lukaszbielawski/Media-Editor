@@ -130,6 +130,7 @@ final class ImageProjectViewModel: ObservableObject {
         if undoModel.count > undoLimit {
             undoModel.removeFirst()
         }
+        
         redoModel.removeAll()
         undoModel.append(latestSnapshot)
         latestSnapshot = createSnapshot()
@@ -164,7 +165,7 @@ final class ImageProjectViewModel: ObservableObject {
         return .init(layers: layers, projectModel: projectModel)
     }
 
-    func saveNewCGImageOnDisk(fileName: String, cgImage: CGImage!) async throws {
+    nonisolated func saveNewCGImageOnDisk(fileName: String, cgImage: CGImage!) async throws {
         if let imageData = UIImage(cgImage: cgImage).pngData() {
             _ = try await photoLibraryService.saveToDisk(
                 data: imageData,
@@ -263,7 +264,6 @@ final class ImageProjectViewModel: ObservableObject {
         projectLayers.append(newLayer)
 
         showLayerOnScreen(layerModel: newLayer)
-        objectWillChange.send()
     }
 
     func calculateBoundsForMergedLayers() -> (layerRect: CGRect?, pixelSize: CGSize?) {
@@ -360,8 +360,6 @@ final class ImageProjectViewModel: ObservableObject {
         projectLayers.append(mergedLayerModel)
 
         showLayerOnScreen(layerModel: mergedLayerModel)
-
-        updateLatestSnapshot()
     }
 
     func cleanupAfterMerge() {
@@ -379,7 +377,7 @@ final class ImageProjectViewModel: ObservableObject {
         disablePreviewCGImage()
         if let activeLayer {
             Task {
-//                try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
+                try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
             }
         }
         activeLayer = nil

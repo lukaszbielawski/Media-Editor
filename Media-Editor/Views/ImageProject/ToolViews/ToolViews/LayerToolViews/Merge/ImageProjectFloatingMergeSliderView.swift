@@ -102,9 +102,9 @@ struct ImageProjectFloatingMergeSliderView: View {
                 .opacity(vm.layersToMerge.count < 2 ? 0.6 : 0.0)
         }
         .onAppear {
-            vm.layersToMerge = .init()
+            vm.layersToMerge.removeAll()
         }.onDisappear {
-            vm.layersToMerge = .init()
+            vm.layersToMerge.removeAll()
         }
     }
 }

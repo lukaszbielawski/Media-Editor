@@ -14,8 +14,6 @@ struct ImageProjectLayerView: View {
 
     @ObservedObject var layerModel: LayerModel
 
-    @State var isInLayersToMerge: Bool = false
-
     @State var wasPreviousDragGestureFrameLockedForX = false
     @State var wasPreviousDragGestureFrameLockedForY = false
 
@@ -29,7 +27,7 @@ struct ImageProjectLayerView: View {
                 Image(decorative: layerModel.cgImage, scale: 1.0, orientation: .up)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                if isInLayersToMerge {
+                if vm.layersToMerge.contains(layerModel) {
                     Color.clear
                         .border(Color(.accent), width: 4)
                 }
@@ -48,12 +46,11 @@ struct ImageProjectLayerView: View {
                 if let currentTool = vm.currentTool as? ProjectSingleActionToolType,
                    currentTool == .merge
                 {
-                    if isInLayersToMerge {
+                    if vm.layersToMerge.contains(layerModel) {
                         vm.layersToMerge.removeAll { $0.fileName == layerModel.fileName }
                     } else {
                         vm.layersToMerge.append(layerModel)
                     }
-                    isInLayersToMerge.toggle()
                 } else {
                     if vm.activeLayer == layerModel {
                         vm.deactivateLayer()

@@ -58,9 +58,6 @@ struct ImageProjectImportPhotoSummaryGridView: View {
                 }
                 .padding(.vertical, padding * tileWidth)
         }
-
-        .onChange(of: vm.selectedPhotos.count) { _ in
-        }
         .frame(height: tileWidth)
         .padding(.horizontal, 2 * padding * tileWidth)
     }
