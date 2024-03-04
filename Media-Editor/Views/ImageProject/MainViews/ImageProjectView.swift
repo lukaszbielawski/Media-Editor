@@ -38,13 +38,16 @@ struct ImageProjectView: View {
                 ZStack {
                     ImageProjectPlaneView()
 
-                    if let layerModel = vm.activeLayer, let positionZ = layerModel.positionZ, positionZ > 0 {
-                        if let currentTool = vm.currentTool as? ProjectSingleActionToolType, currentTool == .merge {}
-                        else {
-                            ImageProjectEditingFrameView(layerModel: layerModel)
+                    if let currentTool = vm.currentTool as? ProjectSingleActionToolType, currentTool == .merge {
+                        ForEach(vm.layersToMerge) { layerModel in
+                            ImageProjectMergingFrameView(layerModel: layerModel)
                                 .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
                                 .zIndex(Double(Int.max) - 2)
                         }
+                    } else if let layerModel = vm.activeLayer, let positionZ = layerModel.positionZ, positionZ > 0 {
+                        ImageProjectEditingFrameView(layerModel: layerModel)
+                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+                            .zIndex(Double(Int.max) - 2)
                     }
 
                     Path { path in

@@ -88,6 +88,7 @@
 		B275159F2B8DF93900647D4E /* PhotoExportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B275159E2B8DF93900647D4E /* PhotoExportError.swift */; };
 		B27515A12B8E4D0D00647D4E /* ImageProjectToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27515A02B8E4D0D00647D4E /* ImageProjectToastView.swift */; };
 		B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B285B23E2B6932AB00258E28 /* AngleExtensions.swift */; };
+		B28F7BB62B95FA8200E684C8 /* ImageProjectMergingFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F7BB52B95FA8200E684C8 /* ImageProjectMergingFrameView.swift */; };
 		B29415FD2B779F0B00F81596 /* ImageProjectEditingFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29415FC2B779F0B00F81596 /* ImageProjectEditingFrameView.swift */; };
 		B29415FF2B77FD9600F81596 /* EditFrameCircleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29415FE2B77FD9600F81596 /* EditFrameCircleModifier.swift */; };
 		B29416032B77FDF400F81596 /* EditFrameResizeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */; };
@@ -203,6 +204,7 @@
 		B275159E2B8DF93900647D4E /* PhotoExportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExportError.swift; sourceTree = "<group>"; };
 		B27515A02B8E4D0D00647D4E /* ImageProjectToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToastView.swift; sourceTree = "<group>"; };
 		B285B23E2B6932AB00258E28 /* AngleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleExtensions.swift; sourceTree = "<group>"; };
+		B28F7BB52B95FA8200E684C8 /* ImageProjectMergingFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectMergingFrameView.swift; sourceTree = "<group>"; };
 		B29415FC2B779F0B00F81596 /* ImageProjectEditingFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectEditingFrameView.swift; sourceTree = "<group>"; };
 		B29415FE2B77FD9600F81596 /* EditFrameCircleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFrameCircleModifier.swift; sourceTree = "<group>"; };
 		B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFrameResizeModifier.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 			isa = PBXGroup;
 			children = (
 				B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */,
+				B28F7BB52B95FA8200E684C8 /* ImageProjectMergingFrameView.swift */,
 			);
 			path = Merge;
 			sourceTree = "<group>";
@@ -832,6 +835,7 @@
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
 				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */,
+				B28F7BB62B95FA8200E684C8 /* ImageProjectMergingFrameView.swift in Sources */,
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
 				B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */,
 				B2B2B1092B4BF6E200E3E8A6 /* PhotoLibraryService.swift in Sources */,

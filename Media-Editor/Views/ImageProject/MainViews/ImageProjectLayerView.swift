@@ -23,62 +23,57 @@ struct ImageProjectLayerView: View {
         if vm.plane.size != nil,
            layerModel.photoEntity.positionX != nil
         {
-            ZStack {
-                Image(decorative: layerModel.cgImage, scale: 1.0, orientation: .up)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                if vm.layersToMerge.contains(layerModel) {
-                    Color.clear
-                        .border(Color(.accent), width: 4)
+            Image(decorative: layerModel.cgImage, scale: 1.0, orientation: .up)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+
+                .frame(width: layerModel.size?.width ?? 0, height: layerModel.size?.height ?? 0)
+                .scaleEffect(x: layerModel.scaleX ?? 1.0, y: layerModel.scaleY ?? 1.0)
+                .rotationEffect(layerModel.rotation ?? .zero)
+                .position((layerModel.position ?? .zero) + vm.plane.globalPosition)
+                .opacity(vm.tools.layersOpacity)
+                .animation(.easeInOut(duration: 0.35), value: vm.tools.layersOpacity)
+                .onAppear {
+                    layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
+                    vm.objectWillChange.send()
                 }
-            }
-            .frame(width: layerModel.size?.width ?? 0, height: layerModel.size?.height ?? 0)
-            .scaleEffect(x: layerModel.scaleX ?? 1.0, y: layerModel.scaleY ?? 1.0)
-            .rotationEffect(layerModel.rotation ?? .zero)
-            .position((layerModel.position ?? .zero) + vm.plane.globalPosition)
-            .opacity(vm.tools.layersOpacity)
-            .animation(.easeInOut(duration: 0.35), value: vm.tools.layersOpacity)
-            .onAppear {
-                layerModel.size = vm.calculateLayerSize(layerModel: layerModel)
-                vm.objectWillChange.send()
-            }
-            .onTapGesture {
-                if let currentTool = vm.currentTool as? ProjectSingleActionToolType,
-                   currentTool == .merge
-                {
-                    if vm.layersToMerge.contains(layerModel) {
-                        vm.layersToMerge.removeAll { $0.fileName == layerModel.fileName }
+                .onTapGesture {
+                    if let currentTool = vm.currentTool as? ProjectSingleActionToolType,
+                       currentTool == .merge
+                    {
+                        if vm.layersToMerge.contains(layerModel) {
+                            vm.layersToMerge.removeAll { $0.fileName == layerModel.fileName }
+                        } else {
+                            vm.layersToMerge.append(layerModel)
+                        }
                     } else {
-                        vm.layersToMerge.append(layerModel)
+                        if vm.activeLayer == layerModel {
+                            vm.deactivateLayer()
+                        } else {
+                            vm.activeLayer = layerModel
+                            vm.objectWillChange.send()
+                        }
                     }
-                } else {
+                }
+                .gesture(
+                    vm.activeLayer == layerModel ?
+                        layerDragGesture
+                        : nil
+                ).onChange(of: vm.plane.lineYPosition) { newValue in
+                    if newValue != nil {
+                        HapticService.shared.play(.medium)
+                    }
+                }
+                .onChange(of: vm.plane.lineXPosition) { newValue in
+                    if newValue != nil {
+                        HapticService.shared.play(.medium)
+                    }
+                }
+                .onReceive(vm.performLayerDragPublisher) { translation in
                     if vm.activeLayer == layerModel {
-                        vm.deactivateLayer()
-                    } else {
-                        vm.activeLayer = layerModel
-                        vm.objectWillChange.send()
+                        layerDragGestureFunction(translation)
                     }
                 }
-            }
-            .gesture(
-                vm.activeLayer == layerModel ?
-                    layerDragGesture
-                    : nil
-            ).onChange(of: vm.plane.lineYPosition) { newValue in
-                if newValue != nil {
-                    HapticService.shared.play(.medium)
-                }
-            }
-            .onChange(of: vm.plane.lineXPosition) { newValue in
-                if newValue != nil {
-                    HapticService.shared.play(.medium)
-                }
-            }
-            .onReceive(vm.performLayerDragPublisher) { translation in
-                if vm.activeLayer == layerModel {
-                    layerDragGestureFunction(translation)
-                }
-            }
         }
     }
 }
