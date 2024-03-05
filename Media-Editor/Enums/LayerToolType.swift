@@ -9,6 +9,7 @@ import Foundation
 
 enum LayerToolType: String, Tool {
     case filters
+    case crop
     case flip
 
     var id: String { return rawValue }
@@ -19,6 +20,8 @@ extension LayerToolType {
         switch self {
         case .filters:
             return "Filters"
+        case .crop:
+            return "Crop"
         case .flip:
             return "Flip"
         }
@@ -28,6 +31,8 @@ extension LayerToolType {
         switch self {
         case .filters:
             return "camera.filters"
+        case .crop:
+            return "crop"
         case .flip:
             return "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"
         }

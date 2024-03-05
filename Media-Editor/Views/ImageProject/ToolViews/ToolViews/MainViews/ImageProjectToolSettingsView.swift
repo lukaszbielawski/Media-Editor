@@ -12,7 +12,7 @@ struct ImageProjectToolSettingsView: View {
     var body: some View {
         HStack(spacing: 0) {
             switch vm.currentTool {
-            case is LayerToolType:
+            case let layerTool as LayerToolType:
                 ImageProjectToolFloatingButtonView(
                     systemName: vm.tools.leftFloatingButtonIcon,
                     buttonType: .left)
@@ -27,7 +27,18 @@ struct ImageProjectToolSettingsView: View {
                     ImageProjectToolFloatingButtonView(
                         systemName: vm.tools.rightFloatingButtonIcon,
                         buttonType: .right)
+                } else if layerTool == .crop {
+                    ImageProjectViewFloatingCropSliderView(
+                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                    Spacer()
+                    ImageProjectToolFloatingButtonView(
+                        systemName: vm.tools.rightFloatingButtonIcon,
+                        buttonType: .right)
                 }
+
             case let projectTool as ProjectToolType:
                 ImageProjectToolFloatingButtonView(
                     systemName: vm.tools.leftFloatingButtonIcon,

@@ -54,6 +54,11 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
+                    case .crop:
+                        ImageProjectToolCaseCropView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .exitFocusMode
+                            }
                     }
                 }
             }

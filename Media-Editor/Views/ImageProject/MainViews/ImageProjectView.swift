@@ -38,17 +38,23 @@ struct ImageProjectView: View {
                 ZStack {
                     ImageProjectPlaneView()
 
-                    if let currentTool = vm.currentTool as? ProjectSingleActionToolType, currentTool == .merge {
-                        ForEach(vm.layersToMerge) { layerModel in
-                            ImageProjectMergingFrameView(layerModel: layerModel)
-                                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
-                                .zIndex(Double(Int.max) - 2)
-                        }
-                    } else if let layerModel = vm.activeLayer, let positionZ = layerModel.positionZ, positionZ > 0 {
-                        ImageProjectEditingFrameView(layerModel: layerModel)
-                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
-                            .zIndex(Double(Int.max) - 2)
-                    }
+                    Group {
+                        if let currentTool = vm.currentTool as? ProjectSingleActionToolType, currentTool == .merge {
+                            ForEach(vm.layersToMerge) { layerModel in
+                                ImageProjectMergingFrameView(layerModel: layerModel)
+                            }
+                        } else if let layerModel = vm.activeLayer, let positionZ = layerModel.positionZ, positionZ > 0 {
+                            ImageProjectEditingFrameView(layerModel: layerModel)
+                        } 
+//                        else if let layerModel = vm.activeLayer,
+//                                  let currentTool = vm.currentTool as? LayerToolType,
+//                                  currentTool == .crop
+//                        {
+//                            ImageProjectCroppingFrameView(layerModel: layerModel)
+//                        }
+
+                    }.transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+                        .zIndex(Double(Int.max) - 2)
 
                     Path { path in
                         let points = vm.calculatePathPoints()
@@ -73,6 +79,15 @@ struct ImageProjectView: View {
                     }
                     .stroke(Color(.accent), lineWidth: 1)
                     .allowsHitTesting(false)
+
+                    if let layerModel = vm.activeLayer,
+                       let currentTool = vm.currentTool as? LayerToolType,
+                       currentTool == .crop
+                    {
+                        ImageProjectFocusView()
+                            .zIndex(Double(Int.max) - 1)
+                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    }
                 }
                 .onChange(of: vm.activeLayer) { _ in
                     vm.plane.lineXPosition = nil
@@ -80,6 +95,7 @@ struct ImageProjectView: View {
                 }
 
                 ImageProjectToolView()
+                    .zIndex(Double(Int.max) + 1)
             }
             .overlay {
                 if isToastShown.isShown {

@@ -12,4 +12,5 @@ enum FloatingButtonActionType {
     case confirm
     case hideKeyboard
     case backToCategories
+    case exitFocusMode
 }

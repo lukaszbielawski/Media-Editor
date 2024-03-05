@@ -13,12 +13,13 @@ struct ImageProjectToolView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             ImageProjectToolScrollView()
-            if let currentTool = vm.currentTool, 
-                !(currentTool is LayerSingleActionToolType),
-                !(currentTool is ProjectSingleActionToolType) {
+            if let currentTool = vm.currentTool,
+               !(currentTool is LayerSingleActionToolType),
+               !(currentTool is ProjectSingleActionToolType)
+            {
                 ImageProjectToolDetailsView()
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                    .zIndex(Double(Int.max - 5))
+                    .zIndex(Double(Int.max) + 2)
                     .environmentObject(vm)
             }
             ImageProjectToolSettingsView()

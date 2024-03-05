@@ -12,6 +12,7 @@ struct ImageProjectToolTileView: View {
 
     var title: String?
     let iconName: String
+    var imageRotation: Angle = .zero
 
     var body: some View {
         Rectangle()
@@ -23,6 +24,7 @@ struct ImageProjectToolTileView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(.horizontal)
+                        .rotationEffect(imageRotation)
 
                     if let title {
                         Text(title)

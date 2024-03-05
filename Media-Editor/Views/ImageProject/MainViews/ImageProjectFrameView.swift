@@ -24,7 +24,7 @@ struct ImageProjectFrameView: View {
                 .frame(width: vm.frame.rect?.size.width ?? 0.0, height: vm.frame.rect?.size.height ?? 0.0)
                 .shadow(radius: 10.0)
                 .onAppear {
-                    vm.setupFrameRect()
+                    vm.frame.rect = vm.calculateFrameRect()
 
                     subscribtion = vm.layoutChangedSubject
                         .debounce(for: .seconds(5.0), scheduler: DispatchQueue.main)

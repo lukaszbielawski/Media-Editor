@@ -21,6 +21,8 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentTool: (any Tool)?
     @Published var currentFilter: FilterType?
     @Published var currentCategory: FilterCategoryType?
+    @Published var currentCropRatio: CropRatioType = .any
+    @Published var currentCropShape: CropShapeType = .rectangle
     @Published var originalCGImage: CGImage!
 
     @Published var workspaceSize: CGSize?
@@ -44,16 +46,17 @@ final class ImageProjectViewModel: ObservableObject {
 
     private var latestSnapshot: SnapshotModel!
     let undoLimit = 50
+
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
     let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
     let filterChangedSubject = PassthroughSubject<Void, Never>()
     let performToolActionSubject = PassthroughSubject<any Tool, Never>()
+    var floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
 
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
 
-    var floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
 
     var centerButtonFunction: (() -> Void)?
 
@@ -436,7 +439,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func recalculateFrameAndLayersGeometry() {
-        setupFrameRect()
+        frame.rect = calculateFrameRect()
 
         for layer in projectLayers {
             layer.size = calculateLayerSize(layerModel: layer)
@@ -533,30 +536,35 @@ final class ImageProjectViewModel: ObservableObject {
         objectWillChange.send()
     }
 
-    func setupFrameRect() {
+    func calculateFrameRect(customBounds: CGSize? = nil, isMargined: Bool = true) -> CGRect? {
         guard let projectPixelFrameWidth = projectModel.framePixelWidth,
               let projectPixelFrameHeight = projectModel.framePixelHeight,
-              let marginedWorkspaceSize
-        else { return }
+              let marginedWorkspaceSize,
+              let absoluteWorkspaceSize = workspaceSize
+        else { return nil }
+
+        let bounds = customBounds ?? .init(width: projectPixelFrameWidth, height: projectPixelFrameHeight)
+
+        let workspaceSize = isMargined ? marginedWorkspaceSize : absoluteWorkspaceSize
 
         let validatedProjectPixelFrameWidth =
-            max(min(projectPixelFrameWidth, CGFloat(frame.maxPixels)),
+        max(min(bounds.width, CGFloat(frame.maxPixels)),
                 CGFloat(frame.minPixels))
 
         let validatedProjectPixelFrameHeight =
-            max(min(projectPixelFrameHeight, CGFloat(frame.maxPixels)),
+        max(min(bounds.height, CGFloat(frame.maxPixels)),
                 CGFloat(frame.minPixels))
 
         let aspectRatio = validatedProjectPixelFrameHeight / validatedProjectPixelFrameWidth
-        let workspaceAspectRatio = marginedWorkspaceSize.height / marginedWorkspaceSize.width
+        let workspaceAspectRatio =  workspaceSize.height / workspaceSize.width
 
         let frameSize = if aspectRatio < workspaceAspectRatio {
-            CGSize(width: marginedWorkspaceSize.width, height: marginedWorkspaceSize.width * aspectRatio)
+            CGSize(width: workspaceSize.width, height: workspaceSize.width * aspectRatio)
         } else {
-            CGSize(width: marginedWorkspaceSize.height / aspectRatio, height: marginedWorkspaceSize.height)
+            CGSize(width: workspaceSize.height / aspectRatio, height: workspaceSize.height)
         }
 
-        frame.rect = CGRect(origin: CGPoint(x: -frameSize.width * 0.5, y: -frameSize.height * 0.5),
+        return CGRect(origin: CGPoint(x: -frameSize.width * 0.5, y: -frameSize.height * 0.5),
                             size: frameSize)
     }
 
