@@ -14,23 +14,34 @@ struct ImageProjectToolCaseBackgroundView: View {
     @State private var cancellable: AnyCancellable?
     @State private var colorPickerSubject = PassthroughSubject<Void, Never>()
 
+    var isProjectBackgroundColorChanger: Bool = true
+
     var body: some View {
+        let backgroundColorBinding = isProjectBackgroundColorChanger ?
+            $vm.projectModel.backgroundColor :
+            $vm.currentLayerBackgroundColor
         HStack {
             ZStack(alignment: .center) {
-                ColorPicker(selection: $vm.projectModel.backgroundColor.onChange(colorPicked), label: { EmptyView() })
+                ColorPicker(selection: backgroundColorBinding.onChange(colorPicked), label: { EmptyView() })
                     .labelsHidden()
                     .scaleEffect(vm.plane.lowerToolbarHeight *
                         (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
 
-                ImageProjectToolColorTileView(color: $vm.projectModel.backgroundColor, title: "Custom")
+                ImageProjectToolColorTileView(color: backgroundColorBinding, title: "Custom")
                     .allowsHitTesting(false)
             }
             ForEach(vm.tools.colorArray, id: \.self) { color in
                 ImageProjectToolColorTileView(color: .constant(color))
                     .onTapGesture {
-                        vm.projectModel.backgroundColor = color
-
-                        vm.updateLatestSnapshot()
+                        backgroundColorBinding.wrappedValue = color
+                        if isProjectBackgroundColorChanger {
+                            vm.updateLatestSnapshot()
+                        } else {
+                            Task {
+                                try await vm.addBackgroundToLayer()
+                            }
+                        }
+                        vm.objectWillChange.send()
                     }
             }
             Spacer()
@@ -39,9 +50,21 @@ struct ImageProjectToolCaseBackgroundView: View {
                 colorPickerSubject
                     .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
                     .sink { [unowned vm] in
-                        vm.updateLatestSnapshot()
+                        print("?", isProjectBackgroundColorChanger)
+                        if isProjectBackgroundColorChanger {
+                            vm.updateLatestSnapshot()
+                        } else {
+                            Task {
+                                try await vm.addBackgroundToLayer()
+                            }
+                        }
                         vm.objectWillChange.send()
                     }
+
+            if !isProjectBackgroundColorChanger {
+                guard let activeLayer = vm.activeLayer else { return }
+                vm.originalCGImage = activeLayer.cgImage?.copy()
+            }
         }
     }
 

@@ -59,6 +59,11 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }
+                    case .background:
+                        ImageProjectToolCaseBackgroundView(isProjectBackgroundColorChanger: false)
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .exitFocusMode
+                            }
                     }
                 }
             }

@@ -74,7 +74,7 @@ struct ImageProjectView: View {
                     .allowsHitTesting(false)
 
                     if let currentTool = vm.currentTool as? LayerToolType,
-                        currentTool == .crop {
+                       currentTool == .crop || currentTool == .background {
                             ImageProjectFocusView()
                                 .zIndex(Double(Int.max) - 1)
                                 .transition(AnyTransition

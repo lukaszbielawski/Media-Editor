@@ -35,6 +35,8 @@ struct ImageProjectFloatingBackgroundSliderView: View {
         return "\(Int(defaultOffsetFactor.toPercentage))%"
     }
 
+    var isProjectBackgroundColorChanger: Bool = true
+
     var body: some View {
         ZStack(alignment: .leading) {
             Capsule(style: .circular)
@@ -80,7 +82,14 @@ struct ImageProjectFloatingBackgroundSliderView: View {
                         .updating($lastOffset) { _, lastOffset, _ in
                             lastOffset = lastOffset ?? sliderOffset
                         }.onEnded { _ in
-                            vm.updateLatestSnapshot()
+                            if isProjectBackgroundColorChanger {
+                                vm.updateLatestSnapshot()
+                            } else {
+                                Task {
+                                    try await vm.addBackgroundToLayer()
+                                }
+                            }
+                            vm.objectWillChange.send()
                         }
                 )
         }

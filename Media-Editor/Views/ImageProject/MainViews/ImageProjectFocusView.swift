@@ -25,10 +25,6 @@ struct ImageProjectFocusView: View {
                 ZStack {
                     Image("AlphaVector")
                         .resizable(resizingMode: .tile)
-                        .overlay {
-                            //                        vm.projectModel.backgroundColor
-                            //                        layerBgColor dodac do coredata
-                        }
                         .frame(width: frameSize.width, height: frameSize.height)
 
                     Image(decorative: layerModel.cgImage, scale: 1.0)
@@ -46,8 +42,28 @@ struct ImageProjectFocusView: View {
             }
 
             .onReceive(vm.floatingButtonClickedSubject) { action in
+                print(action)
                 if action == .exitFocusMode {
+                    if let currentTool = vm.currentTool as? LayerToolType {
+                        print("xd")
+                        vm.currentLayerBackgroundColor = Color.clear
+                        vm.disablePreviewCGImage()
+                    }
                     vm.currentTool = .none
+                } else if let currentTool = vm.currentTool as? LayerToolType,
+                          currentTool == .background
+                {
+                    if action == .confirm {
+                        vm.currentTool = .none
+                        vm.currentLayerBackgroundColor = Color.clear
+                        Task {
+                            try? await vm.saveNewCGImageOnDisk(
+                                fileName: layerModel.fileName,
+                                cgImage: layerModel.cgImage)
+                        }
+                        
+                        vm.updateLatestSnapshot()
+                    }
                 }
             }
         }

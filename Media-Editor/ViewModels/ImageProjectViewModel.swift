@@ -23,6 +23,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentCategory: FilterCategoryType?
     @Published var currentCropRatio: CropRatioType = .any
     @Published var currentCropShape: CropShapeType = .rectangle
+    @Published var currentLayerBackgroundColor: Color = .clear
     @Published var originalCGImage: CGImage!
 
     @Published var workspaceSize: CGSize?
@@ -73,7 +74,11 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     var isInNewCGImagePreview: Bool {
-        return currentFilter != .none
+        if let currentTool = currentTool as? LayerToolType, currentTool == .filters || currentTool == .background {
+            return true
+        } else {
+            return false
+        }
     }
 
     typealias PathPoints = (startPoint: CGPoint, endPoint: CGPoint)
@@ -362,6 +367,24 @@ final class ImageProjectViewModel: ObservableObject {
         projectLayers.append(mergedLayerModel)
 
         showLayerOnScreen(layerModel: mergedLayerModel)
+    }
+
+    func addBackgroundToLayer() async throws {
+        guard let activeLayer else { return }
+        activeLayer.cgImage = originalCGImage
+
+        let layerWithBackground = try await photoExporterService
+            .exportLayersToImage(
+                photos: [activeLayer],
+                contextPixelSize: activeLayer.pixelSize,
+                backgroundColor: UIColor.clear.cgColor,
+                layersBackgroundColor: currentLayerBackgroundColor.cgColor!,
+            isApplyingTransforms: false)
+
+//        try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: layerWithBackground)
+
+        activeLayer.cgImage = layerWithBackground
+        objectWillChange.send()
     }
 
     func cleanupAfterMerge() {

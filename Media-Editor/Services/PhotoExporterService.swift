@@ -112,7 +112,10 @@ struct PhotoExporterService {
 
     func exportLayersToImage(photos: [LayerModel],
                              contextPixelSize: CGSize,
-                             backgroundColor: CGColor, offsetFromCenter: CGPoint = .zero) async throws -> CGImage
+                             backgroundColor: CGColor,
+                             offsetFromCenter: CGPoint = .zero,
+                             layersBackgroundColor: CGColor? = nil, 
+                             isApplyingTransforms: Bool = true) async throws -> CGImage
     {
         return try await Task {
             guard let context = CGContext(data: nil,
@@ -168,7 +171,15 @@ struct PhotoExporterService {
                     .concatenating(reverseOriginTranslation)
                     .concatenating(translationTransform)
 
-                context.concatenate(resultTransform)
+                if isApplyingTransforms {
+                    context.concatenate(resultTransform)
+                }
+
+                if let layersBackgroundColor {
+                    context.setFillColor(layersBackgroundColor)
+                    context.fill(CGRect(origin: .zero, size: .init(width: photo.pixelSize.width,
+                                                                   height: photo.pixelSize.height)))
+                }
 
                 context.draw(photo.cgImage, in:
                     CGRect(x: 0,
