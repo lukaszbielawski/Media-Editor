@@ -94,5 +94,6 @@ struct ImageProjectViewFloatingCropSliderView: View {
     private func resetValues() {
         sliderOffset = nil
         vm.currentCropRatio = .any
+        vm.currentCropShape = .rectangle
     }
 }

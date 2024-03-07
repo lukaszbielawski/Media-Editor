@@ -57,7 +57,6 @@ final class ImageProjectViewModel: ObservableObject {
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
 
-
     var centerButtonFunction: (() -> Void)?
 
     private var cancellable: AnyCancellable?
@@ -133,7 +132,7 @@ final class ImageProjectViewModel: ObservableObject {
         if undoModel.count > undoLimit {
             undoModel.removeFirst()
         }
-        
+
         redoModel.removeAll()
         undoModel.append(latestSnapshot)
         latestSnapshot = createSnapshot()
@@ -375,8 +374,44 @@ final class ImageProjectViewModel: ObservableObject {
         currentTool = .none
     }
 
+    func cropLayer(frameRect: CGRect, cropRect: CGRect) async throws {
+        guard let activeLayer else { return }
+
+        let widthRatio = CGFloat(activeLayer.cgImage.width) / frameRect.width
+        let heightRatio = CGFloat(activeLayer.cgImage.height) / frameRect.height
+
+        let pixelFrameSize = frameRect.size.pixelSize(widthRatio,
+                                                      heightRatio)
+
+        let pixelCropSize = cropRect.size.pixelSize(widthRatio,
+                                                    heightRatio)
+
+        let pixelOffset = CGSize(width: cropRect.origin.x * widthRatio,
+                                 height: cropRect.origin.y * heightRatio)
+
+        let path = currentCropShape.shape.path(in: CGRect(
+            origin: .zero,
+            size: cropRect.size.pixelSize(widthRatio, heightRatio)))
+
+        let croppedCGImage =
+            try await photoExporterService
+                .cropLayerToImage(layer: activeLayer,
+                                  pixelFrameSize: pixelFrameSize,
+                                  pixelCropSize: pixelCropSize,
+                                  pixelOffset: pixelOffset,
+                                  path: path)
+
+        try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: croppedCGImage)
+
+        withAnimation {
+            activeLayer.cgImage = croppedCGImage
+            activeLayer.size = calculateLayerSize(layerModel: activeLayer)
+        }
+
+        objectWillChange.send()
+    }
+
     func deactivateLayer() {
-        //TODO: zrobic by nie zapisywalo sie na kazdej deaktywacji
         disablePreviewCGImage()
         if let activeLayer {
             Task {
@@ -548,15 +583,15 @@ final class ImageProjectViewModel: ObservableObject {
         let workspaceSize = isMargined ? marginedWorkspaceSize : absoluteWorkspaceSize
 
         let validatedProjectPixelFrameWidth =
-        max(min(bounds.width, CGFloat(frame.maxPixels)),
+            max(min(bounds.width, CGFloat(frame.maxPixels)),
                 CGFloat(frame.minPixels))
 
         let validatedProjectPixelFrameHeight =
-        max(min(bounds.height, CGFloat(frame.maxPixels)),
+            max(min(bounds.height, CGFloat(frame.maxPixels)),
                 CGFloat(frame.minPixels))
 
         let aspectRatio = validatedProjectPixelFrameHeight / validatedProjectPixelFrameWidth
-        let workspaceAspectRatio =  workspaceSize.height / workspaceSize.width
+        let workspaceAspectRatio = workspaceSize.height / workspaceSize.width
 
         let frameSize = if aspectRatio < workspaceAspectRatio {
             CGSize(width: workspaceSize.width, height: workspaceSize.width * aspectRatio)
@@ -565,7 +600,7 @@ final class ImageProjectViewModel: ObservableObject {
         }
 
         return CGRect(origin: CGPoint(x: -frameSize.width * 0.5, y: -frameSize.height * 0.5),
-                            size: frameSize)
+                      size: frameSize)
     }
 
     func fetchPhoto(for asset: PHAsset,

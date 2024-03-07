@@ -15,24 +15,19 @@ enum CropShapeType: CaseIterable {
     case flippedTriangle
     case hexagon
 
-    @ViewBuilder
-    var shape: some View {
+    @ShapeBuilder
+    var shape: some Shape {
         switch self {
         case .rectangle:
             Rectangle()
-                .fill(.white)
         case .ellipse:
             Ellipse()
-                .fill(.white)
         case .triangle:
             Triangle()
-                .fill(.white)
         case .flippedTriangle:
             FlippedTriangle()
-                .fill(.white)
         case .hexagon:
             Hexagon()
-                .fill(.white)
         }
     }
 

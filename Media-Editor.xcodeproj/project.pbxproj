@@ -98,6 +98,7 @@
 		B29416032B77FDF400F81596 /* EditFrameResizeModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */; };
 		B29586DF2B8F9A8600ECFFF4 /* FilterCategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29586DE2B8F9A8600ECFFF4 /* FilterCategoryType.swift */; };
 		B29586E12B8FA51100ECFFF4 /* PhotoExporterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29586E02B8FA51100ECFFF4 /* PhotoExporterService.swift */; };
+		B2AD27342B99B12700F704DF /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AD27332B99B12700F704DF /* ShapeBuilder.swift */; };
 		B2B20D222B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */; };
 		B2B20D242B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */; };
 		B2B20D262B88D71500E3E458 /* ImageProjectToolFullTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D252B88D71500E3E458 /* ImageProjectToolFullTileView.swift */; };
@@ -224,6 +225,7 @@
 		B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFrameResizeModifier.swift; sourceTree = "<group>"; };
 		B29586DE2B8F9A8600ECFFF4 /* FilterCategoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCategoryType.swift; sourceTree = "<group>"; };
 		B29586E02B8FA51100ECFFF4 /* PhotoExporterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExporterService.swift; sourceTree = "<group>"; };
+		B2AD27332B99B12700F704DF /* ShapeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeBuilder.swift; sourceTree = "<group>"; };
 		B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseFiltersView.swift; sourceTree = "<group>"; };
 		B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolFloatingButton.swift; sourceTree = "<group>"; };
 		B2B20D252B88D71500E3E458 /* ImageProjectToolFullTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolFullTileView.swift; sourceTree = "<group>"; };
@@ -724,6 +726,7 @@
 				B2C352202B974CB700E64525 /* FlippedTriangle.swift */,
 				B2C352222B974D0D00E64525 /* Polygon.swift */,
 				B209B9612B97AA2E00803D1F /* Triangle.swift */,
+				B2AD27332B99B12700F704DF /* ShapeBuilder.swift */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -895,6 +898,7 @@
 				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
 				B2DB93822B8C7602003AB2D2 /* UIColorExtensions.swift in Sources */,
 				B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */,
+				B2AD27342B99B12700F704DF /* ShapeBuilder.swift in Sources */,
 				B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */,
 				B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */,
 				B28F7BBD2B9653A200E684C8 /* ImageProjectCroppingFrameView+ResizeCircles.swift in Sources */,

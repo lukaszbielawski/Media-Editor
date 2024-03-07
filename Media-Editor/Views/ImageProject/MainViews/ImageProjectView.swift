@@ -45,14 +45,7 @@ struct ImageProjectView: View {
                             }
                         } else if let layerModel = vm.activeLayer, let positionZ = layerModel.positionZ, positionZ > 0 {
                             ImageProjectEditingFrameView(layerModel: layerModel)
-                        } 
-//                        else if let layerModel = vm.activeLayer,
-//                                  let currentTool = vm.currentTool as? LayerToolType,
-//                                  currentTool == .crop
-//                        {
-//                            ImageProjectCroppingFrameView(layerModel: layerModel)
-//                        }
-
+                        }
                     }.transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
                         .zIndex(Double(Int.max) - 2)
 
@@ -80,14 +73,14 @@ struct ImageProjectView: View {
                     .stroke(Color(.accent), lineWidth: 1)
                     .allowsHitTesting(false)
 
-                    if let layerModel = vm.activeLayer,
-                       let currentTool = vm.currentTool as? LayerToolType,
-                       currentTool == .crop
-                    {
-                        ImageProjectFocusView()
-                            .zIndex(Double(Int.max) - 1)
-                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                    }
+                    if let currentTool = vm.currentTool as? LayerToolType,
+                        currentTool == .crop {
+                            ImageProjectFocusView()
+                                .zIndex(Double(Int.max) - 1)
+                                .transition(AnyTransition
+                                    .scale(scale: 0.0, anchor: UnitPoint(x: 1, y: 0.5))
+                                    .animation(.easeInOut(duration: 0.35)))
+                        }
                 }
                 .onChange(of: vm.activeLayer) { _ in
                     vm.plane.lineXPosition = nil

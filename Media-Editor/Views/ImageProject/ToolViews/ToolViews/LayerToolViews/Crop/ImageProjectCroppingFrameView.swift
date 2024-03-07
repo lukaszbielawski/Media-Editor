@@ -18,23 +18,18 @@ struct ImageProjectCroppingFrameView: View {
     @State var offset: CGSize = .zero
     @State var frameScaleWidth = 1.0
     @State var frameScaleHeight = 1.0
+    @State var aspectRatioCorrectionWidth: CGFloat = 1.0
+    @State var aspectRatioCorrectionHeight: CGFloat = 1.0
 
     let frameSize: CGSize
     let scaledSize: CGSize
 
-    var initialSize: CGSize {
-        .init(width: frameSize.width, height: frameSize.height)
-    }
-
-    var initialAspectRatio: CGFloat {
-        initialSize.width / initialSize.height
-    }
-
-    @State var aspectRatioCorrectionWidth: CGFloat = 1.0
-    @State var aspectRatioCorrectionHeight: CGFloat = 1.0
-
     let resizeCircleSize: CGFloat = 9
     let resizeBorderWidth: CGFloat = 2
+
+    var aspectRatio: CGFloat {
+        frameSize.width / frameSize.height
+    }
 
     var body: some View {
         ZStack {
@@ -43,9 +38,10 @@ struct ImageProjectCroppingFrameView: View {
 
             vm.currentCropShape
                 .shape
+                .fill(Color.white)
                 .border(Color.clear, width: 2)
-                .frame(width: initialSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
-                       height: initialSize.height * frameScaleHeight * aspectRatioCorrectionHeight)
+                .frame(width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
+                       height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)
                 .blendMode(.destinationOut)
                 .overlay(resizeFrame)
                 .offset(offset)
@@ -73,11 +69,26 @@ struct ImageProjectCroppingFrameView: View {
                 frameScaleHeight = 1.0
                 offset = .zero
                 if let ratio {
-                    aspectRatioCorrectionWidth = min(ratio / initialAspectRatio, 1.0)
-                    aspectRatioCorrectionHeight = min(initialAspectRatio / ratio, 1.0)
+                    aspectRatioCorrectionWidth = min(ratio / aspectRatio, 1.0)
+                    aspectRatioCorrectionHeight = min(aspectRatio / ratio, 1.0)
                 } else {
                     aspectRatioCorrectionWidth = 1.0
                     aspectRatioCorrectionHeight = 1.0
+                }
+            }
+        }
+        .onReceive(vm.floatingButtonClickedSubject) { action in
+            if action == .confirm {
+                Task {
+                    guard let activeLayer = vm.activeLayer else { return }
+                    try await vm.cropLayer(
+                        frameRect: .init(origin: .zero, size: frameSize),
+                        cropRect: .init(origin: .init(x: offset.width, y: offset.height),
+                                        size: .init(
+                                            width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
+                                            height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)))
+                    vm.currentTool = .none
+                    vm.updateLatestSnapshot()
                 }
             }
         }

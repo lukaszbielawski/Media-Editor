@@ -39,11 +39,10 @@ struct ImageProjectFocusView: View {
 
                     if let currentTool = vm.currentTool as? LayerToolType, currentTool == .crop {
                         ImageProjectCroppingFrameView(frameSize: frameSize, scaledSize: scaledSize)
-
-                        }
+                    }
                 }
-//                .offset(x: 0, y: ((vm.plane.totalLowerToolbarHeight ?? 0.0)
-//                        - (vm.plane.totalNavBarHeight ?? 0.0)) * 0.5)
+                .offset(x: 0, y: ((vm.plane.totalLowerToolbarHeight ?? 0.0)
+                        - (vm.plane.totalNavBarHeight ?? 0.0)) * 0.5)
             }
 
             .onReceive(vm.floatingButtonClickedSubject) { action in
