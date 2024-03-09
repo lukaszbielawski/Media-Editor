@@ -44,7 +44,7 @@ struct ImageProjectFocusView: View {
             .onReceive(vm.floatingButtonClickedSubject) { action in
                 print(action)
                 if action == .exitFocusMode {
-                    if let currentTool = vm.currentTool as? LayerToolType {
+                    if vm.currentTool is LayerToolType {
                         print("xd")
                         vm.currentLayerBackgroundColor = Color.clear
                         vm.disablePreviewCGImage()
@@ -61,7 +61,7 @@ struct ImageProjectFocusView: View {
                                 fileName: layerModel.fileName,
                                 cgImage: layerModel.cgImage)
                         }
-                        
+
                         vm.updateLatestSnapshot()
                     }
                 }

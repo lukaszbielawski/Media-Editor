@@ -204,7 +204,9 @@ final class ImageProjectViewModel: ObservableObject {
                 layer.cgImage = previousLayer.cgImage
 
                 Task { [unowned self] in
-                    try await self.saveNewCGImageOnDisk(fileName: previousLayer.fileName, cgImage: previousLayer.cgImage)
+                    try await self.saveNewCGImageOnDisk(
+                        fileName: previousLayer.fileName,
+                        cgImage: previousLayer.cgImage)
                 }
 
                 let distanceDiff = hypot(layer.position!.x - previousLayer.position!.x,
@@ -332,6 +334,23 @@ final class ImageProjectViewModel: ObservableObject {
         return (layerRect, pixelSize)
     }
 
+    func toggleIsActiveStatus(layerModel: LayerModel) {
+        if activeLayer == layerModel {
+            deactivateLayer()
+        } else {
+            activeLayer = layerModel
+            objectWillChange.send()
+        }
+    }
+
+    func toggleToMergeStatus(layerModel: LayerModel) {
+        if layersToMerge.contains(layerModel) {
+            layersToMerge.removeAll { $0.fileName == layerModel.fileName }
+        } else {
+            layersToMerge.append(layerModel)
+        }
+    }
+
     func mergeLayers() async throws {
         guard layersToMerge.count > 1 else { return }
 
@@ -379,7 +398,7 @@ final class ImageProjectViewModel: ObservableObject {
                 contextPixelSize: activeLayer.pixelSize,
                 backgroundColor: UIColor.clear.cgColor,
                 layersBackgroundColor: currentLayerBackgroundColor.cgColor!,
-            isApplyingTransforms: false)
+                isApplyingTransforms: false)
 
 //        try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: layerWithBackground)
 

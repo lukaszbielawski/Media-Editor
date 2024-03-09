@@ -39,7 +39,7 @@ struct ImageProjectView: View {
                     ImageProjectPlaneView()
 
                     Group {
-                        if let currentTool = vm.currentTool as? ProjectSingleActionToolType, currentTool == .merge {
+                        if let currentTool = vm.currentTool as? ProjectToolType, currentTool == .merge {
                             ForEach(vm.layersToMerge) { layerModel in
                                 ImageProjectMergingFrameView(layerModel: layerModel)
                             }

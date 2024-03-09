@@ -10,6 +10,7 @@ import Foundation
 enum ProjectToolType: String, Tool {
     case add
     case layers
+    case merge
     case resize
     case background
 
@@ -23,6 +24,8 @@ extension ProjectToolType {
             return "Add"
         case .layers:
             return "Layers"
+        case .merge:
+            return "Merge"
         case .resize:
             return "Resize"
         case .background:
@@ -36,6 +39,8 @@ extension ProjectToolType {
             return "photo.badge.plus.fill"
         case .layers:
             return "square.3.layers.3d.top.filled"
+        case .merge:
+            return "point.3.filled.connected.trianglepath.dotted"
         case .resize:
             return "square.resize.up"
         case .background:

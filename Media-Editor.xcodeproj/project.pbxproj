@@ -58,7 +58,6 @@
 		B2490C4F2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C4E2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift */; };
 		B2490C522B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */; };
 		B2490C542B94D3340071DDB1 /* ProjectSingleActionToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C532B94D3340071DDB1 /* ProjectSingleActionToolType.swift */; };
-		B2490C562B94EBE00071DDB1 /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C552B94EBE00071DDB1 /* CGRectExtensions.swift */; };
 		B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */; };
 		B24AD8FF2B553B1700BBD1E8 /* EntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */; };
 		B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */; };
@@ -127,6 +126,7 @@
 		B2CF19482B7D2B320053E960 /* ImageProjectLayerView+DragGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CF19472B7D2B320053E960 /* ImageProjectLayerView+DragGesture.swift */; };
 		B2CF194A2B7D69840053E960 /* ApexType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CF19492B7D69840053E960 /* ApexType.swift */; };
 		B2DB93822B8C7602003AB2D2 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DB93812B8C7602003AB2D2 /* UIColorExtensions.swift */; };
+		B2EFC4672B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */; };
 		B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* LayerModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
 		B2F918AD2B58554300540F33 /* CGSizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */; };
@@ -185,7 +185,6 @@
 		B2490C4E2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolSettingsView.swift; sourceTree = "<group>"; };
 		B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectFloatingMergeSliderView.swift; sourceTree = "<group>"; };
 		B2490C532B94D3340071DDB1 /* ProjectSingleActionToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSingleActionToolType.swift; sourceTree = "<group>"; };
-		B2490C552B94EBE00071DDB1 /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
 		B24AD8FB2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCreatedPreferenceKey.swift; sourceTree = "<group>"; };
 		B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityController.swift; sourceTree = "<group>"; };
 		B24AD9002B553C2200BBD1E8 /* ProjectEntityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectEntityController.swift; sourceTree = "<group>"; };
@@ -254,6 +253,7 @@
 		B2CF19472B7D2B320053E960 /* ImageProjectLayerView+DragGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageProjectLayerView+DragGesture.swift"; sourceTree = "<group>"; };
 		B2CF19492B7D69840053E960 /* ApexType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApexType.swift; sourceTree = "<group>"; };
 		B2DB93812B8C7602003AB2D2 /* UIColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
+		B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseMergeView.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* LayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
 		B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtensions.swift; sourceTree = "<group>"; };
@@ -385,7 +385,6 @@
 				B2B20D2B2B88F27A00E3E458 /* CGFloatExtensions.swift */,
 				B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */,
 				B2DB93812B8C7602003AB2D2 /* UIColorExtensions.swift */,
-				B2490C552B94EBE00071DDB1 /* CGRectExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -494,6 +493,7 @@
 		B2490C502B9485470071DDB1 /* Merge */ = {
 			isa = PBXGroup;
 			children = (
+				B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */,
 				B2490C512B9485E20071DDB1 /* ImageProjectFloatingMergeSliderView.swift */,
 				B28F7BB52B95FA8200E684C8 /* ImageProjectMergingFrameView.swift */,
 			);
@@ -861,7 +861,6 @@
 				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B20507582B761E6A0060854D /* PlaneModel.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
-				B2490C562B94EBE00071DDB1 /* CGRectExtensions.swift in Sources */,
 				B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
 				B275159B2B8DF55500647D4E /* ImageProjectExportPhotosView.swift in Sources */,
@@ -891,6 +890,7 @@
 				B2490C542B94D3340071DDB1 /* ProjectSingleActionToolType.swift in Sources */,
 				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
 				B2B20D2C2B88F27A00E3E458 /* CGFloatExtensions.swift in Sources */,
+				B2EFC4672B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift in Sources */,
 				B2C352162B97299A00E64525 /* ImageProjectToolCaseCropView.swift in Sources */,
 				B2C352232B974D0D00E64525 /* Polygon.swift in Sources */,
 				B25FB5852B5D3AC100EBFB16 /* ImageProjectLayerView.swift in Sources */,

@@ -65,11 +65,13 @@ struct ImageProjectToolScrollView: View {
                             await vm.copyAndAppend()
                         }
                     }
-                } else if let tool = tool as? ProjectSingleActionToolType {
-                    if tool == .merge {
-                        vm.currentTool = tool
-                    }
-                }
+                } 
+//                else 
+//                if let tool = tool as? ProjectSingleActionToolType {
+//                    if tool == .merge {
+//                        vm.currentTool = tool
+//                    }
+//                }
             }
             .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
             .frame(height: vm.plane.lowerToolbarHeight)

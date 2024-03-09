@@ -8,7 +8,8 @@
 import Foundation
 
 enum ProjectSingleActionToolType: String, Tool {
-    case merge
+//    case merge
+    case none
 
     var id: String { return rawValue }
 }
@@ -16,14 +17,14 @@ enum ProjectSingleActionToolType: String, Tool {
 extension ProjectSingleActionToolType {
     var name: String {
         switch self {
-        case .merge:
+        default:
             return "Merge"
         }
     }
 
     var icon: String {
         switch self {
-        case .merge:
+        default:
             return "point.3.filled.connected.trianglepath.dotted"
         }
     }

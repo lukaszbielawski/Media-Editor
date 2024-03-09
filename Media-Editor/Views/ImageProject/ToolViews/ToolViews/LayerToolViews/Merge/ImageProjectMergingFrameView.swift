@@ -23,7 +23,6 @@ struct ImageProjectMergingFrameView: View {
         ZStack {
             if let planeCurrentPosition = vm.plane.currentPosition,
                let layerPosition = layerModel.position,
-               let marginedWorkspaceSize = vm.marginedWorkspaceSize,
                let workspaceSize = vm.workspaceSize,
                let planeScale = vm.plane.scale
 

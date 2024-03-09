@@ -59,6 +59,14 @@ struct ImageProjectToolSettingsView: View {
                     .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
 
                 switch projectTool {
+                case .merge:
+                    ImageProjectFloatingMergeSliderView(
+                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
+                        backgroundColor: $vm.projectModel.backgroundColor)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                    Spacer()
                 case .background:
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
@@ -74,23 +82,23 @@ struct ImageProjectToolSettingsView: View {
             case let layerSingleTool as LayerSingleActionToolType:
                 EmptyView()
 
-            case let projectSingleTool as ProjectSingleActionToolType:
-                switch projectSingleTool {
-                case .merge:
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.leftFloatingButtonIcon,
-                        buttonType: .left)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                    Spacer()
-
-                    ImageProjectFloatingMergeSliderView(
-                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                        backgroundColor: $vm.projectModel.backgroundColor)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                        .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                    Spacer()
-                }
+//            case let projectSingleTool as ProjectSingleActionToolType:
+//                switch projectSingleTool {
+//                case .merge:
+//                    ImageProjectToolFloatingButtonView(
+//                        systemName: vm.tools.leftFloatingButtonIcon,
+//                        buttonType: .left)
+//                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+//                    Spacer()
+//
+//                    ImageProjectFloatingMergeSliderView(
+//                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
+//                        backgroundColor: $vm.projectModel.backgroundColor)
+//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+//                        .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+//                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+//                    Spacer()
+//                }
             default:
                 EmptyView()
             }

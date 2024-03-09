@@ -29,6 +29,11 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
+                    case .merge:
+                        ImageProjectToolCaseMergeView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     case .resize:
                         ImageProjectToolCaseResizeView()
                             .onAppear {

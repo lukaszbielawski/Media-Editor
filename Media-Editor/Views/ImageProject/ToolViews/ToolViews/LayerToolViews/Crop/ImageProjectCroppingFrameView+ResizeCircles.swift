@@ -15,6 +15,7 @@ extension ImageProjectCroppingFrameView {
                 Circle()
                     .fill(Color(.accent))
                     .frame(width: resizeCircleSize, height: resizeCircleSize)
+                    .contentShape(Rectangle().size(width: 50, height: 50))
                     .offset(.init(
                         width: -(resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: -(resizeCircleSize - resizeBorderWidth) * 0.5))
@@ -26,6 +27,7 @@ extension ImageProjectCroppingFrameView {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)
+                        .contentShape(Rectangle().size(width: 50, height: 50))
                         .offset(.init(
                             width: 0,
                             height: -(resizeCircleSize - resizeBorderWidth) * 0.5))
@@ -36,6 +38,7 @@ extension ImageProjectCroppingFrameView {
                 Circle()
                     .fill(Color(.accent))
                     .frame(width: resizeCircleSize, height: resizeCircleSize)
+                    .contentShape(Rectangle().size(width: 50, height: 50))
                     .offset(.init(
                         width: (resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: -(resizeCircleSize - resizeBorderWidth) * 0.5))
@@ -47,6 +50,7 @@ extension ImageProjectCroppingFrameView {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)
+                        .contentShape(Rectangle().size(width: 50, height: 50))
                         .offset(.init(
                             width: (resizeCircleSize - resizeBorderWidth) * 0.5,
                             height: 0))
@@ -57,6 +61,7 @@ extension ImageProjectCroppingFrameView {
                 Circle()
                     .fill(Color(.accent))
                     .frame(width: resizeCircleSize, height: resizeCircleSize)
+                    .contentShape(Rectangle().size(width: 50, height: 50))
                     .offset(.init(
                         width: (resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: (resizeCircleSize - resizeBorderWidth) * 0.5))
@@ -78,6 +83,7 @@ extension ImageProjectCroppingFrameView {
                 Circle()
                     .fill(Color(.accent))
                     .frame(width: resizeCircleSize, height: resizeCircleSize)
+                    .contentShape(Rectangle().size(width: 50, height: 50))
                     .offset(.init(
                         width: -(resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: (resizeCircleSize - resizeBorderWidth) * 0.5))
@@ -90,6 +96,7 @@ extension ImageProjectCroppingFrameView {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)
+                        .contentShape(Rectangle().size(width: 50, height: 50))
                         .offset(.init(
                             width: -(resizeCircleSize - resizeBorderWidth) * 0.5,
                             height: 0))

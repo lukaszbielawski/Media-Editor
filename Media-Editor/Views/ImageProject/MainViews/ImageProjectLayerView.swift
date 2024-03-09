@@ -38,21 +38,12 @@ struct ImageProjectLayerView: View {
                     vm.objectWillChange.send()
                 }
                 .onTapGesture {
-                    if let currentTool = vm.currentTool as? ProjectSingleActionToolType,
+                    if let currentTool = vm.currentTool as? ProjectToolType,
                        currentTool == .merge
                     {
-                        if vm.layersToMerge.contains(layerModel) {
-                            vm.layersToMerge.removeAll { $0.fileName == layerModel.fileName }
-                        } else {
-                            vm.layersToMerge.append(layerModel)
-                        }
+                        vm.toggleToMergeStatus(layerModel: layerModel)
                     } else {
-                        if vm.activeLayer == layerModel {
-                            vm.deactivateLayer()
-                        } else {
-                            vm.activeLayer = layerModel
-                            vm.objectWillChange.send()
-                        }
+                        vm.toggleIsActiveStatus(layerModel: layerModel)
                     }
                 }
                 .gesture(

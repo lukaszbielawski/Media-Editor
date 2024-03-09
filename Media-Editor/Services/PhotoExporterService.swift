@@ -114,7 +114,7 @@ struct PhotoExporterService {
                              contextPixelSize: CGSize,
                              backgroundColor: CGColor,
                              offsetFromCenter: CGPoint = .zero,
-                             layersBackgroundColor: CGColor? = nil, 
+                             layersBackgroundColor: CGColor? = nil,
                              isApplyingTransforms: Bool = true) async throws -> CGImage
     {
         return try await Task {

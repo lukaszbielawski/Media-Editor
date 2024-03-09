@@ -9,16 +9,16 @@ import Foundation
 import SwiftUI
 
 @resultBuilder
-public struct ShapeBuilder {
+public enum ShapeBuilder {
     public static func buildBlock<C0: Shape>(_ c0: C0) -> C0 { c0 }
 }
 
-extension ShapeBuilder {
-    public static func buildEither<First: Shape, Second: Shape>(first: First) -> EitherShape<First, Second> {
+public extension ShapeBuilder {
+    static func buildEither<First: Shape, Second: Shape>(first: First) -> EitherShape<First, Second> {
         return .first(first)
     }
 
-    public static func buildEither<First: Shape, Second: Shape>(second: Second) -> EitherShape<First, Second> {
+    static func buildEither<First: Shape, Second: Shape>(second: Second) -> EitherShape<First, Second> {
         return .second(second)
     }
 }
