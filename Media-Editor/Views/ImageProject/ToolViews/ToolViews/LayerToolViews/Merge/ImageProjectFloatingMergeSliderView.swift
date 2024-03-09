@@ -82,7 +82,6 @@ struct ImageProjectFloatingMergeSliderView: View {
                                 Task {
                                     try await vm.mergeLayers()
                                     vm.currentTool = .none
-                                    print("merged")
                                 }
                             }
                         }

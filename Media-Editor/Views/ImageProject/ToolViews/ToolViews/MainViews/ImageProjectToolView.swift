@@ -14,8 +14,8 @@ struct ImageProjectToolView: View {
         ZStack(alignment: .topLeading) {
             ImageProjectToolScrollView()
             if let currentTool = vm.currentTool,
-               !(currentTool is LayerSingleActionToolType),
-               !(currentTool is ProjectSingleActionToolType)
+               !(currentTool is LayerSingleActionToolType)
+//                ,!(currentTool is ProjectSingleActionToolType)
             {
                 ImageProjectToolDetailsView()
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))

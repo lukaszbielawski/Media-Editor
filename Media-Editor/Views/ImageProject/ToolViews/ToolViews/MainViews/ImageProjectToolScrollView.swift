@@ -25,15 +25,15 @@ struct ImageProjectToolScrollView: View {
 
                             })
                         }
-                        ForEach(ProjectSingleActionToolType.allCases) { tool in
-                            Button(action: {
-                                vm.performToolActionSubject.send(tool)
-                            }, label: {
-                                ImageProjectToolTileView(title: tool.name,
-                                                         iconName: tool.icon)
-                            })
-                        }
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+//                        ForEach(ProjectSingleActionToolType.allCases) { tool in
+//                            Button(action: {
+//                                vm.performToolActionSubject.send(tool)
+//                            }, label: {
+//                                ImageProjectToolTileView(title: tool.name,
+//                                                         iconName: tool.icon)
+//                            })
+//                        }
+//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     } else {
                         Group {
                             ForEach(LayerToolType.allCases) { tool in

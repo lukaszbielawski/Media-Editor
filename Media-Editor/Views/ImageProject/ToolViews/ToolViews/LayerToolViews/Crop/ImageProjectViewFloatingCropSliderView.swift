@@ -84,6 +84,7 @@ struct ImageProjectViewFloatingCropSliderView: View {
                 )
         }
         .onChange(of: stepNumber) { value in
+            HapticService.shared.play(.light)
             vm.currentCropRatio = CropRatioType.allCases[Int(value)]
         }
         .onAppear {

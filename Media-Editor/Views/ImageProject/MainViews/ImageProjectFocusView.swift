@@ -42,10 +42,8 @@ struct ImageProjectFocusView: View {
             }
 
             .onReceive(vm.floatingButtonClickedSubject) { action in
-                print(action)
                 if action == .exitFocusMode {
                     if vm.currentTool is LayerToolType {
-                        print("xd")
                         vm.currentLayerBackgroundColor = Color.clear
                         vm.disablePreviewCGImage()
                     }

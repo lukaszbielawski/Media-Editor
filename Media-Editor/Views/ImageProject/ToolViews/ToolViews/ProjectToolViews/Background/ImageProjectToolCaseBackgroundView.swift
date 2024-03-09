@@ -50,7 +50,6 @@ struct ImageProjectToolCaseBackgroundView: View {
                 colorPickerSubject
                     .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
                     .sink { [unowned vm] in
-                        print("?", isProjectBackgroundColorChanger)
                         if isProjectBackgroundColorChanger {
                             vm.updateLatestSnapshot()
                         } else {

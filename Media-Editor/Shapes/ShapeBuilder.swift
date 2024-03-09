@@ -10,7 +10,7 @@ import SwiftUI
 
 @resultBuilder
 public enum ShapeBuilder {
-    public static func buildBlock<C0: Shape>(_ c0: C0) -> C0 { c0 }
+    public static func buildBlock(_ shape: some Shape) -> some Shape { shape }
 }
 
 public extension ShapeBuilder {

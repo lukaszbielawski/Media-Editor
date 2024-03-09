@@ -457,7 +457,6 @@
 			isa = PBXGroup;
 			children = (
 				B2B20D292B88DD5900E3E458 /* ImageProjectViewFloatingFilterSliderView.swift */,
-				B2C352192B97355100E64525 /* ImageProjectViewFloatingCropSliderView.swift */,
 				B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */,
 			);
 			path = Fliters;
@@ -659,6 +658,7 @@
 				B28F7BBA2B96339100E684C8 /* ImageProjectCroppingFrameView.swift */,
 				B28F7BBC2B9653A200E684C8 /* ImageProjectCroppingFrameView+ResizeCircles.swift */,
 				B28F7BBE2B9658C800E684C8 /* ImageProjectCroppingFrameView+ResizeGestures.swift */,
+				B2C352192B97355100E64525 /* ImageProjectViewFloatingCropSliderView.swift */,
 				B2C352152B97299A00E64525 /* ImageProjectToolCaseCropView.swift */,
 			);
 			path = Crop;

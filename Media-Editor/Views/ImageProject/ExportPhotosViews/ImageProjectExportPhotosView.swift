@@ -62,7 +62,6 @@ struct ImageProjectExportPhotosView: View {
         }
         .task {
             await vm.renderPhoto(renderSize: .preview)
-//            vm.exportProjectToPhotoLibrary()
         }
     }
 }

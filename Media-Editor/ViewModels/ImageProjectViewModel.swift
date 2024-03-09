@@ -115,10 +115,6 @@ final class ImageProjectViewModel: ObservableObject {
         latestSnapshot = createSnapshot()
     }
 
-    deinit {
-        print("viewmodel deinit")
-    }
-
     func setupAddAssetsToProject() {
         photoLibraryService.requestAuthorization()
         setupSubscription()
@@ -357,8 +353,6 @@ final class ImageProjectViewModel: ObservableObject {
         let (mergedLayerBounds, mergedLayersPixelSize) = calculateBoundsForMergedLayers()
 
         guard let mergedLayersPixelSize, let mergedLayerBounds else { return }
-
-        print(mergedLayerBounds, mergedLayerBounds.midX, mergedLayerBounds.midY, mergedLayersPixelSize)
 
         let mergedCGImage = try await photoExporterService
             .exportLayersToImage(

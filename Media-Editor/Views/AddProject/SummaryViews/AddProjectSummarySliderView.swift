@@ -30,6 +30,7 @@ struct AddProjectSummarySliderView: View {
                     Label("Create photo project",
                           systemImage: "chevron.right.2")
                         .padding(.leading, 16)
+                        .foregroundStyle(Color(.tint))
                 }
                 .geometryAccessor { geo in
                     DispatchQueue.main.async {
