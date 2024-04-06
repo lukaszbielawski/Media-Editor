@@ -52,6 +52,12 @@ struct MenuPlaceholderTileView: View {
 
         .sheet(isPresented: $isAddProjectViewPresented) {
             AddProjectView()
+                .background {
+                    Image("MenuBackground")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .ignoresSafeArea()
+                }
                 .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
                     guard let value else { return }
 

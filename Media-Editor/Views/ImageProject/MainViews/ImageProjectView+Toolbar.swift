@@ -11,14 +11,10 @@ import SwiftUI
 extension ImageProjectView {
     @ToolbarContentBuilder var imageProjectToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            Label(isSaved ? "Back" : "Save", systemImage: isSaved ? "chevron.left" : "square.and.arrow.down")
+            Label("Back", systemImage: "chevron.left")
                 .labelStyle(.titleAndIcon)
                 .onTapGesture {
-                    if isSaved {
-                        dismiss()
-                    } else {
-                        isSaved = true
-                    }
+                    dismiss()
                 }
                 .foregroundStyle(Color(.tint))
         }

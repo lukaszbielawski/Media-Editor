@@ -17,7 +17,8 @@ struct ImageProjectExportPhotosView: View {
         VStack {
             Text("Export your photos")
                 .padding()
-                .font(.title2)
+                .font(.custom("Kaushan Script", size: 32))
+                .foregroundStyle(Color(.tint))
             if let previewPhoto = vm.previewPhoto,
                let marginedWorkspaceSize = vm.marginedWorkspaceSize
             {
@@ -29,7 +30,7 @@ struct ImageProjectExportPhotosView: View {
                     .shadow(radius: 10.0)
             }
             Form {
-                Section("Image Format") {
+                Section {
                     Picker("Format", selection: $pickerFormatValue) {
                         ForEach(PhotoFormatType.allCases, id: \.self) { formatType in
                             Text(formatType.toString)
@@ -37,8 +38,11 @@ struct ImageProjectExportPhotosView: View {
                     }
                     .padding(.vertical, 8.0)
                     .pickerStyle(.segmented)
+                } header: {
+                    Text("Image Format")
+                        .foregroundStyle(Color(.tint))
                 }
-                Section("Render Size") {
+                Section {
                     Picker("Size", selection: $pickerRenderSizeValue) {
                         ForEach(RenderSizeType.allCases, id: \.self) { renderSizeType in
                             Text(renderSizeType.toString)
@@ -46,8 +50,11 @@ struct ImageProjectExportPhotosView: View {
                     }
                     .padding(.vertical, 8.0)
                     .pickerStyle(.segmented)
+                } header: {
+                    Text("Render Size")
+                        .foregroundStyle(Color(.tint))
                 }
-                Section("Export") {
+                Section {
                     Button {
                         Task {
                             await vm.renderPhoto(renderSize: pickerRenderSizeValue, photoFormat: pickerFormatValue)
@@ -55,8 +62,12 @@ struct ImageProjectExportPhotosView: View {
                     } label: {
                         Text("Export image")
                     }.foregroundStyle(Color(.image))
+                } header: {
+                    Text("Export")
+                        .foregroundStyle(Color(.tint))
                 }
             }
+            .modifier(FormHiddenBackground())
 
             Spacer()
         }

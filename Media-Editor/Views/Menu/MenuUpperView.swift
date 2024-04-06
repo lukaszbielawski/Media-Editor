@@ -10,6 +10,12 @@ import SwiftUI
 
 struct MenuUpperView: View {
     var body: some View {
-        Image(systemName: "globe")
+        VStack(spacing: 0) {
+            Text("Pixiva")
+                .font(.init(.custom("Kaushan Script", size: 144)))
+            Text("Photo & Layer Editor")
+                .font(.init(.custom("Kaushan Script", size: 32)))
+        }
+        .foregroundStyle(Color(.tint))
     }
 }

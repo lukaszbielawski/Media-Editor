@@ -39,8 +39,6 @@
 		B21103642B49796100CA4981 /* ImageProjectEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103622B49796100CA4981 /* ImageProjectEntity.swift */; };
 		B21103692B49856E00CA4981 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103682B49856E00CA4981 /* ViewExtensions.swift */; };
 		B211036A2B499D3D00CA4981 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2085C172B48671F004D904A /* Assets.xcassets */; };
-		B211036E2B499DE200CA4981 /* ex_movie.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B211036C2B499DE200CA4981 /* ex_movie.mp4 */; };
-		B211036F2B499DE200CA4981 /* ex_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B211036D2B499DE200CA4981 /* ex_image.jpg */; };
 		B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103702B49AB4500CA4981 /* MenuScrollView.swift */; };
 		B21103742B49C02300CA4981 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21103732B49C02300CA4981 /* MenuViewModel.swift */; };
 		B21C24EE2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */; };
@@ -52,6 +50,8 @@
 		B21C25002B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */; };
 		B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21D085C2B78D2CC0060C35F /* DoubleExtensions.swift */; };
 		B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */; };
+		B22B1BEE2BC1B0B8003A0031 /* KaushanScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */; };
+		B22B1BEF2BC1B0B8003A0031 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = B22B1BED2BC1B0B8003A0031 /* OFL.txt */; };
 		B235D4052B8D402900D02790 /* FloatingButtonActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */; };
 		B235D40B2B8D4AD700D02790 /* FloatingButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */; };
 		B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */; };
@@ -120,6 +120,7 @@
 		B2C3521F2B97482D00E64525 /* CropShapeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3521E2B97482D00E64525 /* CropShapeType.swift */; };
 		B2C352212B974CB700E64525 /* FlippedTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C352202B974CB700E64525 /* FlippedTriangle.swift */; };
 		B2C352232B974D0D00E64525 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C352222B974D0D00E64525 /* Polygon.swift */; };
+		B2C842E82BC291B000A7853F /* FormHiddenBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */; };
 		B2CCFD492B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */; };
 		B2CCFD4B2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */; };
 		B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */; };
@@ -166,8 +167,6 @@
 		B21103592B49705900CA4981 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		B21103622B49796100CA4981 /* ImageProjectEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectEntity.swift; sourceTree = "<group>"; };
 		B21103682B49856E00CA4981 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
-		B211036C2B499DE200CA4981 /* ex_movie.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ex_movie.mp4; sourceTree = "<group>"; };
-		B211036D2B499DE200CA4981 /* ex_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ex_image.jpg; sourceTree = "<group>"; };
 		B21103702B49AB4500CA4981 /* MenuScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScrollView.swift; sourceTree = "<group>"; };
 		B21103732B49C02300CA4981 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
 		B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectResizeSliderView.swift; sourceTree = "<group>"; };
@@ -179,6 +178,8 @@
 		B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorTileView.swift; sourceTree = "<group>"; };
 		B21D085C2B78D2CC0060C35F /* DoubleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensions.swift; sourceTree = "<group>"; };
 		B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarAccessor.swift; sourceTree = "<group>"; };
+		B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KaushanScript-Regular.ttf"; sourceTree = "<group>"; };
+		B22B1BED2BC1B0B8003A0031 /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonActionType.swift; sourceTree = "<group>"; };
 		B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonType.swift; sourceTree = "<group>"; };
 		B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerSingleActionToolType.swift; sourceTree = "<group>"; };
@@ -247,6 +248,7 @@
 		B2C3521E2B97482D00E64525 /* CropShapeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropShapeType.swift; sourceTree = "<group>"; };
 		B2C352202B974CB700E64525 /* FlippedTriangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedTriangle.swift; sourceTree = "<group>"; };
 		B2C352222B974D0D00E64525 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
+		B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHiddenBackground.swift; sourceTree = "<group>"; };
 		B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageProjectEditingFrameView+Gestures.swift"; sourceTree = "<group>"; };
 		B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseLayersView.swift; sourceTree = "<group>"; };
 		B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsModel.swift; sourceTree = "<group>"; };
@@ -403,8 +405,7 @@
 		B211036B2B499DD000CA4981 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B211036D2B499DE200CA4981 /* ex_image.jpg */,
-				B211036C2B499DE200CA4981 /* ex_movie.mp4 */,
+				B22B1BEB2BC1B027003A0031 /* Fonts */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -487,6 +488,15 @@
 				B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B22B1BEB2BC1B027003A0031 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */,
+				B22B1BED2BC1B0B8003A0031 /* OFL.txt */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		B2490C502B9485470071DDB1 /* Merge */ = {
@@ -574,6 +584,7 @@
 				B20936772B5ED35900757317 /* StatusBarHiddenModifier.swift */,
 				B29415FE2B77FD9600F81596 /* EditFrameCircleModifier.swift */,
 				B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */,
+				B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -809,8 +820,8 @@
 			files = (
 				B211036A2B499D3D00CA4981 /* Assets.xcassets in Resources */,
 				B2085C1B2B48671F004D904A /* Preview Assets.xcassets in Resources */,
-				B211036F2B499DE200CA4981 /* ex_image.jpg in Resources */,
-				B211036E2B499DE200CA4981 /* ex_movie.mp4 in Resources */,
+				B22B1BEF2BC1B0B8003A0031 /* OFL.txt in Resources */,
+				B22B1BEE2BC1B0B8003A0031 /* KaushanScript-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -919,6 +930,7 @@
 				B2675FF92B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift in Sources */,
 				B2CF194A2B7D69840053E960 /* ApexType.swift in Sources */,
 				B2C352212B974CB700E64525 /* FlippedTriangle.swift in Sources */,
+				B2C842E82BC291B000A7853F /* FormHiddenBackground.swift in Sources */,
 				B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */,
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
 				B275159D2B8DF7E200647D4E /* RenderSizeType.swift in Sources */,
@@ -1023,6 +1035,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1080,6 +1093,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
@@ -1098,6 +1112,9 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Media-Editor/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Pixiva;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow usage of your Photo Library to begin";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1110,7 +1127,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lukaszbielawski.Media-Editor";
+				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.Pixiva;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1130,6 +1147,9 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Media-Editor/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Pixiva;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow usage of your Photo Library to begin";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1142,7 +1162,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lukaszbielawski.Media-Editor";
+				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.Pixiva;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

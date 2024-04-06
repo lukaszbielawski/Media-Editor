@@ -13,7 +13,6 @@ struct ImageProjectView: View {
 
     @Environment(\.dismiss) var dismiss
 
-    @State var isSaved: Bool = false
     @State var isEditingFrameVisible = false
     @State var editingFrameOpacity: CGFloat = 1.0
     @State private var isToastShown = (isShown: false, result: false)
@@ -120,6 +119,12 @@ struct ImageProjectView: View {
             .toolbar { imageProjectToolbar }
             .sheet(isPresented: $vm.isExportSheetPresented) {
                 ImageProjectExportPhotosView()
+                    .background {
+                        Image("MenuBackground")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .ignoresSafeArea()
+                    }
             }
             .alert("Deleting image", isPresented: $vm.tools.isDeleteImageAlertPresented) {
                 Button("Cancel", role: .cancel) {

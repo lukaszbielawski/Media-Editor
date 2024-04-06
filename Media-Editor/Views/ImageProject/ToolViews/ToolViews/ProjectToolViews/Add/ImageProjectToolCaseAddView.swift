@@ -21,6 +21,12 @@ struct ImageProjectToolCaseAddView: View {
                         .contentShape(Rectangle())
                         .sheet(isPresented: $vm.tools.isImportPhotoViewShown) {
                             ImageProjectImportPhotoView()
+                                .background {
+                                    Image("MenuBackground")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .ignoresSafeArea()
+                                }
                                 .onDisappear {
                                     vm.selectedPhotos.removeAll()
                                 }

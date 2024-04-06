@@ -13,7 +13,8 @@ struct ImageProjectImportPhotoView: View {
     var body: some View {
         Text("Add photos to your project")
             .padding()
-            .font(.title2)
+            .font(.custom("Kaushan Script", size: 32))
+            .foregroundStyle(Color(.tint))
         ZStack(alignment: .bottom) {
             ScrollView(showsIndicators: false) {
                 ImageProjectImportPhotoGridView()
@@ -22,8 +23,4 @@ struct ImageProjectImportPhotoView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
     }
-}
-
-#Preview {
-    ImageProjectImportPhotoView()
 }

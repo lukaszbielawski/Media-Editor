@@ -42,7 +42,14 @@ struct MenuView: View {
                             isManageProjectSheetPresented = false
                         }
                     })
-            }.navigationBarHidden(true)
+            }
+            .background { 
+                Image("MenuBackground")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+            }
+            .navigationBarHidden(true)
         }
         .onPreferenceChange(ProjectCreatedPreferenceKey.self) { value in
             guard value != nil else { return }
