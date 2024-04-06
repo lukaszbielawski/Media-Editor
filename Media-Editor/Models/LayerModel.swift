@@ -7,7 +7,6 @@
 
 import CoreGraphics
 import Foundation
-import ImageIO
 import SwiftUI
 
 class LayerModel: Identifiable, ObservableObject {
@@ -51,7 +50,13 @@ class LayerModel: Identifiable, ObservableObject {
         self.fileName = photoEntity.fileName!
 
         self.positionZ = photoEntity.positionZ?.intValue
-        self.cgImage = try! createCGImage(absoluteFilePath: absoluteFilePath)
+        do {
+            self.cgImage = try createCGImage(absoluteFilePath: absoluteFilePath)
+        } catch {
+            print(error)
+            self.cgImage = nil
+        }
+
 
         self.position = CGPoint(x: photoEntity.positionX!.doubleValue, y: photoEntity.positionY!.doubleValue as Double)
         self.rotation = Angle(radians: photoEntity.rotation as? Double ?? .zero)

@@ -44,12 +44,10 @@ extension ImageProjectEditingFrameView {
                 let newY = lastPosition.y - dragLenght * 0.5
                     * cos(CGFloat(rotation.radians))
 
-                DispatchQueue.main.async {
-                    layerModel.scaleY = newScale
-                    layerModel.position =
-                        CGPoint(x: newX,
-                                y: newY)
-                }
+                layerScaleGesturePositionLocker(newPosition:
+                    CGPoint(x: newX,
+                            y: newY), scaleEdges: [.top],
+                    newScaleY: newScale)
             }
             .updating($lastPosition) { _, lastPosition, _ in
                 lastPosition = lastPosition ?? layerModel.position
@@ -139,14 +137,16 @@ extension ImageProjectEditingFrameView {
                 guard abs(layerSize.width * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleX ?? 1.0) > 0.0 else { return }
 
-                DispatchQueue.main.async {
-                    layerModel.scaleX = newScale
-                    layerModel.position =
-                        CGPoint(x: lastPosition.x - dragLenght * 0.5
-                            * cos(CGFloat(rotation.radians)),
-                            y: lastPosition.y - dragLenght * 0.5
-                                * sin(CGFloat(rotation.radians)))
-                }
+                let newX = lastPosition.x - dragLenght * 0.5
+                    * cos(CGFloat(rotation.radians))
+
+                let newY = lastPosition.y - dragLenght * 0.5
+                    * sin(CGFloat(rotation.radians))
+
+                layerScaleGesturePositionLocker(newPosition:
+                    CGPoint(x: newX,
+                            y: newY), scaleEdges: [.trailing],
+                    newScaleX: newScale)
             }
             .updating($lastPosition) { _, lastPosition, _ in
                 lastPosition = lastPosition ?? layerModel.position
@@ -258,14 +258,16 @@ extension ImageProjectEditingFrameView {
                 guard abs(layerSize.height * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleY ?? 1.0) > 0.0 else { return }
 
-                DispatchQueue.main.async {
-                    layerModel.scaleY = newScale
-                    layerModel.position =
-                        CGPoint(x: lastPosition.x - dragLenght * 0.5
-                            * sin(CGFloat(rotation.radians)),
-                            y: lastPosition.y + dragLenght * 0.5
-                                * cos(CGFloat(rotation.radians)))
-                }
+                let newX = lastPosition.x - dragLenght * 0.5
+                    * sin(CGFloat(rotation.radians))
+
+                let newY = lastPosition.y + dragLenght * 0.5
+                    * cos(CGFloat(rotation.radians))
+
+                layerScaleGesturePositionLocker(newPosition:
+                    CGPoint(x: newX,
+                            y: newY), scaleEdges: [.bottom],
+                    newScaleY: newScale)
             }
             .updating($lastPosition) { _, lastPosition, _ in
                 lastPosition = lastPosition ?? layerModel.position
@@ -318,14 +320,16 @@ extension ImageProjectEditingFrameView {
                 guard abs(layerSize.width * newScale) > vm.plane.minDimension,
                       newScale * (layerModel.scaleX ?? 1.0) > 0.0 else { return }
 
-                DispatchQueue.main.async {
-                    layerModel.scaleX = newScale
-                    layerModel.position =
-                        CGPoint(x: lastPosition.x + dragLenght * 0.5
-                            * cos(CGFloat(rotation.radians)),
-                            y: lastPosition.y + dragLenght * 0.5
-                                * sin(CGFloat(rotation.radians)))
-                }
+                let newX = lastPosition.x + dragLenght * 0.5
+                    * cos(CGFloat(rotation.radians))
+
+                let newY = lastPosition.y + dragLenght * 0.5
+                    * sin(CGFloat(rotation.radians))
+
+                layerScaleGesturePositionLocker(newPosition:
+                    CGPoint(x: newX,
+                            y: newY), scaleEdges: [.leading],
+                    newScaleX: newScale)
             }
             .updating($lastPosition) { _, lastPosition, _ in
                 lastPosition = lastPosition ?? layerModel.position
@@ -336,5 +340,394 @@ extension ImageProjectEditingFrameView {
             .onEnded { _ in
                 vm.updateLatestSnapshot()
             }
+    }
+
+    func layerScaleGesturePositionLocker(newPosition: CGPoint,
+                                         scaleEdges: [Edge],
+                                         newScaleX: Double? = nil,
+                                         newScaleY: Double? = nil)
+    {
+        guard let frameRect = vm.frame.rect,
+              let scaledLayerRotation = layerModel.rotation,
+              let scaledLayerSize = layerModel.size,
+              let scaledLayerScaleX = layerModel.scaleX,
+              let scaledLayerScaleY = layerModel.scaleY else { return }
+
+        let scaledLayerTopLeftApexPosition =
+            layerModel.rotatedApexPositionFunction(apex: .topLeft)(newPosition)
+        let scaledLayerTopRightApexPosition =
+            layerModel.rotatedApexPositionFunction(apex: .topRight)(newPosition)
+        let scaledLayerBottomLeftApexPosition =
+            layerModel.rotatedApexPositionFunction(apex: .bottomLeft)(newPosition)
+        let scaledLayerBottomRightApexPosition =
+            layerModel.rotatedApexPositionFunction(apex: .bottomRight)(newPosition)
+
+        let scaledLayerWidth = scaledLayerSize.width * abs(scaledLayerScaleX)
+        let scaledLayerHeight = scaledLayerSize.height * abs(scaledLayerScaleY)
+
+        var (isXChanged, isYChanged) = (false, false)
+        var dragGestureTolerance = 10.0
+        var (newX, newY) = (newPosition.x, newPosition.y)
+        var (newScaleX, newScaleY) = (newScaleX, newScaleY)
+        var touchPositionX: CGFloat?
+        var touchPositionY: CGFloat?
+
+        for otherLayer in vm.projectLayers
+            where (otherLayer.positionZ ?? 0) > 0 && otherLayer != layerModel
+        {
+            guard let otherLayerPosition = otherLayer.position,
+                  let otherLayerRotation = otherLayer.rotation,
+                  let otherLayerSize = otherLayer.size,
+                  let otherLayerScaleX = otherLayer.scaleX,
+                  let otherLayerScaleY = otherLayer.scaleY
+            else { return }
+
+            guard scaledLayerRotation.isRightAngle, otherLayerRotation.isRightAngle else { continue }
+
+            let otherLayerTopLeftApexPosition =
+                otherLayer.rotatedApexPositionFunction(apex: .topLeft)(nil)
+            let otherLayerTopRightApexPosition =
+                otherLayer.rotatedApexPositionFunction(apex: .topRight)(nil)
+            let otherLayerBottomLeftApexPosition =
+                otherLayer.rotatedApexPositionFunction(apex: .bottomLeft)(nil)
+            let otherLayerBottomRightApexPosition =
+                otherLayer.rotatedApexPositionFunction(apex: .bottomRight)(nil)
+
+            let otherLayerWidth = otherLayerSize.width * abs(otherLayerScaleX)
+            let otherLayerHeight = otherLayerSize.height * abs(otherLayerScaleY)
+            let scaledLayerWidth = scaledLayerSize.width * abs(scaledLayerScaleX)
+            let scaledLayerHeight = scaledLayerSize.height * abs(scaledLayerScaleY)
+
+            //                     trailing - leading
+            if abs(scaledLayerTopRightApexPosition.x - otherLayerBottomLeftApexPosition.x)
+                < dragGestureTolerance, scaleEdges.contains(.trailing)
+            {
+                if !isXChanged {
+                    newScaleX = (newScaleX ?? 1.0)
+                        * abs(otherLayerBottomLeftApexPosition.x - scaledLayerTopLeftApexPosition.x)
+                        / scaledLayerWidth
+
+                    let scaledLayerComponent = 0.0
+                        - scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.x
+                        - otherLayerWidth * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + otherLayerHeight * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newX = scaledLayerComponent + otherLayerComponent
+                    touchPositionX = otherLayerBottomLeftApexPosition.x
+                }
+                isXChanged = true
+            }
+            //                      trailing - trailing
+            else if abs(scaledLayerTopRightApexPosition.x - otherLayerTopRightApexPosition.x)
+                < dragGestureTolerance, scaleEdges.contains(.trailing)
+            {
+                if !isXChanged {
+                    newScaleX = (newScaleX ?? 1.0)
+                        * abs(otherLayerTopRightApexPosition.x - scaledLayerTopLeftApexPosition.x)
+                        / scaledLayerWidth
+
+                    let scaledLayerComponent = 0.0
+                        - scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.x
+                        + otherLayerWidth * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - otherLayerHeight * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newX = scaledLayerComponent + otherLayerComponent
+                    touchPositionX = otherLayerTopRightApexPosition.x
+                }
+                isXChanged = true
+            }
+            // leading - leading
+            else if abs(scaledLayerBottomLeftApexPosition.x - otherLayerBottomLeftApexPosition.x)
+                < dragGestureTolerance, scaleEdges.contains(.leading)
+            {
+                if !isXChanged {
+                    newScaleX = (newScaleX ?? 1.0)
+                        * abs(otherLayerBottomLeftApexPosition.x - scaledLayerBottomRightApexPosition.x)
+                        / scaledLayerWidth
+                    let scaledLayerComponent = 0.0
+                        + scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.x
+                        - otherLayerWidth * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + otherLayerHeight * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newX = scaledLayerComponent + otherLayerComponent
+                    touchPositionX = otherLayerBottomLeftApexPosition.x
+                }
+                isXChanged = true
+            }
+            // leading - trailing
+            else if abs(scaledLayerBottomLeftApexPosition.x - otherLayerTopRightApexPosition.x)
+                < dragGestureTolerance, scaleEdges.contains(.leading)
+            {
+                if !isXChanged {
+                    newScaleX = (newScaleX ?? 1.0)
+                        * abs(otherLayerTopRightApexPosition.x - scaledLayerBottomRightApexPosition.x)
+                        / scaledLayerWidth
+                    let scaledLayerComponent = 0.0
+                        + scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.x
+                        + otherLayerWidth * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - otherLayerHeight * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newX = scaledLayerComponent + otherLayerComponent
+                    touchPositionX = otherLayerTopRightApexPosition.x
+                }
+                isXChanged = true
+            }
+            // top - bottom
+            if abs(scaledLayerTopLeftApexPosition.y - otherLayerBottomRightApexPosition.y)
+                < dragGestureTolerance, scaleEdges.contains(.top)
+            {
+                if !isYChanged {
+                    newScaleY = (newScaleY ?? 1.0)
+                        * abs(otherLayerBottomRightApexPosition.y - scaledLayerBottomLeftApexPosition.y)
+                        / scaledLayerHeight
+                    let scaledLayerComponent = 0.0
+                        - scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.y
+                        - otherLayerWidth * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + otherLayerHeight * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newY = scaledLayerComponent + otherLayerComponent
+                    touchPositionY = otherLayerBottomRightApexPosition.y
+                }
+                isYChanged = true
+            }
+            // top - top
+            else if abs(scaledLayerTopLeftApexPosition.y - otherLayerTopLeftApexPosition.y)
+                < dragGestureTolerance, scaleEdges.contains(.top)
+            {
+                if !isYChanged {
+                    newScaleY = (newScaleY ?? 1.0)
+                        * abs(otherLayerTopLeftApexPosition.y - scaledLayerBottomLeftApexPosition.y)
+                        / scaledLayerHeight
+                    let scaledLayerComponent = 0.0
+                        - scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.y
+                        + otherLayerWidth * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - otherLayerHeight * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newY = scaledLayerComponent + otherLayerComponent
+                    touchPositionY = otherLayerTopLeftApexPosition.y
+                }
+                isYChanged = true
+            }
+            // bottom - bottom
+            else if abs(scaledLayerBottomRightApexPosition.y - otherLayerBottomRightApexPosition.y)
+                < dragGestureTolerance, scaleEdges.contains(.bottom)
+            {
+                if !isYChanged {
+                    newScaleY = (newScaleY ?? 1.0)
+                        * abs(otherLayerBottomRightApexPosition.y - scaledLayerTopRightApexPosition.y)
+                        / scaledLayerHeight
+                    let scaledLayerComponent = 0.0
+                        + scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.y
+                        - otherLayerWidth * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + otherLayerHeight * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newY = scaledLayerComponent + otherLayerComponent
+                    touchPositionY = otherLayerBottomRightApexPosition.y
+                }
+                isYChanged = true
+            }
+            // bottom - top
+            else if abs(scaledLayerBottomRightApexPosition.y - otherLayerTopLeftApexPosition.y)
+                < dragGestureTolerance, scaleEdges.contains(.bottom)
+            {
+                if !isYChanged {
+                    newScaleY = (newScaleY ?? 1.0)
+                        * abs(otherLayerTopLeftApexPosition.y - scaledLayerTopRightApexPosition.y)
+                        / scaledLayerHeight
+                    let scaledLayerComponent = 0.0
+                        + scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let otherLayerComponent = otherLayerPosition.y
+                        + otherLayerWidth * 0.5 * sin(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - otherLayerHeight * 0.5 * cos(otherLayerRotation.radians)
+                        * (otherLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    newY = scaledLayerComponent + otherLayerComponent
+                    touchPositionY = otherLayerTopLeftApexPosition.y
+                }
+                isYChanged = true
+            }
+        }
+
+        if scaledLayerRotation.isRightAngle {
+            // trailing - frameTrailing
+            if abs(scaledLayerTopRightApexPosition.x - frameRect.maxX) < dragGestureTolerance,
+               scaleEdges.contains(.trailing)
+            {
+                if !isXChanged {
+                    newScaleX = (newScaleX ?? 1.0)
+                        * abs(frameRect.maxX - scaledLayerTopLeftApexPosition.x)
+                        / scaledLayerWidth
+                    let scaledLayerComponent = 0.0
+                        - scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let frameComponent = frameRect.size.width * 0.5
+
+                    newX = scaledLayerComponent + frameComponent
+                    touchPositionX = nil
+                }
+                isXChanged = true
+            }
+            // leading - frameLeading
+            else if abs(scaledLayerBottomLeftApexPosition.x - frameRect.minX) < dragGestureTolerance,
+                    scaleEdges.contains(.leading)
+            {
+                if !isXChanged {
+                    newScaleX = (newScaleX ?? 1.0)
+                        * abs(frameRect.minX - scaledLayerBottomRightApexPosition.x)
+                        / scaledLayerWidth
+
+                    let scaledLayerComponent = 0.0
+                        + scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let frameComponent = -frameRect.size.width * 0.5
+
+                    newX = scaledLayerComponent + frameComponent
+                }
+                touchPositionX = nil
+                isXChanged = true
+            }
+            // top - frameTop
+            if abs(scaledLayerTopLeftApexPosition.y - frameRect.minY) < dragGestureTolerance,
+               scaleEdges.contains(.top)
+            {
+                if !isYChanged {
+                    newScaleY = (newScaleY ?? 1.0)
+                        * abs(frameRect.minY - scaledLayerBottomLeftApexPosition.y)
+                        / scaledLayerHeight
+
+                    let scaledLayerComponent = 0.0
+                        - scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        + scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let frameComponent = -frameRect.size.height * 0.5
+
+                    newY = scaledLayerComponent + frameComponent
+                }
+                touchPositionY = nil
+                isYChanged = true
+            }
+            // bottom - frameBottom
+            else if abs(scaledLayerBottomRightApexPosition.y - frameRect.maxY) < dragGestureTolerance,
+                    scaleEdges.contains(.bottom)
+            {
+                if !isYChanged {
+                    newScaleY = (newScaleY ?? 1.0)
+                        * abs(frameRect.maxY - scaledLayerTopRightApexPosition.y)
+                        / scaledLayerHeight
+
+                    let scaledLayerComponent = 0.0
+                        + scaledLayerSize.width * abs(newScaleX ?? 1.0) * 0.5 * sin(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+                        - scaledLayerSize.height * abs(newScaleY ?? 1.0) * 0.5 * cos(scaledLayerRotation.radians)
+                        * (scaledLayerRotation.isBelowHalfAngle ? -1.0 : 1.0)
+
+                    let frameComponent = frameRect.size.height * 0.5
+
+                    newY = scaledLayerComponent + frameComponent
+                }
+                touchPositionY = nil
+                isYChanged = true
+            }
+        }
+
+        if let newScaleX, !wasPreviousScaleGestureFrameLockedForX {
+            layerModel.position?.x = newX
+            layerModel.scaleX = newScaleX
+        }
+        if let newScaleY, !wasPreviousScaleGestureFrameLockedForY {
+            layerModel.position?.y = newY
+            layerModel.scaleY = newScaleY
+        }
+
+        if !isXChanged {
+            wasPreviousScaleGestureFrameLockedForX = false
+            vm.plane.lineXPosition = nil
+        }
+        else {
+            if !wasPreviousScaleGestureFrameLockedForX {
+                if touchPositionX == nil {
+                    HapticService.shared.play(.medium)
+                }
+                wasPreviousScaleGestureFrameLockedForX = true
+                vm.plane.lineXPosition = touchPositionX
+            }
+        }
+
+        if !isYChanged {
+            wasPreviousScaleGestureFrameLockedForY = false
+            vm.plane.lineYPosition = nil
+        }
+        else {
+            if !wasPreviousScaleGestureFrameLockedForY {
+                if touchPositionY == nil {
+                    HapticService.shared.play(.medium)
+                }
+
+                wasPreviousScaleGestureFrameLockedForY = true
+                vm.plane.lineYPosition = touchPositionY
+            }
+        }
     }
 }
