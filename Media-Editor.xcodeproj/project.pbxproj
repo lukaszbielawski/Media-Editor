@@ -121,6 +121,7 @@
 		B2C352212B974CB700E64525 /* FlippedTriangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C352202B974CB700E64525 /* FlippedTriangle.swift */; };
 		B2C352232B974D0D00E64525 /* Polygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C352222B974D0D00E64525 /* Polygon.swift */; };
 		B2C842E82BC291B000A7853F /* FormHiddenBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */; };
+		B2C842EA2BC2B19C00A7853F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2C842E92BC2B19C00A7853F /* GoogleService-Info.plist */; };
 		B2CCFD492B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */; };
 		B2CCFD4B2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */; };
 		B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */; };
@@ -131,9 +132,11 @@
 		B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* LayerModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
 		B2F918AD2B58554300540F33 /* CGSizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */; };
+		E53765446609E6BDFA453294 /* Pods_Media_Editor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F206294C9D205E348621DA7F /* Pods_Media_Editor.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		314F1D791BE6D9B65F817710 /* Pods-Media-Editor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Editor.release.xcconfig"; path = "Target Support Files/Pods-Media-Editor/Pods-Media-Editor.release.xcconfig"; sourceTree = "<group>"; };
 		B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotificationService.swift; sourceTree = "<group>"; };
 		B200CB2C2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.AnimationCurveExtensions.swift; sourceTree = "<group>"; };
 		B200CB2E2B502C0800BA3023 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
@@ -249,6 +252,7 @@
 		B2C352202B974CB700E64525 /* FlippedTriangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedTriangle.swift; sourceTree = "<group>"; };
 		B2C352222B974D0D00E64525 /* Polygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Polygon.swift; sourceTree = "<group>"; };
 		B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHiddenBackground.swift; sourceTree = "<group>"; };
+		B2C842E92BC2B19C00A7853F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B2CCFD482B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageProjectEditingFrameView+Gestures.swift"; sourceTree = "<group>"; };
 		B2CCFD4A2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseLayersView.swift; sourceTree = "<group>"; };
 		B2CCFD4C2B7A93130082D0A4 /* ToolsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsModel.swift; sourceTree = "<group>"; };
@@ -259,6 +263,8 @@
 		B2F918A62B5811F400540F33 /* LayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
 		B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtensions.swift; sourceTree = "<group>"; };
+		F10322B384BB494BEB47A4DC /* Pods-Media-Editor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Editor.debug.xcconfig"; path = "Target Support Files/Pods-Media-Editor/Pods-Media-Editor.debug.xcconfig"; sourceTree = "<group>"; };
+		F206294C9D205E348621DA7F /* Pods_Media_Editor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Media_Editor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,6 +272,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E53765446609E6BDFA453294 /* Pods_Media_Editor.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +285,8 @@
 				B2085C122B48671E004D904A /* Media-Editor */,
 				B2085C132B48671E004D904A /* MediaEditorApp.swift */,
 				B2085C112B48671E004D904A /* Products */,
+				F9EC0A0714EFAACD9D8F61FA /* Pods */,
+				DC2DE2206D4DB8DD8CE4F656 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -292,6 +301,7 @@
 		B2085C122B48671E004D904A /* Media-Editor */ = {
 			isa = PBXGroup;
 			children = (
+				B2C842E92BC2B19C00A7853F /* GoogleService-Info.plist */,
 				B2085C172B48671F004D904A /* Assets.xcassets */,
 				B2085C192B48671F004D904A /* Preview Content */,
 				B24AD8FA2B5531F900BBD1E8 /* PreferenceKeys */,
@@ -755,6 +765,23 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		DC2DE2206D4DB8DD8CE4F656 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F206294C9D205E348621DA7F /* Pods_Media_Editor.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F9EC0A0714EFAACD9D8F61FA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F10322B384BB494BEB47A4DC /* Pods-Media-Editor.debug.xcconfig */,
+				314F1D791BE6D9B65F817710 /* Pods-Media-Editor.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -762,18 +789,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B2085C1E2B48671F004D904A /* Build configuration list for PBXNativeTarget "Media-Editor" */;
 			buildPhases = (
+				ACC70208B37A7DB79E8EC6EF /* [CP] Check Pods Manifest.lock */,
 				B2085C0C2B48671E004D904A /* Sources */,
 				B2085C0D2B48671E004D904A /* Frameworks */,
 				B2085C0E2B48671E004D904A /* Resources */,
 				B22744C12B5C6D56000740DF /* ShellScript */,
+				EA8052C4287E8D07676097A3 /* [CP] Embed Pods Frameworks */,
+				B2C842F52BC2B8E700A7853F /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Media-Editor";
-			packageProductDependencies = (
-			);
 			productName = "Media-Editor";
 			productReference = B2085C102B48671E004D904A /* Media-Editor.app */;
 			productType = "com.apple.product-type.application";
@@ -802,8 +830,6 @@
 				Base,
 			);
 			mainGroup = B2085C072B48671E004D904A;
-			packageReferences = (
-			);
 			productRefGroup = B2085C112B48671E004D904A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -820,6 +846,7 @@
 			files = (
 				B211036A2B499D3D00CA4981 /* Assets.xcassets in Resources */,
 				B2085C1B2B48671F004D904A /* Preview Assets.xcassets in Resources */,
+				B2C842EA2BC2B19C00A7853F /* GoogleService-Info.plist in Resources */,
 				B22B1BEF2BC1B0B8003A0031 /* OFL.txt in Resources */,
 				B22B1BEE2BC1B0B8003A0031 /* KaushanScript-Regular.ttf in Resources */,
 			);
@@ -828,6 +855,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		ACC70208B37A7DB79E8EC6EF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Media-Editor-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B22744C12B5C6D56000740DF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -844,7 +893,42 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint >/dev/null; then\n    swiftlint autocorrect\n    swiftlint --path\n    echo \"Linting\"\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		B2C842F52BC2B8E700A7853F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n\n";
+		};
+		EA8052C4287E8D07676097A3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Media-Editor/Pods-Media-Editor-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Media-Editor/Pods-Media-Editor-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Media-Editor/Pods-Media-Editor-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1102,11 +1186,13 @@
 		};
 		B2085C1F2B48671F004D904A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F10322B384BB494BEB47A4DC /* Pods-Media-Editor.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Media-Editor/Preview Content\"";
 				DEVELOPMENT_TEAM = J6U333HZ7J;
 				ENABLE_PREVIEWS = YES;
@@ -1137,6 +1223,7 @@
 		};
 		B2085C202B48671F004D904A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 314F1D791BE6D9B65F817710 /* Pods-Media-Editor.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

@@ -6,7 +6,6 @@
 //
 
 import CoreData
-import Kingfisher
 import SwiftUI
 
 struct MenuView: View {

@@ -5,7 +5,6 @@
 //  Created by Łukasz Bielawski on 06/01/2024.
 //
 
-import Kingfisher
 import SwiftUI
 
 struct MenuScrollView: View {
