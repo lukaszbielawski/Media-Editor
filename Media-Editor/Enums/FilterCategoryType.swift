@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FilterCategoryType: CaseIterable, Identifiable {
+enum FilterCategoryType: Category {
 
     var id: String { shortName }
 

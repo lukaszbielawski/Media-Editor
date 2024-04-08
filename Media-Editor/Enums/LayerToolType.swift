@@ -12,6 +12,7 @@ enum LayerToolType: String, Tool {
     case crop
     case background
     case flip
+    case editText
 
     var id: String { return rawValue }
 }
@@ -27,6 +28,8 @@ extension LayerToolType {
             return "Background"
         case .flip:
             return "Flip"
+        case .editText:
+            return "Edit text"
         }
     }
 
@@ -40,6 +43,8 @@ extension LayerToolType {
             return "rectangle.checkered"
         case .flip:
             return "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"
+        case .editText:
+            return "character.cursor.ibeam"
         }
     }
 }

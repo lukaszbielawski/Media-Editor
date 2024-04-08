@@ -24,7 +24,6 @@ struct MenuScrollView: View {
                 LazyVGrid(columns: columns, spacing: 16) {
                     Group {
                         MenuPlaceholderTileView()
-
                         ForEach(vm.projects
                             .sorted { ($0.lastEditDate ?? Date.distantPast) > ($1.lastEditDate ?? Date.distantPast) },
                             id: \.self)
@@ -40,12 +39,4 @@ struct MenuScrollView: View {
             vm.objectWillChange.send()
         }
     }
-}
-
-#Preview {
-//    let preview = PersistenceController.shared.preview
-//    let bindingArray: Binding<[ProjectEntity]> = .constant(preview)
-    let vm = MenuViewModel()
-    vm.projects = PersistenceController.preview.projectController.fetchAll()
-    return MenuScrollView { _ in }.environmentObject(vm)
 }

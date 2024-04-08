@@ -33,6 +33,18 @@ extension Binding where Value == String {
     }
 }
 
+extension Binding where Value == FontType {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        Binding(
+            get: { self.wrappedValue },
+            set: { newValue in
+                self.wrappedValue = newValue
+                handler(newValue)
+            }
+        )
+    }
+}
+
 extension Binding where Value == CGFloat {
     func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
         Binding(

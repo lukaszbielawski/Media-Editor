@@ -39,6 +39,11 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
+                    case .text:
+                        ImageProjectToolCaseTextView(isEditMode: false)
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
+                            }
                     case .background:
                         ImageProjectToolCaseBackgroundView()
                             .onAppear {
@@ -65,9 +70,14 @@ struct ImageProjectToolDetailsView: View {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }
                     case .background:
-                        ImageProjectToolCaseBackgroundView(isProjectBackgroundColorChanger: false)
+                        ImageProjectToolCaseBackgroundView(colorPickerType: .layerBackground)
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
+                            }
+                    case .editText:
+                        ImageProjectToolCaseTextView(isEditMode: true)
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .back
                             }
                     }
                 }

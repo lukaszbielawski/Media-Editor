@@ -18,7 +18,7 @@ struct ImageProjectToolTileView: View {
         Rectangle()
             .fill(Material.ultraThinMaterial)
             .overlay {
-                VStack {
+                VStack(spacing: 0) {
                     Spacer()
                     Image(iconName)
                         .resizable()
@@ -26,12 +26,16 @@ struct ImageProjectToolTileView: View {
                         .padding(.horizontal)
                         .rotationEffect(imageRotation)
 
+                    Spacer()
                     if let title {
                         Text(title)
                             .font(.footnote)
+                            .padding(.bottom, 8)
                     }
-                    Spacer()
-                }  .padding(.vertical, 8)
+
+
+                }
+                .padding(.vertical, 4)
             }
             .modifier(ProjectToolTileViewModifier())
     }

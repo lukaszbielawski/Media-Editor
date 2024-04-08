@@ -19,11 +19,12 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var libraryPhotos = [PHAsset]()
 
     @Published var currentTool: (any Tool)?
+    @Published var currentCategory: (any Category)?
     @Published var currentFilter: FilterType?
-    @Published var currentCategory: FilterCategoryType?
     @Published var currentCropRatio: CropRatioType = .any
     @Published var currentCropShape: CropShapeType = .rectangle
     @Published var currentLayerBackgroundColor: Color = .clear
+    @Published var currentTextLayerTextColor: Color = .white
     @Published var originalCGImage: CGImage!
 
     @Published var workspaceSize: CGSize?
@@ -53,7 +54,7 @@ final class ImageProjectViewModel: ObservableObject {
     let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
     let filterChangedSubject = PassthroughSubject<Void, Never>()
     let performToolActionSubject = PassthroughSubject<any Tool, Never>()
-    var floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
+    let floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
 
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
@@ -61,6 +62,7 @@ final class ImageProjectViewModel: ObservableObject {
     var centerButtonFunction: (() -> Void)?
 
     private var cancellable: AnyCancellable?
+    var renderTask: Task<Void, Error>?
 
     private var photoLibraryService = PhotoLibraryService()
     private var photoExporterService = PhotoExporterService()
@@ -96,7 +98,13 @@ final class ImageProjectViewModel: ObservableObject {
                 deletePhotoEntity(photoEntity: photoEntity)
                 projectModel.photoEntities.remove(photoEntity)
             } else {
-                let layerModel = LayerModel(photoEntity: photoEntity)
+                let layerModel: LayerModel
+                if let textModelEntity = photoEntity.photoEntityToTextModelEntity {
+                    layerModel = TextLayerModel(photoEntity: photoEntity, textModelEntity: textModelEntity)
+                } else {
+                    layerModel = LayerModel(photoEntity: photoEntity)
+                }
+
                 if projectModel.lastEditDate == nil && isFirst {
                     isFirst = false
                     layerModel.positionZ = 1
@@ -333,9 +341,16 @@ final class ImageProjectViewModel: ObservableObject {
     func toggleIsActiveStatus(layerModel: LayerModel) {
         if activeLayer == layerModel {
             deactivateLayer()
+            currentCategory = nil
+            currentTool = nil
+        } else if activeLayer == nil {
+            activeLayer = layerModel
+            objectWillChange.send()
         } else {
             activeLayer = layerModel
             objectWillChange.send()
+            currentCategory = nil
+            currentTool = nil
         }
     }
 
@@ -455,6 +470,8 @@ final class ImageProjectViewModel: ObservableObject {
             }
         }
         activeLayer = nil
+        currentCategory = nil
+        currentTool = nil
     }
 
     func disablePreviewCGImage() {
@@ -592,8 +609,7 @@ final class ImageProjectViewModel: ObservableObject {
         layerModel.positionZ = (projectLayers.compactMap { $0.positionZ }.max() ?? 0) + 1
         layerModel.toDelete = false
 
-        deactivateLayer()
-        activeLayer = layerModel
+        toggleIsActiveStatus(layerModel: layerModel)
 
         updateLatestSnapshot()
         objectWillChange.send()
@@ -714,6 +730,43 @@ final class ImageProjectViewModel: ObservableObject {
             where !projectLayers.contains(where: { $0.fileName == photoEntity.fileName })
         {
             projectLayers.append(LayerModel(photoEntity: photoEntity))
+        }
+    }
+
+    func createTextLayer() async throws -> TextLayerModel {
+        guard let framePixelHeight = projectModel.framePixelHeight else { throw PhotoExportError.other }
+        let textLayerUUID = UUID()
+        let textLayerFileName = textLayerUUID.uuidString + ".PNG"
+
+        let textModelEntity = TextModelEntity(
+            id: textLayerUUID,
+            text: "Your text here",
+            fontSize: max(min(720, Int(framePixelHeight) / 10), 10))
+
+        let textCGImage = try await photoExporterService.renderTextLayer(textModelEntity: textModelEntity)
+
+        try await saveNewCGImageOnDisk(fileName: textLayerFileName, cgImage: textCGImage)
+        let photoEntity = PhotoEntity(fileName: textLayerFileName, projectEntity: projectModel.imageProjectEntity)
+
+        let textLayerModel = TextLayerModel(photoEntity: photoEntity, textModelEntity: textModelEntity)
+        projectLayers.append(textLayerModel)
+        showLayerOnScreen(layerModel: textLayerModel)
+
+        return textLayerModel
+    }
+
+    func renderTextLayer() async throws {
+        guard let textLayerModel = activeLayer as? TextLayerModel else { return }
+        do {
+            let textCGImage = try await photoExporterService.renderTextLayer(textModelEntity: textLayerModel.textModelEntity)
+            Task {
+                try await saveNewCGImageOnDisk(fileName: textLayerModel.fileName, cgImage: textCGImage)
+            }
+
+            textLayerModel.cgImage = textCGImage
+            textLayerModel.size = calculateLayerSize(layerModel: textLayerModel)
+        } catch {
+            print(error)
         }
     }
 

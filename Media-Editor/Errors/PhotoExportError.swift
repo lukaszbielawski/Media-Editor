@@ -8,9 +8,11 @@
 import Foundation
 
 enum PhotoExportError: Error {
-    case contextCreation
+    case contextCreation(contextSize: CGSize)
     case contextImageMaking
     case colorSpace
     case contextResizedImageMaking
     case dataRetrieving
+    case fontCreating
+    case other
 }

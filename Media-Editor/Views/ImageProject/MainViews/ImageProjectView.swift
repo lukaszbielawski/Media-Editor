@@ -73,13 +73,14 @@ struct ImageProjectView: View {
                     .allowsHitTesting(false)
 
                     if let currentTool = vm.currentTool as? LayerToolType,
-                       currentTool == .crop || currentTool == .background {
-                            ImageProjectFocusView()
-                                .zIndex(Double(Int.max) - 1)
-                                .transition(AnyTransition
-                                    .scale(scale: 0.0, anchor: UnitPoint(x: 1, y: 0.5))
-                                    .animation(.easeInOut(duration: 0.35)))
-                        }
+                       currentTool == .crop || currentTool == .background
+                    {
+                        ImageProjectFocusView()
+                            .zIndex(Double(Int.max) - 1)
+                            .transition(AnyTransition
+                                .scale(scale: 0.0, anchor: UnitPoint(x: 1, y: 0.5))
+                                .animation(.easeInOut(duration: 0.35)))
+                    }
                 }
                 .onChange(of: vm.activeLayer) { _ in
                     vm.plane.lineXPosition = nil
@@ -121,9 +122,9 @@ struct ImageProjectView: View {
                 ImageProjectExportPhotosView()
                     .background {
                         Image("MenuBackground")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .ignoresSafeArea()
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .ignoresSafeArea()
                     }
             }
             .alert("Deleting image", isPresented: $vm.tools.isDeleteImageAlertPresented) {
@@ -144,5 +145,6 @@ struct ImageProjectView: View {
             }
 
         }.environmentObject(vm)
+            .transition(AnyTransition.slide.animation(.easeInOut(duration: 1.0)))
     }
 }

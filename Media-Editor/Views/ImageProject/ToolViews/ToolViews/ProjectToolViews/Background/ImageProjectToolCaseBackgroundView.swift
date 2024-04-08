@@ -1,5 +1,5 @@
 //
-//  ImageProjectToolFlipAddView.swift
+//  ImageProjectToolCaseBackgroundView.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 22/02/2024.
@@ -14,60 +14,102 @@ struct ImageProjectToolCaseBackgroundView: View {
     @State private var cancellable: AnyCancellable?
     @State private var colorPickerSubject = PassthroughSubject<Void, Never>()
 
-    var isProjectBackgroundColorChanger: Bool = true
+    var colorPickerType: ColorPickerType = .projectBackground
+    var onlyCustom: Bool = false
+    var customTitle: String = "Custom"
 
     var body: some View {
-        let backgroundColorBinding = isProjectBackgroundColorChanger ?
-            $vm.projectModel.backgroundColor :
-            $vm.currentLayerBackgroundColor
-        HStack {
-            ZStack(alignment: .center) {
-                ColorPicker(selection: backgroundColorBinding.onChange(colorPicked), label: { EmptyView() })
-                    .labelsHidden()
-                    .scaleEffect(vm.plane.lowerToolbarHeight *
-                        (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
-
-                ImageProjectToolColorTileView(color: backgroundColorBinding, title: "Custom")
-                    .allowsHitTesting(false)
-            }
-            ForEach(vm.tools.colorArray, id: \.self) { color in
-                ImageProjectToolColorTileView(color: .constant(color))
-                    .onTapGesture {
-                        backgroundColorBinding.wrappedValue = color
-                        if isProjectBackgroundColorChanger {
-                            vm.updateLatestSnapshot()
-                        } else {
-                            Task {
-                                try await vm.addBackgroundToLayer()
-                            }
+        let colorBinding: Binding<Color>? = {
+            switch colorPickerType {
+            case .projectBackground:
+                return $vm.projectModel.backgroundColor
+            case .layerBackground:
+                return $vm.currentLayerBackgroundColor
+            case .textColor:
+                if let textLayer = vm.activeLayer as? TextLayerModel {
+                    return Binding<Color>(
+                        get: {
+                            textLayer.textColor
+                        },
+                        set: { newValue in
+                            textLayer.textColor = newValue
                         }
-                        vm.objectWillChange.send()
-                    }
-            }
-            Spacer()
-        }.onAppear {
-            cancellable =
-                colorPickerSubject
-                    .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-                    .sink { [unowned vm] in
-                        if isProjectBackgroundColorChanger {
-                            vm.updateLatestSnapshot()
-                        } else {
-                            Task {
-                                try await vm.addBackgroundToLayer()
-                            }
-                        }
-                        vm.objectWillChange.send()
-                    }
+                    )
+                } else {
+                    return nil
+                }
 
-            if !isProjectBackgroundColorChanger {
-                guard let activeLayer = vm.activeLayer else { return }
-                vm.originalCGImage = activeLayer.cgImage?.copy()
+            case .borderColor:
+                if let textLayer = vm.activeLayer as? TextLayerModel {
+                    return Binding<Color>(
+                        get: {
+                            textLayer.borderColor
+                        },
+                        set: { newValue in
+                            textLayer.borderColor = newValue
+                        }
+                    )
+                } else {
+                    return nil
+                }
+            }
+        }()
+
+        if let colorBinding {
+            HStack {
+                ZStack(alignment: .center) {
+                    ColorPicker(selection: colorBinding.onChange(colorPicked), label: { EmptyView() })
+                        .labelsHidden()
+                        .scaleEffect(vm.plane.lowerToolbarHeight *
+                            (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
+                    ImageProjectToolColorTileView(color: colorBinding, title: customTitle)
+                        .allowsHitTesting(false)
+                }
+                if !onlyCustom {
+                    ForEach(vm.tools.colorArray, id: \.self) { color in
+                        ImageProjectToolColorTileView(color: .constant(color))
+                            .onTapGesture {
+                                colorBinding.wrappedValue = color
+                                performColorPickedAction()
+                            }
+                    }
+                    Spacer()
+                }
+            }.onAppear {
+                cancellable =
+                    colorPickerSubject
+                        .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
+                        .sink {
+                            performColorPickedAction()
+                        }
+
+                if colorPickerType == .layerBackground {
+                    guard let activeLayer = vm.activeLayer else { return }
+                    vm.originalCGImage = activeLayer.cgImage?.copy()
+                }
             }
         }
     }
 
     private func colorPicked(color: Color) {
         colorPickerSubject.send()
+    }
+
+    private func performColorPickedAction() {
+        vm.objectWillChange.send()
+        switch colorPickerType {
+        case .projectBackground:
+            vm.updateLatestSnapshot()
+        case .layerBackground:
+            Task {
+                try await vm.addBackgroundToLayer()
+            }
+        case .textColor, .borderColor:
+            Task {
+                try await vm.renderTextLayer()
+            }
+            vm.objectWillChange.send()
+        }
+        vm.objectWillChange.send()
     }
 }

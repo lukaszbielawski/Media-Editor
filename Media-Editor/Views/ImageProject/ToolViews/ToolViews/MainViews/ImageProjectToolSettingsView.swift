@@ -18,7 +18,7 @@ struct ImageProjectToolSettingsView: View {
                     buttonType: .left)
                     .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                 if vm.currentFilter != .none {
-                    ImageProjectViewFloatingFilterSliderView(
+                    ImageProjectToolFilterFloatingSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
@@ -42,7 +42,7 @@ struct ImageProjectToolSettingsView: View {
                     ImageProjectFloatingBackgroundSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                         backgroundColor: $vm.currentLayerBackgroundColor,
-                        isProjectBackgroundColorChanger: false)
+                        colorPickerType: .layerBackground)
                         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
@@ -60,6 +60,7 @@ struct ImageProjectToolSettingsView: View {
 
                 switch projectTool {
                 case .merge:
+                    Spacer()
                     ImageProjectFloatingMergeSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                         backgroundColor: $vm.projectModel.backgroundColor)
@@ -67,6 +68,17 @@ struct ImageProjectToolSettingsView: View {
                         .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
+                case .text:
+                    Spacer()
+                    ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    Spacer()
+                    ImageProjectToolFloatingButtonView(
+                        systemName: vm.tools.rightFloatingButtonIcon,
+                        buttonType: .right)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .onAppear {
+                            vm.tools.rightFloatingButtonIcon = "checkmark"
+                        }
                 case .background:
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
@@ -81,24 +93,6 @@ struct ImageProjectToolSettingsView: View {
                 }
             case let layerSingleTool as LayerSingleActionToolType:
                 EmptyView()
-
-//            case let projectSingleTool as ProjectSingleActionToolType:
-//                switch projectSingleTool {
-//                case .merge:
-//                    ImageProjectToolFloatingButtonView(
-//                        systemName: vm.tools.leftFloatingButtonIcon,
-//                        buttonType: .left)
-//                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-//                    Spacer()
-//
-//                    ImageProjectFloatingMergeSliderView(
-//                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-//                        backgroundColor: $vm.projectModel.backgroundColor)
-//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-//                        .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-//                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-//                    Spacer()
-//                }
             default:
                 EmptyView()
             }

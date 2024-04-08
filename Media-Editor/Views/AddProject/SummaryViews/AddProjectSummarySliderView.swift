@@ -11,12 +11,13 @@ struct AddProjectSummarySliderView: View {
     @EnvironmentObject var vm: AddProjectViewModel
 
     @State var sliderOffset: Double = 0.0
-    @State var sliderWidth: Double = 0.0
+
     @State var isInteractive: Bool = true
     @State var alreadySwiped: Bool = false
 
     var maxOffset: Double { return sliderWidth - sliderHeight }
-    let sliderHeight = 50.0
+    let sliderWidth: Double = 300.0
+    let sliderHeight: Double = 50.0
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -24,7 +25,7 @@ struct AddProjectSummarySliderView: View {
                 .fill(Color(.image))
                 .overlay(Material.ultraThinMaterial)
                 .clipShape(Capsule(style: .circular))
-                .frame(maxWidth: 300, maxHeight: sliderHeight)
+                .frame(width: sliderWidth, height: sliderHeight)
 
                 .overlay {
                     Label("Create photo project",
@@ -32,12 +33,6 @@ struct AddProjectSummarySliderView: View {
                         .padding(.leading, 16)
                         .foregroundStyle(Color(.tint))
                 }
-                .geometryAccessor { geo in
-                    DispatchQueue.main.async {
-                        sliderWidth = geo.size.width
-                    }
-                }
-
             Capsule(style: .circular)
                 .fill(Color(.image))
                 .frame(width: sliderHeight + sliderOffset, height: sliderHeight)
@@ -55,7 +50,6 @@ struct AddProjectSummarySliderView: View {
                     DragGesture()
                         .onChanged { value in
                             guard !alreadySwiped else { return }
-
                             sliderOffset = min(max(value.translation.width, 0.0), maxOffset)
                             if sliderOffset > sliderWidth * 0.5 {
                                 DispatchQueue.main.async {
@@ -82,7 +76,6 @@ struct AddProjectSummarySliderView: View {
                         }
                 )
         }
-        .frame(maxWidth: 300)
         .padding(.horizontal, 50)
     }
 }

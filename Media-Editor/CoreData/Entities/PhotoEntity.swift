@@ -26,6 +26,7 @@ public extension PhotoEntity {
     @NSManaged var toDelete: Bool
 
     @NSManaged var photoEntityToImageProjectEntity: ImageProjectEntity?
+    @NSManaged var photoEntityToTextModelEntity: TextModelEntity?
 }
 
 extension PhotoEntity: Identifiable {

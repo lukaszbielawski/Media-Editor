@@ -20,5 +20,17 @@
         <attribute name="scaleY" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="toDelete" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="photoEntityToImageProjectEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImageProjectEntity" inverseName="imageProjectEntityToPhotoEntity" inverseEntity="ImageProjectEntity"/>
+        <relationship name="photoEntityToTextModelEntity" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TextModelEntity" inverseName="textModelEntityToPhotoEntity" inverseEntity="TextModelEntity"/>
+    </entity>
+    <entity name="TextModelEntity" representedClassName=".TextModelEntity" syncable="YES">
+        <attribute name="borderColorHex" attributeType="String" defaultValueString="#FF000000"/>
+        <attribute name="borderSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="curveDegrees" attributeType="Double" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="fontName" attributeType="String" defaultValueString="Arial"/>
+        <attribute name="fontSize" attributeType="Integer 32" defaultValueString="32" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="text" attributeType="String" defaultValueString="Label"/>
+        <attribute name="textColorHex" attributeType="String" defaultValueString="#FFFFFFFF" customClassName="#FFFFFFFF"/>
+        <relationship name="textModelEntityToPhotoEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoEntity" inverseName="photoEntityToTextModelEntity" inverseEntity="PhotoEntity"/>
     </entity>
 </model>

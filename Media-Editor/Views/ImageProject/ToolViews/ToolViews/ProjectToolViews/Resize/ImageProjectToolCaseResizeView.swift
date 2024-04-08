@@ -17,9 +17,6 @@ struct ImageProjectToolCaseResizeView: View {
         return formatter
     }()
 
-    @State var pixelFrameWidthTextField: String = ""
-    @State var pixelFrameHeightTextField: String = ""
-
     @FocusState var isFocused: Bool
 
     var body: some View {

@@ -1,5 +1,5 @@
 //
-//  ImageProjectViewFloatingSliderView.swift
+//  ImageProjectToolFilterFloatingSliderView.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 23/02/2024.
@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-struct ImageProjectViewFloatingFilterSliderView: View {
+struct ImageProjectToolFilterFloatingSliderView: View {
     @Environment(\.colorScheme) var appearance
     @EnvironmentObject var vm: ImageProjectViewModel
 

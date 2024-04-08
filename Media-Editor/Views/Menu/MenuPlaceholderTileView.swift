@@ -39,10 +39,10 @@ struct MenuPlaceholderTileView: View {
                         EmptyView()
                     })
             }
+            .clipShape(RoundedRectangle(cornerRadius: 16.0))
         }
         .foregroundStyle(Color(.tint))
         .aspectRatio(1.0, contentMode: .fill)
-        .clipShape(RoundedRectangle(cornerRadius: 16.0))
         .onTapGesture {
             if !isAddProjectViewPresented {
                 HapticService.shared.play(.medium)

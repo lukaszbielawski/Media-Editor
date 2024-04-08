@@ -13,7 +13,7 @@ struct ImageProjectToolCaseFiltersView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                if vm.currentCategory == .none {
+                if vm.currentCategory == nil {
                     ForEach(FilterCategoryType.allCases) { category in
                         ImageProjectToolFullTileView(title: category.shortName,
                                                      imageName: category.thumbnailName,
@@ -27,8 +27,8 @@ struct ImageProjectToolCaseFiltersView: View {
                     .onAppear {
                         vm.leftFloatingButtonActionType = .back
                     }
-                } else {
-                    ForEach(FilterType.allCases.filter { $0.category == vm.currentCategory! }) { filter in
+                } else if let currentCategory = vm.currentCategory as? FilterCategoryType {
+                    ForEach(FilterType.allCases.filter { $0.category == currentCategory }) { filter in
                         ImageProjectToolFullTileView(title: filter.shortName,
                                                      imageName: filter.thumbnailName,
                                                      font: .caption)

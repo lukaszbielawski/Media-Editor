@@ -48,6 +48,39 @@ struct ImageProjectEditingFrameView: View {
                             (isFrameBig ? 32.0 : 80.0),
                             height: layerHeight +
                                 (isFrameBig ? 32.0 : 80.0))
+                        // topScale
+                        .overlay(alignment: Alignment(horizontal: .center, vertical: .top)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(topScaleGesture(layerModel: layerModel))
+                        }
+                        // bottomScale
+                        .overlay(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(bottomScaleGesture(layerModel: layerModel))
+                        }
+                        // leadingScale
+                        .overlay(alignment: Alignment(horizontal: .leading, vertical: .center)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(leadingScaleGesture(layerModel: layerModel))
+                        }
+                        // trailingScale
+                        .overlay(alignment: Alignment(horizontal: .trailing, vertical: .center)) {
+                            Circle()
+                                .strokeBorder(Color(.image), lineWidth: 2)
+                                .clipShape(Circle())
+                                .modifier(EditFrameResizeModifier(offset: $offset))
+                                .gesture(trailingScaleGesture(layerModel: layerModel))
+                        }
+                        // delete
                         .overlay(alignment: .topLeading) {
                             ZStack(alignment: .topLeading) {
                                 if !isFrameBig {
@@ -63,7 +96,7 @@ struct ImageProjectEditingFrameView: View {
                                     .modifier(EditFrameCircleModifier())
                                     .rotationEffect(-layerModel.rotation!)
                                     .shadow(radius: 10.0)
-                                    .contentShape(Circle())
+                                    .contentShape(Rectangle())
                                     .gesture(deleteGesture(layerModel: layerModel))
                             }
                         }
@@ -123,38 +156,6 @@ struct ImageProjectEditingFrameView: View {
                                     .shadow(radius: 10.0)
                                     .gesture(moveGesture(layerModel: layerModel))
                             }
-                        }
-                        // topScale
-                        .overlay(alignment: Alignment(horizontal: .center, vertical: .top)) {
-                            Circle()
-                                .strokeBorder(Color(.image), lineWidth: 2)
-                                .clipShape(Circle())
-                                .modifier(EditFrameResizeModifier(offset: $offset))
-                                .gesture(topScaleGesture(layerModel: layerModel))
-                        }
-                        // bottomScale
-                        .overlay(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
-                            Circle()
-                                .strokeBorder(Color(.image), lineWidth: 2)
-                                .clipShape(Circle())
-                                .modifier(EditFrameResizeModifier(offset: $offset))
-                                .gesture(bottomScaleGesture(layerModel: layerModel))
-                        }
-                        // leadingScale
-                        .overlay(alignment: Alignment(horizontal: .leading, vertical: .center)) {
-                            Circle()
-                                .strokeBorder(Color(.image), lineWidth: 2)
-                                .clipShape(Circle())
-                                .modifier(EditFrameResizeModifier(offset: $offset))
-                                .gesture(leadingScaleGesture(layerModel: layerModel))
-                        }
-                        // trailingScale
-                        .overlay(alignment: Alignment(horizontal: .trailing, vertical: .center)) {
-                            Circle()
-                                .strokeBorder(Color(.image), lineWidth: 2)
-                                .clipShape(Circle())
-                                .modifier(EditFrameResizeModifier(offset: $offset))
-                                .gesture(trailingScaleGesture(layerModel: layerModel))
                         }
                 }
                 .rotationEffect(layerModel.rotation ?? .zero)

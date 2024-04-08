@@ -15,7 +15,6 @@ struct ImageProjectToolView: View {
             ImageProjectToolScrollView()
             if let currentTool = vm.currentTool,
                !(currentTool is LayerSingleActionToolType)
-//                ,!(currentTool is ProjectSingleActionToolType)
             {
                 ImageProjectToolDetailsView()
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))

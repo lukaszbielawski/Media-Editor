@@ -25,17 +25,17 @@ struct ImageProjectToolScrollView: View {
 
                             })
                         }
-//                        ForEach(ProjectSingleActionToolType.allCases) { tool in
-//                            Button(action: {
-//                                vm.performToolActionSubject.send(tool)
-//                            }, label: {
-//                                ImageProjectToolTileView(title: tool.name,
-//                                                         iconName: tool.icon)
-//                            })
-//                        }
-//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
                     } else {
                         Group {
+                            if let currentTool = vm.currentTool as? LayerToolType,
+                               currentTool == .editText {
+                                Button(action: {
+                                    vm.currentTool = LayerToolType.editText
+                                }, label: {
+                                    ImageProjectToolTileView(title: currentTool.name,
+                                                             iconName: currentTool.icon)
+                                })
+                            }
                             ForEach(LayerToolType.allCases) { tool in
                                 Button(action: {
                                     vm.currentTool = tool
@@ -65,13 +65,7 @@ struct ImageProjectToolScrollView: View {
                             await vm.copyAndAppend()
                         }
                     }
-                } 
-//                else 
-//                if let tool = tool as? ProjectSingleActionToolType {
-//                    if tool == .merge {
-//                        vm.currentTool = tool
-//                    }
-//                }
+                }
             }
             .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
             .frame(height: vm.plane.lowerToolbarHeight)
