@@ -248,8 +248,14 @@ final class ImageProjectViewModel: ObservableObject {
 
     func copyAndAppend() async {
         guard let activeLayer else { return }
-        let layerCopy = activeLayer.copy(withCGImage: true) as! LayerModel
-        try? await createNewEntity(from: layerCopy)
+
+        if activeLayer is TextLayerModel,
+           let layerCopy = activeLayer.copy(withCGImage: true) as? TextLayerModel
+        {
+            try? await createNewEntity(from: layerCopy)
+        } else if let layerCopy = activeLayer.copy(withCGImage: true) as? LayerModel {
+            try? await createNewEntity(from: layerCopy)
+        }
     }
 
     func createNewEntity(from layer: LayerModel) async throws {
@@ -258,13 +264,23 @@ final class ImageProjectViewModel: ObservableObject {
         guard let dotIndex = layer.fileName.lastIndex(of: ".") else { return }
         let fileExtension = layer.fileName.suffix(from: dotIndex)
 
-        let newEntityFileName = UUID().uuidString + fileExtension
+        let newEntityUUID = UUID()
+        let newEntityFileName = newEntityUUID.uuidString + fileExtension
 
         try await saveNewCGImageOnDisk(fileName: newEntityFileName, cgImage: layer.cgImage)
 
         let newEntity = PhotoEntity(fileName: newEntityFileName, projectEntity: projectEntity)
 
-        let newLayer = LayerModel(photoEntity: newEntity)
+        let mirror = Mirror(reflecting: layer)
+
+        let newLayer: LayerModel
+
+        if let layerType = mirror.subjectType as? TextLayerModel.Type {
+            let textModelEntity = TextModelEntity(id: newEntityUUID)
+            newLayer = layerType.init(photoEntity: newEntity, textModelEntity: textModelEntity)
+        } else {
+            newLayer = LayerModel(photoEntity: newEntity)
+        }
 
         newLayer.position = layer.position
         newLayer.positionZ = layer.positionZ
@@ -274,6 +290,18 @@ final class ImageProjectViewModel: ObservableObject {
         newLayer.size = layer.size
         newLayer.toDelete = layer.toDelete
         newLayer.cgImage = layer.cgImage
+
+        if let newTextLayer = newLayer as? TextLayerModel,
+           let textLayer = layer as? TextLayerModel
+        {
+            newTextLayer.text = textLayer.text
+            newTextLayer.fontName = textLayer.fontName
+            newTextLayer.fontSize = textLayer.fontSize
+            newTextLayer.curveAngle = textLayer.curveAngle
+            newTextLayer.textColor = textLayer.textColor
+            newTextLayer.borderColor = textLayer.borderColor
+            newTextLayer.borderSize = textLayer.borderSize
+        }
 
         newEntity.photoEntityToImageProjectEntity = projectEntity
 

@@ -9,7 +9,7 @@ import CoreGraphics
 import Foundation
 import SwiftUI
 
-class LayerModel: Identifiable, ObservableObject {
+class LayerModel: Identifiable, ObservableObject, NSCopying {
     var id: String { fileName }
     let fileName: String
     var cgImage: CGImage!
@@ -66,9 +66,7 @@ class LayerModel: Identifiable, ObservableObject {
 
         self.toDelete = photoEntity.toDelete
     }
-}
 
-extension LayerModel: NSCopying {
     func copy(with zone: NSZone? = nil) -> Any {
         return LayerModel(photoEntity: photoEntity)
     }

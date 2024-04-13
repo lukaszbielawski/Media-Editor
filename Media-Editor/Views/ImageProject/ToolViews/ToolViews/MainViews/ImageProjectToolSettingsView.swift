@@ -50,6 +50,17 @@ struct ImageProjectToolSettingsView: View {
                     ImageProjectToolFloatingButtonView(
                         systemName: vm.tools.rightFloatingButtonIcon,
                         buttonType: .right)
+                } else if layerTool == .editText {
+                    Spacer()
+                    ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    Spacer()
+                    ImageProjectToolFloatingButtonView(
+                        systemName: vm.tools.rightFloatingButtonIcon,
+                        buttonType: .right)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .onAppear {
+                            vm.tools.rightFloatingButtonIcon = "checkmark"
+                        }
                 }
 
             case let projectTool as ProjectToolType:

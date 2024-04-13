@@ -62,4 +62,16 @@ final class TextLayerModel: LayerModel {
         super.init(photoEntity: photoEntity)
         self.photoEntity.photoEntityToTextModelEntity = textModelEntity
     }
+
+    override func copy(with zone: NSZone? = nil) -> Any {
+        return TextLayerModel(photoEntity: photoEntity, textModelEntity: textModelEntity)
+    }
+
+    override func copy(withCGImage: Bool, with zone: NSZone? = nil) -> Any {
+        let layerModel = copy(with: zone) as! TextLayerModel
+        if withCGImage {
+            layerModel.cgImage = cgImage
+        }
+        return layerModel
+    }
 }

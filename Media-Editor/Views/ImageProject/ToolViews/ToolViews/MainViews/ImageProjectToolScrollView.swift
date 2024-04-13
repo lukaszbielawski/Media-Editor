@@ -27,16 +27,15 @@ struct ImageProjectToolScrollView: View {
                         }
                     } else {
                         Group {
-                            if let currentTool = vm.currentTool as? LayerToolType,
-                               currentTool == .editText {
+                            if vm.activeLayer is TextLayerModel {
                                 Button(action: {
                                     vm.currentTool = LayerToolType.editText
                                 }, label: {
-                                    ImageProjectToolTileView(title: currentTool.name,
-                                                             iconName: currentTool.icon)
+                                    ImageProjectToolTileView(title: LayerToolType.editText.name,
+                                                             iconName: LayerToolType.editText.icon)
                                 })
                             }
-                            ForEach(LayerToolType.allCases) { tool in
+                            ForEach(LayerToolType.allCases.filter { $0 != .editText }) { tool in
                                 Button(action: {
                                     vm.currentTool = tool
                                 }, label: {
