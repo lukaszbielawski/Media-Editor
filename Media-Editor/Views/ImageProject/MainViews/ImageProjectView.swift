@@ -108,7 +108,9 @@ struct ImageProjectView: View {
             .background(Color(.primary))
             .background {
                 NavBarAccessor { navBar in
-                    vm.plane.totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
+                    DispatchQueue.main.async {
+                        vm.plane.totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
+                    }
                 }
             }
             .navigationBarBackButtonHidden(true)

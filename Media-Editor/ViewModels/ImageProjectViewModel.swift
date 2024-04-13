@@ -17,6 +17,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var previewPhoto: CGImage?
     @Published var selectedPhotos = [PHAsset]()
     @Published var libraryPhotos = [PHAsset]()
+    @Published var isPermissionGranted = true
 
     @Published var currentTool: (any Tool)?
     @Published var currentCategory: (any Category)?
@@ -124,8 +125,10 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func setupAddAssetsToProject() {
-        photoLibraryService.requestAuthorization()
-        setupSubscription()
+        photoLibraryService.requestAuthorization { [unowned self] completion in
+            self.isPermissionGranted = completion
+            self.setupSubscription()
+        }
     }
 
     private func setupSubscription() {

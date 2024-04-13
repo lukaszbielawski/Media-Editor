@@ -11,18 +11,24 @@ import Foundation
 import Photos
 import UIKit
 
-class PhotoLibraryService: ObservableObject {
+final class PhotoLibraryService: ObservableObject {
     var mediaPublisher = PassthroughSubject<[PHAsset], Never>()
 
     private var imageCachingManager: PHCachingImageManager!
 
-    func requestAuthorization() {
-        PHPhotoLibrary.requestAuthorization { [unowned self] status in
-            switch status {
-            case .authorized, .limited:
-                fetchAllMediaFromPhotoLibrary()
-            default:
-                print("Permission not granted")
+    func requestAuthorization(completion: @escaping (Bool) -> Void) {
+        DispatchQueue.main.async {
+            PHPhotoLibrary.requestAuthorization { status in
+                switch status {
+                case .authorized, .limited:
+                    DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+                        self.fetchAllMediaFromPhotoLibrary()
+                    }
+                    completion(true)
+                default:
+                    print("Permission not granted")
+                    completion(false)
+                }
             }
         }
     }

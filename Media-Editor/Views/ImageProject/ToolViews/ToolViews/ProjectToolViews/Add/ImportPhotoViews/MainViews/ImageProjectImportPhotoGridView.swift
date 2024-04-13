@@ -16,12 +16,23 @@ struct ImageProjectImportPhotoGridView: View {
 
     var body: some View {
         VStack {
-            LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(vm.libraryPhotos, id: \.localIdentifier) { photo in
-                    ZStack {
-                        ImageProjectImportPhotoGridTileView(image: photo)
+            if vm.isPermissionGranted {
+                LazyVGrid(columns: columns, spacing: 4) {
+                    ForEach(vm.libraryPhotos, id: \.localIdentifier) { photo in
+                        ZStack {
+                            ImageProjectImportPhotoGridTileView(image: photo)
+                        }
                     }
                 }
+            } else {
+                Text("Could not load assets from photo library")
+                    .multilineTextAlignment(.center)
+                    .font(.title)
+                    .padding(.vertical)
+                Text("Please allow access to Photo Library in Settings to continue")
+                    .fontWeight(.thin)
+                    .multilineTextAlignment(.center)
+                    .font(.callout)
             }
         }
         .padding(4)

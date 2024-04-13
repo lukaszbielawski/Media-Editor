@@ -15,8 +15,10 @@ struct ImageProjectToolCaseAddView: View {
                 HStack {
                     ImageProjectToolTileView(iconName: "plus")
                         .onTapGesture {
-                            vm.setupAddAssetsToProject()
-                            vm.tools.isImportPhotoViewShown = true
+                            DispatchQueue.main.async {
+                                vm.setupAddAssetsToProject()
+                                vm.tools.isImportPhotoViewShown = true
+                            }
                         }
                         .contentShape(Rectangle())
                         .sheet(isPresented: $vm.tools.isImportPhotoViewShown) {

@@ -17,13 +17,23 @@ final class AddProjectViewModel: ObservableObject {
     @Published var selectedAssets = [PHAsset]()
     @Published var createdProject: ImageProjectEntity?
 
+    @Published var isPermissionGranted: Bool = true
+
     private let photoService = PhotoLibraryService()
 
     private var subscription: AnyCancellable?
 
     init() {
         setupSubscription()
-        photoService.requestAuthorization()
+        requestPermission()
+    }
+
+    func requestPermission() {
+        Task {
+            photoService.requestAuthorization { [unowned self] completion in
+                self.isPermissionGranted = completion
+            }
+        }
     }
 
     private func setupSubscription() {
