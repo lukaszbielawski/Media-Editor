@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ImageProjectView: View {
     @StateObject var vm: ImageProjectViewModel
+    @StateObject var interstitialAdManager = InterstitialAdsManager()
 
     @Environment(\.dismiss) var dismiss
 
@@ -36,7 +37,6 @@ struct ImageProjectView: View {
             VStack(spacing: 0) {
                 ZStack {
                     ImageProjectPlaneView()
-
                     Group {
                         if let currentTool = vm.currentTool as? ProjectToolType, currentTool == .merge {
                             ForEach(vm.layersToMerge) { layerModel in
@@ -100,7 +100,6 @@ struct ImageProjectView: View {
             }
             .onReceive(vm.showImageExportResultToast) { result in
                 isToastShown = (true, result)
-
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     isToastShown = (false, result)
                 }
@@ -118,6 +117,7 @@ struct ImageProjectView: View {
             .ignoresSafeArea(edges: .top)
             .onAppear {
                 vm.plane.totalLowerToolbarHeight = vm.plane.lowerToolbarHeight + UIScreen.bottomSafeArea
+                interstitialAdManager.loadInterstitialAd()
             }
             .toolbar { imageProjectToolbar }
             .sheet(isPresented: $vm.isExportSheetPresented) {
@@ -127,6 +127,14 @@ struct ImageProjectView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .ignoresSafeArea()
+                    }
+                    .onDisappear {
+                        if isToastShown == (true, true) {
+                            interstitialAdManager.didDismissAdAction = { [unowned vm] in
+                                vm.centerButtonFunction?()
+                            }
+                            interstitialAdManager.displayInterstitialAd()
+                        }
                     }
             }
             .alert("Deleting image", isPresented: $vm.tools.isDeleteImageAlertPresented) {

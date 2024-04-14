@@ -5,6 +5,7 @@
 //  Created by Łukasz Bielawski on 27/02/2024.
 //
 
+import GoogleMobileAds
 import SwiftUI
 
 struct ImageProjectExportPhotosView: View {
