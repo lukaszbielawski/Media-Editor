@@ -802,9 +802,8 @@ final class ImageProjectViewModel: ObservableObject {
         guard let textLayerModel = activeLayer as? TextLayerModel else { return }
         do {
             let textCGImage = try await photoExporterService.renderTextLayer(textModelEntity: textLayerModel.textModelEntity)
-            Task {
-                try await saveNewCGImageOnDisk(fileName: textLayerModel.fileName, cgImage: textCGImage)
-            }
+
+            try await saveNewCGImageOnDisk(fileName: textLayerModel.fileName, cgImage: textCGImage)
 
             textLayerModel.cgImage = textCGImage
             textLayerModel.size = calculateLayerSize(layerModel: textLayerModel)

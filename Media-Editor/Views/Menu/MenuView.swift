@@ -42,7 +42,7 @@ struct MenuView: View {
                         }
                     })
             }
-            .background { 
+            .background {
                 Image("MenuBackground")
                 .resizable()
                 .aspectRatio(contentMode: .fill)

@@ -14,6 +14,8 @@ struct ImageProjectPlaneView: View {
 
     @State var lastScaleValue: Double? = 1.0
 
+    @State private var isGeometryAlreadyAccessed: Bool = false
+
     var body: some View {
         ZStack {
             Color.clear
@@ -24,11 +26,14 @@ struct ImageProjectPlaneView: View {
                 .contentShape(Rectangle())
                 .zIndex(Double(Int.min + 1))
                 .geometryAccessor { workspaceGeoProxy in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        vm.workspaceSize = workspaceGeoProxy.size
-                        vm.setupCenterButtonFunction()
-                        vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
-                        vm.objectWillChange.send()
+                    if !isGeometryAlreadyAccessed {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            vm.workspaceSize = workspaceGeoProxy.size
+                            vm.setupCenterButtonFunction()
+                            vm.plane.setupPlaneView(workspaceSize: workspaceGeoProxy.size)
+                            isGeometryAlreadyAccessed = true
+                            vm.objectWillChange.send()
+                        }
                     }
                 }
 
