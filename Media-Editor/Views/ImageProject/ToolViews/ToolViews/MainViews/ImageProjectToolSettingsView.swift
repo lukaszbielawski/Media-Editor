@@ -54,13 +54,13 @@ struct ImageProjectToolSettingsView: View {
                     Spacer()
                     ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
                     Spacer()
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.rightFloatingButtonIcon,
-                        buttonType: .right)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                        .onAppear {
-                            vm.tools.rightFloatingButtonIcon = "checkmark"
-                        }
+//                    ImageProjectToolFloatingButtonView(
+//                        systemName: vm.tools.rightFloatingButtonIcon,
+//                        buttonType: .right)
+//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+//                        .onAppear {
+//                            vm.tools.rightFloatingButtonIcon = "checkmark"
+//                        }
                 }
 
             case let projectTool as ProjectToolType:
@@ -83,13 +83,13 @@ struct ImageProjectToolSettingsView: View {
                     Spacer()
                     ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
                     Spacer()
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.rightFloatingButtonIcon,
-                        buttonType: .right)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-                        .onAppear {
-                            vm.tools.rightFloatingButtonIcon = "checkmark"
-                        }
+//                    ImageProjectToolFloatingButtonView(
+//                        systemName: vm.tools.rightFloatingButtonIcon,
+//                        buttonType: .right)
+//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+//                        .onAppear {
+//                            vm.tools.rightFloatingButtonIcon = "checkmark"
+//                        }
                 case .background:
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(

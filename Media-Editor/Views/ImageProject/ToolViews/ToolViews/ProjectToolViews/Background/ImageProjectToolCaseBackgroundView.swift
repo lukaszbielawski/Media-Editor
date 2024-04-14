@@ -108,6 +108,7 @@ struct ImageProjectToolCaseBackgroundView: View {
             Task {
                 try await vm.renderTextLayer()
             }
+            vm.updateLatestSnapshot()
             vm.objectWillChange.send()
         }
         vm.objectWillChange.send()

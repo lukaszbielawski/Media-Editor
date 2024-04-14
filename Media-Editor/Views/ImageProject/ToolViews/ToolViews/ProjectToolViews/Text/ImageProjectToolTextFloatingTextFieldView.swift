@@ -29,8 +29,11 @@ struct ImageProjectToolTextFloatingTextFieldView: View {
                     textLayer.text = newValue
                 }
 
-
-                TextField("Type text here...", text: textFieldBinding.onChange(debounceTextFieldSubject.send(_:)))
+                TextField("Type text here...", text: textFieldBinding.onChange(debounceTextFieldSubject.send(_:)), onEditingChanged: { editing in
+                    if !editing {
+                        vm.updateLatestSnapshot()
+                    }
+                })
                     .foregroundStyle(Color(.tint))
                     .font(.title2)
                     .focused($isFocused)
@@ -55,7 +58,8 @@ struct ImageProjectToolTextFloatingTextFieldView: View {
                                      debounceInterval: .seconds(1.0),
                                      scheduler: DispatchQueue.main)
                     .sink { [unowned vm] _ in
-                        Task {
+                        vm.renderTask?.cancel()
+                        vm.renderTask = Task {
                             try await vm.renderTextLayer()
                         }
                         vm.objectWillChange.send()

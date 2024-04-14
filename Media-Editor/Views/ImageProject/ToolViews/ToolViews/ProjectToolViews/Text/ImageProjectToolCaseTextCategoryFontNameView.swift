@@ -44,7 +44,7 @@ struct ImageProjectToolCaseTextCategoryFontNameView: View {
                 .pickerStyle(WheelPickerStyle())
             }
             .frame(height: vm.plane.lowerToolbarHeight + vm.tools.paddingFactor *
-                   vm.plane.lowerToolbarHeight)
+                vm.plane.lowerToolbarHeight)
         }
         .padding(.bottom, vm.tools.paddingFactor *
             vm.plane.lowerToolbarHeight)
@@ -56,6 +56,7 @@ struct ImageProjectToolCaseTextCategoryFontNameView: View {
                     vm.renderTask = Task {
                         try await vm.renderTextLayer()
                     }
+                    vm.updateLatestSnapshot()
                     vm.objectWillChange.send()
                 }
         }

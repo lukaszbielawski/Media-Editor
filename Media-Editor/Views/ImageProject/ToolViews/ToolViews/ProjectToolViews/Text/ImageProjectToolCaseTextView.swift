@@ -75,17 +75,6 @@ struct ImageProjectToolCaseTextView: View {
                 vm.currentCategory = .none
             } else if actionType == .back {
                 vm.currentTool = .none
-                if !isEditMode {
-                    guard let activeLayer = vm.activeLayer else { return }
-                    vm.layerToDelete = vm.activeLayer
-                    vm.deactivateLayer()
-                    vm.deleteLayer()
-
-                }
-            } else if actionType == .confirm {
-                vm.activeLayer?.toDelete = false
-                vm.currentTool = .none
-                vm.updateLatestSnapshot()
             }
         }
     }

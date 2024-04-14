@@ -48,7 +48,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var isExportSheetPresented = false
 
     private var latestSnapshot: SnapshotModel!
-    let undoLimit = 50
+    let undoLimit = 200
 
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
@@ -228,6 +228,18 @@ final class ImageProjectViewModel: ObservableObject {
                     layer.scaleX = previousLayer.scaleX
                     layer.scaleY = previousLayer.scaleY
                     layer.size = self.calculateLayerSize(layerModel: previousLayer)
+                }
+
+                if let previousTextLayer = previousLayer as? TextLayerModel,
+                   let textLayer = layer as? TextLayerModel
+                {
+                    textLayer.text = previousTextLayer.text
+                    textLayer.fontName = previousTextLayer.fontName
+                    textLayer.fontSize = previousTextLayer.fontSize
+                    textLayer.curveAngle = previousTextLayer.curveAngle
+                    textLayer.textColor = previousTextLayer.textColor
+                    textLayer.borderColor = previousTextLayer.borderColor
+                    textLayer.borderSize = previousTextLayer.borderSize
                 }
 
             } else {

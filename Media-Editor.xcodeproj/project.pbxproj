@@ -79,6 +79,7 @@
 		B25FB5962B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */; };
 		B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */; };
 		B2675FF92B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2675FF82B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift */; };
+		B268B3CD2BCBAC5400D107B3 /* SenderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B268B3CC2BCBAC5400D107B3 /* SenderType.swift */; };
 		B2707D782BC3E90000C1F4A8 /* ColorPickerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2707D772BC3E90000C1F4A8 /* ColorPickerType.swift */; };
 		B2707D7A2BC3F37300C1F4A8 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2707D792BC3F37300C1F4A8 /* Category.swift */; };
 		B271509C2B4AC94600411F9A /* MenuManageProjectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */; };
@@ -224,6 +225,7 @@
 		B25FB5952B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolDetailsView.swift; sourceTree = "<group>"; };
 		B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileViewModifier.swift; sourceTree = "<group>"; };
 		B2675FF82B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectImportPhotoView.swift; sourceTree = "<group>"; };
+		B268B3CC2BCBAC5400D107B3 /* SenderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenderType.swift; sourceTree = "<group>"; };
 		B2707D772BC3E90000C1F4A8 /* ColorPickerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerType.swift; sourceTree = "<group>"; };
 		B2707D792BC3F37300C1F4A8 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		B271509B2B4AC94600411F9A /* MenuManageProjectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManageProjectSheetView.swift; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 				B2707D772BC3E90000C1F4A8 /* ColorPickerType.swift */,
 				B2E0CF6E2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift */,
 				B2F00E4A2BCA79D70053B7DB /* FontType.swift */,
+				B268B3CC2BCBAC5400D107B3 /* SenderType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -1119,6 +1122,7 @@
 				B21C24EE2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift in Sources */,
 				B29416032B77FDF400F81596 /* EditFrameResizeModifier.swift in Sources */,
 				B210F5FD2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift in Sources */,
+				B268B3CD2BCBAC5400D107B3 /* SenderType.swift in Sources */,
 				B2CF19482B7D2B320053E960 /* ImageProjectLayerView+DragGesture.swift in Sources */,
 				B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */,
 			);

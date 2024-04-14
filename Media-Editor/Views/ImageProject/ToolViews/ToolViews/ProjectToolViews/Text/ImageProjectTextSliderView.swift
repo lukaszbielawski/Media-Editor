@@ -17,7 +17,7 @@ struct ImageProjectTextSliderView: View {
     @Binding var textSliderBinding: CGFloat
     @Binding var textTextFieldBinding: String
 
-    @State var debounceSaveSubject = PassthroughSubject<Void, Never>()
+    @State var debounceSaveSubject = PassthroughSubject<SenderType, Never>()
     @State var cancellable: AnyCancellable?
 
     @FocusState var isFocused
@@ -34,7 +34,7 @@ struct ImageProjectTextSliderView: View {
                 .onTapGesture {
                     if textSliderBinding > sliderRange.lowerBound {
                         textSliderBinding -= 1.0
-                        debounceSaveSubject.send()
+                        debounceSaveSubject.send(.slider)
                     }
                 }
             if isLogarithmic {
@@ -58,7 +58,7 @@ struct ImageProjectTextSliderView: View {
                 .onTapGesture {
                     if textSliderBinding < sliderRange.upperBound {
                         textSliderBinding += 1.0
-                        debounceSaveSubject.send()
+                        debounceSaveSubject.send(.slider)
                     }
                 }
             TextField(hint,
@@ -79,17 +79,21 @@ struct ImageProjectTextSliderView: View {
             textTextFieldBinding = String(Int(textSliderBinding))
 
             cancellable = debounceSaveSubject
-                .map {
+                .map { value in
                     vm.objectWillChange.send()
+                    return value
                 }
                 .throttleAndDebounce(throttleInterval: .seconds(0.0333),
                                      debounceInterval: .seconds(1.0),
                                      scheduler: DispatchQueue.main)
-                .sink { [unowned vm] _ in
+                .sink { [unowned vm] sender, publisherType in
 
                     vm.renderTask?.cancel()
                     vm.renderTask = Task {
                         try await vm.renderTextLayer()
+                    }
+                    if publisherType == .debounce && sender != .textField {
+                        vm.updateLatestSnapshot()
                     }
                     vm.objectWillChange.send()
                 }
@@ -112,12 +116,12 @@ struct ImageProjectTextSliderView: View {
             textTextFieldBinding = ""
         }
         withAnimation(.easeInOut(duration: 0.35)) {
-            debounceSaveSubject.send()
+            debounceSaveSubject.send(.textField)
         }
     }
 
     private func sliderChanged(newValue: CGFloat) {
         textTextFieldBinding = String(Int(newValue))
-        debounceSaveSubject.send()
+        debounceSaveSubject.send(.slider)
     }
 }
