@@ -64,6 +64,7 @@ struct PhotoExporterService {
                           path: Path) async throws -> CGImage
     {
         return try await Task {
+            guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
             guard let context = CGContext(data: nil,
                                           width: Int(pixelCropSize.width),
                                           height: Int(pixelCropSize.height),
@@ -96,10 +97,10 @@ struct PhotoExporterService {
             )
             context.translateBy(x: -pixelOffset.width * scaleXSign, y: pixelOffset.height * scaleYSign)
 
-            context.draw(layer.cgImage, in: CGRect(x: 0,
+            context.draw(layerImage, in: CGRect(x: 0,
                                                    y: 0,
-                                                   width: CGFloat(layer.cgImage.width),
-                                                   height: CGFloat(layer.cgImage.height)))
+                                                   width: CGFloat(layerImage.width),
+                                                   height: CGFloat(layerImage.height)))
 
             let clippedImage = context.makeImage()
 
@@ -118,6 +119,7 @@ struct PhotoExporterService {
                              isApplyingTransforms: Bool = true) async throws -> CGImage
     {
         return try await Task {
+
             guard let context = CGContext(data: nil,
                                           width: Int(contextPixelSize.width),
                                           height: Int(contextPixelSize.height),
@@ -143,6 +145,8 @@ struct PhotoExporterService {
                       let rotation = photo.rotation,
                       let position = photo.position
                 else { continue }
+
+                guard let layerImage = photo.cgImage else { continue }
 
                 context.saveGState()
 
@@ -185,7 +189,7 @@ struct PhotoExporterService {
                                                                    height: photo.pixelSize.height)))
                 }
 
-                context.draw(photo.cgImage, in:
+                context.draw(layerImage, in:
                     CGRect(x: 0,
                            y: 0,
                            width: photo.pixelSize.width,

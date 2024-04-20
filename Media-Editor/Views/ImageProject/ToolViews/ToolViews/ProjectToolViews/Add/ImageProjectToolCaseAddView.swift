@@ -34,29 +34,31 @@ struct ImageProjectToolCaseAddView: View {
                                 }
                         }
                     ForEach(vm.projectLayers.filter { !($0.toDelete ?? false)  }) { layerModel in
-                        ZStack(alignment: .topTrailing) {
-                            Image(decorative: layerModel.cgImage, scale: 1.0)
-                                .centerCropped()
-                                .modifier(ProjectToolTileViewModifier())
-                                .contentShape(Rectangle())
-                            Circle()
-                                .fill(Color(.image))
-                                .frame(width: 25, height: 25)
-                                .padding(4.0)
-                                .overlay {
-                                    Image(systemName: "trash")
-                                        .foregroundStyle(Color(.tint))
-                                }
-                                .padding(.top, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    vm.layerToDelete = layerModel
-                                    vm.tools.isDeleteImageAlertPresented = true
-                                }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            vm.showLayerOnScreen(layerModel: layerModel)
+                        if let layerImage = layerModel.cgImage {
+                            ZStack(alignment: .topTrailing) {
+                                Image(decorative: layerImage, scale: 1.0)
+                                    .centerCropped()
+                                    .modifier(ProjectToolTileViewModifier())
+                                    .contentShape(Rectangle())
+                                Circle()
+                                    .fill(Color(.image))
+                                    .frame(width: 25, height: 25)
+                                    .padding(4.0)
+                                    .overlay {
+                                        Image(systemName: "trash")
+                                            .foregroundStyle(Color(.tint))
+                                    }
+                                    .padding(.top, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        vm.layerToDelete = layerModel
+                                        vm.tools.isDeleteImageAlertPresented = true
+                                    }
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                vm.showLayerOnScreen(layerModel: layerModel)
+                            }
                         }
                     }
                 }

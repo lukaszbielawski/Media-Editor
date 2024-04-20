@@ -12,7 +12,7 @@ import SwiftUI
 class LayerModel: Identifiable, ObservableObject, NSCopying {
     var id: String { fileName }
     let fileName: String
-    var cgImage: CGImage!
+    var cgImage: CGImage?
 
     let photoEntity: PhotoEntity
 
@@ -94,6 +94,7 @@ extension LayerModel {
     }
 
     var pixelSize: CGSize {
+        guard let cgImage else { return .zero }
         return CGSize(width: cgImage.width, height: cgImage.height)
     }
 

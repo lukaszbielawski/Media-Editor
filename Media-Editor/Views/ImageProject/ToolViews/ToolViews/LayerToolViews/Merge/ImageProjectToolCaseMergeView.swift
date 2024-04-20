@@ -18,32 +18,34 @@ struct ImageProjectToolCaseMergeView: View {
                     .filter { $0.positionZ! > 0 }
                     .sorted { $0.positionZ! > $1.positionZ! }
                 ForEach(filteredArray) { layerModel in
-                    ZStack(alignment: .topTrailing) {
-                        Image(decorative: layerModel.cgImage, scale: 1.0)
-                            .centerCropped()
-                            .contentShape(Rectangle())
-                            .overlay {
-                                if vm.layersToMerge.contains(layerModel) {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius:
-                                            vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                    if let layerModelImage = layerModel.cgImage {
+                        ZStack(alignment: .topTrailing) {
+                            Image(decorative: layerModelImage, scale: 1.0)
+                                .centerCropped()
+                                .contentShape(Rectangle())
+                                .overlay {
+                                    if vm.layersToMerge.contains(layerModel) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius:
+                                                                vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                                             .fill(Color(.accent))
-                                        RoundedRectangle(cornerRadius:
-                                            vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                                            RoundedRectangle(cornerRadius:
+                                                                vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                                             .fill(Color.white)
                                             .padding(2.0)
                                             .blendMode(.destinationOut)
+                                        }
+                                        .compositingGroup()
+                                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
                                     }
-                                    .compositingGroup()
-                                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
                                 }
-                            }
-                            .modifier(ProjectToolTileViewModifier())
-                    }
+                                .modifier(ProjectToolTileViewModifier())
+                        }
 
-                    .onTapGesture {
-                        vm.toggleToMergeStatus(layerModel: layerModel)
-                    }.animation(.easeInOut(duration: 0.35), value: layerModel.positionZ)
+                        .onTapGesture {
+                            vm.toggleToMergeStatus(layerModel: layerModel)
+                        }.animation(.easeInOut(duration: 0.35), value: layerModel.positionZ)
+                    }
                 }
             }
         }

@@ -110,9 +110,12 @@ final class ImageProjectViewModel: ObservableObject {
                     isFirst = false
                     layerModel.positionZ = 1
                     projectLayers.append(layerModel)
+                    
+                    if let layerImage = layerModel.cgImage {
+                        projectModel.framePixelWidth = CGFloat(layerImage.width)
+                        projectModel.framePixelHeight = CGFloat(layerImage.height)
+                    }
 
-                    projectModel.framePixelWidth = CGFloat(layerModel.cgImage.width)
-                    projectModel.framePixelHeight = CGFloat(layerModel.cgImage.height)
                     projectModel.lastEditDate = Date.now
 
                     PersistenceController.shared.saveChanges()
@@ -469,10 +472,12 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func cropLayer(frameRect: CGRect, cropRect: CGRect) async throws {
-        guard let activeLayer else { return }
+        guard let activeLayer,
+        let activeLayerImage = activeLayer.cgImage else { return }
 
-        let widthRatio = CGFloat(activeLayer.cgImage.width) / frameRect.width
-        let heightRatio = CGFloat(activeLayer.cgImage.height) / frameRect.height
+        
+        let widthRatio = CGFloat(activeLayerImage.width) / frameRect.width
+        let heightRatio = CGFloat(activeLayerImage.height) / frameRect.height
 
         let pixelFrameSize = frameRect.size.pixelSize(widthRatio,
                                                       heightRatio)
@@ -550,7 +555,8 @@ final class ImageProjectViewModel: ObservableObject {
     func calculateLayerSize(layerModel: LayerModel) -> CGSize {
         guard let frameSize = frame.rect?.size,
               let projectPixelFrameWidth = projectModel.framePixelWidth,
-              let projectPixelFrameHeight = projectModel.framePixelHeight
+              let projectPixelFrameHeight = projectModel.framePixelHeight,
+              let layerImage = layerModel.cgImage
         else { return .zero }
 
         let validatedProjectPixelFrameWidth =
@@ -561,8 +567,8 @@ final class ImageProjectViewModel: ObservableObject {
             max(min(projectPixelFrameHeight, CGFloat(frame.maxPixels)),
                 CGFloat(frame.minPixels))
 
-        let scale = (x: Double(layerModel.cgImage.width) / validatedProjectPixelFrameWidth,
-                     y: Double(layerModel.cgImage.height) / validatedProjectPixelFrameHeight)
+        let scale = (x: Double(layerImage.width) / validatedProjectPixelFrameWidth,
+                     y: Double(layerImage.height) / validatedProjectPixelFrameHeight)
 
         let layerSize = CGSize(width: frameSize.width * scale.x, height: frameSize.height * scale.y)
 

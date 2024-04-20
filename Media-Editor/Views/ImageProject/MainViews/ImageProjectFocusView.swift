@@ -11,7 +11,8 @@ struct ImageProjectFocusView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var body: some View {
-        if let layerModel = vm.activeLayer {
+        if let layerModel = vm.activeLayer,
+           let layerModelImage = layerModel.cgImage {
             let scaledSize = CGSize(width: layerModel.pixelSize.width * abs(layerModel.scaleX ?? 1.0),
                                     height: layerModel.pixelSize.height * abs(layerModel.scaleY ?? 1.0))
 
@@ -27,7 +28,7 @@ struct ImageProjectFocusView: View {
                         .resizable(resizingMode: .tile)
                         .frame(width: frameSize.width, height: frameSize.height)
 
-                    Image(decorative: layerModel.cgImage, scale: 1.0)
+                    Image(decorative: layerModelImage, scale: 1.0)
                         .resizable()
                         .frame(width: frameSize.width, height: frameSize.height)
                         .scaleEffect(x: copysign(-1.0, layerModel.scaleX ?? 1.0),

@@ -19,9 +19,10 @@ struct ImageProjectToolCaseLayersView: View {
                     ForEach(filteredArray) { layerModel in
 
                         let index = filteredArray.firstIndex(of: layerModel)!
-                        if let positionZ = layerModel.positionZ {
+                        if let positionZ = layerModel.positionZ,
+                           let layerModelImage = layerModel.cgImage {
                             ZStack(alignment: .topTrailing) {
-                                Image(decorative: layerModel.cgImage, scale: 1.0)
+                                Image(decorative: layerModelImage, scale: 1.0)
                                     .centerCropped()
                                     .modifier(ProjectToolTileViewModifier())
                                     .contentShape(Rectangle())

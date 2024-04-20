@@ -21,9 +21,10 @@ struct ImageProjectLayerView: View {
 
     var body: some View {
         if vm.plane.size != nil,
-           layerModel.photoEntity.positionX != nil
+           layerModel.photoEntity.positionX != nil,
+           let layerModelImage = layerModel.cgImage
         {
-            Image(decorative: layerModel.cgImage, scale: 1.0, orientation: .up)
+            Image(decorative: layerModelImage, scale: 1.0, orientation: .up)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
 
