@@ -35,7 +35,6 @@ struct MediaEditorApp: App {
             MenuView()
                 .background(Color(.background))
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                    print("will enter")
                     appOpenAdsManager.displayAppOpenAd()
                 }
                 .onAppear {

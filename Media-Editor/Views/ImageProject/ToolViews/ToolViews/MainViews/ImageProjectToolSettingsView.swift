@@ -37,7 +37,14 @@ struct ImageProjectToolSettingsView: View {
                     ImageProjectToolFloatingButtonView(
                         systemName: vm.tools.rightFloatingButtonIcon,
                         buttonType: .right)
-                } else if layerTool == .background {
+                } else if layerTool == .draw {
+                    ImageProjectToolCaseDrawFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                }
+
+                else if layerTool == .background {
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
@@ -54,13 +61,6 @@ struct ImageProjectToolSettingsView: View {
                     Spacer()
                     ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
                     Spacer()
-//                    ImageProjectToolFloatingButtonView(
-//                        systemName: vm.tools.rightFloatingButtonIcon,
-//                        buttonType: .right)
-//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-//                        .onAppear {
-//                            vm.tools.rightFloatingButtonIcon = "checkmark"
-//                        }
                 }
 
             case let projectTool as ProjectToolType:

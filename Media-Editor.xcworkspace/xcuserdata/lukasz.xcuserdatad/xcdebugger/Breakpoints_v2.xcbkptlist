@@ -346,9 +346,9 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "setupSubscription()"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "setupPhotoLibrarySubscription()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -394,8 +394,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
             landmarkName = "setupAddAssetsToProject()"
             landmarkType = "7">
             <Locations>
@@ -442,8 +442,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "copyAndAppend()"
             landmarkType = "7">
          </BreakpointContent>
@@ -458,8 +458,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
             landmarkName = "createNewEntity(from:)"
             landmarkType = "7">
             <Locations>
@@ -521,8 +521,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
             landmarkName = "createNewEntity(from:)"
             landmarkType = "7">
             <Locations>
@@ -584,8 +584,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "copyAndAppend()"
             landmarkType = "7">
             <Locations>
@@ -722,9 +722,9 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
-            landmarkName = "createNewEntity(from:)"
+            startingLineNumber = "299"
+            endingLineNumber = "299"
+            landmarkName = "copyAndAppend()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -36,7 +36,7 @@ struct ImageProjectToolCaseTextView: View {
                 Group {
                     switch textCategory {
                     case .textColor:
-                        ImageProjectToolCaseBackgroundView(colorPickerType: .textColor)
+                        ImageProjectToolColorPickerView(colorPickerType: .textColor)
                     case .fontName:
                         ImageProjectToolCaseTextCategoryFontNameView()
                     case .fontSize:
@@ -45,7 +45,7 @@ struct ImageProjectToolCaseTextView: View {
                         ImageProjectToolCaseTextSliderView(textCategory: .curve)
                     case .border:
                         HStack {
-                            ImageProjectToolCaseBackgroundView(
+                            ImageProjectToolColorPickerView(
                                 colorPickerType: .borderColor,
                                 onlyCustom: true,
                                 customTitle: "Border")

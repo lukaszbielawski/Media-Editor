@@ -12,4 +12,5 @@ enum ColorPickerType {
     case layerBackground
     case textColor
     case borderColor
+    case pencilColor
 }

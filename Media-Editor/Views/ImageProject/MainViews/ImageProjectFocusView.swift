@@ -13,11 +13,11 @@ struct ImageProjectFocusView: View {
     var body: some View {
         if let layerModel = vm.activeLayer,
            let layerModelImage = layerModel.cgImage {
-            let scaledSize = CGSize(width: layerModel.pixelSize.width * abs(layerModel.scaleX ?? 1.0),
+            let pixelSize = CGSize(width: layerModel.pixelSize.width * abs(layerModel.scaleX ?? 1.0),
                                     height: layerModel.pixelSize.height * abs(layerModel.scaleY ?? 1.0))
 
             var frameSize: CGSize {
-                return vm.calculateFrameRect(customBounds: scaledSize, isMargined: true)?.size ?? .zero
+                return vm.calculateFrameRect(customBounds: pixelSize, isMargined: true)?.size ?? .zero
             }
 
             ZStack {
@@ -34,9 +34,14 @@ struct ImageProjectFocusView: View {
                         .scaleEffect(x: copysign(-1.0, layerModel.scaleX ?? 1.0),
                                      y: copysign(-1.0, layerModel.scaleY ?? 1.0))
 
-                    if let currentTool = vm.currentTool as? LayerToolType, currentTool == .crop {
-                        ImageProjectCroppingFrameView(frameSize: frameSize, scaledSize: scaledSize)
+                    if let currentTool = vm.currentTool as? LayerToolType {
+                        if currentTool == .crop {
+                            ImageProjectCroppingFrameView(frameSize: frameSize, scaledSize: pixelSize)
+                        } else if currentTool == .draw {
+                            ImageProjectDrawingCanvasView(frameSize: frameSize, pixelSize: pixelSize)
+                        }
                     }
+                    
                 }
                 .offset(x: 0, y: ((vm.plane.totalLowerToolbarHeight ?? 0.0)
                         - (vm.plane.totalNavBarHeight ?? 0.0)) * 0.5)

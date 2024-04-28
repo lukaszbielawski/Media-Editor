@@ -1,5 +1,5 @@
 //
-//  ImageProjectToolCaseBackgroundView.swift
+//  ImageProjectToolColorPickerView.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 22/02/2024.
@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-struct ImageProjectToolCaseBackgroundView: View {
+struct ImageProjectToolColorPickerView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     @State private var cancellable: AnyCancellable?
@@ -16,6 +16,7 @@ struct ImageProjectToolCaseBackgroundView: View {
 
     var colorPickerType: ColorPickerType = .projectBackground
     var onlyCustom: Bool = false
+    var allowOpacity: Bool = true
     var customTitle: String = "Custom"
 
     var body: some View {
@@ -52,13 +53,17 @@ struct ImageProjectToolCaseBackgroundView: View {
                 } else {
                     return nil
                 }
+            case .pencilColor:
+                return $vm.currentPencilColor
             }
+
         }()
 
         if let colorBinding {
             HStack {
                 ZStack(alignment: .center) {
-                    ColorPicker(selection: colorBinding.onChange(colorPicked), label: { EmptyView() })
+                    ColorPicker(selection: colorBinding.onChange(colorPicked),
+                                supportsOpacity: allowOpacity, label: { EmptyView() })
                         .labelsHidden()
                         .scaleEffect(vm.plane.lowerToolbarHeight *
                             (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
@@ -96,7 +101,7 @@ struct ImageProjectToolCaseBackgroundView: View {
     }
 
     private func performColorPickedAction() {
-        vm.objectWillChange.send()
+
         switch colorPickerType {
         case .projectBackground:
             vm.updateLatestSnapshot()
@@ -110,6 +115,8 @@ struct ImageProjectToolCaseBackgroundView: View {
             }
             vm.updateLatestSnapshot()
             vm.objectWillChange.send()
+        case .pencilColor:
+            break
         }
         vm.objectWillChange.send()
     }

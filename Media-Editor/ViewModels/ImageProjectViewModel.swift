@@ -28,6 +28,11 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentTextLayerTextColor: Color = .white
     @Published var originalCGImage: CGImage!
 
+    @Published var currentPencil: PencilType = .pencil
+    @Published var currentPencilSize: Int = 16
+    @Published var currentPencilColor: Color = .black
+    @Published var drawingParticles: [ParticleModel] = []
+
     @Published var workspaceSize: CGSize?
 
     @Published var plane: PlaneModel = .init()
@@ -56,13 +61,15 @@ final class ImageProjectViewModel: ObservableObject {
     let filterChangedSubject = PassthroughSubject<Void, Never>()
     let performToolActionSubject = PassthroughSubject<any Tool, Never>()
     let floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
+    var saveActiveLayerImageSubject =
+        PassthroughSubject<Void, Never>()
 
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
 
     var centerButtonFunction: (() -> Void)?
 
-    private var cancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
     var renderTask: Task<Void, Error>?
 
     private var photoLibraryService = PhotoLibraryService()
@@ -110,7 +117,7 @@ final class ImageProjectViewModel: ObservableObject {
                     isFirst = false
                     layerModel.positionZ = 1
                     projectLayers.append(layerModel)
-                    
+
                     if let layerImage = layerModel.cgImage {
                         projectModel.framePixelWidth = CGFloat(layerImage.width)
                         projectModel.framePixelHeight = CGFloat(layerImage.height)
@@ -124,23 +131,42 @@ final class ImageProjectViewModel: ObservableObject {
                 }
             }
         }
+        setupSubscriptions()
         latestSnapshot = createSnapshot()
     }
 
     func setupAddAssetsToProject() {
         photoLibraryService.requestAuthorization { [unowned self] completion in
             self.isPermissionGranted = completion
-            self.setupSubscription()
+            self.setupPhotoLibrarySubscription()
         }
     }
 
-    private func setupSubscription() {
-        cancellable = photoLibraryService
+    private func setupPhotoLibrarySubscription() {
+        photoLibraryService
             .mediaPublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] assets in
                 self.libraryPhotos = assets
             }
+            .store(in: &cancellables)
+    }
+
+    private func setupSubscriptions() {
+
+        saveActiveLayerImageSubject
+            .throttleAndDebounce(throttleInterval: .seconds(2.0),
+                                 debounceInterval: .seconds(1.0),
+                                 scheduler: DispatchQueue.main)
+            .sink { [unowned self] _ in
+                guard let activeLayer else { return }
+                print("in")
+                Task(priority: .high) {
+                    try await self.saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
+                }
+            }
+            .store(in: &cancellables)
+
     }
 
     func updateLatestSnapshot() {
@@ -473,9 +499,8 @@ final class ImageProjectViewModel: ObservableObject {
 
     func cropLayer(frameRect: CGRect, cropRect: CGRect) async throws {
         guard let activeLayer,
-        let activeLayerImage = activeLayer.cgImage else { return }
+              let activeLayerImage = activeLayer.cgImage else { return }
 
-        
         let widthRatio = CGFloat(activeLayerImage.width) / frameRect.width
         let heightRatio = CGFloat(activeLayerImage.height) / frameRect.height
 
@@ -879,6 +904,38 @@ final class ImageProjectViewModel: ObservableObject {
         } catch {
             isExportSheetPresented = false
             showImageExportResultToast.send(false)
+            print(error)
+        }
+    }
+
+    func applyDrawings(frameSize: CGSize) async {
+        guard let activeLayer else { return }
+        do {
+            let newCGImage: CGImage
+            if currentPencil == .eraser {
+                newCGImage = try await
+                    photoExporterService
+                    .eraseFromImageAndRender(
+                        eraserParticles: drawingParticles,
+                        on: activeLayer,
+                        frameSize: frameSize,
+                        pixelFrameSize: activeLayer.pixelSize)
+            } else {
+                newCGImage = try await
+                    photoExporterService
+                    .renderImageFromDrawing(
+                        drawingParticles: drawingParticles,
+                        on: activeLayer,
+                        frameSize: frameSize,
+                        pixelFrameSize: activeLayer.pixelSize)
+            }
+            activeLayer.cgImage = newCGImage
+            drawingParticles.removeAll()
+            updateLatestSnapshot()
+            print("save active layer")
+            saveActiveLayerImageSubject.send()
+
+        } catch {
             print(error)
         }
     }

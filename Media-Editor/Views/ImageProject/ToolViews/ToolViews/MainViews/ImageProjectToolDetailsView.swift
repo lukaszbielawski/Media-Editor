@@ -45,7 +45,7 @@ struct ImageProjectToolDetailsView: View {
                                 vm.leftFloatingButtonActionType = .back
                             }
                     case .background:
-                        ImageProjectToolCaseBackgroundView()
+                        ImageProjectToolColorPickerView()
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
@@ -69,8 +69,13 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }
+                    case .draw:
+                        ImageProjectToolCaseDrawView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .exitFocusMode
+                            }
                     case .background:
-                        ImageProjectToolCaseBackgroundView(colorPickerType: .layerBackground)
+                        ImageProjectToolColorPickerView(colorPickerType: .layerBackground)
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }

@@ -98,9 +98,9 @@ struct PhotoExporterService {
             context.translateBy(x: -pixelOffset.width * scaleXSign, y: pixelOffset.height * scaleYSign)
 
             context.draw(layerImage, in: CGRect(x: 0,
-                                                   y: 0,
-                                                   width: CGFloat(layerImage.width),
-                                                   height: CGFloat(layerImage.height)))
+                                                y: 0,
+                                                width: CGFloat(layerImage.width),
+                                                height: CGFloat(layerImage.height)))
 
             let clippedImage = context.makeImage()
 
@@ -111,7 +111,7 @@ struct PhotoExporterService {
         }.value
     }
 
-    func exportLayersToImage(photos: [LayerModel],
+    func exportLayersToImage(photos: [any LayerMergeable],
                              contextPixelSize: CGSize,
                              backgroundColor: CGColor,
                              offsetFromCenter: CGPoint = .zero,
@@ -119,7 +119,6 @@ struct PhotoExporterService {
                              isApplyingTransforms: Bool = true) async throws -> CGImage
     {
         return try await Task {
-
             guard let context = CGContext(data: nil,
                                           width: Int(contextPixelSize.width),
                                           height: Int(contextPixelSize.height),
@@ -204,6 +203,124 @@ struct PhotoExporterService {
         }.value
     }
 
+    func renderImageFromDrawing(drawingParticles: [ParticleModel],
+                                on layer: LayerModel,
+                                frameSize: CGSize,
+                                pixelFrameSize: CGSize) async throws -> CGImage
+    {
+        return try await Task {
+            guard let context = CGContext(data: nil,
+                                          width: Int(pixelFrameSize.width),
+                                          height: Int(pixelFrameSize.height),
+                                          bitsPerComponent: 8,
+                                          bytesPerRow: 0,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+
+            else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelFrameSize.width), height: Int(pixelFrameSize.height))) }
+
+            guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
+
+            context.draw(layerImage, in: CGRect(x: 0,
+                                                y: 0,
+                                                width: CGFloat(pixelFrameSize.width),
+                                                height: CGFloat(pixelFrameSize.height)))
+
+            let transform = CGAffineTransform(scaleX: pixelFrameSize.width / frameSize.width, y: pixelFrameSize.height / frameSize.height)
+
+
+
+            context.translateBy(x: 0, y: pixelFrameSize.height)
+            context.scaleBy(x: 1, y: -1)
+
+            var path = Path()
+
+            for particle in drawingParticles {
+
+                let particleRect = particle.path.applying(transform).boundingRect
+                path.addLine(to: .init(x: particleRect.midX,
+                                       y: particleRect.midY))
+                path.move(to: .init(x: particleRect.midX,
+                                    y: particleRect.midY))
+
+                context.addPath(particle.path.applying(transform).cgPath)
+                context.setFillColor(particle.color.cgColor!)
+                context.fillPath()
+
+                context.setStrokeColor(particle.color.cgColor!)
+                context.setLineWidth(particleRect.width)
+                context.addPath(path.cgPath)
+                context.strokePath()
+            }
+
+            let clippedImage = context.makeImage()
+
+            guard let clippedImage else { throw PhotoExportError.contextImageMaking }
+
+            return clippedImage
+
+        }.value
+    }
+
+    func eraseFromImageAndRender(eraserParticles: [ParticleModel],
+                                on layer: LayerModel,
+                                frameSize: CGSize,
+                                pixelFrameSize: CGSize) async throws -> CGImage
+    {
+        return try await Task {
+            guard let context = CGContext(data: nil,
+                                          width: Int(pixelFrameSize.width),
+                                          height: Int(pixelFrameSize.height),
+                                          bitsPerComponent: 8,
+                                          bytesPerRow: 0,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+
+            else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelFrameSize.width), height: Int(pixelFrameSize.height))) }
+
+            guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
+
+            context.draw(layerImage, in: CGRect(x: 0,
+                                                y: 0,
+                                                width: CGFloat(pixelFrameSize.width),
+                                                height: CGFloat(pixelFrameSize.height)))
+
+            let transform = CGAffineTransform(scaleX: pixelFrameSize.width / frameSize.width, y: pixelFrameSize.height / frameSize.height)
+
+
+
+            context.translateBy(x: 0, y: pixelFrameSize.height)
+            context.scaleBy(x: 1, y: -1)
+
+            var path = Path()
+
+            for particle in eraserParticles {
+
+                let particleRect = particle.path.applying(transform).boundingRect
+                path.addLine(to: .init(x: particleRect.midX,
+                                       y: particleRect.midY))
+                path.move(to: .init(x: particleRect.midX,
+                                    y: particleRect.midY))
+
+                context.addPath(particle.path.applying(transform).cgPath)
+                context.setFillColor(particle.color.cgColor!)
+                context.fillPath()
+
+                context.setStrokeColor(particle.color.cgColor!)
+                context.setLineWidth(min(particleRect.width, particleRect.height))
+                context.addPath(path.cgPath)
+                context.strokePath()
+            }
+
+            let clippedImage = context.makeImage()
+
+            guard let clippedImage else { throw PhotoExportError.contextImageMaking }
+
+            return clippedImage
+
+        }.value
+    }
+
     func renderTextLayer(textModelEntity: TextModelEntity) async throws -> CGImage {
         return try await Task {
             let text = textModelEntity.text
@@ -236,18 +353,17 @@ struct PhotoExporterService {
             }(abs(curveAngle.degrees))
 
             let radius = ((textHeight + textWidth * 6.0) * curveFactor)
-            * copysign(-1.0, curveAngle.radians)
+                * copysign(-1.0, curveAngle.radians)
 
             let newWidth =
-            max(textWidth * pow(abs(cos(curveAngle.radians * 0.5)), 1/2),
-                2.0 * abs(radius) * sin(curveAngle.radians * 0.5) * sin(curveAngle.radians * 0.5)
-                + textHeight) + textHeight * 0.25
-            
-            let heightFactor = pow(abs(cos(curveAngle.radians * 0.5 - .pi * 0.5)), 1/2) * (2.0 * abs(radius) * sin(curveAngle.radians * 0.5) * sin(curveAngle.radians * 0.5))
+                max(textWidth * pow(abs(cos(curveAngle.radians * 0.5)), 1 / 2),
+                    2.0 * abs(radius) * sin(curveAngle.radians * 0.5) * sin(curveAngle.radians * 0.5)
+                        + textHeight) + textHeight * 0.25
+
+            let heightFactor = pow(abs(cos(curveAngle.radians * 0.5 - .pi * 0.5)), 1 / 2) * (2.0 * abs(radius) * sin(curveAngle.radians * 0.5) * sin(curveAngle.radians * 0.5))
 
             let newHeight =
-            heightFactor + textHeight
-
+                heightFactor + textHeight
 
             let size = CGSize(
                 width: newWidth,

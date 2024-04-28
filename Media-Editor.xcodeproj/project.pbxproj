@@ -45,7 +45,7 @@
 		B21C24F42B8B776B00DBE6B2 /* SnapshotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */; };
 		B21C24F72B8BA46300DBE6B2 /* PhotoFormatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */; };
 		B21C24F92B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */; };
-		B21C24FB2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift */; };
+		B21C24FB2B8BB47B00DBE6B2 /* ImageProjectToolColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolColorPickerView.swift */; };
 		B21C24FD2B8BB62E00DBE6B2 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */; };
 		B21C25002B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */; };
 		B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21D085C2B78D2CC0060C35F /* DoubleExtensions.swift */; };
@@ -146,6 +146,14 @@
 		B2E2624E2BCC3601003C41ED /* AppOpenAdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E2624D2BCC3601003C41ED /* AppOpenAdsManager.swift */; };
 		B2EFC4672B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */; };
 		B2F00E4B2BCA79D70053B7DB /* FontType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F00E4A2BCA79D70053B7DB /* FontType.swift */; };
+		B2F86F082BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */; };
+		B2F86F0A2BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */; };
+		B2F86F0C2BDE56C900C5AAFE /* PencilShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */; };
+		B2F86F0E2BDE688200C5AAFE /* ParticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0D2BDE688200C5AAFE /* ParticleModel.swift */; };
+		B2F86F102BDE747100C5AAFE /* LayerMergeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */; };
+		B2F86F142BDE761400C5AAFE /* MergeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F132BDE761400C5AAFE /* MergeModel.swift */; };
+		B2F86F162BDE9AFF00C5AAFE /* PencilType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */; };
+		B2F86F182BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F172BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift */; };
 		B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* LayerModel.swift */; };
 		B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A82B58277E00540F33 /* CGImageError.swift */; };
 		B2F918AD2B58554300540F33 /* CGSizeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */; };
@@ -193,7 +201,7 @@
 		B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotModel.swift; sourceTree = "<group>"; };
 		B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFormatType.swift; sourceTree = "<group>"; };
 		B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectFloatingBackgroundSliderView.swift; sourceTree = "<group>"; };
-		B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseBackgroundView.swift; sourceTree = "<group>"; };
+		B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolColorPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorPickerView.swift; sourceTree = "<group>"; };
 		B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorTileView.swift; sourceTree = "<group>"; };
 		B21D085C2B78D2CC0060C35F /* DoubleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensions.swift; sourceTree = "<group>"; };
@@ -294,6 +302,14 @@
 		B2E2624D2BCC3601003C41ED /* AppOpenAdsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppOpenAdsManager.swift; sourceTree = "<group>"; };
 		B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseMergeView.swift; sourceTree = "<group>"; };
 		B2F00E4A2BCA79D70053B7DB /* FontType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontType.swift; sourceTree = "<group>"; };
+		B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseDrawView.swift; sourceTree = "<group>"; };
+		B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectDrawingCanvasView.swift; sourceTree = "<group>"; };
+		B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilShape.swift; sourceTree = "<group>"; };
+		B2F86F0D2BDE688200C5AAFE /* ParticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleModel.swift; sourceTree = "<group>"; };
+		B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerMergeable.swift; sourceTree = "<group>"; };
+		B2F86F132BDE761400C5AAFE /* MergeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeModel.swift; sourceTree = "<group>"; };
+		B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilType.swift; sourceTree = "<group>"; };
+		B2F86F172BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseDrawFloatingSliderView.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* LayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerModel.swift; sourceTree = "<group>"; };
 		B2F918A82B58277E00540F33 /* CGImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImageError.swift; sourceTree = "<group>"; };
 		B2F918AC2B58554300540F33 /* CGSizeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSizeExtensions.swift; sourceTree = "<group>"; };
@@ -415,6 +431,7 @@
 				B2E0CF6E2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift */,
 				B2F00E4A2BCA79D70053B7DB /* FontType.swift */,
 				B268B3CC2BCBAC5400D107B3 /* SenderType.swift */,
+				B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -518,7 +535,7 @@
 		B21C24F52B8B96C000DBE6B2 /* Background */ = {
 			isa = PBXGroup;
 			children = (
-				B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift */,
+				B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolColorPickerView.swift */,
 				B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */,
 			);
 			path = Background;
@@ -576,6 +593,7 @@
 				B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */,
 				B2B28BE32B87CF0C00EC96B8 /* Tool.swift */,
 				B2707D792BC3F37300C1F4A8 /* Category.swift */,
+				B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -741,6 +759,7 @@
 		B2B28BDE2B87CBAD00EC96B8 /* LayerToolViews */ = {
 			isa = PBXGroup;
 			children = (
+				B2F86F062BDE53B100C5AAFE /* Draw */,
 				B28F7BB92B96336100E684C8 /* Crop */,
 				B21C24F22B8B709F00DBE6B2 /* Fliters */,
 				B21C24F12B8B709600DBE6B2 /* Flip */,
@@ -802,6 +821,7 @@
 				B2C352222B974D0D00E64525 /* Polygon.swift */,
 				B209B9612B97AA2E00803D1F /* Triangle.swift */,
 				B2AD27332B99B12700F704DF /* ShapeBuilder.swift */,
+				B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -818,6 +838,16 @@
 			path = Text;
 			sourceTree = "<group>";
 		};
+		B2F86F062BDE53B100C5AAFE /* Draw */ = {
+			isa = PBXGroup;
+			children = (
+				B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */,
+				B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */,
+				B2F86F172BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift */,
+			);
+			path = Draw;
+			sourceTree = "<group>";
+		};
 		B2F918A52B5811E400540F33 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -828,6 +858,8 @@
 				B210F5FE2B7B90DF0072AF7D /* ImageProjectModel.swift */,
 				B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */,
 				B2C842F72BC2EC8100A7853F /* TextLayerModel.swift */,
+				B2F86F0D2BDE688200C5AAFE /* ParticleModel.swift */,
+				B2F86F132BDE761400C5AAFE /* MergeModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1032,10 +1064,11 @@
 				B210F6052B7BE9F50072AF7D /* BindingExtensions.swift in Sources */,
 				B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */,
 				B2BF7A092B600D510031B8AA /* ImageProjectToolCaseAddView.swift in Sources */,
+				B2F86F082BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift in Sources */,
 				B24EA94C2B56B8260081FBFD /* MenuPlaceholderTileView.swift in Sources */,
 				B2C787402BC4687A00876BD3 /* CGImageExtensions.swift in Sources */,
 				B200CB2D2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift in Sources */,
-				B21C24FB2B8BB47B00DBE6B2 /* ImageProjectToolCaseBackgroundView.swift in Sources */,
+				B21C24FB2B8BB47B00DBE6B2 /* ImageProjectToolColorPickerView.swift in Sources */,
 				B25FB5832B5D38E100EBFB16 /* ImageProjectPlaneView.swift in Sources */,
 				B235D40B2B8D4AD700D02790 /* FloatingButtonType.swift in Sources */,
 				B25FB5962B5DB07200EBFB16 /* ImageProjectToolDetailsView.swift in Sources */,
@@ -1060,8 +1093,11 @@
 				B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
+				B2F86F182BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift in Sources */,
 				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */,
+				B2F86F0C2BDE56C900C5AAFE /* PencilShape.swift in Sources */,
 				B2C3521A2B97355100E64525 /* ImageProjectViewFloatingCropSliderView.swift in Sources */,
+				B2F86F142BDE761400C5AAFE /* MergeModel.swift in Sources */,
 				B28F7BB62B95FA8200E684C8 /* ImageProjectMergingFrameView.swift in Sources */,
 				B2E0CF6F2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift in Sources */,
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
@@ -1077,6 +1113,7 @@
 				B2490C542B94D3340071DDB1 /* ProjectSingleActionToolType.swift in Sources */,
 				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
 				B2B20D2C2B88F27A00E3E458 /* CGFloatExtensions.swift in Sources */,
+				B2F86F0A2BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift in Sources */,
 				B2C7873C2BC3FAB100876BD3 /* ImageProjectToolTextFloatingTextFieldView.swift in Sources */,
 				B2EFC4672B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift in Sources */,
 				B2C352162B97299A00E64525 /* ImageProjectToolCaseCropView.swift in Sources */,
@@ -1087,6 +1124,7 @@
 				B2F00E4B2BCA79D70053B7DB /* FontType.swift in Sources */,
 				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
 				B2DB93822B8C7602003AB2D2 /* UIColorExtensions.swift in Sources */,
+				B2F86F102BDE747100C5AAFE /* LayerMergeable.swift in Sources */,
 				B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */,
 				B2AD27342B99B12700F704DF /* ShapeBuilder.swift in Sources */,
 				B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */,
@@ -1121,6 +1159,7 @@
 				B2B20D282B88DC6100E3E458 /* ImageProjectToolView.swift in Sources */,
 				B209B9622B97AA2E00803D1F /* Triangle.swift in Sources */,
 				B275159F2B8DF93900647D4E /* PhotoExportError.swift in Sources */,
+				B2F86F162BDE9AFF00C5AAFE /* PencilType.swift in Sources */,
 				B20936762B5EB7D000757317 /* ImageProjectPhotosImportedPreferenceKey.swift in Sources */,
 				B200CB2F2B502C0800BA3023 /* HapticService.swift in Sources */,
 				B21103692B49856E00CA4981 /* ViewExtensions.swift in Sources */,
@@ -1148,6 +1187,7 @@
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,
 				B200CB352B505D0700BA3023 /* FlieError.swift in Sources */,
 				B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */,
+				B2F86F0E2BDE688200C5AAFE /* ParticleModel.swift in Sources */,
 				B209366C2B5E8F3E00757317 /* ImageProjectImportPhotoSummary.swift in Sources */,
 				B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */,
 				B29415FF2B77FD9600F81596 /* EditFrameCircleModifier.swift in Sources */,
@@ -1316,7 +1356,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.Pixiva;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1355,7 +1395,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.Pixiva;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

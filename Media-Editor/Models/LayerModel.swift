@@ -80,7 +80,7 @@ class LayerModel: Identifiable, ObservableObject, NSCopying {
     }
 }
 
-extension LayerModel {
+extension LayerModel: LayerMergeable {
     var absoluteFilePath: String {
         let mediaDirectoryPath: URL =
             FileManager

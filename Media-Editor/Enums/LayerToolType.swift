@@ -10,6 +10,7 @@ import Foundation
 enum LayerToolType: String, Tool {
     case filters
     case crop
+    case draw
     case background
     case flip
     case editText
@@ -24,6 +25,8 @@ extension LayerToolType {
             return "Filters"
         case .crop:
             return "Crop"
+        case .draw:
+            return "Draw"
         case .background:
             return "Background"
         case .flip:
@@ -39,12 +42,31 @@ extension LayerToolType {
             return "camera.filters"
         case .crop:
             return "crop"
+        case .draw:
+            return "pencil.and.scribble"
         case .background:
             return "rectangle.checkered"
         case .flip:
             return "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"
         case .editText:
             return "character.cursor.ibeam"
+        }
+    }
+
+    var isFocusViewTool: Bool {
+        switch self {
+        case .filters:
+            false
+        case .crop:
+            true
+        case .draw:
+            true
+        case .background:
+            true
+        case .flip:
+            false
+        case .editText:
+            false
         }
     }
 }

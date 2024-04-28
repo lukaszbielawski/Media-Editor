@@ -11,7 +11,8 @@ struct ImageProjectToolTileView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var title: String?
-    let iconName: String
+    var iconName: String?
+    var systemName: String?
     var imageRotation: Angle = .zero
 
     var body: some View {
@@ -20,11 +21,20 @@ struct ImageProjectToolTileView: View {
             .overlay {
                 VStack(spacing: 0) {
                     Spacer()
-                    Image(iconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding(.horizontal)
-                        .rotationEffect(imageRotation)
+
+                    if let systemName {
+                        Image(systemName: systemName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.horizontal)
+                            .rotationEffect(imageRotation)
+                    } else if let iconName {
+                        Image(iconName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.horizontal)
+                            .rotationEffect(imageRotation)
+                    }
 
                     Spacer()
                     if let title {
@@ -32,8 +42,6 @@ struct ImageProjectToolTileView: View {
                             .font(.footnote)
                             .padding(.bottom, 8)
                     }
-
-
                 }
                 .padding(.vertical, 4)
             }
