@@ -25,18 +25,8 @@ struct ImageProjectToolCaseMergeView: View {
                                 .contentShape(Rectangle())
                                 .overlay {
                                     if vm.layersToMerge.contains(layerModel) {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius:
-                                                                vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                                            .fill(Color(.accent))
-                                            RoundedRectangle(cornerRadius:
-                                                                vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                                            .fill(Color.white)
-                                            .padding(2.0)
-                                            .blendMode(.destinationOut)
-                                        }
-                                        .compositingGroup()
-                                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+                                        Color.accent
+                                            .modifier(ProjectToolTileSelectedModifier(paddingFactor: vm.tools.paddingFactor, lowerToolbarHeight: vm.plane.lowerToolbarHeight))
                                     }
                                 }
                                 .modifier(ProjectToolTileViewModifier())

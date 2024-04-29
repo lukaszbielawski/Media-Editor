@@ -26,7 +26,7 @@ struct ImageProjectToolCaseTextView: View {
                                     vm.currentCategory = category
                                 }
                         }
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .onAppear {
                             vm.leftFloatingButtonActionType = .back
                         }
@@ -53,7 +53,7 @@ struct ImageProjectToolCaseTextView: View {
                         }
                     }
                 }
-                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                .transition(.normalOpacityTransition)
                 .onAppear {
                     vm.leftFloatingButtonActionType = .backToCategories
                 }

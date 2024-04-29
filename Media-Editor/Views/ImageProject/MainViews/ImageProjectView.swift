@@ -79,7 +79,8 @@ struct ImageProjectView: View {
                             .zIndex(Double(Int.max) - 1)
                             .transition(AnyTransition
                                 .scale(scale: 0.0, anchor: UnitPoint(x: 1, y: 0.5))
-                                .animation(.easeInOut(duration: 0.35)))
+                                .animation(.easeInOut(duration: 0.35))
+                            )
                     }
                 }
                 .onChange(of: vm.activeLayer) { _ in
@@ -95,7 +96,7 @@ struct ImageProjectView: View {
                     let systemName =
                         isToastShown.result ? "checkmark.seal.fill" : "xmark.seal.fill"
                     ImageProjectToastView(systemName: systemName)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                 }
             }
             .onReceive(vm.showImageExportResultToast) { result in

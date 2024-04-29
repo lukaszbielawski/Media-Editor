@@ -12,9 +12,10 @@ struct ImageProjectFocusView: View {
 
     var body: some View {
         if let layerModel = vm.activeLayer,
-           let layerModelImage = layerModel.cgImage {
+           let layerModelImage = layerModel.cgImage
+        {
             let pixelSize = CGSize(width: layerModel.pixelSize.width * abs(layerModel.scaleX ?? 1.0),
-                                    height: layerModel.pixelSize.height * abs(layerModel.scaleY ?? 1.0))
+                                   height: layerModel.pixelSize.height * abs(layerModel.scaleY ?? 1.0))
 
             var frameSize: CGSize {
                 return vm.calculateFrameRect(customBounds: pixelSize, isMargined: true)?.size ?? .zero
@@ -28,20 +29,22 @@ struct ImageProjectFocusView: View {
                         .resizable(resizingMode: .tile)
                         .frame(width: frameSize.width, height: frameSize.height)
 
-                    Image(decorative: layerModelImage, scale: 1.0)
-                        .resizable()
-                        .frame(width: frameSize.width, height: frameSize.height)
-                        .scaleEffect(x: copysign(-1.0, layerModel.scaleX ?? 1.0),
-                                     y: copysign(-1.0, layerModel.scaleY ?? 1.0))
+                    ZStack {
+                        Image(decorative: layerModelImage, scale: 1.0)
+                            .resizable()
+                            .animation(nil)
+                            .frame(width: frameSize.width, height: frameSize.height)
+                            .scaleEffect(x: copysign(-1.0, layerModel.scaleX ?? 1.0),
+                                         y: copysign(-1.0, layerModel.scaleY ?? 1.0))
 
-                    if let currentTool = vm.currentTool as? LayerToolType {
-                        if currentTool == .crop {
-                            ImageProjectCroppingFrameView(frameSize: frameSize, scaledSize: pixelSize)
-                        } else if currentTool == .draw {
-                            ImageProjectDrawingCanvasView(frameSize: frameSize, pixelSize: pixelSize)
+                        if let currentTool = vm.currentTool as? LayerToolType {
+                            if currentTool == .crop {
+                                ImageProjectCroppingFrameView(frameSize: frameSize, scaledSize: pixelSize)
+                            } else if currentTool == .draw {
+                                ImageProjectDrawingCanvasView(frameSize: frameSize, pixelSize: pixelSize)
+                            }
                         }
-                    }
-                    
+                    }.compositingGroup()
                 }
                 .offset(x: 0, y: ((vm.plane.totalLowerToolbarHeight ?? 0.0)
                         - (vm.plane.totalNavBarHeight ?? 0.0)) * 0.5)

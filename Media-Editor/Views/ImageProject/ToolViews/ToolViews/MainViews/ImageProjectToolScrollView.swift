@@ -53,7 +53,7 @@ struct ImageProjectToolScrollView: View {
                                 })
                             }
                         }
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                     }
                 }
             }

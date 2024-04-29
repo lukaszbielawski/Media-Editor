@@ -65,7 +65,7 @@ struct ImageProjectToolCaseDrawFloatingSliderView: View {
                     Circle()
                         .fill(Color.tint)
                         .padding(2)
-                    Text("\(vm.currentPencilSize)")
+                    Text("\(vm.pencil.currentPencilSize)")
                         .foregroundStyle(Color(.image))
                 }
                 .frame(width: sliderHeight, height: sliderHeight)
@@ -81,7 +81,7 @@ struct ImageProjectToolCaseDrawFloatingSliderView: View {
                             sliderOffset = newOffset
                             guard let sliderOffset else { return }
                             sliderFactor = (sliderOffset / maxOffset)
-                            vm.currentPencilSize = Int(sliderFactor! * 99.0) + 1
+                            vm.pencil.currentPencilSize = Int(sliderFactor! * 99.0) + 1
                             debounceSliderSubject.send()
                         }
                         .updating($lastOffset) { _, lastOffset, _ in

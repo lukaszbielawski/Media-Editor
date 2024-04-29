@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B20095652BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */; };
+		B20095672BDF8156006B6B47 /* PenShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095662BDF8156006B6B47 /* PenShape.swift */; };
+		B20095692BDF8A9C006B6B47 /* PencilModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095682BDF8A9C006B6B47 /* PencilModel.swift */; };
+		B200956B2BDF93CC006B6B47 /* AnyTransitionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */; };
 		B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */; };
 		B200CB2D2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB2C2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift */; };
 		B200CB2F2B502C0800BA3023 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB2E2B502C0800BA3023 /* HapticService.swift */; };
@@ -149,7 +153,7 @@
 		B2F86F082BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */; };
 		B2F86F0A2BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */; };
 		B2F86F0C2BDE56C900C5AAFE /* PencilShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */; };
-		B2F86F0E2BDE688200C5AAFE /* ParticleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0D2BDE688200C5AAFE /* ParticleModel.swift */; };
+		B2F86F0E2BDE688200C5AAFE /* ParticlesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0D2BDE688200C5AAFE /* ParticlesModel.swift */; };
 		B2F86F102BDE747100C5AAFE /* LayerMergeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */; };
 		B2F86F142BDE761400C5AAFE /* MergeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F132BDE761400C5AAFE /* MergeModel.swift */; };
 		B2F86F162BDE9AFF00C5AAFE /* PencilType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */; };
@@ -162,6 +166,10 @@
 
 /* Begin PBXFileReference section */
 		314F1D791BE6D9B65F817710 /* Pods-Media-Editor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Editor.release.xcconfig"; path = "Target Support Files/Pods-Media-Editor/Pods-Media-Editor.release.xcconfig"; sourceTree = "<group>"; };
+		B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileSelectedModifier.swift; sourceTree = "<group>"; };
+		B20095662BDF8156006B6B47 /* PenShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenShape.swift; sourceTree = "<group>"; };
+		B20095682BDF8A9C006B6B47 /* PencilModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilModel.swift; sourceTree = "<group>"; };
+		B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransitionExtensions.swift; sourceTree = "<group>"; };
 		B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotificationService.swift; sourceTree = "<group>"; };
 		B200CB2C2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.AnimationCurveExtensions.swift; sourceTree = "<group>"; };
 		B200CB2E2B502C0800BA3023 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
@@ -305,7 +313,7 @@
 		B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseDrawView.swift; sourceTree = "<group>"; };
 		B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectDrawingCanvasView.swift; sourceTree = "<group>"; };
 		B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilShape.swift; sourceTree = "<group>"; };
-		B2F86F0D2BDE688200C5AAFE /* ParticleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleModel.swift; sourceTree = "<group>"; };
+		B2F86F0D2BDE688200C5AAFE /* ParticlesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesModel.swift; sourceTree = "<group>"; };
 		B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerMergeable.swift; sourceTree = "<group>"; };
 		B2F86F132BDE761400C5AAFE /* MergeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeModel.swift; sourceTree = "<group>"; };
 		B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilType.swift; sourceTree = "<group>"; };
@@ -456,6 +464,7 @@
 				B2DB93812B8C7602003AB2D2 /* UIColorExtensions.swift */,
 				B2C7873F2BC4687A00876BD3 /* CGImageExtensions.swift */,
 				B2E0CF6C2BC7F5A700FCBF63 /* PublisherExtensions.swift */,
+				B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -657,6 +666,7 @@
 				B29415FE2B77FD9600F81596 /* EditFrameCircleModifier.swift */,
 				B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */,
 				B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */,
+				B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -822,6 +832,7 @@
 				B209B9612B97AA2E00803D1F /* Triangle.swift */,
 				B2AD27332B99B12700F704DF /* ShapeBuilder.swift */,
 				B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */,
+				B20095662BDF8156006B6B47 /* PenShape.swift */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -858,8 +869,9 @@
 				B210F5FE2B7B90DF0072AF7D /* ImageProjectModel.swift */,
 				B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */,
 				B2C842F72BC2EC8100A7853F /* TextLayerModel.swift */,
-				B2F86F0D2BDE688200C5AAFE /* ParticleModel.swift */,
+				B2F86F0D2BDE688200C5AAFE /* ParticlesModel.swift */,
 				B2F86F132BDE761400C5AAFE /* MergeModel.swift */,
+				B20095682BDF8A9C006B6B47 /* PencilModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1075,6 +1087,7 @@
 				B2B20D242B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift in Sources */,
 				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B20507582B761E6A0060854D /* PlaneModel.swift in Sources */,
+				B20095652BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
 				B24EA94A2B56B7F00081FBFD /* MenuTileView.swift in Sources */,
 				B271509E2B4AD00500411F9A /* AddProjectView.swift in Sources */,
@@ -1153,6 +1166,7 @@
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
 				B275159D2B8DF7E200647D4E /* RenderSizeType.swift in Sources */,
 				B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */,
+				B20095692BDF8A9C006B6B47 /* PencilModel.swift in Sources */,
 				B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */,
 				B2B28BE42B87CF0C00EC96B8 /* Tool.swift in Sources */,
 				B29533BD2BC857920090C2FC /* ImageProjectToolCaseTextCategoryFontNameView.swift in Sources */,
@@ -1182,12 +1196,13 @@
 				B20936722B5E970F00757317 /* ImageProjectImportPhotoSummaryGridView.swift in Sources */,
 				B2CCFD4B2B7A8C570082D0A4 /* ImageProjectToolCaseLayersView.swift in Sources */,
 				B24EA9542B56B9070081FBFD /* AddProjectSummarySliderView.swift in Sources */,
+				B200956B2BDF93CC006B6B47 /* AnyTransitionExtensions.swift in Sources */,
 				B2BF7A062B5FCF2F0031B8AA /* CGPointExtensions.swift in Sources */,
 				B209366A2B5E82B400757317 /* ImageProjectImportPhotoGridView.swift in Sources */,
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,
 				B200CB352B505D0700BA3023 /* FlieError.swift in Sources */,
 				B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */,
-				B2F86F0E2BDE688200C5AAFE /* ParticleModel.swift in Sources */,
+				B2F86F0E2BDE688200C5AAFE /* ParticlesModel.swift in Sources */,
 				B209366C2B5E8F3E00757317 /* ImageProjectImportPhotoSummary.swift in Sources */,
 				B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */,
 				B29415FF2B77FD9600F81596 /* EditFrameCircleModifier.swift in Sources */,
@@ -1195,6 +1210,7 @@
 				B2B28BE22B87CC1A00EC96B8 /* LayerToolType.swift in Sources */,
 				B21C24EE2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift in Sources */,
 				B29416032B77FDF400F81596 /* EditFrameResizeModifier.swift in Sources */,
+				B20095672BDF8156006B6B47 /* PenShape.swift in Sources */,
 				B210F5FD2B7B8D9C0072AF7D /* ImageProjectToolCaseResizeView.swift in Sources */,
 				B268B3CD2BCBAC5400D107B3 /* SenderType.swift in Sources */,
 				B2CF19482B7D2B320053E960 /* ImageProjectLayerView+DragGesture.swift in Sources */,

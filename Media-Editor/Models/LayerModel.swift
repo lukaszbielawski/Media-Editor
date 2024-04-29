@@ -57,7 +57,6 @@ class LayerModel: Identifiable, ObservableObject, NSCopying {
             self.cgImage = nil
         }
 
-
         self.position = CGPoint(x: photoEntity.positionX!.doubleValue, y: photoEntity.positionY!.doubleValue as Double)
         self.rotation = Angle(radians: photoEntity.rotation as? Double ?? .zero)
 
@@ -73,9 +72,11 @@ class LayerModel: Identifiable, ObservableObject, NSCopying {
 
     func copy(withCGImage: Bool, with zone: NSZone? = nil) -> Any {
         let layerModel = copy(with: zone) as! LayerModel
+
         if withCGImage {
             layerModel.cgImage = cgImage
         }
+
         return layerModel
     }
 }

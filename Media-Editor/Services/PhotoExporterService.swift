@@ -203,11 +203,12 @@ struct PhotoExporterService {
         }.value
     }
 
-    func renderImageFromDrawing(drawingParticles: [ParticleModel],
-                                on layer: LayerModel,
-                                frameSize: CGSize,
-                                pixelFrameSize: CGSize) async throws -> CGImage
-    {
+    func renderImageFromDrawing(
+        using pencil: PencilModel,
+        on layer: LayerModel,
+        frameSize: CGSize,
+        pixelFrameSize: CGSize
+    ) async throws -> CGImage {
         return try await Task {
             guard let context = CGContext(data: nil,
                                           width: Int(pixelFrameSize.width),
@@ -228,88 +229,34 @@ struct PhotoExporterService {
 
             let transform = CGAffineTransform(scaleX: pixelFrameSize.width / frameSize.width, y: pixelFrameSize.height / frameSize.height)
 
-
-
             context.translateBy(x: 0, y: pixelFrameSize.height)
             context.scaleBy(x: 1, y: -1)
 
             var path = Path()
 
-            for particle in drawingParticles {
-
-                let particleRect = particle.path.applying(transform).boundingRect
-                path.addLine(to: .init(x: particleRect.midX,
-                                       y: particleRect.midY))
-                path.move(to: .init(x: particleRect.midX,
-                                    y: particleRect.midY))
-
-                context.addPath(particle.path.applying(transform).cgPath)
-                context.setFillColor(particle.color.cgColor!)
-                context.fillPath()
-
-                context.setStrokeColor(particle.color.cgColor!)
-                context.setLineWidth(particleRect.width)
-                context.addPath(path.cgPath)
-                context.strokePath()
+            if pencil.currentPencilType == .eraser {
+                context.setBlendMode(.destinationOut)
             }
 
-            let clippedImage = context.makeImage()
+            for position in pencil.particlesPositions {
+                path.addLine(to: .init(x: position.x,
+                                       y: position.y))
+                path.move(to: .init(x: position.x,
+                                    y: position.y))
+            }
+            context.addPath(path.applying(transform).cgPath)
+            let pencilColor: CGColor =
+                pencil.currentPencilType == .eraser
+                    ? CGColor(gray: 1.0, alpha: 1.0)
+                    : pencil.currentPencilColor.cgColor!
+            context.setStrokeColor(pencilColor)
+            context.setAllowsAntialiasing(true)
+            context.setLineWidth(CGFloat(pencil.currentPencilSize) * sqrt(transform.a * transform.d))
+            context.setLineCap(.round)
+            context.strokePath()
 
-            guard let clippedImage else { throw PhotoExportError.contextImageMaking }
-
-            return clippedImage
-
-        }.value
-    }
-
-    func eraseFromImageAndRender(eraserParticles: [ParticleModel],
-                                on layer: LayerModel,
-                                frameSize: CGSize,
-                                pixelFrameSize: CGSize) async throws -> CGImage
-    {
-        return try await Task {
-            guard let context = CGContext(data: nil,
-                                          width: Int(pixelFrameSize.width),
-                                          height: Int(pixelFrameSize.height),
-                                          bitsPerComponent: 8,
-                                          bytesPerRow: 0,
-                                          space: CGColorSpaceCreateDeviceRGB(),
-                                          bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
-
-            else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelFrameSize.width), height: Int(pixelFrameSize.height))) }
-
-            guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
-
-            context.draw(layerImage, in: CGRect(x: 0,
-                                                y: 0,
-                                                width: CGFloat(pixelFrameSize.width),
-                                                height: CGFloat(pixelFrameSize.height)))
-
-            let transform = CGAffineTransform(scaleX: pixelFrameSize.width / frameSize.width, y: pixelFrameSize.height / frameSize.height)
-
-
-
-            context.translateBy(x: 0, y: pixelFrameSize.height)
-            context.scaleBy(x: 1, y: -1)
-
-            var path = Path()
-
-            for particle in eraserParticles {
-
-                let particleRect = particle.path.applying(transform).boundingRect
-                path.addLine(to: .init(x: particleRect.midX,
-                                       y: particleRect.midY))
-                path.move(to: .init(x: particleRect.midX,
-                                    y: particleRect.midY))
-
-                context.addPath(particle.path.applying(transform).cgPath)
-                context.setFillColor(particle.color.cgColor!)
-                context.fillPath()
-
-                context.setStrokeColor(particle.color.cgColor!)
-                context.setLineWidth(min(particleRect.width, particleRect.height))
-                context.addPath(path.cgPath)
-                context.strokePath()
+            if pencil.currentPencilType == .eraser {
+                context.setBlendMode(.normal)
             }
 
             let clippedImage = context.makeImage()

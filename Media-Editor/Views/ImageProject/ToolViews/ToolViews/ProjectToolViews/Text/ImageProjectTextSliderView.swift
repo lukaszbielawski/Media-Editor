@@ -62,7 +62,7 @@ struct ImageProjectTextSliderView: View {
                     }
                 }
             TextField(hint,
-                      text: $textTextFieldBinding.onChange(textFieldChanged), onEditingChanged: { editing in
+                      text: $textTextFieldBinding.onChange(textFieldChanged), onEditingChanged: { [unowned vm] editing in
                           if !editing {
                               vm.updateLatestSnapshot()
                           }
@@ -79,7 +79,7 @@ struct ImageProjectTextSliderView: View {
             textTextFieldBinding = String(Int(textSliderBinding))
 
             cancellable = debounceSaveSubject
-                .map { value in
+                .map { [unowned vm] value in
                     vm.objectWillChange.send()
                     return value
                 }
@@ -89,7 +89,7 @@ struct ImageProjectTextSliderView: View {
                 .sink { [unowned vm] sender, publisherType in
 
                     vm.renderTask?.cancel()
-                    vm.renderTask = Task {
+                    vm.renderTask = Task { [unowned vm] in
                         try await vm.renderTextLayer()
                     }
                     if publisherType == .debounce && sender != .textField {

@@ -381,6 +381,21 @@
                   endingLineNumber = "141"
                   offsetFromSymbolStart = "116">
                </Location>
+               <Location
+                  uuid = "29615685-7FDD-4C1D-9C25-9A75E79C280A - 393d579a8fb2ed26"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Array&lt;__C.PHAsset&gt;) -&gt; () in Media_Editor.ImageProjectViewModel.setupPhotoLibrarySubscription() -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150"
+                  offsetFromSymbolStart = "52">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -429,6 +444,21 @@
                   endingLineNumber = "129"
                   offsetFromSymbolStart = "56">
                </Location>
+               <Location
+                  uuid = "7A2418AF-C1B7-462E-9EFE-315A5DE6DD45 - e60da8244b8e4ea9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool) -&gt; () in Media_Editor.ImageProjectViewModel.setupAddAssetsToProject() -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "140"
+                  endingLineNumber = "140"
+                  offsetFromSymbolStart = "56">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -442,8 +472,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
             landmarkName = "copyAndAppend()"
             landmarkType = "7">
          </BreakpointContent>
@@ -458,8 +488,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
             landmarkName = "createNewEntity(from:)"
             landmarkType = "7">
             <Locations>
@@ -508,6 +538,21 @@
                   endingLineNumber = "292"
                   offsetFromSymbolStart = "912">
                </Location>
+               <Location
+                  uuid = "75ED7DCC-1EB2-4810-88BE-FD8B4FA22A19 - b6e45259e3688ccf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Media_Editor.ImageProjectViewModel.createNewEntity(from: Media_Editor.LayerModel) async throws -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "324"
+                  endingLineNumber = "324"
+                  offsetFromSymbolStart = "912">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -521,8 +566,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "335"
-            endingLineNumber = "335"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
             landmarkName = "createNewEntity(from:)"
             landmarkType = "7">
             <Locations>
@@ -571,6 +616,21 @@
                   endingLineNumber = "310"
                   offsetFromSymbolStart = "2144">
                </Location>
+               <Location
+                  uuid = "AC751682-14F1-4068-B43E-C5F8872D3161 - b6e45259e3688e99"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Media_Editor.ImageProjectViewModel.createNewEntity(from: Media_Editor.LayerModel) async throws -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "342"
+                  endingLineNumber = "342"
+                  offsetFromSymbolStart = "2144">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -584,8 +644,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
+            startingLineNumber = "319"
+            endingLineNumber = "319"
             landmarkName = "copyAndAppend()"
             landmarkType = "7">
             <Locations>
@@ -709,6 +769,66 @@
                   endingLineNumber = "267"
                   offsetFromSymbolStart = "44">
                </Location>
+               <Location
+                  uuid = "390FE01F-FB5A-4B1C-8411-6494D6E91575 - 45b94457fade1d6d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for Media_Editor.ImageProjectViewModel.copyAndAppend() async -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "299"
+                  endingLineNumber = "299"
+                  offsetFromSymbolStart = "524">
+               </Location>
+               <Location
+                  uuid = "390FE01F-FB5A-4B1C-8411-6494D6E91575 - 23dc0d24c11a200d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for Media_Editor.ImageProjectViewModel.copyAndAppend() async -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "299"
+                  endingLineNumber = "299"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  uuid = "390FE01F-FB5A-4B1C-8411-6494D6E91575 - ba314f2dde2ba1d3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Media_Editor.ImageProjectViewModel.copyAndAppend() async -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "299"
+                  endingLineNumber = "299"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "390FE01F-FB5A-4B1C-8411-6494D6E91575 - d24d57a73068ca16"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) suspend resume partial function for Media_Editor.ImageProjectViewModel.copyAndAppend() async -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "299"
+                  endingLineNumber = "299"
+                  offsetFromSymbolStart = "44">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -722,9 +842,9 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
-            landmarkName = "copyAndAppend()"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
+            landmarkName = "createNewEntity(from:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

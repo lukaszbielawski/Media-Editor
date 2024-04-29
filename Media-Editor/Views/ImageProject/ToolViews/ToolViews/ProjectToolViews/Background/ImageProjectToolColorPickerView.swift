@@ -12,7 +12,7 @@ struct ImageProjectToolColorPickerView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     @State private var cancellable: AnyCancellable?
-    @State private var colorPickerSubject = PassthroughSubject<Void, Never>()
+    @State private var colorPickerSubject = PassthroughSubject<ColorPickerType, Never>()
 
     var colorPickerType: ColorPickerType = .projectBackground
     var onlyCustom: Bool = false
@@ -54,7 +54,7 @@ struct ImageProjectToolColorPickerView: View {
                     return nil
                 }
             case .pencilColor:
-                return $vm.currentPencilColor
+                return $vm.pencil.currentPencilColor
             }
 
         }()
@@ -73,19 +73,19 @@ struct ImageProjectToolColorPickerView: View {
                 if !onlyCustom {
                     ForEach(vm.tools.colorArray, id: \.self) { color in
                         ImageProjectToolColorTileView(color: .constant(color))
-                            .onTapGesture {
+                            .onTapGesture { [unowned vm] in
                                 colorBinding.wrappedValue = color
-                                performColorPickedAction()
+                                vm.performColorPickedAction(colorPickerType)
                             }
                     }
                     Spacer()
                 }
-            }.onAppear {
+            }.onAppear { [unowned vm] in
                 cancellable =
                     colorPickerSubject
                         .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-                        .sink {
-                            performColorPickedAction()
+                        .sink { [unowned vm] colorPickerType in
+                            vm.performColorPickedAction(colorPickerType)
                         }
 
                 if colorPickerType == .layerBackground {
@@ -97,27 +97,6 @@ struct ImageProjectToolColorPickerView: View {
     }
 
     private func colorPicked(color: Color) {
-        colorPickerSubject.send()
-    }
-
-    private func performColorPickedAction() {
-
-        switch colorPickerType {
-        case .projectBackground:
-            vm.updateLatestSnapshot()
-        case .layerBackground:
-            Task {
-                try await vm.addBackgroundToLayer()
-            }
-        case .textColor, .borderColor:
-            Task {
-                try await vm.renderTextLayer()
-            }
-            vm.updateLatestSnapshot()
-            vm.objectWillChange.send()
-        case .pencilColor:
-            break
-        }
-        vm.objectWillChange.send()
+        colorPickerSubject.send(colorPickerType)
     }
 }

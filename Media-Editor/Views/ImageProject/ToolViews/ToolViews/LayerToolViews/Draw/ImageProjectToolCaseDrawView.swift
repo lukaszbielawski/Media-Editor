@@ -16,17 +16,42 @@ struct ImageProjectToolCaseDrawView: View {
                 ImageProjectToolColorPickerView(
                     colorPickerType: .pencilColor,
                     onlyCustom: true,
-                    allowOpacity: false,
                     customTitle: "Color")
+                    .overlay {
+                        if vm.pencil.currentPencilType == .eraser {
+                            Color.white
+                                .opacity(0.4)
+
+                                .overlay {
+                                    Image(systemName: "hand.raised.fill")
+                                        .resizable()
+                                        .foregroundStyle(Color.tint)
+                                        .scaledToFit()
+                                        .padding()
+                                        .padding(.bottom)
+                                }
+                                .centerCropped()
+                                .modifier(ProjectToolTileViewModifier())
+                                .transition(.normalOpacityTransition)
+                        }
+                    }
 
                 ForEach(PencilType.allCases, id: \.self) { pencilType in
                     ImageProjectToolTileView(
                         title: pencilType.name,
                         systemName: pencilType.icon)
-                        .onTapGesture {
-                            vm.currentPencil = pencilType
+                        .centerCropped()
+                        .overlay {
+                            if vm.pencil.currentPencilType == pencilType {
+                                Color.accent
+                                    .modifier(ProjectToolTileSelectedModifier(paddingFactor: vm.tools.paddingFactor, lowerToolbarHeight: vm.plane.lowerToolbarHeight))
+                            }
                         }
+                        .modifier(ProjectToolTileViewModifier())
                         .contentShape(Rectangle())
+                        .onTapGesture {
+                            vm.pencil.currentPencilType = pencilType
+                        }
                 }
             }
         }

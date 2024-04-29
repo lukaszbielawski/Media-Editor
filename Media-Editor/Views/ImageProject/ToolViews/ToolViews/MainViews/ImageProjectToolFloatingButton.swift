@@ -35,6 +35,6 @@ struct ImageProjectToolFloatingButtonView: View {
         }
         .frame(width: vm.plane.lowerToolbarHeight * 0.5,
                height: vm.plane.lowerToolbarHeight * 0.5)
-        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+        .transition(.normalOpacityTransition)
     }
 }

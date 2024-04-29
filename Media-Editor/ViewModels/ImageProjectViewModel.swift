@@ -28,16 +28,12 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentTextLayerTextColor: Color = .white
     @Published var originalCGImage: CGImage!
 
-    @Published var currentPencil: PencilType = .pencil
-    @Published var currentPencilSize: Int = 16
-    @Published var currentPencilColor: Color = .black
-    @Published var drawingParticles: [ParticleModel] = []
-
     @Published var workspaceSize: CGSize?
 
     @Published var plane: PlaneModel = .init()
     @Published var frame: FrameModel = .init()
     @Published var tools: ToolsModel = .init()
+    @Published var pencil: PencilModel = .init()
 
     @Published var layerToDelete: LayerModel?
     @Published var activeLayer: LayerModel?
@@ -61,8 +57,8 @@ final class ImageProjectViewModel: ObservableObject {
     let filterChangedSubject = PassthroughSubject<Void, Never>()
     let performToolActionSubject = PassthroughSubject<any Tool, Never>()
     let floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
-    var saveActiveLayerImageSubject =
-        PassthroughSubject<Void, Never>()
+    var saveLayerImageSubject =
+        PassthroughSubject<(fileName: String, cgImage: CGImage), Never>()
 
     var leftFloatingButtonActionType = FloatingButtonActionType.back
     var rightFloatingButtonActionType = FloatingButtonActionType.confirm
@@ -135,6 +131,10 @@ final class ImageProjectViewModel: ObservableObject {
         latestSnapshot = createSnapshot()
     }
 
+    deinit {
+        print("vm deinited")
+    }
+
     func setupAddAssetsToProject() {
         photoLibraryService.requestAuthorization { [unowned self] completion in
             self.isPermissionGranted = completion
@@ -153,20 +153,36 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     private func setupSubscriptions() {
-
-        saveActiveLayerImageSubject
+        saveLayerImageSubject
             .throttleAndDebounce(throttleInterval: .seconds(2.0),
                                  debounceInterval: .seconds(1.0),
                                  scheduler: DispatchQueue.main)
-            .sink { [unowned self] _ in
-                guard let activeLayer else { return }
-                print("in")
+            .sink { [unowned self] tuple, _ in
                 Task(priority: .high) {
-                    try await self.saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
+                    try await self.saveNewCGImageOnDisk(fileName: tuple.fileName, cgImage: tuple.cgImage)
                 }
             }
             .store(in: &cancellables)
+    }
 
+    func performColorPickedAction(_ colorPickerType: ColorPickerType) {
+        switch colorPickerType {
+        case .projectBackground:
+            updateLatestSnapshot()
+        case .layerBackground:
+            Task {
+                try await addBackgroundToLayer()
+            }
+        case .textColor, .borderColor:
+            Task {
+                try await renderTextLayer()
+            }
+            updateLatestSnapshot()
+            objectWillChange.send()
+        case .pencilColor:
+            break
+        }
+        objectWillChange.send()
     }
 
     func updateLatestSnapshot() {
@@ -203,7 +219,9 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     private func createSnapshot() -> SnapshotModel {
-        let layers = projectLayers.map { $0.copy(withCGImage: !isInNewCGImagePreview) as! LayerModel }
+        let layers = projectLayers.map { [unowned self] layer in
+            layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
+        }
         let projectModel = projectModel.copy() as! ImageProjectModel
         return .init(layers: layers, projectModel: projectModel)
     }
@@ -239,7 +257,12 @@ final class ImageProjectViewModel: ObservableObject {
 
                 layer.cgImage = previousLayer.cgImage
 
-                Task { [unowned self] in
+//                if let layerCGImage = layer.cgImage {
+//                    saveLayerImageSubject.send((previousLayer.fileName,
+//                                                layerCGImage))
+//                }
+
+                Task(priority: .high) { [unowned self] in
                     try await self.saveNewCGImageOnDisk(
                         fileName: previousLayer.fileName,
                         cgImage: previousLayer.cgImage)
@@ -911,29 +934,19 @@ final class ImageProjectViewModel: ObservableObject {
     func applyDrawings(frameSize: CGSize) async {
         guard let activeLayer else { return }
         do {
-            let newCGImage: CGImage
-            if currentPencil == .eraser {
-                newCGImage = try await
-                    photoExporterService
-                    .eraseFromImageAndRender(
-                        eraserParticles: drawingParticles,
-                        on: activeLayer,
-                        frameSize: frameSize,
-                        pixelFrameSize: activeLayer.pixelSize)
-            } else {
-                newCGImage = try await
-                    photoExporterService
-                    .renderImageFromDrawing(
-                        drawingParticles: drawingParticles,
-                        on: activeLayer,
-                        frameSize: frameSize,
-                        pixelFrameSize: activeLayer.pixelSize)
-            }
+            let newCGImage = try await
+                photoExporterService
+                .renderImageFromDrawing(
+                    using: pencil,
+                    on: activeLayer,
+                    frameSize: frameSize,
+                    pixelFrameSize: activeLayer.pixelSize)
+
             activeLayer.cgImage = newCGImage
-            drawingParticles.removeAll()
+            pencil.particlesPositions.removeAll()
+            saveLayerImageSubject.send((activeLayer.fileName,
+                                        newCGImage))
             updateLatestSnapshot()
-            print("save active layer")
-            saveActiveLayerImageSubject.send()
 
         } catch {
             print(error)

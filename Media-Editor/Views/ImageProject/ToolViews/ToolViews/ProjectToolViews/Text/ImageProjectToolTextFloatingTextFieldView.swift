@@ -23,40 +23,40 @@ struct ImageProjectToolTextFloatingTextFieldView: View {
         ZStack(alignment: .leading) {
             if let textLayer = vm.activeLayer as? TextLayerModel {
                 let textFieldBinding =
-                Binding<String> {
-                    textLayer.text
-                } set: { newValue in
-                    textLayer.text = newValue
-                }
+                    Binding<String> {
+                        textLayer.text
+                    } set: { newValue in
+                        textLayer.text = newValue
+                    }
 
                 TextField("Type text here...", text: textFieldBinding.onChange(debounceTextFieldSubject.send(_:)), onEditingChanged: { editing in
                     if !editing {
                         vm.updateLatestSnapshot()
                     }
                 })
-                    .foregroundStyle(Color(.tint))
-                    .font(.title2)
-                    .focused($isFocused)
-                    .padding(.horizontal, textFieldHeight * 0.25)
-                    .frame(maxHeight: .infinity)
-                    .background(Color(.image))
-                    .clipShape(Capsule(style: .circular))
-                    .geometryAccessor { geo in
-                        DispatchQueue.main.async {
-                            textFieldWidth = geo.size.width
-                        }
+                .foregroundStyle(Color(.tint))
+                .font(.title2)
+                .focused($isFocused)
+                .padding(.horizontal, textFieldHeight * 0.25)
+                .frame(maxHeight: .infinity)
+                .background(Color(.image))
+                .clipShape(Capsule(style: .circular))
+                .geometryAccessor { geo in
+                    DispatchQueue.main.async {
+                        textFieldWidth = geo.size.width
                     }
+                }
             }
         }
         .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+        .transition(.normalOpacityTransition)
         .onAppear {
             cancellable =
                 debounceTextFieldSubject
-                .throttleAndDebounce(throttleInterval: .seconds(0.0333),
-                                     debounceInterval: .seconds(1.0),
-                                     scheduler: DispatchQueue.main)
+                    .throttleAndDebounce(throttleInterval: .seconds(0.0333),
+                                         debounceInterval: .seconds(1.0),
+                                         scheduler: DispatchQueue.main)
                     .sink { [unowned vm] _ in
                         vm.renderTask?.cancel()
                         vm.renderTask = Task {

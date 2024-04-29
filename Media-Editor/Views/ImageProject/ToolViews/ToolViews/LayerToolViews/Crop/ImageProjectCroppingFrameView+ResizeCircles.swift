@@ -20,7 +20,7 @@ extension ImageProjectCroppingFrameView {
                         width: -(resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: -(resizeCircleSize - resizeBorderWidth) * 0.5))
                     .gesture(resizeTopLeadingGesture)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
             }
             .overlay(alignment: .top) {
                 if vm.currentCropRatio == .any {
@@ -43,7 +43,7 @@ extension ImageProjectCroppingFrameView {
                         width: (resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: -(resizeCircleSize - resizeBorderWidth) * 0.5))
                     .gesture(resizeTopTrailingGesture)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
             }
             .overlay(alignment: .trailing) {
                 if vm.currentCropRatio == .any {
@@ -66,7 +66,7 @@ extension ImageProjectCroppingFrameView {
                         width: (resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: (resizeCircleSize - resizeBorderWidth) * 0.5))
                     .gesture(resizeBottomTrailingGesture)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
             }
             .overlay(alignment: .bottom) {
                 if vm.currentCropRatio == .any {
@@ -88,7 +88,7 @@ extension ImageProjectCroppingFrameView {
                         width: -(resizeCircleSize - resizeBorderWidth) * 0.5,
                         height: (resizeCircleSize - resizeBorderWidth) * 0.5))
                     .gesture(resizeBottomLeadingGesture)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
 
             }
             .overlay(alignment: .leading) {
@@ -103,6 +103,6 @@ extension ImageProjectCroppingFrameView {
                         .gesture(resizeLeadingGesture)
                 }
             }
-            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+            .transition(.normalOpacityTransition)
     }
 }

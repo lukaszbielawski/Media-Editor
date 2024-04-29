@@ -17,7 +17,7 @@ struct ImageProjectToolView: View {
                !(currentTool is LayerSingleActionToolType)
             {
                 ImageProjectToolDetailsView()
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
                     .zIndex(Double(Int.max) + 2)
                     .environmentObject(vm)
             }

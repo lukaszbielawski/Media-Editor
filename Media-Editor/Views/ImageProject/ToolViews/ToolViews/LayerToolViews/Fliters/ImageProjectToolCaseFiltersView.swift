@@ -23,7 +23,7 @@ struct ImageProjectToolCaseFiltersView: View {
                                 vm.currentCategory = category
                             }
                     }
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
                     .onAppear {
                         vm.leftFloatingButtonActionType = .back
                     }
@@ -41,7 +41,7 @@ struct ImageProjectToolCaseFiltersView: View {
                                 }
                             }
                     }
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                    .transition(.normalOpacityTransition)
                     .onAppear {
                         vm.leftFloatingButtonActionType = .backToCategories
                     }

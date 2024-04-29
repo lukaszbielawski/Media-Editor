@@ -17,9 +17,9 @@ enum PencilType: CaseIterable {
     var path: some Shape {
         switch self {
         case .eraser:
-            PencilShape()
+            PenShape()
         case .pen:
-            PencilShape()
+            PenShape()
         case .pencil:
             PencilShape()
         }

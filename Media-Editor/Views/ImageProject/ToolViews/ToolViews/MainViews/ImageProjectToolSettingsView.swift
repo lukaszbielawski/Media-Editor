@@ -20,7 +20,7 @@ struct ImageProjectToolSettingsView: View {
                 if vm.currentFilter != .none {
                     ImageProjectToolFilterFloatingSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
@@ -30,7 +30,7 @@ struct ImageProjectToolSettingsView: View {
                 } else if layerTool == .crop {
                     ImageProjectViewFloatingCropSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
@@ -39,7 +39,7 @@ struct ImageProjectToolSettingsView: View {
                         buttonType: .right)
                 } else if layerTool == .draw {
                     ImageProjectToolCaseDrawFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                 }
@@ -50,7 +50,7 @@ struct ImageProjectToolSettingsView: View {
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                         backgroundColor: $vm.currentLayerBackgroundColor,
                         colorPickerType: .layerBackground)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
@@ -59,7 +59,9 @@ struct ImageProjectToolSettingsView: View {
                         buttonType: .right)
                 } else if layerTool == .editText {
                     Spacer()
+
                     ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
+
                     Spacer()
                 }
 
@@ -75,7 +77,7 @@ struct ImageProjectToolSettingsView: View {
                     ImageProjectFloatingMergeSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                         backgroundColor: $vm.projectModel.backgroundColor)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
@@ -83,19 +85,12 @@ struct ImageProjectToolSettingsView: View {
                     Spacer()
                     ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
                     Spacer()
-//                    ImageProjectToolFloatingButtonView(
-//                        systemName: vm.tools.rightFloatingButtonIcon,
-//                        buttonType: .right)
-//                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
-//                        .onAppear {
-//                            vm.tools.rightFloatingButtonIcon = "checkmark"
-//                        }
                 case .background:
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                         backgroundColor: $vm.projectModel.backgroundColor)
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+                        .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
@@ -111,7 +106,7 @@ struct ImageProjectToolSettingsView: View {
         .offset(
             y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
         .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.35)))
+        .transition(.normalOpacityTransition)
         .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
             guard let vm else { return }
             if functionType == .back {
