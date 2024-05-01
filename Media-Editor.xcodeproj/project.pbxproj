@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		B20095652BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */; };
 		B20095672BDF8156006B6B47 /* PenShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095662BDF8156006B6B47 /* PenShape.swift */; };
-		B20095692BDF8A9C006B6B47 /* PencilModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095682BDF8A9C006B6B47 /* PencilModel.swift */; };
+		B20095692BDF8A9C006B6B47 /* DrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095682BDF8A9C006B6B47 /* DrawingModel.swift */; };
 		B200956B2BDF93CC006B6B47 /* AnyTransitionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */; };
 		B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */; };
 		B200CB2D2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB2C2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift */; };
@@ -107,6 +107,7 @@
 		B29533BD2BC857920090C2FC /* ImageProjectToolCaseTextCategoryFontNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29533BC2BC857920090C2FC /* ImageProjectToolCaseTextCategoryFontNameView.swift */; };
 		B29586DF2B8F9A8600ECFFF4 /* FilterCategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29586DE2B8F9A8600ECFFF4 /* FilterCategoryType.swift */; };
 		B29586E12B8FA51100ECFFF4 /* PhotoExporterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29586E02B8FA51100ECFFF4 /* PhotoExporterService.swift */; };
+		B2A33A7D2BE247CE00F8D6DD /* RevertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A33A7C2BE247CE00F8D6DD /* RevertModel.swift */; };
 		B2AD27342B99B12700F704DF /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AD27332B99B12700F704DF /* ShapeBuilder.swift */; };
 		B2B20D222B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */; };
 		B2B20D242B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */; };
@@ -153,9 +154,6 @@
 		B2F86F082BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */; };
 		B2F86F0A2BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */; };
 		B2F86F0C2BDE56C900C5AAFE /* PencilShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */; };
-		B2F86F0E2BDE688200C5AAFE /* ParticlesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0D2BDE688200C5AAFE /* ParticlesModel.swift */; };
-		B2F86F102BDE747100C5AAFE /* LayerMergeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */; };
-		B2F86F142BDE761400C5AAFE /* MergeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F132BDE761400C5AAFE /* MergeModel.swift */; };
 		B2F86F162BDE9AFF00C5AAFE /* PencilType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */; };
 		B2F86F182BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F172BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift */; };
 		B2F918A72B5811F400540F33 /* LayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F918A62B5811F400540F33 /* LayerModel.swift */; };
@@ -168,7 +166,7 @@
 		314F1D791BE6D9B65F817710 /* Pods-Media-Editor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Editor.release.xcconfig"; path = "Target Support Files/Pods-Media-Editor/Pods-Media-Editor.release.xcconfig"; sourceTree = "<group>"; };
 		B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileSelectedModifier.swift; sourceTree = "<group>"; };
 		B20095662BDF8156006B6B47 /* PenShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenShape.swift; sourceTree = "<group>"; };
-		B20095682BDF8A9C006B6B47 /* PencilModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilModel.swift; sourceTree = "<group>"; };
+		B20095682BDF8A9C006B6B47 /* DrawingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingModel.swift; sourceTree = "<group>"; };
 		B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransitionExtensions.swift; sourceTree = "<group>"; };
 		B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotificationService.swift; sourceTree = "<group>"; };
 		B200CB2C2B50165100BA3023 /* UIView.AnimationCurveExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.AnimationCurveExtensions.swift; sourceTree = "<group>"; };
@@ -267,6 +265,7 @@
 		B29533BC2BC857920090C2FC /* ImageProjectToolCaseTextCategoryFontNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseTextCategoryFontNameView.swift; sourceTree = "<group>"; };
 		B29586DE2B8F9A8600ECFFF4 /* FilterCategoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCategoryType.swift; sourceTree = "<group>"; };
 		B29586E02B8FA51100ECFFF4 /* PhotoExporterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExporterService.swift; sourceTree = "<group>"; };
+		B2A33A7C2BE247CE00F8D6DD /* RevertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevertModel.swift; sourceTree = "<group>"; };
 		B2AD27332B99B12700F704DF /* ShapeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeBuilder.swift; sourceTree = "<group>"; };
 		B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseFiltersView.swift; sourceTree = "<group>"; };
 		B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolFloatingButton.swift; sourceTree = "<group>"; };
@@ -313,9 +312,6 @@
 		B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseDrawView.swift; sourceTree = "<group>"; };
 		B2F86F092BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectDrawingCanvasView.swift; sourceTree = "<group>"; };
 		B2F86F0B2BDE56C900C5AAFE /* PencilShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilShape.swift; sourceTree = "<group>"; };
-		B2F86F0D2BDE688200C5AAFE /* ParticlesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesModel.swift; sourceTree = "<group>"; };
-		B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerMergeable.swift; sourceTree = "<group>"; };
-		B2F86F132BDE761400C5AAFE /* MergeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeModel.swift; sourceTree = "<group>"; };
 		B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilType.swift; sourceTree = "<group>"; };
 		B2F86F172BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseDrawFloatingSliderView.swift; sourceTree = "<group>"; };
 		B2F918A62B5811F400540F33 /* LayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerModel.swift; sourceTree = "<group>"; };
@@ -602,7 +598,6 @@
 				B24AD8FE2B553B1700BBD1E8 /* EntityController.swift */,
 				B2B28BE32B87CF0C00EC96B8 /* Tool.swift */,
 				B2707D792BC3F37300C1F4A8 /* Category.swift */,
-				B2F86F0F2BDE747100C5AAFE /* LayerMergeable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -869,9 +864,8 @@
 				B210F5FE2B7B90DF0072AF7D /* ImageProjectModel.swift */,
 				B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */,
 				B2C842F72BC2EC8100A7853F /* TextLayerModel.swift */,
-				B2F86F0D2BDE688200C5AAFE /* ParticlesModel.swift */,
-				B2F86F132BDE761400C5AAFE /* MergeModel.swift */,
-				B20095682BDF8A9C006B6B47 /* PencilModel.swift */,
+				B20095682BDF8A9C006B6B47 /* DrawingModel.swift */,
+				B2A33A7C2BE247CE00F8D6DD /* RevertModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1110,7 +1104,6 @@
 				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */,
 				B2F86F0C2BDE56C900C5AAFE /* PencilShape.swift in Sources */,
 				B2C3521A2B97355100E64525 /* ImageProjectViewFloatingCropSliderView.swift in Sources */,
-				B2F86F142BDE761400C5AAFE /* MergeModel.swift in Sources */,
 				B28F7BB62B95FA8200E684C8 /* ImageProjectMergingFrameView.swift in Sources */,
 				B2E0CF6F2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift in Sources */,
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
@@ -1127,6 +1120,7 @@
 				B285B23F2B6932AB00258E28 /* AngleExtensions.swift in Sources */,
 				B2B20D2C2B88F27A00E3E458 /* CGFloatExtensions.swift in Sources */,
 				B2F86F0A2BDE551400C5AAFE /* ImageProjectDrawingCanvasView.swift in Sources */,
+				B2A33A7D2BE247CE00F8D6DD /* RevertModel.swift in Sources */,
 				B2C7873C2BC3FAB100876BD3 /* ImageProjectToolTextFloatingTextFieldView.swift in Sources */,
 				B2EFC4672B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift in Sources */,
 				B2C352162B97299A00E64525 /* ImageProjectToolCaseCropView.swift in Sources */,
@@ -1137,7 +1131,6 @@
 				B2F00E4B2BCA79D70053B7DB /* FontType.swift in Sources */,
 				B24EA9502B56B8D50081FBFD /* AddProjectGridTileView.swift in Sources */,
 				B2DB93822B8C7602003AB2D2 /* UIColorExtensions.swift in Sources */,
-				B2F86F102BDE747100C5AAFE /* LayerMergeable.swift in Sources */,
 				B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */,
 				B2AD27342B99B12700F704DF /* ShapeBuilder.swift in Sources */,
 				B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */,
@@ -1166,7 +1159,7 @@
 				B21103712B49AB4500CA4981 /* MenuScrollView.swift in Sources */,
 				B275159D2B8DF7E200647D4E /* RenderSizeType.swift in Sources */,
 				B21103572B496F2F00CA4981 /* Model.xcdatamodeld in Sources */,
-				B20095692BDF8A9C006B6B47 /* PencilModel.swift in Sources */,
+				B20095692BDF8A9C006B6B47 /* DrawingModel.swift in Sources */,
 				B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */,
 				B2B28BE42B87CF0C00EC96B8 /* Tool.swift in Sources */,
 				B29533BD2BC857920090C2FC /* ImageProjectToolCaseTextCategoryFontNameView.swift in Sources */,
@@ -1202,7 +1195,6 @@
 				B2B2B10E2B4C17D800E3E8A6 /* PHAssetExtensions.swift in Sources */,
 				B200CB352B505D0700BA3023 /* FlieError.swift in Sources */,
 				B211034B2B495A5B00CA4981 /* ImageExtensions.swift in Sources */,
-				B2F86F0E2BDE688200C5AAFE /* ParticlesModel.swift in Sources */,
 				B209366C2B5E8F3E00757317 /* ImageProjectImportPhotoSummary.swift in Sources */,
 				B211035A2B49705900CA4981 /* PersistenceController.swift in Sources */,
 				B29415FF2B77FD9600F81596 /* EditFrameCircleModifier.swift in Sources */,
@@ -1373,7 +1365,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.Pixiva;
+				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.PixivaDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

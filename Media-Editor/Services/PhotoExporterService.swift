@@ -111,7 +111,7 @@ struct PhotoExporterService {
         }.value
     }
 
-    func exportLayersToImage(photos: [any LayerMergeable],
+    func exportLayersToImage(photos: [LayerModel],
                              contextPixelSize: CGSize,
                              backgroundColor: CGColor,
                              offsetFromCenter: CGPoint = .zero,
@@ -203,8 +203,8 @@ struct PhotoExporterService {
         }.value
     }
 
-    func renderImageFromDrawing(
-        using pencil: PencilModel,
+    func renderImageFromDrawings(
+        from drawings: [DrawingModel],
         on layer: LayerModel,
         frameSize: CGSize,
         pixelFrameSize: CGSize
@@ -232,31 +232,33 @@ struct PhotoExporterService {
             context.translateBy(x: 0, y: pixelFrameSize.height)
             context.scaleBy(x: 1, y: -1)
 
-            var path = Path()
+            for drawing in drawings {
+                var path = Path()
 
-            if pencil.currentPencilType == .eraser {
-                context.setBlendMode(.destinationOut)
-            }
+                if drawing.currentPencilType == .eraser {
+                    context.setBlendMode(.destinationOut)
+                }
 
-            for position in pencil.particlesPositions {
-                path.addLine(to: .init(x: position.x,
-                                       y: position.y))
-                path.move(to: .init(x: position.x,
-                                    y: position.y))
-            }
-            context.addPath(path.applying(transform).cgPath)
-            let pencilColor: CGColor =
-                pencil.currentPencilType == .eraser
-                    ? CGColor(gray: 1.0, alpha: 1.0)
-                    : pencil.currentPencilColor.cgColor!
-            context.setStrokeColor(pencilColor)
-            context.setAllowsAntialiasing(true)
-            context.setLineWidth(CGFloat(pencil.currentPencilSize) * sqrt(transform.a * transform.d))
-            context.setLineCap(.round)
-            context.strokePath()
+                for position in drawing.particlesPositions {
+                    path.addLine(to: .init(x: position.x,
+                                           y: position.y))
+                    path.move(to: .init(x: position.x,
+                                        y: position.y))
+                }
+                context.addPath(path.applying(transform).cgPath)
+                let pencilColor: CGColor =
+                drawing.currentPencilType == .eraser
+                        ? CGColor(gray: 1.0, alpha: 1.0)
+                        : drawing.currentPencilColor.cgColor!
+                context.setStrokeColor(pencilColor)
+                context.setAllowsAntialiasing(true)
+                context.setLineWidth(CGFloat(drawing.currentPencilSize) * sqrt(transform.a * transform.d))
+                context.setLineCap(.round)
+                context.strokePath()
 
-            if pencil.currentPencilType == .eraser {
-                context.setBlendMode(.normal)
+                if drawing.currentPencilType == .eraser {
+                    context.setBlendMode(.normal)
+                }
             }
 
             let clippedImage = context.makeImage()

@@ -5,29 +5,22 @@
 //  Created by Łukasz Bielawski on 28/04/2024.
 //
 
+import Combine
 import SwiftUI
 
 struct ImageProjectDrawingCanvasView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
-    @GestureState private var lastPencilOffset: CGSize? = .zero
-    @GestureState var lastFrameScaleWidth: Double?
-    @GestureState var lastFrameScaleHeight: Double?
-
     @State private var isTouchingCanvas = false
-    @State private var wasTouchingCanvas = false
-
-    @State var frameScaleWidth = 1.0
-    @State var frameScaleHeight = 1.0
-
     @State private var pencilPosition: CGPoint = .zero
+
+    @State private var touchingCanvasSubject =
+        PassthroughSubject<Void, Never>()
+
+    @State private var cancellable: AnyCancellable?
 
     let frameSize: CGSize
     let pixelSize: CGSize
-
-    var aspectRatio: CGFloat {
-        frameSize.width / frameSize.height
-    }
 
     var initialOffset: CGSize {
         guard let workspaceSize = vm.workspaceSize else { return .zero }
@@ -36,49 +29,68 @@ struct ImageProjectDrawingCanvasView: View {
     }
 
     var body: some View {
-        Canvas { [unowned vm] context, _ in
-            if isTouchingCanvas {
-                let particlePosition =
-                    CGPoint(
-                        x: pencilPosition.x
-                            - initialOffset.width,
-                        y: pencilPosition.y
-                            - initialOffset.height
-                    )
-                vm.pencil.particlesPositions.append(particlePosition)
+        ZStack {
+            ForEach(vm.drawings + [vm.currentDrawing], id: \.self) { drawing in
+                let strokeStyle = StrokeStyle(lineWidth: CGFloat(drawing.currentPencilSize), lineCap: .round)
+                let pencilColor: Color = drawing.currentPencilType == .eraser ? Color.black : drawing.currentPencilColor
+
+                Path { path in
+                    drawing.particlesPositions.forEach { position in
+                        path.addLine(to: .init(x: position.x, y: position.y))
+                        path.move(to: .init(x: position.x, y: position.y))
+                    }
+                }
+                .stroke(style: strokeStyle)
+                .foregroundStyle(pencilColor)
+                .blendMode(drawing.currentPencilType == .eraser ? .destinationOut : .normal)
+                .clipShape(Rectangle().size(width: frameSize.width, height: frameSize.height))
             }
-
-            var path = Path()
-
-            vm.pencil.particlesPositions.forEach { position in
-                path.addLine(to: .init(x: position.x, y: position.y))
-                path.move(to: .init(x: position.x, y: position.y))
-            }
-
-            let strokeStyle = StrokeStyle(lineWidth: CGFloat(vm.pencil.currentPencilSize), lineCap: .round)
-            let pencilColor: GraphicsContext.Shading = .color(vm.pencil.currentPencilType == .eraser ? Color.black : vm.pencil.currentPencilColor)
-
-            context.stroke(path,
-                           with: pencilColor,
-                           style: strokeStyle)
         }
-        .frame(width: frameSize.width * frameScaleWidth,
-               height: frameSize.height * frameScaleHeight)
-
-        .blendMode(vm.pencil.currentPencilType == .eraser ? .destinationOut : .normal)
+        .contentShape(Rectangle())
+        .frame(width: frameSize.width,
+               height: frameSize.height)
+        .border(Color.accentColor)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .gesture(
             DragGesture(minimumDistance: 0.0, coordinateSpace: .local)
                 .onChanged { value in
-                    isTouchingCanvas = true
                     pencilPosition = value.location
+                    touchingCanvasSubject.send()
                 }
-                .onEnded { _ in
+                .onEnded { [unowned vm] _ in
                     isTouchingCanvas = false
-                    Task(priority: .userInitiated) { [unowned vm] in
-                        await vm.applyDrawings(frameSize: frameSize)
-                    }
+                    vm.storeCurrentDrawing()
                 }
         )
+        .onAppear {
+            cancellable = touchingCanvasSubject
+                .sink {
+                    let particlePosition =
+                        CGPoint(
+                            x: pencilPosition.x
+                                - initialOffset.width,
+                            y: pencilPosition.y
+                                - initialOffset.height
+                        )
+                    vm.currentDrawing.particlesPositions.append(particlePosition)
+                }
+        }
+        .onReceive(vm.floatingButtonClickedSubject) { action in
+            if action == .confirm {
+                vm.currentTool = .none
+                Task(priority: .userInitiated) { [unowned vm] in
+                    await vm.applyDrawings(frameSize: frameSize)
+                }
+
+            } else if action == .back {
+                vm.currentTool = .none
+                vm.drawings.removeAll()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { [unowned vm] _ in
+            guard isTouchingCanvas else { return }
+            isTouchingCanvas = false
+            vm.storeCurrentDrawing()
+        }
     }
 }

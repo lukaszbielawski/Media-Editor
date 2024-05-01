@@ -76,7 +76,6 @@ struct ImageProjectViewFloatingCropSliderView: View {
                             newOffset += value.translation.width
                             newOffset = min(max(newOffset, 0.0), maxOffset)
                             sliderOffset = newOffset
-                            guard let sliderOffset else { return }
                         }
                         .updating($lastOffset) { _, lastOffset, _ in
                             lastOffset = lastOffset ?? sliderOffset

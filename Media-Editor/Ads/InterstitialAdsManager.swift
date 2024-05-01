@@ -30,7 +30,6 @@ class InterstitialAdsManager: NSObject, GADFullScreenContentDelegate, Observable
                 self.interstitialAdLoaded = false
                 return
             }
-            print("🟢: Loading succeeded")
             self.interstitialAdLoaded = true
             self.interstitialAd = add
             self.interstitialAd?.fullScreenContentDelegate = self
@@ -45,24 +44,20 @@ class InterstitialAdsManager: NSObject, GADFullScreenContentDelegate, Observable
             add.present(fromRootViewController: root)
             self.interstitialAdLoaded = false
         } else {
-            print("🔵: Ad wasn't ready")
             self.interstitialAdLoaded = false
             self.loadInterstitialAd()
         }
     }
 
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        print("🟡: Failed to display interstitial ad", error)
         self.loadInterstitialAd()
     }
 
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("🤩: Displayed an interstitial ad")
         self.interstitialAdLoaded = false
     }
 
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        didDismissAdAction?()
-        print("😔: Interstitial ad closed")
+        self.didDismissAdAction?()
     }
 }

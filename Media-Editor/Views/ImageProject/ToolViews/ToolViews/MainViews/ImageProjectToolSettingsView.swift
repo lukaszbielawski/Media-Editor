@@ -42,9 +42,11 @@ struct ImageProjectToolSettingsView: View {
                         .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-                }
-
-                else if layerTool == .background {
+                    Spacer()
+                    ImageProjectToolFloatingButtonView(
+                        systemName: vm.tools.rightFloatingButtonIcon,
+                        buttonType: .right)
+                } else if layerTool == .background {
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,

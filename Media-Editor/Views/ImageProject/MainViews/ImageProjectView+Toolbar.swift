@@ -23,12 +23,12 @@ extension ImageProjectView {
                 Group {
                     Spacer().frame(width: 11)
                     Label("Undo", systemImage: "arrowshape.turn.up.backward.fill")
-                        .opacity(vm.undoModel.count > 0 ? 1.0 : 0.5)
+                        .opacity(vm.currentRevertModel.undoModel.count > 0 ? 1.0 : 0.5)
                         .onTapGesture {
                             vm.performUndo()
                         }
                     Label("Redo", systemImage: "arrowshape.turn.up.forward.fill")
-                        .opacity(vm.redoModel.count > 0 ? 1.0 : 0.5)
+                        .opacity(vm.currentRevertModel.redoModel.count > 0 ? 1.0 : 0.5)
                         .onTapGesture {
                             vm.performRedo()
                         }

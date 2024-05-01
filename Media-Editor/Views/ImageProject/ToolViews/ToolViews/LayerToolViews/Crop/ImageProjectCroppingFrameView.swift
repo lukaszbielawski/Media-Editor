@@ -80,7 +80,7 @@ struct ImageProjectCroppingFrameView: View {
         .onReceive(vm.floatingButtonClickedSubject) { action in
             if action == .confirm {
                 Task {
-                    guard let activeLayer = vm.activeLayer else { return }
+                    guard vm.activeLayer != nil else { return }
                     try await vm.cropLayer(
                         frameRect: .init(origin: .zero, size: frameSize),
                         cropRect: .init(origin: .init(x: offset.width, y: offset.height),

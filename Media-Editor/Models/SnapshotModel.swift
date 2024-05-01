@@ -10,4 +10,5 @@ import Foundation
 struct SnapshotModel {
     let layers: [LayerModel]
     let projectModel: ImageProjectModel
+    let drawings: [DrawingModel]
 }

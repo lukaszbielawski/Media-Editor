@@ -18,7 +18,7 @@ struct ImageProjectToolCaseDrawView: View {
                     onlyCustom: true,
                     customTitle: "Color")
                     .overlay {
-                        if vm.pencil.currentPencilType == .eraser {
+                        if vm.currentDrawing.currentPencilType == .eraser {
                             Color.white
                                 .opacity(0.4)
 
@@ -42,7 +42,7 @@ struct ImageProjectToolCaseDrawView: View {
                         systemName: pencilType.icon)
                         .centerCropped()
                         .overlay {
-                            if vm.pencil.currentPencilType == pencilType {
+                            if vm.currentDrawing.currentPencilType == pencilType {
                                 Color.accent
                                     .modifier(ProjectToolTileSelectedModifier(paddingFactor: vm.tools.paddingFactor, lowerToolbarHeight: vm.plane.lowerToolbarHeight))
                             }
@@ -50,7 +50,7 @@ struct ImageProjectToolCaseDrawView: View {
                         .modifier(ProjectToolTileViewModifier())
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            vm.pencil.currentPencilType = pencilType
+                            vm.currentDrawing.currentPencilType = pencilType
                         }
                 }
             }

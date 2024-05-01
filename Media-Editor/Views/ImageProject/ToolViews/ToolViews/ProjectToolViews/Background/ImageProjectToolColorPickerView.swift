@@ -54,7 +54,7 @@ struct ImageProjectToolColorPickerView: View {
                     return nil
                 }
             case .pencilColor:
-                return $vm.pencil.currentPencilColor
+                return $vm.currentDrawing.currentPencilColor
             }
 
         }()

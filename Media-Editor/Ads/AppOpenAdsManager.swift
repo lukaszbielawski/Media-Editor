@@ -30,7 +30,6 @@ class AppOpenAdsManager: NSObject, GADFullScreenContentDelegate, ObservableObjec
                 self.appOpenAdLoaded = false
                 return
             }
-            print("🟢: Loading succeeded")
             self.appOpenAdLoaded = true
             self.appOpenAd = add
             self.appOpenAd?.fullScreenContentDelegate = self
@@ -45,25 +44,21 @@ class AppOpenAdsManager: NSObject, GADFullScreenContentDelegate, ObservableObjec
             add.present(fromRootViewController: root)
             self.appOpenAdLoaded = false
         } else {
-            print("🔵: Ad wasn't ready")
             self.appOpenAdLoaded = false
             self.loadAppOpenAd()
         }
     }
 
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        print("🟡: Failed to display app open ad", error)
         self.loadAppOpenAd()
     }
 
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("🤩: Displayed an app open ad")
         self.appOpenAdLoaded = false
         self.loadAppOpenAd()
     }
 
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         self.didDismissAdAction?()
-        print("😔: App open ad closed")
     }
 }

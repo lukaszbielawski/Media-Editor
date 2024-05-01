@@ -33,28 +33,29 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var plane: PlaneModel = .init()
     @Published var frame: FrameModel = .init()
     @Published var tools: ToolsModel = .init()
-    @Published var pencil: PencilModel = .init()
+    @Published var currentDrawing: DrawingModel = .init()
 
     @Published var layerToDelete: LayerModel?
     @Published var activeLayer: LayerModel?
 
     @Published var projectLayers = [LayerModel]()
+    @Published var drawings: [DrawingModel] = []
 
-    @Published var redoModel: [SnapshotModel] = .init()
-    @Published var undoModel: [SnapshotModel] = .init()
+    @Published var drawingRevertModel: RevertModel
+    @Published var normalRevertModel: RevertModel
 
     @Published var layersToMerge: [LayerModel] = .init()
 
     @Published var isSnapshotCurrentlyLoading = false
     @Published var isExportSheetPresented = false
 
-    private var latestSnapshot: SnapshotModel!
     let undoLimit = 200
 
     let performLayerDragPublisher = PassthroughSubject<CGSize, Never>()
     let showImageExportResultToast = PassthroughSubject<Bool, Never>()
     let layoutChangedSubject = CurrentValueSubject<Void, Never>(())
     let filterChangedSubject = PassthroughSubject<Void, Never>()
+    let pencilChangedSubject = PassthroughSubject<Void, Never>()
     let performToolActionSubject = PassthroughSubject<any Tool, Never>()
     let floatingButtonClickedSubject = PassthroughSubject<FloatingButtonActionType, Never>()
     var saveLayerImageSubject =
@@ -70,6 +71,14 @@ final class ImageProjectViewModel: ObservableObject {
 
     private var photoLibraryService = PhotoLibraryService()
     private var photoExporterService = PhotoExporterService()
+
+    var currentRevertModel: RevertModel {
+        if let currentTool = currentTool as? LayerToolType, currentTool == .draw {
+            drawingRevertModel
+        } else {
+            normalRevertModel
+        }
+    }
 
     var marginedWorkspaceSize: CGSize? {
         guard let totalLowerToolbarHeight = plane.totalLowerToolbarHeight, let workspaceSize
@@ -91,6 +100,10 @@ final class ImageProjectViewModel: ObservableObject {
 
     init(projectEntity: ImageProjectEntity) {
         projectModel = ImageProjectModel(imageProjectEntity: projectEntity)
+
+        drawingRevertModel = RevertModel()
+        normalRevertModel = RevertModel()
+
         configureNavBar()
 
         let photoEntities = projectModel.photoEntities
@@ -128,7 +141,9 @@ final class ImageProjectViewModel: ObservableObject {
             }
         }
         setupSubscriptions()
-        latestSnapshot = createSnapshot()
+        let latestSnapshot = createSnapshot()
+        drawingRevertModel.latestSnapshot = latestSnapshot
+        normalRevertModel.latestSnapshot = latestSnapshot
     }
 
     deinit {
@@ -186,44 +201,52 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func updateLatestSnapshot() {
-        if undoModel.count > undoLimit {
-            undoModel.removeFirst()
+        if currentRevertModel.undoModel.count > undoLimit {
+            currentRevertModel.undoModel.removeFirst()
         }
 
-        redoModel.removeAll()
-        undoModel.append(latestSnapshot)
-        latestSnapshot = createSnapshot()
+        currentRevertModel.redoModel.removeAll()
+        currentRevertModel.undoModel.append(currentRevertModel.latestSnapshot)
+        currentRevertModel.latestSnapshot = createSnapshot()
         projectModel.lastEditDate = Date.now
         PersistenceController.shared.saveChanges()
+        objectWillChange.send()
         layoutChangedSubject.send()
     }
 
     func performUndo() {
-        guard undoModel.count > 0 else { return }
+        guard currentRevertModel.undoModel.count > 0 else { return }
 
         let firstSnapshot = createSnapshot()
         loadPreviousProjectLayerData(isUndo: true)
-        undoModel.removeLast()
-        redoModel.append(firstSnapshot)
-        latestSnapshot = createSnapshot()
+        currentRevertModel.undoModel.removeLast()
+        currentRevertModel.redoModel.append(firstSnapshot)
+        currentRevertModel.latestSnapshot = createSnapshot()
     }
 
     func performRedo() {
-        guard redoModel.count > 0 else { return }
+        guard currentRevertModel.redoModel.count > 0 else { return }
 
         let projectLayerCopy = createSnapshot()
         loadPreviousProjectLayerData(isUndo: false)
-        redoModel.removeLast()
-        undoModel.append(projectLayerCopy)
-        latestSnapshot = createSnapshot()
+        currentRevertModel.redoModel.removeLast()
+        currentRevertModel.undoModel.append(projectLayerCopy)
+        currentRevertModel.latestSnapshot = createSnapshot()
     }
 
     private func createSnapshot() -> SnapshotModel {
-        let layers = projectLayers.map { [unowned self] layer in
-            layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
+        if currentRevertModel === drawingRevertModel {
+            return .init(layers: projectLayers,
+                         projectModel: projectModel,
+                         drawings: drawings)
+        } else {
+            let layers = projectLayers.map { [unowned self] layer in
+                layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
+            }
+            let projectModel = projectModel.copy() as! ImageProjectModel
+
+            return .init(layers: layers, projectModel: projectModel, drawings: drawings)
         }
-        let projectModel = projectModel.copy() as! ImageProjectModel
-        return .init(layers: layers, projectModel: projectModel)
     }
 
     nonisolated func saveNewCGImageOnDisk(fileName: String, cgImage: CGImage!) async throws {
@@ -235,10 +258,14 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     private func loadPreviousProjectLayerData(isUndo: Bool) {
-        let previousLayers = (isUndo ? undoModel : redoModel)
-        guard previousLayers.count > 0 else { return }
+        let previousSnapshots = (isUndo
+            ? currentRevertModel.undoModel
+            : currentRevertModel.redoModel)
+        guard let previousSnapshot = previousSnapshots.last else { return }
 
-        let loadedIDs = previousLayers.last!.layers.map { $0.id }
+        let previousLayers = previousSnapshot.layers
+
+        let loadedIDs = previousLayers.map { $0.id }
         let toRemoveIDs = projectLayers.filter { !loadedIDs.contains($0.fileName) }.map { $0.id }
 
         if let activeLayerID = activeLayer?.id, toRemoveIDs.contains(activeLayerID) {
@@ -250,17 +277,12 @@ final class ImageProjectViewModel: ObservableObject {
             layerToDelete.toDelete = true
         }
 
-        for previousLayer in previousLayers.last!.layers {
+        for previousLayer in previousLayers {
             if let layer = projectLayers.first(where: { $0.fileName == previousLayer.fileName }) {
                 layer.positionZ = previousLayer.positionZ
                 layer.toDelete = previousLayer.toDelete
 
                 layer.cgImage = previousLayer.cgImage
-
-//                if let layerCGImage = layer.cgImage {
-//                    saveLayerImageSubject.send((previousLayer.fileName,
-//                                                layerCGImage))
-//                }
 
                 Task(priority: .high) { [unowned self] in
                     try await self.saveNewCGImageOnDisk(
@@ -298,8 +320,12 @@ final class ImageProjectViewModel: ObservableObject {
                 projectLayers.append(previousLayer)
             }
         }
-        let previousProjectModel = previousLayers.last!.projectModel
+        let previousDrawings = previousSnapshot.drawings
+        let previousProjectModel = previousSnapshot.projectModel
+
         withAnimation(.easeInOut(duration: 0.35)) {
+            drawings = previousDrawings
+
             projectModel.backgroundColor = previousProjectModel.backgroundColor
             projectModel.framePixelWidth = previousProjectModel.framePixelWidth
             projectModel.framePixelHeight = previousProjectModel.framePixelHeight
@@ -858,7 +884,6 @@ final class ImageProjectViewModel: ObservableObject {
             let textCGImage = try await photoExporterService.renderTextLayer(textModelEntity: textLayerModel.textModelEntity)
 
             try await saveNewCGImageOnDisk(fileName: textLayerModel.fileName, cgImage: textCGImage)
-
             textLayerModel.cgImage = textCGImage
             textLayerModel.size = calculateLayerSize(layerModel: textLayerModel)
         } catch {
@@ -936,20 +961,31 @@ final class ImageProjectViewModel: ObservableObject {
         do {
             let newCGImage = try await
                 photoExporterService
-                .renderImageFromDrawing(
-                    using: pencil,
+                .renderImageFromDrawings(
+                    from: drawings,
                     on: activeLayer,
                     frameSize: frameSize,
                     pixelFrameSize: activeLayer.pixelSize)
 
             activeLayer.cgImage = newCGImage
-            pencil.particlesPositions.removeAll()
+            drawings.removeAll()
+            let latestSnapshot = createSnapshot()
+            drawingRevertModel = RevertModel(latestSnapshot)
+            updateLatestSnapshot()
             saveLayerImageSubject.send((activeLayer.fileName,
                                         newCGImage))
-            updateLatestSnapshot()
 
         } catch {
             print(error)
         }
+    }
+
+    func storeCurrentDrawing() {
+        drawings.append(currentDrawing)
+        currentDrawing = DrawingModel(currentPencilType: currentDrawing.currentPencilType,
+                                      currentPencilSize: currentDrawing.currentPencilSize,
+                                      currentPencilColor: currentDrawing.currentPencilColor,
+                                      particlesPositions: [])
+        updateLatestSnapshot()
     }
 }
