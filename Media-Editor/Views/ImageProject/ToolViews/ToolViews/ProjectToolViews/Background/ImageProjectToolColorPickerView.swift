@@ -14,63 +14,68 @@ struct ImageProjectToolColorPickerView: View {
     @State private var cancellable: AnyCancellable?
     @State private var colorPickerSubject = PassthroughSubject<ColorPickerType, Never>()
 
-    var colorPickerType: ColorPickerType = .projectBackground
+    let colorPickerType: ColorPickerType
     var onlyCustom: Bool = false
     var allowOpacity: Bool = true
     var customTitle: String = "Custom"
 
-    var body: some View {
-        HStack {
-            ZStack(alignment: .center) {
-                ColorPicker(selection: $vm.currentColorPickerBinding.onChange(colorPicked),
-                            supportsOpacity: allowOpacity, label: { EmptyView() })
-                    .labelsHidden()
-                    .scaleEffect(vm.plane.lowerToolbarHeight *
-                        (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
-                ImageProjectToolColorTileView(color: $vm.currentColorPickerBinding, title: customTitle)
-                    .allowsHitTesting(false)
+    var colorPickerBinding: Binding<Color?> {
+        return Binding<Color?> {
+            if let color = vm.currentColorPickerBinding.shapeStyle as? Color {
+                return color
+            } else {
+                return nil
             }
-            if !onlyCustom {
-                ForEach(vm.tools.colorArray, id: \.self) { color in
-                    ImageProjectToolColorTileView(color: .constant(color))
-                        .onTapGesture { [unowned vm] in
-                            vm.currentColorPickerBinding = color
-                            vm.performColorPickedAction(colorPickerType)
-                        }
-                }
-                Spacer()
-            }
-        }.onAppear { [unowned vm] in
-            vm.currentColorPickerBinding = {
-                switch colorPickerType {
-                case .projectBackground:
-                    Color.clear
-                case .layerBackground:
-                    vm.projectModel.backgroundColor
-                case .textColor:
-                    Color.white
-                case .borderColor:
-                    Color.black
-                case .pencilColor:
-                    Color.red
-                }
-            }()
+        } set: { color in
+            guard let color else { return }
+            vm.currentColorPickerBinding = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
+        }
+    }
 
-            cancellable =
-                colorPickerSubject
-                    .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-                    .sink { [unowned vm] colorPickerType in
-                        vm.performColorPickedAction(colorPickerType)
+    var body: some View {
+        if let colorPickerBinding = Binding(colorPickerBinding) {
+            HStack {
+                ZStack(alignment: .center) {
+                    ColorPicker(selection: colorPickerBinding.onChange(colorPicked),
+                                supportsOpacity: allowOpacity, label: { EmptyView() })
+                        .labelsHidden()
+                        .scaleEffect(vm.plane.lowerToolbarHeight *
+                            (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
+                    ImageProjectToolColorTileView(color: colorPickerBinding, title: customTitle)
+                        .allowsHitTesting(false)
+                }
+                if !onlyCustom {
+                    ForEach(vm.tools.colorArray, id: \.self) { color in
+                        ImageProjectToolColorTileView(color: .constant(color))
+                            .onTapGesture { [unowned vm] in
+                                vm.currentColorPickerBinding =
+                                    ShapeStyleModel(shapeStyle: color, shapeStyleCG: color.cgColor)
+                                vm.performColorPickedAction(colorPickerType, .debounce)
+                            }
                     }
 
-            if colorPickerType == .layerBackground {
-                guard let activeLayer = vm.activeLayer else { return }
-                vm.originalCGImage = activeLayer.cgImage?.copy()
+                    Spacer()
+                }
+            }.onAppear { [unowned vm] in
+                vm.currentColorPickerType = colorPickerType
+                vm.setupInitialColorPickerColor()
+
+                cancellable =
+                    colorPickerSubject
+                        .throttleAndDebounce(throttleInterval: .seconds(1.0), debounceInterval: .seconds(1.0), scheduler: DispatchQueue.main)
+                        .sink { [unowned vm] colorPickerType, throttleAndDebounceType in
+                            vm.performColorPickedAction(colorPickerType, throttleAndDebounceType)
+                        }
+
+                if vm.currentColorPickerType == .layerBackground {
+                    guard let activeLayer = vm.activeLayer else { return }
+                    vm.originalCGImage = activeLayer.cgImage?.copy()
+                }
             }
         }
     }
 
     private func colorPicked(color: Color) {
-        colorPickerSubject.send(colorPickerType)
+        colorPickerSubject.send(vm.currentColorPickerType)
     }
 }

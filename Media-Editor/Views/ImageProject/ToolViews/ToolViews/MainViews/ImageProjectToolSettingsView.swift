@@ -48,13 +48,15 @@ struct ImageProjectToolSettingsView: View {
                         buttonType: .right)
                 } else if layerTool == .background {
                     Spacer()
-                    ImageProjectFloatingBackgroundSliderView(
-                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                        backgroundColor: $vm.currentColorPickerBinding,
-                        colorPickerType: .layerBackground)
+                    if vm.currentColorPickerBinding.shapeStyleType == .color {
+                        ImageProjectFloatingBackgroundSliderView(
+                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
+//                            backgroundColor: $vm.currentColorPickerBinding,
+                            colorPickerType: .layerBackground)
                         .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                    }
                     Spacer()
                     ImageProjectToolFloatingButtonView(
                         systemName: vm.tools.rightFloatingButtonIcon,
@@ -90,8 +92,7 @@ struct ImageProjectToolSettingsView: View {
                 case .background:
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
-                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                        backgroundColor: $vm.projectModel.backgroundColor)
+                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)

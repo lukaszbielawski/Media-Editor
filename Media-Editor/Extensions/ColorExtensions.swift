@@ -42,3 +42,9 @@ extension Color {
         return UIColor(self).hexString
     }
 }
+
+extension Color {
+    var cgColor: CGColor {
+        return UIColor(self).cgColor
+    }
+}

@@ -77,7 +77,7 @@ struct ImageProjectDrawingCanvasView: View {
                     await vm.applyDrawings(frameSize: frameSize)
                 }
 
-            } else if action == .back {
+            } else if action == .exitFocusMode {
                 vm.currentTool = .none
                 vm.drawings.removeAll()
                 vm.currentDrawing.particlesPositions.removeAll()

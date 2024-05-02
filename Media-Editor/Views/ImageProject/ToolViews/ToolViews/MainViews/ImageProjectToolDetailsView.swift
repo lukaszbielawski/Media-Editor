@@ -45,7 +45,7 @@ struct ImageProjectToolDetailsView: View {
                                 vm.leftFloatingButtonActionType = .back
                             }
                     case .background:
-                        ImageProjectToolColorPickerView()
+                        ImageProjectToolColorPickerView( colorPickerType: .projectBackground)
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }

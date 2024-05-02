@@ -10,14 +10,10 @@ import SwiftUI
 struct DrawingModel {
     var currentPencilType: PencilType = .pen
     var currentPencilSize: Int = 16
-    var currentPencilStyle: any ShapeStyle =
-    LinearGradient(colors: [Color.red, Color.blue], startPoint: .topLeading, endPoint: .bottomTrailing)
-    var currentPencilStyleDescription: [String : Any] = [:]
+    var currentPencilStyle = ShapeStyleModel(shapeStyle: Color.black, shapeStyleCG: UIColor(Color.black).cgColor)
     var particlesPositions: [CGPoint] = []
 
     func setupPath(_ path: inout Path) {
-       
-
         particlesPositions.forEach { position in
             switch self.currentPencilType {
             case .pen, .eraser:

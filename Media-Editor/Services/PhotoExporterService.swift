@@ -115,7 +115,7 @@ struct PhotoExporterService {
                              contextPixelSize: CGSize,
                              backgroundColor: CGColor,
                              offsetFromCenter: CGPoint = .zero,
-                             layersBackgroundColor: CGColor? = nil,
+                             layersBackgroundStyle: ShapeStyleModel? = nil,
                              isApplyingTransforms: Bool = true) async throws -> CGImage
     {
         return try await Task {
@@ -182,10 +182,13 @@ struct PhotoExporterService {
                     context.concatenate(resultTransform)
                 }
 
-                if let layersBackgroundColor {
-                    context.setFillColor(layersBackgroundColor)
-                    context.fill(CGRect(origin: .zero, size: .init(width: photo.pixelSize.width,
-                                                                   height: photo.pixelSize.height)))
+                if let layersBackgroundStyle {
+                    if layersBackgroundStyle.shapeStyleType == .color {
+                        let color = (layersBackgroundStyle.shapeStyleCG as! CGColor)
+                        context.setFillColor(color)
+                        context.fill(CGRect(origin: .zero, size: .init(width: photo.pixelSize.width,
+                                                                       height: photo.pixelSize.height)))
+                    }
                 }
 
                 context.draw(layerImage, in:
@@ -249,13 +252,13 @@ struct PhotoExporterService {
                 context.setLineWidth(lineWidthTransformed)
                 context.setLineCap(.round)
 
-                let pencilStyle = drawing.currentPencilStyle
+                let pencilStyle = drawing.currentPencilStyle.shapeStyle
 
                 if drawing.currentPencilType == .eraser {
                     context.setStrokeColor(UIColor.black.cgColor)
                 } else {
                     if let pencilStyle = pencilStyle as? Color {
-                        context.setStrokeColor(pencilStyle.cgColor!)
+                        context.setStrokeColor(UIColor(pencilStyle).cgColor)
                     } else if let pencilStyle = pencilStyle as? LinearGradient {
                         context.saveGState()
                         defer { context.restoreGState() }

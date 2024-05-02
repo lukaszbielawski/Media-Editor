@@ -18,83 +18,99 @@ struct ImageProjectFloatingBackgroundSliderView: View {
     @State private var sliderWidth: Double = 0.0
     @State private var cancellable: AnyCancellable?
 
-    @Binding var backgroundColor: Color
+    var backgroundColor: Binding<Color?> {
+        return Binding<Color?> {
+            if let color = vm.currentColorPickerBinding.shapeStyle as? Color {
+                return color
+            } else {
+                return nil
+            }
+        } set: { color in
+            guard let color else { return }
+            $vm.currentColorPickerBinding.wrappedValue = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
+        }
+
+    }
+
     @GestureState var lastOffset: Double?
 
     var maxOffset: Double { return sliderWidth - sliderHeight }
 
     var sliderOffset: Double {
-        backgroundColor.cgColor!.alpha * maxOffset
+        guard let backgroundColor = backgroundColor.wrappedValue else { return 0.0 }
+        return UIColor(backgroundColor).cgColor.alpha * maxOffset
     }
 
     var defaultOffsetFactor: CGFloat {
-        return backgroundColor.cgColor?.alpha ?? 1.0
+        guard let backgroundColor = backgroundColor.wrappedValue else { return 1.0 }
+        return UIColor(backgroundColor).cgColor.alpha
     }
 
     var percentage: String {
         return "\(Int(defaultOffsetFactor.toPercentage))%"
     }
 
-//    var isProjectBackgroundColorChanger: Bool = true
     var colorPickerType: ColorPickerType = .projectBackground
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            Capsule(style: .circular)
-                .fill(
-                    LinearGradient(
-                        colors: [.clear, backgroundColor.withAlpha(1.0)],
-                        startPoint: .leading,
-                        endPoint: .trailing
+        if let backgroundColor = Binding(backgroundColor) {
+            ZStack(alignment: .leading) {
+                Capsule(style: .circular)
+                    .fill(
+                        LinearGradient(
+                            colors: [.clear, backgroundColor.wrappedValue.withAlpha(1.0)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
                     )
-                )
-                .clipShape(Capsule(style: .circular))
-                .overlay {
-                    Capsule(style: .circular)
-                        .strokeBorder(Color(.secondary), lineWidth: 2)
-                }
-                .geometryAccessor { geo in
-                    DispatchQueue.main.async {
-                        sliderWidth = geo.size.width
+                    .clipShape(Capsule(style: .circular))
+                    .overlay {
+                        Capsule(style: .circular)
+                            .strokeBorder(Color(.secondary), lineWidth: 2)
                     }
-                }
-
-            Circle()
-                .fill(Color(appearance == .light ? .image : .tint))
-                .overlay {
-                    Circle()
-                        .fill(Color.tint)
-                        .padding(2)
-                    Text(percentage)
-                        .foregroundStyle(Color(.image))
-                }
-                .frame(width: sliderHeight, height: sliderHeight)
-                .offset(x: sliderOffset)
-                .gesture(
-                    DragGesture()
-                        .onChanged { value in
-                            var newOffset = lastOffset ?? sliderOffset
-
-                            newOffset += value.translation.width
-                            newOffset = min(max(newOffset, 0.0), maxOffset)
-                            backgroundColor =
-                                backgroundColor.withAlpha(newOffset / maxOffset)
+                    .geometryAccessor { geo in
+                        DispatchQueue.main.async {
+                            sliderWidth = geo.size.width
                         }
-                        .updating($lastOffset) { _, lastOffset, _ in
-                            lastOffset = lastOffset ?? sliderOffset
-                        }.onEnded { _ in
-                            switch colorPickerType {
-                            case .projectBackground:
-                                vm.updateLatestSnapshot()
-                            default:
-                                Task {
-                                    try await vm.addBackgroundToLayer()
-                                }
+                    }
+
+                Circle()
+                    .fill(Color(appearance == .light ? .image : .tint))
+                    .overlay {
+                        Circle()
+                            .fill(Color.tint)
+                            .padding(2)
+                        Text(percentage)
+                            .foregroundStyle(Color(.image))
+                    }
+                    .frame(width: sliderHeight, height: sliderHeight)
+                    .offset(x: sliderOffset)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                var newOffset = lastOffset ?? sliderOffset
+
+                                newOffset += value.translation.width
+                                newOffset = min(max(newOffset, 0.0), maxOffset)
+                                backgroundColor.wrappedValue =
+                                backgroundColor.wrappedValue.withAlpha(newOffset / maxOffset)
                             }
+                            .updating($lastOffset) { _, lastOffset, _ in
+                                lastOffset = lastOffset ?? sliderOffset
+                            }.onEnded { _ in
+                                switch colorPickerType {
+                                case .projectBackground:
+                                    vm.updateLatestSnapshot()
+                                default:
+                                    Task {
+                                        try await vm.addBackgroundToLayer()
+                                    }
+                                }
 
-                            vm.objectWillChange.send()
-                        }
-                )
+                                vm.objectWillChange.send()
+                            }
+                    )
+            }
         }
     }
 }

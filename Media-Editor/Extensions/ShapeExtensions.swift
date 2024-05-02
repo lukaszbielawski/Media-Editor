@@ -14,12 +14,12 @@ extension Shape {
             self
                 .stroke(Color.black, style: strokeStyle)
         case .pen, .pencil:
-            if let currentPencilStyle = drawing.currentPencilStyle as? Color {
+            if let currentPencilShapeStyle = drawing.currentPencilStyle.shapeStyle as? Color {
                 self
-                    .stroke(currentPencilStyle, style: strokeStyle)
-            } else if let currentPencilStyle = drawing.currentPencilStyle as? LinearGradient {
+                    .stroke(currentPencilShapeStyle, style: strokeStyle)
+            } else if let currentPencilShapeStyle = drawing.currentPencilStyle.shapeStyle as? LinearGradient {
                 self
-                    .stroke(currentPencilStyle, style: strokeStyle)
+                    .stroke(currentPencilShapeStyle, style: strokeStyle)
             }
         }
     }
