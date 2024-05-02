@@ -32,16 +32,11 @@ struct ImageProjectDrawingCanvasView: View {
         ZStack {
             ForEach(vm.drawings + [vm.currentDrawing], id: \.self) { drawing in
                 let strokeStyle = StrokeStyle(lineWidth: CGFloat(drawing.currentPencilSize), lineCap: .round)
-                let pencilColor: Color = drawing.currentPencilType == .eraser ? Color.black : drawing.currentPencilColor
 
                 Path { path in
-                    drawing.particlesPositions.forEach { position in
-                        path.addLine(to: .init(x: position.x, y: position.y))
-                        path.move(to: .init(x: position.x, y: position.y))
-                    }
+                    drawing.setupPath(&path)
                 }
-                .stroke(style: strokeStyle)
-                .foregroundStyle(pencilColor)
+                .pencilStroke(for: drawing, strokeStyle: strokeStyle)
                 .blendMode(drawing.currentPencilType == .eraser ? .destinationOut : .normal)
                 .clipShape(Rectangle().size(width: frameSize.width, height: frameSize.height))
             }
@@ -85,6 +80,7 @@ struct ImageProjectDrawingCanvasView: View {
             } else if action == .back {
                 vm.currentTool = .none
                 vm.drawings.removeAll()
+                vm.currentDrawing.particlesPositions.removeAll()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { [unowned vm] _ in

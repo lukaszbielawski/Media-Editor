@@ -220,14 +220,14 @@ struct PhotoExporterService {
 
             else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelFrameSize.width), height: Int(pixelFrameSize.height))) }
 
-            guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
+            guard let layerImage = layer.cgImage, let layerScaleX = layer.scaleX, let layerScaleY = layer.scaleY else { throw PhotoExportError.other }
 
             context.draw(layerImage, in: CGRect(x: 0,
                                                 y: 0,
                                                 width: CGFloat(pixelFrameSize.width),
                                                 height: CGFloat(pixelFrameSize.height)))
 
-            let transform = CGAffineTransform(scaleX: pixelFrameSize.width / frameSize.width, y: pixelFrameSize.height / frameSize.height)
+            let pixelRatioTransform = CGAffineTransform(scaleX: pixelFrameSize.width / frameSize.width, y: pixelFrameSize.height / frameSize.height)
 
             context.translateBy(x: 0, y: pixelFrameSize.height)
             context.scaleBy(x: 1, y: -1)
@@ -239,21 +239,48 @@ struct PhotoExporterService {
                     context.setBlendMode(.destinationOut)
                 }
 
-                for position in drawing.particlesPositions {
-                    path.addLine(to: .init(x: position.x,
-                                           y: position.y))
-                    path.move(to: .init(x: position.x,
-                                        y: position.y))
-                }
-                context.addPath(path.applying(transform).cgPath)
-                let pencilColor: CGColor =
-                drawing.currentPencilType == .eraser
-                        ? CGColor(gray: 1.0, alpha: 1.0)
-                        : drawing.currentPencilColor.cgColor!
-                context.setStrokeColor(pencilColor)
+                drawing.setupPath(&path)
+
+                context.addPath(path.applying(pixelRatioTransform).cgPath)
+
+                let lineWidthTransformed = CGFloat(drawing.currentPencilSize) * sqrt(pixelRatioTransform.a * pixelRatioTransform.d)
+
                 context.setAllowsAntialiasing(true)
-                context.setLineWidth(CGFloat(drawing.currentPencilSize) * sqrt(transform.a * transform.d))
+                context.setLineWidth(lineWidthTransformed)
                 context.setLineCap(.round)
+
+                let pencilStyle = drawing.currentPencilStyle
+
+                if drawing.currentPencilType == .eraser {
+                    context.setStrokeColor(UIColor.black.cgColor)
+                } else {
+                    if let pencilStyle = pencilStyle as? Color {
+                        context.setStrokeColor(pencilStyle.cgColor!)
+                    } else if let pencilStyle = pencilStyle as? LinearGradient {
+                        context.saveGState()
+                        defer { context.restoreGState() }
+
+                        let colors = [UIColor.red.cgColor, UIColor.blue.cgColor]
+                        let locations = [0.0, 1.0]
+
+                        let uiPath = UIBezierPath(cgPath: path.applying(pixelRatioTransform).cgPath)
+
+                        uiPath.addClip()
+
+//                        pencilStyle.sops
+
+                        let bounds = uiPath.cgPath.boundingBox
+                        let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: colors as CFArray, locations: nil)
+
+                        context.replacePathWithStrokedPath()
+                        context.clip()
+
+                        let start = CGPoint(x: bounds.minX, y: bounds.minY)
+                        let end = CGPoint(x: bounds.maxX, y: bounds.maxY)
+                        context.drawLinearGradient(gradient!, start: start, end: end, options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
+                    }
+                }
+
                 context.strokePath()
 
                 if drawing.currentPencilType == .eraser {

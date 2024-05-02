@@ -24,8 +24,21 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentFilter: FilterType?
     @Published var currentCropRatio: CropRatioType = .any
     @Published var currentCropShape: CropShapeType = .rectangle
-    @Published var currentLayerBackgroundColor: Color = .clear
-    @Published var currentTextLayerTextColor: Color = .white
+    @Published var currentColorPickerBinding: Color = .clear {
+        didSet {
+            if let currentTool = currentTool as? ProjectToolType,
+               currentTool == .background {
+                projectModel.backgroundColor = currentColorPickerBinding
+            } else if let currentTool = currentTool as? LayerToolType,
+                       currentTool == .draw  {
+                if currentDrawing.currentPencilStyle is Color {
+                    currentDrawing.currentPencilStyle = currentColorPickerBinding
+                }
+            }
+
+        }
+    }
+
     @Published var originalCGImage: CGImage!
 
     @Published var workspaceSize: CGSize?
@@ -527,7 +540,7 @@ final class ImageProjectViewModel: ObservableObject {
                 photos: [activeLayer],
                 contextPixelSize: activeLayer.pixelSize,
                 backgroundColor: UIColor.clear.cgColor,
-                layersBackgroundColor: currentLayerBackgroundColor.cgColor!,
+                layersBackgroundColor: currentColorPickerBinding.cgColor!,
                 isApplyingTransforms: false)
 
 //        try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: layerWithBackground)
@@ -984,7 +997,7 @@ final class ImageProjectViewModel: ObservableObject {
         drawings.append(currentDrawing)
         currentDrawing = DrawingModel(currentPencilType: currentDrawing.currentPencilType,
                                       currentPencilSize: currentDrawing.currentPencilSize,
-                                      currentPencilColor: currentDrawing.currentPencilColor,
+                                      currentPencilStyle: currentDrawing.currentPencilStyle,
                                       particlesPositions: [])
         updateLatestSnapshot()
     }

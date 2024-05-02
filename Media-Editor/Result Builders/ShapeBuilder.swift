@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 @resultBuilder
-public enum ShapeBuilder {
+enum ShapeBuilder {
     public static func buildBlock(_ shape: some Shape) -> some Shape { shape }
 }
 
-public extension ShapeBuilder {
+extension ShapeBuilder {
     static func buildEither<First: Shape, Second: Shape>(first: First) -> EitherShape<First, Second> {
         return .first(first)
     }
@@ -23,11 +23,11 @@ public extension ShapeBuilder {
     }
 }
 
-public enum EitherShape<First: Shape, Second: Shape>: Shape {
+enum EitherShape<First: Shape, Second: Shape>: Shape {
     case first(First)
     case second(Second)
 
-    public func path(in rect: CGRect) -> Path {
+    func path(in rect: CGRect) -> Path {
         switch self {
         case .first(let first): return first.path(in: rect)
         case .second(let second): return second.path(in: rect)

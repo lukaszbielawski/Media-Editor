@@ -14,14 +14,14 @@ enum PencilType: CaseIterable {
     case pencil
 
     @ShapeBuilder
-    var path: some Shape {
+    var shape: some Shape {
         switch self {
         case .eraser:
             PenShape()
         case .pen:
             PenShape()
         case .pencil:
-            PencilShape()
+            PenShape()
         }
     }
 

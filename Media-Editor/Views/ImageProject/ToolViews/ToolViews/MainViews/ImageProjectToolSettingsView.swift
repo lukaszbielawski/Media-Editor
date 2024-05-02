@@ -50,7 +50,7 @@ struct ImageProjectToolSettingsView: View {
                     Spacer()
                     ImageProjectFloatingBackgroundSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                        backgroundColor: $vm.currentLayerBackgroundColor,
+                        backgroundColor: $vm.currentColorPickerBinding,
                         colorPickerType: .layerBackground)
                         .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)

@@ -53,7 +53,7 @@ struct ImageProjectFocusView: View {
             .onReceive(vm.floatingButtonClickedSubject) { action in
                 if action == .exitFocusMode {
                     if vm.currentTool is LayerToolType {
-                        vm.currentLayerBackgroundColor = Color.clear
+                        vm.currentColorPickerBinding = Color.clear
                         vm.disablePreviewCGImage()
                     }
                     vm.currentTool = .none
@@ -62,7 +62,7 @@ struct ImageProjectFocusView: View {
                 {
                     if action == .confirm {
                         vm.currentTool = .none
-                        vm.currentLayerBackgroundColor = Color.clear
+                        vm.currentColorPickerBinding = Color.clear
                         Task {
                             try? await vm.saveNewCGImageOnDisk(
                                 fileName: layerModel.fileName,
