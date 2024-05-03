@@ -34,18 +34,13 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
-                    case .resize:
-                        ImageProjectToolCaseResizeView()
+                    case .background:
+                        ImageProjectToolCaseProjectBackgroundView()
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
                     case .text:
                         ImageProjectToolCaseTextView(isEditMode: false)
-                            .onAppear {
-                                vm.leftFloatingButtonActionType = .back
-                            }
-                    case .background:
-                        ImageProjectToolColorPickerView( colorPickerType: .projectBackground)
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .back
                             }
@@ -75,8 +70,8 @@ struct ImageProjectToolDetailsView: View {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }
                     case .background:
-                        ImageProjectToolColorPickerView(colorPickerType: .layerBackground)
-                            .onAppear {
+                        ImageProjectToolCaseLayerBackgroundView()
+                            .onTapGesture {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }
                     case .editText:
@@ -86,6 +81,13 @@ struct ImageProjectToolDetailsView: View {
                             }
                     }
                 }
+                if let colorPickerType = vm.currentColorPickerType {
+                    Group {
+                        Color(.image)
+                            .frame(height: vm.plane.lowerToolbarHeight)
+                        ImageProjectToolTextureView()
+                    }.transition(.normalOpacityTransition)
+                }
             }
             .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
 
@@ -93,6 +95,7 @@ struct ImageProjectToolDetailsView: View {
             guard newValue else { return }
 
             if vm.currentTool is LayerToolType {
+                vm.currentColorPickerType = .none
                 vm.currentTool = .none
                 vm.currentFilter = .none
                 vm.currentCategory = .none

@@ -15,27 +15,23 @@ extension UIColor {
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
 
-        let multiplier = CGFloat(255.999999)
+        let multiplier = CGFloat(255)
 
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
-            return nil
-        }
+        self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 
-        if alpha == 1.0 {
-            return String(
-                format: "#%02lX%02lX%02lX",
-                Int(red * multiplier),
-                Int(green * multiplier),
-                Int(blue * multiplier)
-            )
-        } else {
-            return String(
-                format: "#%02lX%02lX%02lX%02lX",
-                Int(alpha * multiplier),
-                Int(red * multiplier),
-                Int(green * multiplier),
-                Int(blue * multiplier)
-            )
-        }
+        let normalizedRed = max(min(Int(red * multiplier), 255), 0)
+        let normalizedGreen = max(min(Int(green * multiplier), 255), 0)
+        let normalizedBlue = max(min(Int(blue * multiplier), 255), 0)
+        let normalizedAlpha = max(min(Int(alpha * multiplier), 255), 0)
+
+        let hexString = String(
+            format: "#%02lX%02lX%02lX%02lX",
+            normalizedRed,
+            normalizedGreen,
+            normalizedBlue,
+            normalizedAlpha
+        )
+
+        return hexString
     }
 }

@@ -1,5 +1,5 @@
 //
-//  FloatingButtonFunctioType.swift
+//  FloatingButtonActionType.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 26/02/2024.
@@ -12,5 +12,6 @@ enum FloatingButtonActionType {
     case confirm
     case hideKeyboard
     case backToCategories
+    case backFromColorPicker
     case exitFocusMode
 }

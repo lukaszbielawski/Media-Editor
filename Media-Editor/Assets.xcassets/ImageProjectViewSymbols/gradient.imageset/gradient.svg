@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="174.4304mm"
+   height="147.215mm"
+   viewBox="0 0 174.4304 147.215"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath82">
+      <g
+         id="g84"
+         style="display:none">
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+           id="rect82"
+           width="10"
+           height="110"
+           x="20"
+           y="5.5511151e-17"
+           d="M 20,0 H 30 V 110 H 20 Z" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+           id="rect83"
+           width="10"
+           height="110"
+           x="140"
+           y="5.5511151e-17"
+           d="m 140,0 h 10 v 110 h -10 z" />
+        <rect
+           style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+           id="rect84"
+           width="10"
+           height="110"
+           x="60"
+           y="-2.220446e-16"
+           d="M 60,0 H 70 V 110 H 60 Z" />
+      </g>
+      <path
+         id="lpe_path-effect84"
+         class="powerclip"
+         d="M -4.7151999,-4.7151999 H 179.7152 V 104.7152 H -4.7151999 Z M 20,0 V 110 H 30 V 0 Z m 120,0 v 110 h 10 V 0 Z M 60,0 V 110 H 70 V 0 Z" />
+    </clipPath>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-0.28480005,-0.28480005)">
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect1"
+       width="164.4304"
+       height="89.430405"
+       x="5.2848001"
+       y="5.2848001"
+       clip-path="url(#clipPath82)"
+       d="M 5.2848001,5.2848001 H 169.7152 V 94.715205 H 5.2848001 Z" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 135,122.49979 10,-10 10,10 v 20 h -20 z"
+       id="path86" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 15,122.49979 10,-10 10,10 v 20 H 15 Z"
+       id="path87" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 55,122.49979 10,-10 10,10 v 20 H 55 Z"
+       id="path88" />
+  </g>
+</svg>

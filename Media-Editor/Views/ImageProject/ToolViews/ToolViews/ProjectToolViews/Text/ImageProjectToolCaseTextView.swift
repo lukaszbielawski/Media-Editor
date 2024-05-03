@@ -15,7 +15,7 @@ struct ImageProjectToolCaseTextView: View {
 
     var body: some View {
         ZStack {
-            if vm.currentCategory == nil {
+            if vm.currentCategory == nil || vm.currentCategory?.isColor == true {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(TextCategoryType.allCases) { category in
@@ -23,6 +23,9 @@ struct ImageProjectToolCaseTextView: View {
                                                      iconName: category.thumbnailName)
                                 .contentShape(Rectangle())
                                 .onTapGesture {
+                                    if category.isColor {
+                                        vm.currentColorPickerType = .textColor
+                                    }
                                     vm.currentCategory = category
                                 }
                         }
@@ -36,7 +39,7 @@ struct ImageProjectToolCaseTextView: View {
                 Group {
                     switch textCategory {
                     case .textColor:
-                        ImageProjectToolColorPickerView(colorPickerType: .textColor)
+                        EmptyView()
                     case .fontName:
                         ImageProjectToolCaseTextCategoryFontNameView()
                     case .fontSize:
@@ -45,10 +48,10 @@ struct ImageProjectToolCaseTextView: View {
                         ImageProjectToolCaseTextSliderView(textCategory: .curve)
                     case .border:
                         HStack {
-                            ImageProjectToolColorPickerView(
-                                colorPickerType: .borderColor,
-                                onlyCustom: true,
-                                customTitle: "Border")
+                            ImageProjectToolTileView(title: "Color", iconName: "paintpalette.fill")
+                                .onTapGesture {
+                                    vm.currentColorPickerType = .borderColor
+                                }
                             ImageProjectToolCaseTextSliderView(textCategory: .border)
                         }
                     }
@@ -75,6 +78,7 @@ struct ImageProjectToolCaseTextView: View {
                 vm.currentCategory = .none
             } else if actionType == .back {
                 vm.currentTool = .none
+                vm.currentColorPickerType = .none
             }
         }
     }

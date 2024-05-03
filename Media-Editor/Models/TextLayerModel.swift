@@ -33,18 +33,14 @@ final class TextLayerModel: LayerModel {
 
     @Published var textColor: Color {
         willSet {
-            print(newValue.hexString)
             guard let hexString = newValue.hexString else { return }
-            print("text color")
             textModelEntity.textColorHex = hexString
         }
     }
 
     @Published var borderColor: Color {
         willSet {
-            print(newValue.hexString)
             guard let hexString = newValue.hexString else { return }
-            print("borderColor")
             textModelEntity.borderColorHex = hexString
         }
     }

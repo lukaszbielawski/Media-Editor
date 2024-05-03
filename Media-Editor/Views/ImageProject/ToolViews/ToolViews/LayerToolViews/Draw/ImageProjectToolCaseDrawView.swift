@@ -13,10 +13,10 @@ struct ImageProjectToolCaseDrawView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ImageProjectToolColorPickerView(
-                    colorPickerType: .pencilColor,
-                    onlyCustom: true,
-                    customTitle: "Color")
+                ImageProjectToolTileView(title: "Color", iconName: "paintpalette.fill")
+                    .onTapGesture {
+                        vm.currentColorPickerType = .pencilColor
+                    }
                     .overlay {
                         if vm.currentDrawing.currentPencilType == .eraser {
                             Color.white
@@ -25,7 +25,7 @@ struct ImageProjectToolCaseDrawView: View {
                                 .overlay {
                                     Image(systemName: "hand.raised.fill")
                                         .resizable()
-                                        .foregroundStyle(Color.tint)
+                                        .foregroundStyle(Color.accentColor)
                                         .scaledToFit()
                                         .padding()
                                         .padding(.bottom)
@@ -35,7 +35,6 @@ struct ImageProjectToolCaseDrawView: View {
                                 .transition(.normalOpacityTransition)
                         }
                     }
-
                 ForEach(PencilType.allCases, id: \.self) { pencilType in
                     ImageProjectToolTileView(
                         title: pencilType.name,

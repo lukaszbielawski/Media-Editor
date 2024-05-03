@@ -56,13 +56,15 @@ struct ImageProjectFocusView: View {
                         vm.disablePreviewCGImage()
                     }
                     vm.currentTool = .none
+                    vm.currentColorPickerType = .none
                 } else if let currentTool = vm.currentTool as? LayerToolType,
                           currentTool == .background
                 {
                     if action == .confirm {
                         vm.currentTool = .none
+                        vm.currentColorPickerType = .none
                         Task {
-                            try? await vm.saveNewCGImageOnDisk(
+                            try await vm.saveNewCGImageOnDisk(
                                 fileName: layerModel.fileName,
                                 cgImage: layerModel.cgImage)
                         }

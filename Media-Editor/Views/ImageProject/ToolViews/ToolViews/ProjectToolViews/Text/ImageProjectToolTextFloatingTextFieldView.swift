@@ -58,7 +58,6 @@ struct ImageProjectToolTextFloatingTextFieldView: View {
                                          debounceInterval: .seconds(1.0),
                                          scheduler: DispatchQueue.main)
                     .sink { [unowned vm] _ in
-                        print("debounceTextFieldSubject sink")
                         vm.renderTask?.cancel()
                         vm.renderTask = Task {
                             try await vm.renderTextLayer()

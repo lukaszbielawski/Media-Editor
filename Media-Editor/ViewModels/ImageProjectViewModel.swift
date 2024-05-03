@@ -24,7 +24,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentFilter: FilterType?
     @Published var currentCropRatio: CropRatioType = .any
     @Published var currentCropShape: CropShapeType = .rectangle
-    @Published var currentColorPickerType: ColorPickerType = .projectBackground
+    @Published var currentColorPickerType: ColorPickerType? = .none
 
     @Published var originalCGImage: CGImage!
 
@@ -49,9 +49,8 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var isSnapshotCurrentlyLoading = false
     @Published var isExportSheetPresented = false
 
-    @Published var currentColorPickerBinding: ShapeStyleModel = .init(shapeStyle: Color.green, shapeStyleCG: UIColor(Color.green).cgColor) {
+    @Published var currentColorPickerBinding: ShapeStyleModel = .init(shapeStyle: Color.clear, shapeStyleCG: UIColor(Color.clear).cgColor) {
         didSet {
-            print("did set", currentColorPickerBinding)
             if let currentTool = currentTool as? ProjectToolType {
                 switch currentTool {
                 case .background:
@@ -234,11 +233,11 @@ final class ImageProjectViewModel: ObservableObject {
                 try await addBackgroundToLayer()
             }
         case .textColor, .borderColor:
-            Task {
-                try await renderTextLayer()
-            }
             if throttleAndDebounceType == .debounce {
                 updateLatestSnapshot()
+                Task {
+                    try await renderTextLayer()
+                }
             }
             objectWillChange.send()
         case .pencilColor:
@@ -296,7 +295,8 @@ final class ImageProjectViewModel: ObservableObject {
         }
     }
 
-    nonisolated func saveNewCGImageOnDisk(fileName: String, cgImage: CGImage!) async throws {
+    nonisolated func saveNewCGImageOnDisk(fileName: String, cgImage: CGImage?) async throws {
+        guard let cgImage else { return }
         if let imageData = UIImage(cgImage: cgImage).pngData() {
             _ = try await photoLibraryService.saveToDisk(
                 data: imageData,
@@ -361,9 +361,6 @@ final class ImageProjectViewModel: ObservableObject {
                     textLayer.textColor = previousTextLayer.textColor
                     textLayer.borderColor = previousTextLayer.borderColor
                     textLayer.borderSize = previousTextLayer.borderSize
-                    Task {
-                        try await renderTextLayer(textLayer: textLayer)
-                    }
                 }
 
             } else {
@@ -513,16 +510,18 @@ final class ImageProjectViewModel: ObservableObject {
     func toggleIsActiveStatus(layerModel: LayerModel) {
         if activeLayer == layerModel {
             deactivateLayer()
-            currentCategory = nil
-            currentTool = nil
+            currentCategory = .none
+            currentTool = .none
+            currentColorPickerType = .none
         } else if activeLayer == nil {
             activeLayer = layerModel
             objectWillChange.send()
         } else {
             activeLayer = layerModel
             objectWillChange.send()
-            currentCategory = nil
-            currentTool = nil
+            currentCategory = .none
+            currentTool = .none
+            currentColorPickerType = .none
         }
     }
 
@@ -643,6 +642,7 @@ final class ImageProjectViewModel: ObservableObject {
         activeLayer = nil
         currentCategory = nil
         currentTool = nil
+        currentColorPickerType = nil
     }
 
     func disablePreviewCGImage() {
@@ -1040,6 +1040,7 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func setupInitialColorPickerColor() {
+        guard let currentColorPickerType else { return }
         let color: Color? = {
             switch currentColorPickerType {
             case .projectBackground:
@@ -1048,7 +1049,6 @@ final class ImageProjectViewModel: ObservableObject {
                 return Color.clear
             case .textColor:
                 guard let textLayer = activeLayer as? TextLayerModel else { return nil }
-                print(textLayer.textColor)
                 return textLayer.textColor
             case .borderColor:
                 guard let textLayer = activeLayer as? TextLayerModel else { return nil }
@@ -1060,10 +1060,10 @@ final class ImageProjectViewModel: ObservableObject {
                 return color
             }
         }()
-
         if let color {
             currentColorPickerBinding = ShapeStyleModel(shapeStyle: color, shapeStyleCG: color.cgColor)
         }
+
         objectWillChange.send()
     }
 }

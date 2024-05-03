@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23B81" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ImageProjectEntity" representedClassName=".ImageProjectEntity" syncable="YES">
-        <attribute name="backgroundColorHex" attributeType="String" defaultValueString="#00FFFFFF"/>
+        <attribute name="backgroundColorHex" attributeType="String" defaultValueString="#FFFFFF00"/>
         <attribute name="frameHeight" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="frameWidth" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
@@ -23,7 +23,7 @@
         <relationship name="photoEntityToTextModelEntity" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TextModelEntity" inverseName="textModelEntityToPhotoEntity" inverseEntity="TextModelEntity"/>
     </entity>
     <entity name="TextModelEntity" representedClassName=".TextModelEntity" syncable="YES">
-        <attribute name="borderColorHex" attributeType="String" defaultValueString="#FF000000"/>
+        <attribute name="borderColorHex" attributeType="String" defaultValueString="#000000FF"/>
         <attribute name="borderSize" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="curveDegrees" attributeType="Double" defaultValueString="10" usesScalarValueType="YES"/>
         <attribute name="fontName" attributeType="String" defaultValueString="Arial"/>

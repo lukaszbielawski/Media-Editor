@@ -47,4 +47,19 @@ enum TextCategoryType: Category {
             return "character.textbox"
         }
     }
+
+    var isColor: Bool {
+        switch self {
+        case .textColor:
+            true
+        case .fontName:
+            false
+        case .fontSize:
+            false
+        case .curve:
+            false
+        case .border:
+            false
+        }
+    }
 }

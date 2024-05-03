@@ -73,12 +73,14 @@ struct ImageProjectDrawingCanvasView: View {
         .onReceive(vm.floatingButtonClickedSubject) { action in
             if action == .confirm {
                 vm.currentTool = .none
+                vm.currentColorPickerType = .none
                 Task(priority: .userInitiated) { [unowned vm] in
                     await vm.applyDrawings(frameSize: frameSize)
                 }
 
             } else if action == .exitFocusMode {
                 vm.currentTool = .none
+                vm.currentColorPickerType = .none
                 vm.drawings.removeAll()
                 vm.currentDrawing.particlesPositions.removeAll()
             }

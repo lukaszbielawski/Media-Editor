@@ -48,14 +48,14 @@ struct ImageProjectToolSettingsView: View {
                         buttonType: .right)
                 } else if layerTool == .background {
                     Spacer()
-                    if vm.currentColorPickerBinding.shapeStyleType == .color {
+                    if vm.currentColorPickerType == .layerBackground {
                         ImageProjectFloatingBackgroundSliderView(
                             sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-//                            backgroundColor: $vm.currentColorPickerBinding,
+                            //                            backgroundColor: $vm.currentColorPickerBinding,
                             colorPickerType: .layerBackground)
-                        .transition(.normalOpacityTransition)
-                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                            .transition(.normalOpacityTransition)
+                            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+                            .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     }
                     Spacer()
                     ImageProjectToolFloatingButtonView(
@@ -91,11 +91,13 @@ struct ImageProjectToolSettingsView: View {
                     Spacer()
                 case .background:
                     Spacer()
-                    ImageProjectFloatingBackgroundSliderView(
-                        sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    if vm.currentColorPickerType == .projectBackground {
+                        ImageProjectFloatingBackgroundSliderView(
+                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .transition(.normalOpacityTransition)
                         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
                         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                    }
                     Spacer()
                 default:
                     EmptyView()
@@ -110,11 +112,5 @@ struct ImageProjectToolSettingsView: View {
             y: -(1 + 2 * vm.tools.paddingFactor) * vm.plane.lowerToolbarHeight * 0.5)
         .padding(.trailing, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
         .transition(.normalOpacityTransition)
-        .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
-            guard let vm else { return }
-            if functionType == .back {
-                vm.currentTool = nil
-            }
-        }
     }
 }

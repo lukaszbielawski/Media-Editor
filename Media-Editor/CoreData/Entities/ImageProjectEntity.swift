@@ -29,7 +29,7 @@ extension ImageProjectEntity: Identifiable {
     convenience init(id: UUID,
                      title: String,
                      lastEditDate: Date? = nil,
-                     backgroundColorHex: String = "#00FFFFFF",
+                     backgroundColorHex: String = "#FFFFFF00",
                      mediaEntities: Set<PhotoEntity>? = Set<PhotoEntity>())
     {
         self.init(context: PersistenceController.shared.container.viewContext)

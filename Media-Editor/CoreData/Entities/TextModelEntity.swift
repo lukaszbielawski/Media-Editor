@@ -34,7 +34,7 @@ extension TextModelEntity: Identifiable {
                      fontSize: Int = 32,
                      curveDegrees: Double = 0.0,
                      textColorHex: String = "#FFFFFFFF",
-                     borderColorHex: String = "#FF000000",
+                     borderColorHex: String = "#000000FF",
                      borderSize: Int = 0,
                      textModelEntityToPhotoEntity: PhotoEntity? = nil)
     {

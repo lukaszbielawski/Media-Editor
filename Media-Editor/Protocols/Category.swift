@@ -11,4 +11,9 @@ protocol Category: Identifiable, CaseIterable, Equatable{
     var id: String { get }
     var shortName: String { get }
     var thumbnailName: String { get }
+    var isColor: Bool { get }
+}
+
+extension Category {
+    var isColor: Bool { false }
 }

@@ -1,14 +1,14 @@
 //
-//  ImageProjectToolCaseResizeView.swift
+//  ImageProjectToolCaseProjectBackgroundView.swift
 //  Media-Editor
 //
-//  Created by Łukasz Bielawski on 13/02/2024.
+//  Created by Łukasz Bielawski on 03/05/2024.
 //
 
-import Combine
+import Foundation
 import SwiftUI
 
-struct ImageProjectToolCaseResizeView: View {
+struct ImageProjectToolCaseProjectBackgroundView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     let formatter: NumberFormatter = {
@@ -21,6 +21,10 @@ struct ImageProjectToolCaseResizeView: View {
 
     var body: some View {
         HStack {
+            ImageProjectToolTileView(title: "Color", iconName: "paintpalette.fill")
+                .onTapGesture {
+                    vm.currentColorPickerType = .projectBackground
+                }
             if let pixelFrameSliderWidth = Binding($vm.projectModel.framePixelWidth),
                let pixelFrameSliderHeight = Binding($vm.projectModel.framePixelHeight)
             {
@@ -42,10 +46,12 @@ struct ImageProjectToolCaseResizeView: View {
                         $vm.projectModel.framePixelHeight)
                         .focused($isFocused)
                 }
+                .padding(.bottom, vm.tools.paddingFactor *
+                    vm.plane.lowerToolbarHeight)
+                .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
             }
         }
-        .padding(.bottom, vm.tools.paddingFactor *
-            vm.plane.lowerToolbarHeight)
+
         .onChange(of: isFocused) { [unowned vm] newValue in
             if newValue {
                 vm.leftFloatingButtonActionType = .hideKeyboard
@@ -66,6 +72,24 @@ struct ImageProjectToolCaseResizeView: View {
         .onTapGesture {
             isFocused = false
         }
-        .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+
     }
 }
+
+//struct ImageProjectToolCaseProjectBackgroundView: View {
+//    @EnvironmentObject var vm: ImageProjectViewModel
+//
+//    var body: some View {
+//        HStack {
+//            ImageProjectToolTileView(title: "Color", iconName: "paintpalette.fill")
+//                .onTapGesture {
+//                    vm.currentColorPickerType = .projectBackground
+//                }
+//            Spacer()
+//        }
+//        .onAppear {
+//            vm.currentColorPickerBinding = ShapeStyleModel(shapeStyle: vm.projectModel.backgroundColor,
+//                                                           shapeStyleCG: vm.projectModel.backgroundColor.cgColor)
+//        }
+//    }
+//}

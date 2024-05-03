@@ -11,9 +11,8 @@ enum ProjectToolType: String, Tool {
     case add
     case layers
     case merge
-    case resize
-    case text
     case background
+    case text
 
     var id: String { return self.rawValue }
 }
@@ -27,8 +26,6 @@ extension ProjectToolType {
             return "Layers"
         case .merge:
             return "Merge"
-        case .resize:
-            return "Resize"
         case .text:
             return "Text"
         case .background:
@@ -44,8 +41,6 @@ extension ProjectToolType {
             return "square.3.layers.3d.top.filled"
         case .merge:
             return "point.3.filled.connected.trianglepath.dotted"
-        case .resize:
-            return "square.resize.up"
         case .text:
             return "character.cursor.ibeam"
         case .background:
