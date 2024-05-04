@@ -11,8 +11,9 @@ struct ImageProjectToolSettingsView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
     var body: some View {
         HStack(spacing: 0) {
-            ImageProjectToolFloatingButtonView(buttonType: .left)
-
+            if !(vm.activeLayer == nil && vm.currentTool == nil) {
+                ImageProjectToolFloatingButtonView(buttonType: .left)
+            }
             switch vm.currentTool {
             case let layerTool as LayerToolType:
                 if vm.currentFilter != .none {

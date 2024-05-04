@@ -57,6 +57,7 @@ struct ImageProjectFocusView: View {
                     }
                     vm.currentTool = .none
                     vm.currentColorPickerType = .none
+                    vm.leftFloatingButtonActionType = .back
                 } else if let currentTool = vm.currentTool as? LayerToolType,
                           currentTool == .background
                 {

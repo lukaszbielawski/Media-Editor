@@ -10,9 +10,8 @@ import SwiftUI
 struct ImageProjectToolColorPickerView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
     var colorPickerBinding: Binding<Color>
-    let customTitle: String
+    var customTitle: String? = nil
     var allowOpacity: Bool
-
 
     var body: some View {
         ZStack(alignment: .center) {

@@ -1000,8 +1000,10 @@ final class ImageProjectViewModel: ObservableObject {
             }
 
         } catch {
-            isExportSheetPresented = false
-            showImageExportResultToast.send(false)
+            if renderSize != .preview {
+                isExportSheetPresented = false
+                showImageExportResultToast.send(false)
+            }
             print(error)
         }
     }
@@ -1065,5 +1067,25 @@ final class ImageProjectViewModel: ObservableObject {
         }
 
         objectWillChange.send()
+    }
+
+    func setupRightButtonActionForPen() {
+        guard currentDrawing.currentPencilType != .pen ||
+            currentDrawing.particlesPositions.isEmpty
+        else {
+            rightFloatingButtonActionType = .endPenPath
+            tools.rightFloatingButtonIcon = "pencil.line"
+            return
+        }
+        rightFloatingButtonActionType = .confirm
+        tools.rightFloatingButtonIcon = "checkmark"
+    }
+
+    func endPenPath() {
+        rightFloatingButtonActionType = .confirm
+        tools.rightFloatingButtonIcon = "checkmark"
+        if !currentDrawing.particlesPositions.isEmpty {
+            storeCurrentDrawing()
+        }
     }
 }

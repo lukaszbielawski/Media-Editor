@@ -24,8 +24,12 @@ struct ImageProjectToolView: View {
             ImageProjectToolSettingsView()
         }
         .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
+            
             guard let vm else { return }
             if functionType == .back {
+                if vm.currentTool == nil {
+                    vm.deactivateLayer()
+                }
                 vm.currentTool = .none
                 vm.currentColorPickerType = .none
             } else if functionType == .backFromColorPicker {
@@ -38,6 +42,7 @@ struct ImageProjectToolView: View {
                 vm.isGradientViewPresented = false
                 vm.setupInitialColorPickerColor()
             }
+            print(functionType)
         }
     }
 }

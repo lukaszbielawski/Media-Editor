@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B20095652BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */; };
-		B20095672BDF8156006B6B47 /* PenShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095662BDF8156006B6B47 /* PenShape.swift */; };
 		B20095692BDF8A9C006B6B47 /* DrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20095682BDF8A9C006B6B47 /* DrawingModel.swift */; };
 		B200956B2BDF93CC006B6B47 /* AnyTransitionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */; };
 		B200CB2B2B5008AB00BA3023 /* KeyboardNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */; };
@@ -175,7 +174,6 @@
 /* Begin PBXFileReference section */
 		314F1D791BE6D9B65F817710 /* Pods-Media-Editor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Media-Editor.release.xcconfig"; path = "Target Support Files/Pods-Media-Editor/Pods-Media-Editor.release.xcconfig"; sourceTree = "<group>"; };
 		B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileSelectedModifier.swift; sourceTree = "<group>"; };
-		B20095662BDF8156006B6B47 /* PenShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenShape.swift; sourceTree = "<group>"; };
 		B20095682BDF8A9C006B6B47 /* DrawingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingModel.swift; sourceTree = "<group>"; };
 		B200956A2BDF93CC006B6B47 /* AnyTransitionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransitionExtensions.swift; sourceTree = "<group>"; };
 		B200CB2A2B5008AB00BA3023 /* KeyboardNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotificationService.swift; sourceTree = "<group>"; };
@@ -862,7 +860,6 @@
 				B2C352202B974CB700E64525 /* FlippedTriangle.swift */,
 				B2C352222B974D0D00E64525 /* Polygon.swift */,
 				B209B9612B97AA2E00803D1F /* Triangle.swift */,
-				B20095662BDF8156006B6B47 /* PenShape.swift */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -1251,7 +1248,6 @@
 				B2B28BE22B87CC1A00EC96B8 /* LayerToolType.swift in Sources */,
 				B21C24EE2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift in Sources */,
 				B29416032B77FDF400F81596 /* EditFrameResizeModifier.swift in Sources */,
-				B20095672BDF8156006B6B47 /* PenShape.swift in Sources */,
 				B268B3CD2BCBAC5400D107B3 /* SenderType.swift in Sources */,
 				B2CF19482B7D2B320053E960 /* ImageProjectLayerView+DragGesture.swift in Sources */,
 				B2F918A92B58277E00540F33 /* CGImageError.swift in Sources */,

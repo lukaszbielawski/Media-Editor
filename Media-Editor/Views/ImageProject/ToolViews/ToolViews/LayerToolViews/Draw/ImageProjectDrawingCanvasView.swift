@@ -53,7 +53,9 @@ struct ImageProjectDrawingCanvasView: View {
                 }
                 .onEnded { [unowned vm] _ in
                     isTouchingCanvas = false
-                    vm.storeCurrentDrawing()
+                    if vm.currentDrawing.currentPencilType != .pen {
+                        vm.storeCurrentDrawing()
+                    }
                 }
         )
         .onAppear {
@@ -68,6 +70,16 @@ struct ImageProjectDrawingCanvasView: View {
                         )
                     vm.currentDrawing.particlesPositions.append(particlePosition)
                 }
+            vm.setupRightButtonActionForPen()
+        }
+        .onChange(of: vm.currentDrawing.currentPencilType) { [unowned vm] newValue in
+            vm.setupRightButtonActionForPen()
+            guard newValue != .pen else { return }
+            vm.endPenPath()
+        }
+        .onChange(of: vm.currentDrawing.particlesPositions.isEmpty) { [unowned vm] newValue in
+            vm.setupRightButtonActionForPen()
+
         }
         .onReceive(vm.floatingButtonClickedSubject) { action in
             if action == .confirm {
@@ -82,6 +94,8 @@ struct ImageProjectDrawingCanvasView: View {
                 vm.currentColorPickerType = .none
                 vm.drawings.removeAll()
                 vm.currentDrawing.particlesPositions.removeAll()
+            } else if action == .endPenPath {
+                vm.endPenPath()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { [unowned vm] _ in

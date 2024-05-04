@@ -34,7 +34,7 @@ struct ImageProjectToolTextureView: View {
 
     var body: some View {
         ZStack {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     if !vm.isGradientViewPresented {
                         if let colorPickerBinding = Binding(colorPickerBinding),

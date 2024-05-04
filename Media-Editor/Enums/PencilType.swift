@@ -10,20 +10,8 @@ import SwiftUI
 
 enum PencilType: CaseIterable {
     case eraser
-    case pen
     case pencil
-
-    @ShapeBuilder
-    var shape: some Shape {
-        switch self {
-        case .eraser:
-            PenShape()
-        case .pen:
-            PenShape()
-        case .pencil:
-            PenShape()
-        }
-    }
+    case pen
 
     var name: String {
         switch self {

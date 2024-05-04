@@ -30,8 +30,10 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1076"
-            endingLineNumber = "1076">
+            startingLineNumber = "1091"
+            endingLineNumber = "1091"
+            landmarkName = "endPenPath()"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "EE8898D4-86A8-49D5-AA93-0872AEE3550E - 7c5b15f71949c04d"
@@ -69,62 +71,191 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "77A9C361-8CA2-4D6D-B13D-6721B9BF4A3D"
+            uuid = "1FDD0BDC-AF5B-4875-9968-EA928C4EF82A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Media-Editor/Views/ImageProject/MainViews/ImageProjectFocusView.swift"
+            filePath = "Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "77A9C361-8CA2-4D6D-B13D-6721B9BF4A3D - c62f6acf4b09dde2"
+                  uuid = "1FDD0BDC-AF5B-4875-9968-EA928C4EF82A - 8d761a5ea29cc5a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectFocusView.body.getter : some"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/MainViews/ImageProjectFocusView.swift"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "1164">
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "284">
                </Location>
                <Location
-                  uuid = "77A9C361-8CA2-4D6D-B13D-6721B9BF4A3D - 1512985164df6572"
+                  uuid = "1FDD0BDC-AF5B-4875-9968-EA928C4EF82A - 8d761a5ea29cc5a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable () async throws -&gt; () in closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectFocusView.body.getter : some"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/MainViews/ImageProjectFocusView.swift"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "100">
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "200">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2960EA88-E107-421B-805D-3FC094C22D19"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "2960EA88-E107-421B-805D-3FC094C22D19 - 8d761a5ea29cc98"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "160">
                </Location>
                <Location
-                  uuid = "77A9C361-8CA2-4D6D-B13D-6721B9BF4A3D - 9c89b89126eb15e7"
+                  uuid = "2960EA88-E107-421B-805D-3FC094C22D19 - 8d761a5ea29cc98"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; () in closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectFocusView.body.getter : some"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/MainViews/ImageProjectFocusView.swift"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "52">
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "152">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F25CC619-009B-4459-BB2E-E9446DF9DE16"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "F25CC619-009B-4459-BB2E-E9446DF9DE16 - 8d761a5ea29ccb9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "136">
+               </Location>
+               <Location
+                  uuid = "F25CC619-009B-4459-BB2E-E9446DF9DE16 - 8d761a5ea29cc98"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "152">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AAAE931E-8BE0-4BBE-8E61-C9E385E70C4B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "AAAE931E-8BE0-4BBE-8E61-C9E385E70C4B - ba227be7c6c10da8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Media_Editor.ImageProjectToolView.body.getter : some"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45"
+                  offsetFromSymbolStart = "1092">
+               </Location>
+               <Location
+                  uuid = "AAAE931E-8BE0-4BBE-8E61-C9E385E70C4B - 8d761a5ea29d26b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Media_Editor.FloatingButtonActionType) -&gt; () in Media_Editor.ImageProjectToolView.body.getter : some"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/ToolViews/ToolViews/MainViews/ImageProjectToolView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45"
+                  offsetFromSymbolStart = "664">
                </Location>
             </Locations>
          </BreakpointContent>

@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct ShapeStyleModel {
-    var shapeStyle: any ShapeStyle
+    private var id: UUID = UUID()
+    var shapeStyle: any ShapeStyle {
+        willSet {
+            id = UUID()
+        }
+    }
     var shapeStyleCG: Any
     let shapeStyleType: ShapeStyleType
 
@@ -23,5 +28,15 @@ struct ShapeStyleModel {
         } else {
             shapeStyleType = .texture
         }
+    }
+}
+
+extension ShapeStyleModel: Equatable, Hashable {
+    static func == (lhs: ShapeStyleModel, rhs: ShapeStyleModel) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

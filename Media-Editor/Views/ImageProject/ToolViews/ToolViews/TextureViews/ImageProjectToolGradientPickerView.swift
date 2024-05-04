@@ -21,15 +21,7 @@ struct ImageProjectToolGradientPickerView: View {
                     vm.gradientModel.direction = vm.gradientModel.direction.nextClockwiseDirection
                 }
             ForEach(Array($vm.gradientModel.stops.enumerated()), id: \.0.self) { index, $stop in
-                ZStack(alignment: .center) {
-                    ColorPicker(selection: $stop.color,
-                                supportsOpacity: allowOpacity, label: { EmptyView() })
-                        .labelsHidden()
-                        .scaleEffect(vm.plane.lowerToolbarHeight *
-                            (1 - 2 * vm.tools.paddingFactor) / (UIDevice.current.userInterfaceIdiom == .phone ? 28 : 36))
-                    ImageProjectToolColorTileView(color: $stop.color)
-                        .allowsHitTesting(false)
-                }
+                ImageProjectToolColorPickerView(colorPickerBinding: $stop.color, allowOpacity: true)
                 .overlay(alignment: .topLeading) {
                     if !(index == 0 || index == vm.gradientModel.stops.count - 1) {
                         Circle()

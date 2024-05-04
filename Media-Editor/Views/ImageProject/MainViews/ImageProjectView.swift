@@ -90,6 +90,7 @@ struct ImageProjectView: View {
 
                 ImageProjectToolView()
                     .zIndex(Double(Int.max) + 1)
+                    .simultaneousGesture(vm.currentColorPickerType == nil ? TapGesture() : nil)
             }
             .overlay {
                 if isToastShown.isShown {
