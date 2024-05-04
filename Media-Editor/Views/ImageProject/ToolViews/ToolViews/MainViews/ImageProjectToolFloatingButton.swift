@@ -11,14 +11,13 @@ struct ImageProjectToolFloatingButtonView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     var color: ColorResource = .image
-    var systemName: String = "arrow.uturn.backward"
+//    var systemName: String = "arrow.uturn.backward"
     let buttonType: FloatingButtonType
 
     var body: some View {
         ZStack {
             Circle().fill(Color(color))
-
-            Button(action: {
+            Button(action: { [unowned vm] in
                 DispatchQueue.main.async {
                     vm.floatingButtonClickedSubject.send(
                         buttonType == .left ?
@@ -27,7 +26,9 @@ struct ImageProjectToolFloatingButtonView: View {
                     )
                 }
             }, label: {
-                Image(systemName: systemName)
+                Image(systemName: buttonType == .left
+                      ? vm.tools.leftFloatingButtonIcon
+                      : vm.tools.rightFloatingButtonIcon)
                     .foregroundStyle(Color(.tint))
                     .contentShape(Rectangle())
                     .font(.title)
@@ -35,6 +36,7 @@ struct ImageProjectToolFloatingButtonView: View {
         }
         .frame(width: vm.plane.lowerToolbarHeight * 0.5,
                height: vm.plane.lowerToolbarHeight * 0.5)
+        .padding(.leading, buttonType == .left ? vm.tools.paddingFactor * vm.plane.lowerToolbarHeight : 0)
         .transition(.normalOpacityTransition)
     }
 }

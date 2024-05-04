@@ -13,5 +13,6 @@ enum FloatingButtonActionType {
     case hideKeyboard
     case backToCategories
     case backFromColorPicker
+    case backFromGradientPicker
     case exitFocusMode
 }

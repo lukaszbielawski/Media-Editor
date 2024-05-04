@@ -44,7 +44,6 @@ struct ImageProjectDrawingCanvasView: View {
         .contentShape(Rectangle())
         .frame(width: frameSize.width,
                height: frameSize.height)
-        .border(Color.accentColor)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .gesture(
             DragGesture(minimumDistance: 0.0, coordinateSpace: .local)

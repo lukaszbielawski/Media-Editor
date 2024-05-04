@@ -37,7 +37,7 @@ struct ImageProjectFloatingMergeSliderView: View {
                 .overlay {
                     Label(vm.layersToMerge.count < 2 ? "Select more layers" : "Merge layers",
                           systemImage: "chevron.right.2")
-                    .animation(.easeInOut(duration: 0.35), value: vm.layersToMerge.count < 2)
+                        .animation(.easeInOut(duration: 0.35), value: vm.layersToMerge.count < 2)
                         .padding(.leading, 16)
                 }
                 .geometryAccessor { geo in
@@ -100,6 +100,9 @@ struct ImageProjectFloatingMergeSliderView: View {
                 .fill(Color(.primary))
                 .opacity(vm.layersToMerge.count < 2 ? 0.6 : 0.0)
         }
+        .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+        .transition(.normalOpacityTransition)
         .onAppear {
             vm.layersToMerge.removeAll()
         }.onDisappear {

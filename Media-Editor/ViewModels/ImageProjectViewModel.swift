@@ -25,6 +25,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentCropRatio: CropRatioType = .any
     @Published var currentCropShape: CropShapeType = .rectangle
     @Published var currentColorPickerType: ColorPickerType? = .none
+    @Published var gradientModel: GradientModel = .init(stops: [], direction: .right)
 
     @Published var originalCGImage: CGImage!
 
@@ -48,6 +49,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var isSnapshotCurrentlyLoading = false
     @Published var isExportSheetPresented = false
+    @Published var isGradientViewPresented = false
 
     @Published var currentColorPickerBinding: ShapeStyleModel = .init(shapeStyle: Color.clear, shapeStyleCG: UIColor(Color.clear).cgColor) {
         didSet {
@@ -544,7 +546,6 @@ final class ImageProjectViewModel: ObservableObject {
             .exportLayersToImage(
                 photos: layersToMerge,
                 contextPixelSize: mergedLayersPixelSize,
-                backgroundColor: UIColor.clear.cgColor,
                 offsetFromCenter: CGPoint(x: -mergedLayerBounds.midX *
                     mergedLayersPixelSize.width /
                     mergedLayerBounds.width,
@@ -576,8 +577,7 @@ final class ImageProjectViewModel: ObservableObject {
             .exportLayersToImage(
                 photos: [activeLayer],
                 contextPixelSize: activeLayer.pixelSize,
-                backgroundColor: UIColor.clear.cgColor,
-                layersBackgroundStyle: currentColorPickerBinding,
+                layerBackgroundShapeStyle: currentColorPickerBinding,
                 isApplyingTransforms: false)
 
         activeLayer.cgImage = layerWithBackground
@@ -870,7 +870,7 @@ final class ImageProjectViewModel: ObservableObject {
             let renderedPhoto = try await photoExporterService.exportLayersToImage(
                 photos: projectLayers,
                 contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
-                backgroundColor: projectModel.backgroundColor.cgColor)
+                projectBackgroundColor: projectModel.backgroundColor.cgColor)
 
             let resizedPhoto = try await photoExporterService.resizePhoto(
                 renderedPhoto: renderedPhoto,
@@ -973,7 +973,7 @@ final class ImageProjectViewModel: ObservableObject {
             let renderedPhoto = try await photoExporterService.exportLayersToImage(
                 photos: projectLayers,
                 contextPixelSize: CGSize(width: framePixelWidth, height: framePixelHeight),
-                backgroundColor: projectModel.backgroundColor.cgColor)
+                projectBackgroundColor: projectModel.backgroundColor.cgColor)
 
             let resizedPhoto = try await photoExporterService.resizePhoto(
                 renderedPhoto: renderedPhoto,
@@ -1055,7 +1055,7 @@ final class ImageProjectViewModel: ObservableObject {
                 return textLayer.borderColor
             case .pencilColor:
                 guard let color = currentDrawing.currentPencilStyle.shapeStyle as? Color else {
-                    return nil
+                    return Color.black
                 }
                 return color
             }

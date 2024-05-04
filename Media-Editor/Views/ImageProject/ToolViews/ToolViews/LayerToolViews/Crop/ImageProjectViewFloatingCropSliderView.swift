@@ -72,7 +72,6 @@ struct ImageProjectViewFloatingCropSliderView: View {
                         .onChanged { value in
                             var newOffset = lastOffset ??
                                 (sliderOffset ?? (maxOffset * defaultOffsetFactor))
-
                             newOffset += value.translation.width
                             newOffset = min(max(newOffset, 0.0), maxOffset)
                             sliderOffset = newOffset
@@ -82,6 +81,9 @@ struct ImageProjectViewFloatingCropSliderView: View {
                         }
                 )
         }
+        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+        .transition(.normalOpacityTransition)
         .onChange(of: stepNumber) { value in
             HapticService.shared.play(.light)
             vm.currentCropRatio = CropRatioType.allCases[Int(value)]

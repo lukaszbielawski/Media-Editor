@@ -1,5 +1,5 @@
 //
-//  ImageProjectViewBackgroundSliderView.swift
+//  ImageProjectColorOpacityFloatingSliderView.swift
 //  Media-Editor
 //
 //  Created by Łukasz Bielawski on 25/02/2024.
@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-struct ImageProjectFloatingBackgroundSliderView: View {
+struct ImageProjectColorOpacityFloatingSliderView: View {
     @Environment(\.colorScheme) var appearance
 
     @EnvironmentObject var vm: ImageProjectViewModel
@@ -29,7 +29,6 @@ struct ImageProjectFloatingBackgroundSliderView: View {
             guard let color else { return }
             $vm.currentColorPickerBinding.wrappedValue = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
         }
-
     }
 
     @GestureState var lastOffset: Double?
@@ -50,7 +49,7 @@ struct ImageProjectFloatingBackgroundSliderView: View {
         return "\(Int(defaultOffsetFactor.toPercentage))%"
     }
 
-    var colorPickerType: ColorPickerType = .projectBackground
+    let colorPickerType: ColorPickerType
 
     var body: some View {
         if let backgroundColor = Binding(backgroundColor) {
@@ -93,7 +92,7 @@ struct ImageProjectFloatingBackgroundSliderView: View {
                                 newOffset += value.translation.width
                                 newOffset = min(max(newOffset, 0.0), maxOffset)
                                 backgroundColor.wrappedValue =
-                                backgroundColor.wrappedValue.withAlpha(newOffset / maxOffset)
+                                    backgroundColor.wrappedValue.withAlpha(newOffset / maxOffset)
                             }
                             .updating($lastOffset) { _, lastOffset, _ in
                                 lastOffset = lastOffset ?? sliderOffset
@@ -111,6 +110,9 @@ struct ImageProjectFloatingBackgroundSliderView: View {
                             }
                     )
             }
+            .transition(.normalOpacityTransition)
+            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+            .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
         }
     }
 }

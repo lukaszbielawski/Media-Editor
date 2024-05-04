@@ -88,6 +88,9 @@ struct ImageProjectToolFilterFloatingSliderView: View {
                             }
                     )
             }
+            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+            .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+            .transition(.normalOpacityTransition)
             .onAppear {
                 resetValues()
                 cancellable =

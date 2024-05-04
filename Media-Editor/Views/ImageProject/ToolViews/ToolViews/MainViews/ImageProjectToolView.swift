@@ -30,6 +30,13 @@ struct ImageProjectToolView: View {
                 vm.currentColorPickerType = .none
             } else if functionType == .backFromColorPicker {
                 vm.currentColorPickerType = .none
+            } else if functionType == .backFromGradientPicker {
+                vm.leftFloatingButtonActionType = .backFromColorPicker
+                vm.isGradientViewPresented = false
+                vm.setupInitialColorPickerColor()
+            } else if functionType == .confirm {
+                vm.isGradientViewPresented = false
+                vm.setupInitialColorPickerColor()
             }
         }
     }

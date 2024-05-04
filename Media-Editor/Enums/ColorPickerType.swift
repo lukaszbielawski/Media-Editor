@@ -13,4 +13,19 @@ enum ColorPickerType {
     case textColor
     case borderColor
     case pencilColor
+
+    var pickerType: TextureType {
+        switch self {
+        case .projectBackground:
+            .colorOpacity
+        case .layerBackground:
+            .gradient
+        case .textColor:
+            .colorOpacity
+        case .borderColor:
+            .colorOpacity
+        case .pencilColor:
+            .gradient
+        }
+    }
 }

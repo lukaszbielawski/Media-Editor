@@ -43,4 +43,47 @@ extension Color {
     var cgColor: CGColor {
         return UIColor(self).cgColor
     }
+
+    var inverted: Color {
+        var uiColor = UIColor(self)
+        var alpha: CGFloat = 0
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+
+        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return Color(red: 1.0 - Double(red), green: 1.0 - Double(green), blue: 1.0 - Double(blue), opacity: Double(alpha))
+    }
+
+    static var random: Color {
+        let red = Double.random(in: 0...1)
+        let green = Double.random(in: 0...1)
+        let blue = Double.random(in: 0...1)
+        return Color(red: red, green: green, blue: blue)
+    }
+
+    var isDark: Bool {
+        var uiColor = UIColor(self)
+        var alpha: CGFloat = 0
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+
+        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        let brightness = (red * 299 + green * 587 + blue * 114) / 1000
+
+        return brightness < 0.5
+    }
+
+    var toDeviceRGB: Color {
+        let components = self.cgColor.components
+        guard let components else { return self }
+
+        guard let cgColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: components) else { return self }
+        let uiColor = UIColor(cgColor: cgColor)
+
+        return Color(uiColor: uiColor)
+    }
 }

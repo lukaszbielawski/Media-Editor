@@ -11,79 +11,53 @@ struct ImageProjectToolSettingsView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
     var body: some View {
         HStack(spacing: 0) {
+            ImageProjectToolFloatingButtonView(buttonType: .left)
+
             switch vm.currentTool {
             case let layerTool as LayerToolType:
-                ImageProjectToolFloatingButtonView(
-                    systemName: vm.tools.leftFloatingButtonIcon,
-                    buttonType: .left)
-                    .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                 if vm.currentFilter != .none {
                     ImageProjectToolFilterFloatingSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(.normalOpacityTransition)
-                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.rightFloatingButtonIcon,
-                        buttonType: .right)
+                    ImageProjectToolFloatingButtonView(buttonType: .right)
                 } else if layerTool == .crop {
                     ImageProjectViewFloatingCropSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(.normalOpacityTransition)
-                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.rightFloatingButtonIcon,
-                        buttonType: .right)
+                    ImageProjectToolFloatingButtonView(buttonType: .right)
                 } else if layerTool == .draw {
-                    ImageProjectToolCaseDrawFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(.normalOpacityTransition)
-                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                    if vm.isGradientViewPresented {
+                        ImageProjectToolGradientFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    } else {
+                        ImageProjectToolCaseDrawFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    }
+
                     Spacer()
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.rightFloatingButtonIcon,
-                        buttonType: .right)
+                    ImageProjectToolFloatingButtonView(buttonType: .right)
                 } else if layerTool == .background {
                     Spacer()
                     if vm.currentColorPickerType == .layerBackground {
-                        ImageProjectFloatingBackgroundSliderView(
-                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                            //                            backgroundColor: $vm.currentColorPickerBinding,
-                            colorPickerType: .layerBackground)
-                            .transition(.normalOpacityTransition)
-                            .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                            .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                        if vm.isGradientViewPresented {
+                            ImageProjectToolGradientFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        } else {
+                            ImageProjectColorOpacityFloatingSliderView(
+                                sliderHeight: vm.plane.lowerToolbarHeight * 0.5, colorPickerType: .layerBackground)
+                        }
                     }
                     Spacer()
-                    ImageProjectToolFloatingButtonView(
-                        systemName: vm.tools.rightFloatingButtonIcon,
-                        buttonType: .right)
+                    ImageProjectToolFloatingButtonView(buttonType: .right)
                 } else if layerTool == .editText {
                     Spacer()
-
                     ImageProjectToolTextFloatingTextFieldView(textFieldHeight: vm.plane.lowerToolbarHeight * 0.5)
-
                     Spacer()
                 }
-
             case let projectTool as ProjectToolType:
-                ImageProjectToolFloatingButtonView(
-                    systemName: vm.tools.leftFloatingButtonIcon,
-                    buttonType: .left)
-                    .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
-
                 switch projectTool {
                 case .merge:
                     Spacer()
                     ImageProjectFloatingMergeSliderView(
                         sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
                         backgroundColor: $vm.projectModel.backgroundColor)
-                        .transition(.normalOpacityTransition)
-                        .frame(maxWidth: 300, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
                     Spacer()
                 case .text:
                     Spacer()
@@ -92,18 +66,19 @@ struct ImageProjectToolSettingsView: View {
                 case .background:
                     Spacer()
                     if vm.currentColorPickerType == .projectBackground {
-                        ImageProjectFloatingBackgroundSliderView(
-                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .transition(.normalOpacityTransition)
-                        .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
+                        if vm.isGradientViewPresented {
+                            ImageProjectToolCaseDrawFloatingSliderView(
+                                sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                        } else {
+                            ImageProjectColorOpacityFloatingSliderView(
+                                sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
+                                colorPickerType: .projectBackground)
+                        }
                     }
                     Spacer()
                 default:
                     EmptyView()
                 }
-            case let layerSingleTool as LayerSingleActionToolType:
-                EmptyView()
             default:
                 EmptyView()
             }

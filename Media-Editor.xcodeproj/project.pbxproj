@@ -47,7 +47,7 @@
 		B21C24EE2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */; };
 		B21C24F42B8B776B00DBE6B2 /* SnapshotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */; };
 		B21C24F72B8BA46300DBE6B2 /* PhotoFormatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */; };
-		B21C24F92B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */; };
+		B21C24F92B8BAA2600DBE6B2 /* ImageProjectColorOpacityFloatingSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24F82B8BAA2600DBE6B2 /* ImageProjectColorOpacityFloatingSliderView.swift */; };
 		B21C24FB2B8BB47B00DBE6B2 /* ImageProjectToolTextureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolTextureView.swift */; };
 		B21C24FD2B8BB62E00DBE6B2 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */; };
 		B21C25002B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */; };
@@ -114,6 +114,12 @@
 		B29586E12B8FA51100ECFFF4 /* PhotoExporterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29586E02B8FA51100ECFFF4 /* PhotoExporterService.swift */; };
 		B2A33A7D2BE247CE00F8D6DD /* RevertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A33A7C2BE247CE00F8D6DD /* RevertModel.swift */; };
 		B2AD27342B99B12700F704DF /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2AD27332B99B12700F704DF /* ShapeBuilder.swift */; };
+		B2ADA4942BE5F88C00100FAC /* TextureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ADA4932BE5F88C00100FAC /* TextureType.swift */; };
+		B2ADA4972BE5FF2E00100FAC /* ImageProjectToolGradientPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ADA4962BE5FF2E00100FAC /* ImageProjectToolGradientPickerView.swift */; };
+		B2ADA49B2BE6141B00100FAC /* ImageProjectToolGradientFloatingSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ADA49A2BE6141B00100FAC /* ImageProjectToolGradientFloatingSliderView.swift */; };
+		B2ADA49D2BE625E500100FAC /* GradientModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ADA49C2BE625E500100FAC /* GradientModel.swift */; };
+		B2ADA49F2BE6268D00100FAC /* DirectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ADA49E2BE6268D00100FAC /* DirectionType.swift */; };
+		B2ADA4A12BE639FA00100FAC /* CGLinearGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2ADA4A02BE639FA00100FAC /* CGLinearGradient.swift */; };
 		B2B20D222B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */; };
 		B2B20D242B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */; };
 		B2B20D262B88D71500E3E458 /* ImageProjectToolFullTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B20D252B88D71500E3E458 /* ImageProjectToolFullTileView.swift */; };
@@ -209,7 +215,7 @@
 		B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectResizeSliderView.swift; sourceTree = "<group>"; };
 		B21C24F32B8B776B00DBE6B2 /* SnapshotModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotModel.swift; sourceTree = "<group>"; };
 		B21C24F62B8BA46300DBE6B2 /* PhotoFormatType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFormatType.swift; sourceTree = "<group>"; };
-		B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectFloatingBackgroundSliderView.swift; sourceTree = "<group>"; };
+		B21C24F82B8BAA2600DBE6B2 /* ImageProjectColorOpacityFloatingSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectColorOpacityFloatingSliderView.swift; sourceTree = "<group>"; };
 		B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolTextureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolTextureView.swift; sourceTree = "<group>"; };
 		B21C24FC2B8BB62E00DBE6B2 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorTileView.swift; sourceTree = "<group>"; };
@@ -276,6 +282,12 @@
 		B29586E02B8FA51100ECFFF4 /* PhotoExporterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExporterService.swift; sourceTree = "<group>"; };
 		B2A33A7C2BE247CE00F8D6DD /* RevertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevertModel.swift; sourceTree = "<group>"; };
 		B2AD27332B99B12700F704DF /* ShapeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeBuilder.swift; sourceTree = "<group>"; };
+		B2ADA4932BE5F88C00100FAC /* TextureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureType.swift; sourceTree = "<group>"; };
+		B2ADA4962BE5FF2E00100FAC /* ImageProjectToolGradientPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolGradientPickerView.swift; sourceTree = "<group>"; };
+		B2ADA49A2BE6141B00100FAC /* ImageProjectToolGradientFloatingSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolGradientFloatingSliderView.swift; sourceTree = "<group>"; };
+		B2ADA49C2BE625E500100FAC /* GradientModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientModel.swift; sourceTree = "<group>"; };
+		B2ADA49E2BE6268D00100FAC /* DirectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionType.swift; sourceTree = "<group>"; };
+		B2ADA4A02BE639FA00100FAC /* CGLinearGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGLinearGradient.swift; sourceTree = "<group>"; };
 		B2B20D212B88B0A600E3E458 /* ImageProjectToolCaseFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseFiltersView.swift; sourceTree = "<group>"; };
 		B2B20D232B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolFloatingButton.swift; sourceTree = "<group>"; };
 		B2B20D252B88D71500E3E458 /* ImageProjectToolFullTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolFullTileView.swift; sourceTree = "<group>"; };
@@ -446,6 +458,8 @@
 				B268B3CC2BCBAC5400D107B3 /* SenderType.swift */,
 				B2F86F152BDE9AFF00C5AAFE /* PencilType.swift */,
 				B27DEB5A2BE39BDC00F52FBD /* ShapeStyleType.swift */,
+				B2ADA4932BE5F88C00100FAC /* TextureType.swift */,
+				B2ADA49E2BE6268D00100FAC /* DirectionType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -542,9 +556,6 @@
 		B21C24F52B8B96C000DBE6B2 /* Background */ = {
 			isa = PBXGroup;
 			children = (
-				B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolTextureView.swift */,
-				B21C24F82B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift */,
-				B26952892BE4D3D00091206E /* ImageProjectToolColorPickerView.swift */,
 				B269528B2BE511A40091206E /* ImageProjectToolCaseLayerBackgroundView.swift */,
 				B269528D2BE51F4F0091206E /* ImageProjectToolCaseProjectBackgroundView.swift */,
 				B21C24ED2B8B6B2200DBE6B2 /* ImageProjectResizeSliderView.swift */,
@@ -775,6 +786,18 @@
 			path = Crop;
 			sourceTree = "<group>";
 		};
+		B2ADA4952BE5FE5000100FAC /* TextureViews */ = {
+			isa = PBXGroup;
+			children = (
+				B21C24FA2B8BB47B00DBE6B2 /* ImageProjectToolTextureView.swift */,
+				B21C24F82B8BAA2600DBE6B2 /* ImageProjectColorOpacityFloatingSliderView.swift */,
+				B26952892BE4D3D00091206E /* ImageProjectToolColorPickerView.swift */,
+				B2ADA4962BE5FF2E00100FAC /* ImageProjectToolGradientPickerView.swift */,
+				B2ADA49A2BE6141B00100FAC /* ImageProjectToolGradientFloatingSliderView.swift */,
+			);
+			path = TextureViews;
+			sourceTree = "<group>";
+		};
 		B2B28BDE2B87CBAD00EC96B8 /* LayerToolViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -826,6 +849,7 @@
 			isa = PBXGroup;
 			children = (
 				B27515A22B8E574A00647D4E /* MainViews */,
+				B2ADA4952BE5FE5000100FAC /* TextureViews */,
 				B2B28BDE2B87CBAD00EC96B8 /* LayerToolViews */,
 				B2B28BE52B87EC1000EC96B8 /* ProjectToolViews */,
 			);
@@ -878,6 +902,8 @@
 				B20095682BDF8A9C006B6B47 /* DrawingModel.swift */,
 				B2A33A7C2BE247CE00F8D6DD /* RevertModel.swift */,
 				B27DEB582BE3955200F52FBD /* ShapeStyleModel.swift */,
+				B2ADA49C2BE625E500100FAC /* GradientModel.swift */,
+				B2ADA4A02BE639FA00100FAC /* CGLinearGradient.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1095,6 +1121,7 @@
 				B2B20D242B88D15E00E3E458 /* ImageProjectToolFloatingButton.swift in Sources */,
 				B24AD8FC2B55321300BBD1E8 /* ProjectCreatedPreferenceKey.swift in Sources */,
 				B20507582B761E6A0060854D /* PlaneModel.swift in Sources */,
+				B2ADA4942BE5F88C00100FAC /* TextureType.swift in Sources */,
 				B20095652BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift in Sources */,
 				B269528E2BE51F4F0091206E /* ImageProjectToolCaseProjectBackgroundView.swift in Sources */,
 				B2BD0E272B4EC2F900D53B77 /* UIScreenExtensions.swift in Sources */,
@@ -1112,6 +1139,7 @@
 				B21C25002B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift in Sources */,
 				B2CCFD492B7A40A60082D0A4 /* ImageProjectEditingFrameView+Gestures.swift in Sources */,
 				B21C24F42B8B776B00DBE6B2 /* SnapshotModel.swift in Sources */,
+				B2ADA4972BE5FF2E00100FAC /* ImageProjectToolGradientPickerView.swift in Sources */,
 				B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
@@ -1127,7 +1155,7 @@
 				B29586E12B8FA51100ECFFF4 /* PhotoExporterService.swift in Sources */,
 				B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */,
 				B2085C222B4867D7004D904A /* MenuView.swift in Sources */,
-				B21C24F92B8BAA2600DBE6B2 /* ImageProjectFloatingBackgroundSliderView.swift in Sources */,
+				B21C24F92B8BAA2600DBE6B2 /* ImageProjectColorOpacityFloatingSliderView.swift in Sources */,
 				B205075C2B764E470060854D /* FrameModel.swift in Sources */,
 				B210F5FF2B7B90DF0072AF7D /* ImageProjectModel.swift in Sources */,
 				B2490C542B94D3340071DDB1 /* ProjectSingleActionToolType.swift in Sources */,
@@ -1152,6 +1180,7 @@
 				B28F7BBD2B9653A200E684C8 /* ImageProjectCroppingFrameView+ResizeCircles.swift in Sources */,
 				B24EA94E2B56B8C20081FBFD /* AddProjectGridView.swift in Sources */,
 				B2490C4F2B94782F0071DDB1 /* ImageProjectToolSettingsView.swift in Sources */,
+				B2ADA49B2BE6141B00100FAC /* ImageProjectToolGradientFloatingSliderView.swift in Sources */,
 				B2B2B10C2B4C026E00E3E8A6 /* PhotoError.swift in Sources */,
 				B28F7BBB2B96339100E684C8 /* ImageProjectCroppingFrameView.swift in Sources */,
 				B25FB5872B5D3AE000EBFB16 /* ImageProjectFrameView.swift in Sources */,
@@ -1161,6 +1190,7 @@
 				B205075A2B76334B0060854D /* ImageProjectView+Toolbar.swift in Sources */,
 				B2B28BDD2B87A31400EC96B8 /* FilterType.swift in Sources */,
 				B2C3521F2B97482D00E64525 /* CropShapeType.swift in Sources */,
+				B2ADA49F2BE6268D00100FAC /* DirectionType.swift in Sources */,
 				B20507602B769F120060854D /* EdgeOverflowError.swift in Sources */,
 				B28F7BB82B96028800E684C8 /* ImageProjectFocusView.swift in Sources */,
 				B200CB3B2B506B2800BA3023 /* ImageProjectView.swift in Sources */,
@@ -1177,10 +1207,12 @@
 				B2CCFD4D2B7A93140082D0A4 /* ToolsModel.swift in Sources */,
 				B2B28BE42B87CF0C00EC96B8 /* Tool.swift in Sources */,
 				B29533BD2BC857920090C2FC /* ImageProjectToolCaseTextCategoryFontNameView.swift in Sources */,
+				B2ADA4A12BE639FA00100FAC /* CGLinearGradient.swift in Sources */,
 				B2B20D282B88DC6100E3E458 /* ImageProjectToolView.swift in Sources */,
 				B209B9622B97AA2E00803D1F /* Triangle.swift in Sources */,
 				B275159F2B8DF93900647D4E /* PhotoExportError.swift in Sources */,
 				B2F86F162BDE9AFF00C5AAFE /* PencilType.swift in Sources */,
+				B2ADA49D2BE625E500100FAC /* GradientModel.swift in Sources */,
 				B269528A2BE4D3D00091206E /* ImageProjectToolColorPickerView.swift in Sources */,
 				B20936762B5EB7D000757317 /* ImageProjectPhotosImportedPreferenceKey.swift in Sources */,
 				B200CB2F2B502C0800BA3023 /* HapticService.swift in Sources */,

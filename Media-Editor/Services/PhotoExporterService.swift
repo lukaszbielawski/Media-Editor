@@ -113,9 +113,9 @@ struct PhotoExporterService {
 
     func exportLayersToImage(photos: [LayerModel],
                              contextPixelSize: CGSize,
-                             backgroundColor: CGColor,
                              offsetFromCenter: CGPoint = .zero,
-                             layersBackgroundStyle: ShapeStyleModel? = nil,
+                             projectBackgroundColor: CGColor = Color.clear.cgColor,
+                             layerBackgroundShapeStyle: ShapeStyleModel? = nil,
                              isApplyingTransforms: Bool = true) async throws -> CGImage
     {
         return try await Task {
@@ -132,7 +132,8 @@ struct PhotoExporterService {
                           height: Int(contextPixelSize.height)))
             }
 
-            context.setFillColor(backgroundColor)
+            context.setFillColor(projectBackgroundColor)
+
             context.fill(CGRect(origin: .zero, size: contextPixelSize))
 
             for photo in photos
@@ -182,13 +183,33 @@ struct PhotoExporterService {
                     context.concatenate(resultTransform)
                 }
 
-                if let layersBackgroundStyle {
-                    if layersBackgroundStyle.shapeStyleType == .color {
-                        let color = (layersBackgroundStyle.shapeStyleCG as! CGColor)
-                        context.setFillColor(color)
-                        context.fill(CGRect(origin: .zero, size: .init(width: photo.pixelSize.width,
-                                                                       height: photo.pixelSize.height)))
+                let shapeStyle = layerBackgroundShapeStyle?.shapeStyle
+                let shapeStyleCG = layerBackgroundShapeStyle?.shapeStyleCG
+
+                if let layerBackgroundShapeStyle {
+                    if let color = shapeStyle as? Color {
+                        context.setFillColor(color.cgColor)
+                    } else if let cgLinearGradient = shapeStyleCG as? CGLinearGradient,
+                              let cgGradient = cgLinearGradient.cgGradient
+                    {
+                        let startPoint = cgLinearGradient.startPoint
+                        let endPoint = cgLinearGradient.endPoint
+
+                        let startX = contextPixelSize.width * startPoint.x
+                        let startY = contextPixelSize.height * startPoint.y
+                        let endX = contextPixelSize.width * endPoint.x
+                        let endY = contextPixelSize.height * endPoint.y
+
+                        let start = CGPoint(x: startX, y: startY)
+                        let end = CGPoint(x: endX, y: endY)
+
+                        context.drawLinearGradient(cgGradient,
+                                                   start: start,
+                                                   end: end,
+                                                   options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
                     }
+                    context.fill(CGRect(origin: .zero, size: .init(width: photo.pixelSize.width,
+                                                                height: photo.pixelSize.height)))
                 }
 
                 context.draw(layerImage, in:
@@ -253,34 +274,41 @@ struct PhotoExporterService {
                 context.setLineCap(.round)
 
                 let pencilStyle = drawing.currentPencilStyle.shapeStyle
+                let pencilStyleCG = drawing.currentPencilStyle.shapeStyleCG
 
                 if drawing.currentPencilType == .eraser {
                     context.setStrokeColor(UIColor.black.cgColor)
                 } else {
                     if let pencilStyle = pencilStyle as? Color {
                         context.setStrokeColor(UIColor(pencilStyle).cgColor)
-                    } else if let pencilStyle = pencilStyle as? LinearGradient {
+                    } else if let cgLinearGradient = pencilStyleCG as? CGLinearGradient,
+                              let cgGradient = cgLinearGradient.cgGradient
+                    {
                         context.saveGState()
                         defer { context.restoreGState() }
-
-                        let colors = [UIColor.red.cgColor, UIColor.blue.cgColor]
-                        let locations = [0.0, 1.0]
 
                         let uiPath = UIBezierPath(cgPath: path.applying(pixelRatioTransform).cgPath)
 
                         uiPath.addClip()
 
-//                        pencilStyle.sops
-
-                        let bounds = uiPath.cgPath.boundingBox
-                        let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: colors as CFArray, locations: nil)
-
                         context.replacePathWithStrokedPath()
                         context.clip()
 
-                        let start = CGPoint(x: bounds.minX, y: bounds.minY)
-                        let end = CGPoint(x: bounds.maxX, y: bounds.maxY)
-                        context.drawLinearGradient(gradient!, start: start, end: end, options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
+                        let startPoint = cgLinearGradient.startPoint
+                        let endPoint = cgLinearGradient.endPoint
+
+                        let startX = pixelFrameSize.width * startPoint.x
+                        let startY = pixelFrameSize.height * startPoint.y
+                        let endX = pixelFrameSize.width * endPoint.x
+                        let endY = pixelFrameSize.height * endPoint.y
+
+                        let start = CGPoint(x: startX, y: startY)
+                        let end = CGPoint(x: endX, y: endY)
+
+                        context.drawLinearGradient(cgGradient,
+                                                   start: start,
+                                                   end: end,
+                                                   options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
                     }
                 }
 
