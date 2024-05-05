@@ -69,8 +69,8 @@ struct ImageProjectFocusView: View {
                                 fileName: layerModel.fileName,
                                 cgImage: layerModel.cgImage)
                         }
-
                         vm.updateLatestSnapshot()
+
                     }
                 }
             }

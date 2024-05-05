@@ -69,6 +69,9 @@ struct ImageProjectDrawingCanvasView: View {
                                 - initialOffset.height
                         )
                     vm.currentDrawing.particlesPositions.append(particlePosition)
+                    if vm.currentDrawing.currentPencilType == .pen {
+                        vm.storePenPointSnapshot()
+                    }
                 }
             vm.setupRightButtonActionForPen()
         }

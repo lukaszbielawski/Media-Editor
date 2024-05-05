@@ -85,7 +85,16 @@ struct ImageProjectToolGradientPickerView: View {
     private func addControlPoint() {
         guard vm.gradientModel.stops.count < 9 else { return }
         let randomColor = Color.random
-        let stop = Gradient.Stop(color: randomColor, location: 0.5)
+        var location: CGFloat = 0.5
+        let usedLocations = vm.gradientModel.stops.map { Int($0.location * 10.0) }
+        for i in 4...14 {
+            guard usedLocations.contains(i % 10 + 1) else {
+                location = CGFloat(i % 10 + 1) * 0.1
+                break
+            }
+        }
+
+        let stop = Gradient.Stop(color: randomColor, location: location)
         vm.gradientModel.stops.append(stop)
         vm.gradientModel.stops.sort { $0.location < $1.location }
     }

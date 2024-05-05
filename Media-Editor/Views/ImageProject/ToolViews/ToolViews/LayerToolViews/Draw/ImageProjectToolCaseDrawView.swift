@@ -53,6 +53,8 @@ struct ImageProjectToolCaseDrawView: View {
                         }
                 }
             }
+        }.onAppear {
+            vm.turnOnDrawingRevertModel()
         }
     }
 }

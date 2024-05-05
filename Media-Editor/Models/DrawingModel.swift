@@ -28,9 +28,4 @@ extension DrawingModel: Hashable, Equatable {
         hasher.combine(currentPencilStyle)
         hasher.combine(particlesPositions)
     }
-
-//    static func == (lhs: DrawingModel, rhs: DrawingModel) -> Bool {
-//        return (lhs.currentPencilType, lhs.currentPencilSize, lhs.currentPencilStyle, lhs.particlesPositions) ==
-//        (rhs.currentPencilType, rhs.currentPencilSize, rhs.currentPencilStyle, rhs.particlesPositions)
-//    }
 }

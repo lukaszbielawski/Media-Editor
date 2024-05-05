@@ -286,14 +286,15 @@ final class ImageProjectViewModel: ObservableObject {
         if currentRevertModel === drawingRevertModel {
             return .init(layers: projectLayers,
                          projectModel: projectModel,
-                         drawings: drawings)
+                         drawings: drawings,
+                         currentDrawing: currentDrawing)
         } else {
             let layers = projectLayers.map { [unowned self] layer in
                 layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
             }
             let projectModel = projectModel.copy() as! ImageProjectModel
 
-            return .init(layers: layers, projectModel: projectModel, drawings: drawings)
+            return .init(layers: layers, projectModel: projectModel, drawings: drawings, currentDrawing: currentDrawing)
         }
     }
 
@@ -370,11 +371,12 @@ final class ImageProjectViewModel: ObservableObject {
             }
         }
         let previousDrawings = previousSnapshot.drawings
+        let previousCurrentDrawing = previousSnapshot.currentDrawing
         let previousProjectModel = previousSnapshot.projectModel
 
         withAnimation(.easeInOut(duration: 0.35)) {
             drawings = previousDrawings
-
+            currentDrawing = previousCurrentDrawing
             projectModel.backgroundColor = previousProjectModel.backgroundColor
             projectModel.framePixelWidth = previousProjectModel.framePixelWidth
             projectModel.framePixelHeight = previousProjectModel.framePixelHeight
@@ -396,6 +398,7 @@ final class ImageProjectViewModel: ObservableObject {
         } else if let layerCopy = activeLayer.copy(withCGImage: true) as? LayerModel {
             try? await createNewEntity(from: layerCopy)
         }
+        HapticService.shared.play(.medium)
     }
 
     func createNewEntity(from layer: LayerModel) async throws {
@@ -1021,8 +1024,6 @@ final class ImageProjectViewModel: ObservableObject {
 
             activeLayer.cgImage = newCGImage
             drawings.removeAll()
-            let latestSnapshot = createSnapshot()
-            drawingRevertModel = RevertModel(latestSnapshot)
             updateLatestSnapshot()
             saveLayerImageSubject.send((activeLayer.fileName,
                                         newCGImage))
@@ -1030,6 +1031,11 @@ final class ImageProjectViewModel: ObservableObject {
         } catch {
             print(error)
         }
+    }
+
+    func turnOnDrawingRevertModel() {
+        let latestSnapshot = createSnapshot()
+        drawingRevertModel = RevertModel(latestSnapshot)
     }
 
     func storeCurrentDrawing() {
@@ -1057,7 +1063,7 @@ final class ImageProjectViewModel: ObservableObject {
                 return textLayer.borderColor
             case .pencilColor:
                 guard let color = currentDrawing.currentPencilStyle.shapeStyle as? Color else {
-                    return Color.black
+                    return isGradientViewPresented ? nil : Color.black
                 }
                 return color
             }
@@ -1079,6 +1085,10 @@ final class ImageProjectViewModel: ObservableObject {
         }
         rightFloatingButtonActionType = .confirm
         tools.rightFloatingButtonIcon = "checkmark"
+    }
+
+    func storePenPointSnapshot() {
+        updateLatestSnapshot()
     }
 
     func endPenPath() {

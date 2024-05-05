@@ -75,9 +75,6 @@ struct PhotoExporterService {
 
             else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelCropSize.width), height: Int(pixelCropSize.height))) }
 
-            let scaleXSign = copysign(-1.0, layer.scaleX ?? 1.0)
-            let scaleYSign = copysign(-1.0, layer.scaleY ?? 1.0)
-
             let bezierPath = UIBezierPath(cgPath: path.cgPath)
 
             let scaleTransform = CGAffineTransform(scaleX: 1,
@@ -89,13 +86,19 @@ struct PhotoExporterService {
             bezierPath.apply(scaleTransform.concatenating(correctionTranslation))
 
             context.addPath(bezierPath.cgPath)
+
             context.clip()
 
+            context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
+
             context.translateBy(
-                x: (pixelCropSize.width - pixelFrameSize.width) * 0.5 * scaleXSign,
-                y: (pixelCropSize.height - pixelFrameSize.height) * 0.5 * scaleYSign
+                x: (pixelCropSize.width - pixelFrameSize.width) * 0.5 * copysign(-1.0, layer.scaleX ?? 1.0),
+                y: (pixelCropSize.height - pixelFrameSize.height) * 0.5 * copysign(-1.0, layer.scaleY ?? 1.0)
             )
-            context.translateBy(x: -pixelOffset.width * scaleXSign, y: pixelOffset.height * scaleYSign)
+            context.translateBy(x: -pixelOffset.width, y: pixelOffset.height)
+
+            context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
+
 
             context.draw(layerImage, in: CGRect(x: 0,
                                                 y: 0,
@@ -209,7 +212,7 @@ struct PhotoExporterService {
                                                    options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
                     }
                     context.fill(CGRect(origin: .zero, size: .init(width: photo.pixelSize.width,
-                                                                height: photo.pixelSize.height)))
+                                                                   height: photo.pixelSize.height)))
                 }
 
                 context.draw(layerImage, in:
@@ -255,6 +258,10 @@ struct PhotoExporterService {
 
             context.translateBy(x: 0, y: pixelFrameSize.height)
             context.scaleBy(x: 1, y: -1)
+            context.saveGState()
+            context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
+            context.translateBy(x: min(copysign(-1.0, layer.scaleX ?? 1.0), 0) * pixelFrameSize.width,
+                                y: min(copysign(-1.0, layer.scaleY ?? 1.0), 0) * pixelFrameSize.height)
 
             for drawing in drawings {
                 var path = Path()
@@ -267,7 +274,12 @@ struct PhotoExporterService {
 
                 context.addPath(path.applying(pixelRatioTransform).cgPath)
 
+                context.saveGState()
+                context.scaleBy(x: 1.0 / abs(layer.scaleX ?? 1.0), y: 1.0 / abs(layer.scaleY ?? 1.0))
+                defer { context.restoreGState() }
+
                 let lineWidthTransformed = CGFloat(drawing.currentPencilSize) * sqrt(pixelRatioTransform.a * pixelRatioTransform.d)
+                    * sqrt(abs(layer.scaleX ?? 1.0) * abs(layer.scaleY ?? 1.0))
 
                 context.setAllowsAntialiasing(true)
                 context.setLineWidth(lineWidthTransformed)
@@ -318,6 +330,8 @@ struct PhotoExporterService {
                     context.setBlendMode(.normal)
                 }
             }
+
+            context.restoreGState()
 
             let clippedImage = context.makeImage()
 
