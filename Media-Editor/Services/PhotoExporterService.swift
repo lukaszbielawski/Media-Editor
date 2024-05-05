@@ -266,9 +266,7 @@ struct PhotoExporterService {
             for drawing in drawings {
                 var path = Path()
 
-                if drawing.currentPencilType == .eraser {
-                    context.setBlendMode(.destinationOut)
-                }
+
 
                 drawing.setupPath(&path)
 
@@ -277,6 +275,10 @@ struct PhotoExporterService {
                 context.saveGState()
                 context.scaleBy(x: 1.0 / abs(layer.scaleX ?? 1.0), y: 1.0 / abs(layer.scaleY ?? 1.0))
                 defer { context.restoreGState() }
+
+                if drawing.currentPencilType == .eraser {
+                    context.setBlendMode(.destinationOut)
+                }
 
                 let lineWidthTransformed = CGFloat(drawing.currentPencilSize) * sqrt(pixelRatioTransform.a * pixelRatioTransform.d)
                     * sqrt(abs(layer.scaleX ?? 1.0) * abs(layer.scaleY ?? 1.0))
@@ -289,6 +291,7 @@ struct PhotoExporterService {
                 let pencilStyleCG = drawing.currentPencilStyle.shapeStyleCG
 
                 if drawing.currentPencilType == .eraser {
+                    print("hello")
                     context.setStrokeColor(UIColor.black.cgColor)
                 } else {
                     if let pencilStyle = pencilStyle as? Color {
@@ -317,6 +320,8 @@ struct PhotoExporterService {
                         let start = CGPoint(x: startX, y: startY)
                         let end = CGPoint(x: endX, y: endY)
 
+                        context.scaleBy(x: abs(layer.scaleX ?? 1.0), y: abs(layer.scaleY ?? 1.0))
+
                         context.drawLinearGradient(cgGradient,
                                                    start: start,
                                                    end: end,
@@ -328,6 +333,7 @@ struct PhotoExporterService {
 
                 if drawing.currentPencilType == .eraser {
                     context.setBlendMode(.normal)
+                    context.setStrokeColor(UIColor.clear.cgColor)
                 }
             }
 

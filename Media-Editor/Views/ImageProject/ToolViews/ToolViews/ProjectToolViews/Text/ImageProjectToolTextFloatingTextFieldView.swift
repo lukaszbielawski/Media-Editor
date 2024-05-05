@@ -65,15 +65,16 @@ struct ImageProjectToolTextFloatingTextFieldView: View {
                         vm.objectWillChange.send()
                     }
         }
-        .onChange(of: isFocused) { [unowned vm] newValue in
-            if newValue {
-                vm.leftFloatingButtonActionType = .hideKeyboard
-                vm.tools.leftFloatingButtonIcon = "keyboard.chevron.compact.down"
-            } else {
-                vm.leftFloatingButtonActionType = .back
-                vm.tools.leftFloatingButtonIcon = "arrow.uturn.backward"
-            }
-        }
+//        .onChange(of: isFocused) { [unowned vm] newValue in
+//            print("focused", newValue)
+//            if newValue {
+//                vm.leftFloatingButtonActionType = .hideKeyboard
+//                vm.tools.leftFloatingButtonIcon = "keyboard.chevron.compact.down"
+//            } else {
+//                vm.leftFloatingButtonActionType = .back
+//                vm.tools.leftFloatingButtonIcon = "arrow.uturn.backward"
+//            }
+//        }
         .onReceive(vm.floatingButtonClickedSubject) { actionType in
             if actionType == .hideKeyboard {
                 isFocused = false

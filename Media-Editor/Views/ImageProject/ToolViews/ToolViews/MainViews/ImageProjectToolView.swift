@@ -44,5 +44,14 @@ struct ImageProjectToolView: View {
             }
             print(functionType)
         }
+        .overlay {
+            if vm.isKeyboardOpen {
+                Color.gray.opacity(0.4)
+                    .transition(.normalOpacityTransition)
+                    .onTapGesture {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    }
+            }
+        }
     }
 }

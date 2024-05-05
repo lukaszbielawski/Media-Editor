@@ -100,6 +100,17 @@ struct ImageProjectView: View {
                         .transition(.normalOpacityTransition)
                 }
             }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                vm.isKeyboardOpen = true
+                vm.lastLeftFloatingButtonAction = vm.leftFloatingButtonActionType
+                vm.leftFloatingButtonActionType = .hideKeyboard
+                vm.tools.leftFloatingButtonIcon = "keyboard.chevron.compact.down"
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                vm.isKeyboardOpen = false
+                vm.leftFloatingButtonActionType = vm.lastLeftFloatingButtonAction
+                vm.tools.leftFloatingButtonIcon = "arrow.uturn.backward"
+            }
             .onReceive(vm.showImageExportResultToast) { result in
                 isToastShown = (true, result)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {

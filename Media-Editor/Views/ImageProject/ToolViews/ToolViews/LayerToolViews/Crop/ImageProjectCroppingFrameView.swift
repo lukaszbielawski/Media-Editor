@@ -90,6 +90,7 @@ struct ImageProjectCroppingFrameView: View {
                     vm.currentTool = .none
                     vm.updateLatestSnapshot()
                 }
+                vm.leftFloatingButtonActionType = .back
             }
         }
     }

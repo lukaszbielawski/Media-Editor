@@ -80,9 +80,8 @@ struct ImageProjectDrawingCanvasView: View {
             guard newValue != .pen else { return }
             vm.endPenPath()
         }
-        .onChange(of: vm.currentDrawing.particlesPositions.isEmpty) { [unowned vm] newValue in
+        .onChange(of: vm.currentDrawing.particlesPositions.isEmpty) { [unowned vm] _ in
             vm.setupRightButtonActionForPen()
-
         }
         .onReceive(vm.floatingButtonClickedSubject) { action in
             if action == .confirm {
@@ -91,6 +90,7 @@ struct ImageProjectDrawingCanvasView: View {
                 Task(priority: .userInitiated) { [unowned vm] in
                     await vm.applyDrawings(frameSize: frameSize)
                 }
+                vm.leftFloatingButtonActionType = .back
 
             } else if action == .exitFocusMode {
                 vm.currentTool = .none

@@ -50,6 +50,8 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var isSnapshotCurrentlyLoading = false
     @Published var isExportSheetPresented = false
     @Published var isGradientViewPresented = false
+    @Published var isKeyboardOpen = false
+    @Published var lastLeftFloatingButtonAction: FloatingButtonActionType = .back
 
     @Published var currentColorPickerBinding: ShapeStyleModel = .init(shapeStyle: Color.clear, shapeStyleCG: UIColor(Color.clear).cgColor) {
         didSet {

@@ -48,15 +48,24 @@ struct MenuTileView: View {
             .aspectRatio(1.0, contentMode: .fill)
             .background {
                 NavigationLink(destination: ImageProjectView(project: project)) {
-                    if let image {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
+                    ZStack {
 
-                    } else {
-                        Image("PlaceholderImage")
-                            .resizable()
-                            .scaledToFill()
+                        Color.clear
+                            .padding(2)
+
+                            .contentShape(RoundedRectangle(cornerRadius: 16.0))
+                        if let image {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+
+                        } else {
+                            Image("PlaceholderImage")
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        RoundedRectangle(cornerRadius: 16.0)
+                            .strokeBorder(Color(.image), style: StrokeStyle(lineWidth: 2))
                     }
                 }
             }

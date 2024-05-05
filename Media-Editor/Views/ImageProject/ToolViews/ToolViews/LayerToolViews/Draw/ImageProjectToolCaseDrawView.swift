@@ -49,6 +49,9 @@ struct ImageProjectToolCaseDrawView: View {
                         .modifier(ProjectToolTileViewModifier())
                         .contentShape(Rectangle())
                         .onTapGesture {
+                            if vm.currentDrawing.currentPencilType == .pen {
+                                vm.storeCurrentDrawing()
+                            }
                             vm.currentDrawing.currentPencilType = pencilType
                         }
                 }
