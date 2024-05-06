@@ -11,12 +11,30 @@ import SwiftUI
 extension ImageProjectView {
     @ToolbarContentBuilder var imageProjectToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            Label("Back", systemImage: "chevron.left")
+            Label("Menu", systemImage: "house.fill")
                 .labelStyle(.titleAndIcon)
                 .onTapGesture {
-                    dismiss()
+                    isBackToMenuAlertShown = true
                 }
                 .foregroundStyle(Color(.tint))
+                .alert("Do you want to\nreturn to menu?",
+                       isPresented: $isBackToMenuAlertShown,
+                       actions: {
+                           Button {
+                               dismiss()
+                           } label: {
+                               Text("Back to menu")
+                           }
+                           Button(role: .cancel) {
+                               isBackToMenuAlertShown = false
+                           } label: {
+                               Text("Stay")
+                           }
+
+                       },
+                       message: {
+                           Text("Your progress is auto-saved")
+                       })
         }
         ToolbarItemGroup(placement: .principal) {
             HStack {

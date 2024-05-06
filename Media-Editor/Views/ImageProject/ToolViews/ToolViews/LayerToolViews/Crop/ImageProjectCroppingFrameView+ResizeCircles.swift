@@ -23,7 +23,7 @@ extension ImageProjectCroppingFrameView {
                     .transition(.normalOpacityTransition)
             }
             .overlay(alignment: .top) {
-                if vm.currentCropRatio == .any {
+                if vm.cropModel.cropRatioType == .any {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)
@@ -46,7 +46,7 @@ extension ImageProjectCroppingFrameView {
                     .transition(.normalOpacityTransition)
             }
             .overlay(alignment: .trailing) {
-                if vm.currentCropRatio == .any {
+                if vm.cropModel.cropRatioType == .any {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)
@@ -69,7 +69,7 @@ extension ImageProjectCroppingFrameView {
                     .transition(.normalOpacityTransition)
             }
             .overlay(alignment: .bottom) {
-                if vm.currentCropRatio == .any {
+                if vm.cropModel.cropRatioType == .any {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)
@@ -92,7 +92,7 @@ extension ImageProjectCroppingFrameView {
 
             }
             .overlay(alignment: .leading) {
-                if vm.currentCropRatio == .any {
+                if vm.cropModel.cropRatioType == .any {
                     Circle()
                         .fill(Color(.accent))
                         .frame(width: resizeCircleSize, height: resizeCircleSize)

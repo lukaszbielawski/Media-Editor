@@ -87,6 +87,12 @@ struct ImageProjectToolDetailsView: View {
                             .frame(height: vm.plane.lowerToolbarHeight)
                         ImageProjectToolTextureView()
                     }.transition(.normalOpacityTransition)
+                } else if case .custom = vm.cropModel.cropShapeType {
+                    Group {
+                        Color(.image)
+                            .frame(height: vm.plane.lowerToolbarHeight)
+                        ImageProjectCropCustomShapeView()
+                    }.transition(.normalOpacityTransition)
                 }
             }
             .padding(.horizontal, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)

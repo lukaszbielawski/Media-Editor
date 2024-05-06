@@ -21,14 +21,14 @@ struct ImageProjectToolTextureView: View {
 
     var colorPickerBinding: Binding<Color?> {
         return Binding<Color?> {
-            if let color = vm.currentColorPickerBinding.shapeStyle as? Color {
+            if let color = vm.currentShapeStyleModel.shapeStyle as? Color {
                 return color
             } else {
                 return nil
             }
         } set: { color in
             guard let color else { return }
-            vm.currentColorPickerBinding = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
+            vm.currentShapeStyleModel = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
         }
     }
 
@@ -51,7 +51,7 @@ struct ImageProjectToolTextureView: View {
                                 ForEach(vm.tools.colorArray, id: \.self) { color in
                                     ImageProjectToolColorTileView(color: .constant(color))
                                         .onTapGesture { [unowned vm] in
-                                            vm.currentColorPickerBinding =
+                                            vm.currentShapeStyleModel =
                                                 ShapeStyleModel(shapeStyle: color, shapeStyleCG: color.cgColor)
                                             vm.performColorPickedAction(colorPickerType, .debounce)
                                         }

@@ -62,7 +62,7 @@ struct ImageProjectViewFloatingCropSliderView: View {
                     Circle()
                         .fill(Color.tint)
                         .padding(2)
-                    Text(vm.currentCropRatio.text)
+                    Text(vm.cropModel.cropRatioType.text)
                         .foregroundStyle(Color(.image))
                 }
                 .frame(width: sliderHeight, height: sliderHeight)
@@ -86,7 +86,7 @@ struct ImageProjectViewFloatingCropSliderView: View {
         .transition(.normalOpacityTransition)
         .onChange(of: stepNumber) { value in
             HapticService.shared.play(.light)
-            vm.currentCropRatio = CropRatioType.allCases[Int(value)]
+            vm.cropModel.cropRatioType = CropRatioType.allCases[Int(value)]
         }
         .onAppear {
             resetValues()
@@ -95,7 +95,7 @@ struct ImageProjectViewFloatingCropSliderView: View {
 
     private func resetValues() {
         sliderOffset = nil
-        vm.currentCropRatio = .any
-        vm.currentCropShape = .rectangle
+        vm.cropModel.cropRatioType = .any
+        vm.cropModel.cropShapeType = .rectangle
     }
 }

@@ -27,23 +27,14 @@ struct ImageProjectToolCaseDrawFloatingSliderView: View {
     let sliderHeight: CGFloat
 
     let pencilSizeRange = 1.0 ... 100.0
-    let defaultPencilSizeValue = 16.0
 
     var body: some View {
         var defaultOffsetFactor: CGFloat {
-            let defaultValue = defaultPencilSizeValue
+            let defaultValue = CGFloat(vm.currentDrawing.currentPencilSize)
             let factor = (defaultValue - pencilSizeRange.lowerBound) /
                 (pencilSizeRange.upperBound - pencilSizeRange.lowerBound)
             return factor
         }
-
-//        var percentage: String {
-//            if let sliderFactor {
-//                return "\(Int(sliderFactor.toPercentage))%"
-//            } else {
-//                return "\(Int(defaultOffsetFactor.toPercentage))%"
-//            }
-//        }
 
         ZStack(alignment: .leading) {
             Capsule(style: .circular)

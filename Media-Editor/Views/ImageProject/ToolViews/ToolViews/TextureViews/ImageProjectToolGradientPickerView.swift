@@ -57,7 +57,7 @@ struct ImageProjectToolGradientPickerView: View {
                 }
         }
         .onAppear { [unowned vm] in
-            if let currentColor = vm.currentColorPickerBinding.shapeStyle as? Color {
+            if let currentColor = vm.currentShapeStyleModel.shapeStyle as? Color {
                 if vm.gradientModel.stops.count < 2 {
                     vm.gradientModel.stops =
                         [Gradient.Stop(color: currentColor, location: 0.0),
@@ -73,7 +73,7 @@ struct ImageProjectToolGradientPickerView: View {
 
     private func setupGradientView() {
         if let gradient = vm.gradientModel.gradient, let gradientCG = vm.gradientModel.gradientCG {
-            vm.currentColorPickerBinding =
+            vm.currentShapeStyleModel =
                 ShapeStyleModel(shapeStyle: gradient,
                                 shapeStyleCG: gradientCG)
             if let colorPickerType = vm.currentColorPickerType {

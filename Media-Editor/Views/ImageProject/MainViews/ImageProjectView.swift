@@ -16,6 +16,7 @@ struct ImageProjectView: View {
 
     @State var isEditingFrameVisible = false
     @State var editingFrameOpacity: CGFloat = 1.0
+    @State var isBackToMenuAlertShown = false
     @State private var isToastShown = (isShown: false, result: false)
 
     init(project: ImageProjectEntity?) {
@@ -120,9 +121,7 @@ struct ImageProjectView: View {
             .background(Color(.primary))
             .background {
                 NavBarAccessor { navBar in
-                    DispatchQueue.main.async {
-                        vm.plane.totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
-                    }
+                    vm.plane.totalNavBarHeight = navBar.bounds.height + UIScreen.topSafeArea
                 }
             }
             .navigationBarBackButtonHidden(true)

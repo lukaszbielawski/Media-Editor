@@ -54,6 +54,10 @@
 		B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */; };
 		B22B1BEE2BC1B0B8003A0031 /* KaushanScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */; };
 		B22B1BEF2BC1B0B8003A0031 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = B22B1BED2BC1B0B8003A0031 /* OFL.txt */; };
+		B233916E2BE8D69F00F4D1F6 /* ImageProjectCropCustomShapeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B233916D2BE8D69F00F4D1F6 /* ImageProjectCropCustomShapeView.swift */; };
+		B23391702BE8DD8B00F4D1F6 /* CropModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B233916F2BE8DD8B00F4D1F6 /* CropModel.swift */; };
+		B23391722BE8E5E400F4D1F6 /* CustomPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23391712BE8E5E400F4D1F6 /* CustomPath.swift */; };
+		B23391742BE8FD3E00F4D1F6 /* ImageProjectCroppingFrameView+CustomShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23391732BE8FD3E00F4D1F6 /* ImageProjectCroppingFrameView+CustomShape.swift */; };
 		B235D4052B8D402900D02790 /* FloatingButtonActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */; };
 		B235D40B2B8D4AD700D02790 /* FloatingButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */; };
 		B2490C4D2B94655B0071DDB1 /* LayerSingleActionToolType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */; };
@@ -221,6 +225,10 @@
 		B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarAccessor.swift; sourceTree = "<group>"; };
 		B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KaushanScript-Regular.ttf"; sourceTree = "<group>"; };
 		B22B1BED2BC1B0B8003A0031 /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		B233916D2BE8D69F00F4D1F6 /* ImageProjectCropCustomShapeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectCropCustomShapeView.swift; sourceTree = "<group>"; };
+		B233916F2BE8DD8B00F4D1F6 /* CropModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropModel.swift; sourceTree = "<group>"; };
+		B23391712BE8E5E400F4D1F6 /* CustomPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPath.swift; sourceTree = "<group>"; };
+		B23391732BE8FD3E00F4D1F6 /* ImageProjectCroppingFrameView+CustomShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageProjectCroppingFrameView+CustomShape.swift"; sourceTree = "<group>"; };
 		B235D4042B8D402900D02790 /* FloatingButtonActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonActionType.swift; sourceTree = "<group>"; };
 		B235D40A2B8D4AD700D02790 /* FloatingButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonType.swift; sourceTree = "<group>"; };
 		B2490C4C2B94655B0071DDB1 /* LayerSingleActionToolType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerSingleActionToolType.swift; sourceTree = "<group>"; };
@@ -493,7 +501,6 @@
 			children = (
 				B21103552B496F2F00CA4981 /* Model.xcdatamodeld */,
 				B24AD9032B553E9600BBD1E8 /* Entities */,
-				B24AD9022B553E8A00BBD1E8 /* Controllers */,
 				B21103592B49705900CA4981 /* PersistenceController.swift */,
 			);
 			path = CoreData;
@@ -632,6 +639,7 @@
 				B21103622B49796100CA4981 /* ImageProjectEntity.swift */,
 				B200CB372B506A0D00BA3023 /* PhotoEntity.swift */,
 				B2C842F92BC2FB3E00A7853F /* TextModelEntity.swift */,
+				B24AD9022B553E8A00BBD1E8 /* Controllers */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -780,6 +788,8 @@
 				B28F7BBE2B9658C800E684C8 /* ImageProjectCroppingFrameView+ResizeGestures.swift */,
 				B2C352192B97355100E64525 /* ImageProjectViewFloatingCropSliderView.swift */,
 				B2C352152B97299A00E64525 /* ImageProjectToolCaseCropView.swift */,
+				B233916D2BE8D69F00F4D1F6 /* ImageProjectCropCustomShapeView.swift */,
+				B23391732BE8FD3E00F4D1F6 /* ImageProjectCroppingFrameView+CustomShape.swift */,
 			);
 			path = Crop;
 			sourceTree = "<group>";
@@ -860,6 +870,7 @@
 				B2C352202B974CB700E64525 /* FlippedTriangle.swift */,
 				B2C352222B974D0D00E64525 /* Polygon.swift */,
 				B209B9612B97AA2E00803D1F /* Triangle.swift */,
+				B23391712BE8E5E400F4D1F6 /* CustomPath.swift */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -901,6 +912,7 @@
 				B27DEB582BE3955200F52FBD /* ShapeStyleModel.swift */,
 				B2ADA49C2BE625E500100FAC /* GradientModel.swift */,
 				B2ADA4A02BE639FA00100FAC /* CGLinearGradient.swift */,
+				B233916F2BE8DD8B00F4D1F6 /* CropModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1130,6 +1142,7 @@
 				B2C842FA2BC2FB3E00A7853F /* TextModelEntity.swift in Sources */,
 				B28F7BBF2B9658C800E684C8 /* ImageProjectCroppingFrameView+ResizeGestures.swift in Sources */,
 				B2707D782BC3E90000C1F4A8 /* ColorPickerType.swift in Sources */,
+				B23391742BE8FD3E00F4D1F6 /* ImageProjectCroppingFrameView+CustomShape.swift in Sources */,
 				B2B20D2A2B88DD5900E3E458 /* ImageProjectToolFilterFloatingSliderView.swift in Sources */,
 				B21103642B49796100CA4981 /* ImageProjectEntity.swift in Sources */,
 				B2C842F82BC2EC8100A7853F /* TextLayerModel.swift in Sources */,
@@ -1143,6 +1156,7 @@
 				B2F86F182BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift in Sources */,
 				B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */,
 				B2C3521A2B97355100E64525 /* ImageProjectViewFloatingCropSliderView.swift in Sources */,
+				B23391722BE8E5E400F4D1F6 /* CustomPath.swift in Sources */,
 				B28F7BB62B95FA8200E684C8 /* ImageProjectMergingFrameView.swift in Sources */,
 				B2E0CF6F2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift in Sources */,
 				B24EA9482B56B7C30081FBFD /* MenuUpperView.swift in Sources */,
@@ -1186,11 +1200,13 @@
 				B2C352182B97320500E64525 /* CropRatioType.swift in Sources */,
 				B205075A2B76334B0060854D /* ImageProjectView+Toolbar.swift in Sources */,
 				B2B28BDD2B87A31400EC96B8 /* FilterType.swift in Sources */,
+				B233916E2BE8D69F00F4D1F6 /* ImageProjectCropCustomShapeView.swift in Sources */,
 				B2C3521F2B97482D00E64525 /* CropShapeType.swift in Sources */,
 				B2ADA49F2BE6268D00100FAC /* DirectionType.swift in Sources */,
 				B20507602B769F120060854D /* EdgeOverflowError.swift in Sources */,
 				B28F7BB82B96028800E684C8 /* ImageProjectFocusView.swift in Sources */,
 				B200CB3B2B506B2800BA3023 /* ImageProjectView.swift in Sources */,
+				B23391702BE8DD8B00F4D1F6 /* CropModel.swift in Sources */,
 				B2675FF92B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift in Sources */,
 				B2CF194A2B7D69840053E960 /* ApexType.swift in Sources */,
 				B2C352212B974CB700E64525 /* FlippedTriangle.swift in Sources */,

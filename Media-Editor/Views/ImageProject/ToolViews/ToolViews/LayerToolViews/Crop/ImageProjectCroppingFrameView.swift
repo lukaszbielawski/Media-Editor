@@ -31,20 +31,26 @@ struct ImageProjectCroppingFrameView: View {
         frameSize.width / frameSize.height
     }
 
+    @GestureState var lastCustomShapeOffset: CGSize?
+    @State var customShapeoffset: CGSize = .zero
+
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(Material.ultraThinMaterial)
 
-            vm.currentCropShape
-                .shape
+            vm.cropModel.cropShapeType.shape
                 .fill(Color.white)
                 .border(Color.clear, width: 2)
                 .frame(width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
                        height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)
                 .blendMode(.destinationOut)
-                .overlay(resizeFrame)
+                .overlay(vm.cropModel.cropShapeType.isCustomShape ? nil : resizeFrame)
                 .offset(offset)
+
+            if case .custom(let pathPoints) = vm.cropModel.cropShapeType {
+                customCroppingFrameView(pathPoints: pathPoints)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 
@@ -61,7 +67,7 @@ struct ImageProjectCroppingFrameView: View {
                 lastOffset = lastOffset ?? offset
             }
         )
-        .onChange(of: vm.currentCropRatio) { cropRatioType in
+        .onChange(of: vm.cropModel.cropRatioType) { cropRatioType in
             let ratio = cropRatioType.value
 
             withAnimation(.easeInOut(duration: 0.2)) {

@@ -22,10 +22,10 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentTool: (any Tool)?
     @Published var currentCategory: (any Category)?
     @Published var currentFilter: FilterType?
-    @Published var currentCropRatio: CropRatioType = .any
-    @Published var currentCropShape: CropShapeType = .rectangle
+
     @Published var currentColorPickerType: ColorPickerType? = .none
     @Published var gradientModel: GradientModel = .init(stops: [], direction: .right)
+    @Published var cropModel: CropModel = .init()
 
     @Published var originalCGImage: CGImage!
 
@@ -53,18 +53,18 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var isKeyboardOpen = false
     @Published var lastLeftFloatingButtonAction: FloatingButtonActionType = .back
 
-    @Published var currentColorPickerBinding: ShapeStyleModel = .init(shapeStyle: Color.clear, shapeStyleCG: UIColor(Color.clear).cgColor) {
+    @Published var currentShapeStyleModel: ShapeStyleModel = .init(shapeStyle: Color.clear, shapeStyleCG: UIColor(Color.clear).cgColor) {
         didSet {
             if let currentTool = currentTool as? ProjectToolType {
                 switch currentTool {
                 case .background:
-                    if let color = currentColorPickerBinding.shapeStyle as? Color {
+                    if let color = currentShapeStyleModel.shapeStyle as? Color {
                         projectModel.backgroundColor = color
                     }
                 case .text:
                     if let textCategory = currentCategory as? TextCategoryType,
                        let textLayer = activeLayer as? TextLayerModel,
-                       let color = currentColorPickerBinding.shapeStyle as? Color
+                       let color = currentShapeStyleModel.shapeStyle as? Color
                     {
                         if textCategory == .textColor {
                             textLayer.textColor = color
@@ -78,11 +78,11 @@ final class ImageProjectViewModel: ObservableObject {
             } else if let currentTool = currentTool as? LayerToolType {
                 switch currentTool {
                 case .draw:
-                    currentDrawing.currentPencilStyle = currentColorPickerBinding
+                    currentDrawing.currentPencilStyle = currentShapeStyleModel
                 case .editText:
                     if let textCategory = currentCategory as? TextCategoryType,
                        let textLayer = activeLayer as? TextLayerModel,
-                       let color = currentColorPickerBinding.shapeStyle as? Color
+                       let color = currentShapeStyleModel.shapeStyle as? Color
                     {
                         if textCategory == .textColor {
                             textLayer.textColor = color
@@ -582,7 +582,7 @@ final class ImageProjectViewModel: ObservableObject {
             .exportLayersToImage(
                 photos: [activeLayer],
                 contextPixelSize: activeLayer.pixelSize,
-                layerBackgroundShapeStyle: currentColorPickerBinding,
+                layerBackgroundShapeStyle: currentShapeStyleModel,
                 isApplyingTransforms: false)
 
         activeLayer.cgImage = layerWithBackground
@@ -615,7 +615,7 @@ final class ImageProjectViewModel: ObservableObject {
         let pixelOffset = CGSize(width: cropRect.origin.x * widthRatio,
                                  height: cropRect.origin.y * heightRatio)
 
-        let path = currentCropShape.shape.path(in: CGRect(
+        let path = cropModel.cropShapeType.shape.path(in: CGRect(
             origin: .zero,
             size: cropRect.size.pixelSize(widthRatio, heightRatio)))
 
@@ -1071,7 +1071,7 @@ final class ImageProjectViewModel: ObservableObject {
             }
         }()
         if let color {
-            currentColorPickerBinding = ShapeStyleModel(shapeStyle: color, shapeStyleCG: color.cgColor)
+            currentShapeStyleModel = ShapeStyleModel(shapeStyle: color, shapeStyleCG: color.cgColor)
         }
 
         objectWillChange.send()

@@ -14,6 +14,7 @@ enum FloatingButtonActionType {
     case backToCategories
     case backFromColorPicker
     case backFromGradientPicker
+    case backFromCustomShape
     case exitFocusMode
     case endPenPath
 }

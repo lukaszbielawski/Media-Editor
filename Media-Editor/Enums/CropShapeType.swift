@@ -8,7 +8,16 @@
 import Foundation
 import SwiftUI
 
-enum CropShapeType: CaseIterable {
+enum CropShapeType: CaseIterable, Hashable {
+    static var allCases: [CropShapeType] =
+        [.custom(pathPoints: []),
+         .rectangle,
+         .ellipse,
+         .triangle,
+         .flippedTriangle,
+         .hexagon]
+
+    case custom(pathPoints: [UnitPoint])
     case rectangle
     case ellipse
     case triangle
@@ -18,6 +27,8 @@ enum CropShapeType: CaseIterable {
     @ShapeBuilder
     var shape: some Shape {
         switch self {
+        case .custom(let pathPoints):
+            CustomPath(pathPoints: pathPoints)
         case .rectangle:
             Rectangle()
         case .ellipse:
@@ -31,8 +42,17 @@ enum CropShapeType: CaseIterable {
         }
     }
 
+    var isCustomShape: Bool {
+        if case .custom = self {
+            return true
+        }
+        return false
+    }
+
     var iconName: String {
         return switch self {
+        case .custom:
+            "rectangle.custom"
         case .rectangle:
             "rectangle.fill"
         case .ellipse:

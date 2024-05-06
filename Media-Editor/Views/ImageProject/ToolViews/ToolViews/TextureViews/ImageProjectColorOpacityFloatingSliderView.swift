@@ -20,14 +20,14 @@ struct ImageProjectColorOpacityFloatingSliderView: View {
 
     var backgroundColor: Binding<Color?> {
         return Binding<Color?> {
-            if let color = vm.currentColorPickerBinding.shapeStyle as? Color {
+            if let color = vm.currentShapeStyleModel.shapeStyle as? Color {
                 return color
             } else {
                 return nil
             }
         } set: { color in
             guard let color else { return }
-            $vm.currentColorPickerBinding.wrappedValue = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
+            $vm.currentShapeStyleModel.wrappedValue = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
         }
     }
 
