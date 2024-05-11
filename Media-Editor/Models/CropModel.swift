@@ -10,4 +10,5 @@ import SwiftUI
 struct CropModel {
     var cropRatioType: CropRatioType = .any
     var cropShapeType: CropShapeType = .rectangle
+    var currentCropCustomShapeType: CropCustomShapeType = .drag
 }

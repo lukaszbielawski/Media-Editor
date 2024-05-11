@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 struct ImageProjectCroppingFrameView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
@@ -20,6 +21,9 @@ struct ImageProjectCroppingFrameView: View {
     @State var frameScaleHeight = 1.0
     @State var aspectRatioCorrectionWidth: CGFloat = 1.0
     @State var aspectRatioCorrectionHeight: CGFloat = 1.0
+
+    @State var saveSnapshotSubject = PassthroughSubject<Void, Never>()
+    @State var cancellable: AnyCancellable?
 
     let frameSize: CGSize
     let scaledSize: CGSize
@@ -66,6 +70,9 @@ struct ImageProjectCroppingFrameView: View {
             .updating($lastOffset) { _, lastOffset, _ in
                 lastOffset = lastOffset ?? offset
             }
+            .onEnded { [unowned vm] _ in
+                vm.updateLatestSnapshot()
+            }
         )
         .onChange(of: vm.cropModel.cropRatioType) { cropRatioType in
             let ratio = cropRatioType.value
@@ -83,7 +90,29 @@ struct ImageProjectCroppingFrameView: View {
                 }
             }
         }
-        .onReceive(vm.floatingButtonClickedSubject) { action in
+        .onAppear {
+            vm.centerButtonFunction = {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    frameScaleWidth = 1.0
+                    frameScaleHeight = 1.0
+                    offset = .zero
+                }
+            }
+
+            cancellable =
+            saveSnapshotSubject
+                .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
+                .sink { [unowned vm] in
+                    vm.updateLatestSnapshot()
+                }
+
+            vm.turnOnCropRevertModel()
+        }
+        .onDisappear {
+            vm.setupCenterButtonFunction()
+            vm.cropModel.cropShapeType = .rectangle
+        }
+        .onReceive(vm.floatingButtonClickedSubject) { [unowned vm] action in
             if action == .confirm {
                 Task {
                     guard vm.activeLayer != nil else { return }

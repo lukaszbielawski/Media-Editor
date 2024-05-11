@@ -62,10 +62,10 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1106"
-            endingLineNumber = "1106"
-            landmarkName = "ImageProjectViewModel"
-            landmarkType = "3">
+            startingLineNumber = "1119"
+            endingLineNumber = "1119"
+            landmarkName = "endPenPath()"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "EE8898D4-86A8-49D5-AA93-0872AEE3550E - 7c5b15f71949c04d"
@@ -110,8 +110,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1079"
-            endingLineNumber = "1079"
+            startingLineNumber = "1092"
+            endingLineNumber = "1092"
             landmarkName = "setupInitialColorPickerColor()"
             landmarkType = "7">
             <Locations>
@@ -173,10 +173,10 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1096"
-            endingLineNumber = "1096"
-            landmarkName = "storePenPointSnapshot()"
-            landmarkType = "7">
+            startingLineNumber = "1109"
+            endingLineNumber = "1109"
+            landmarkName = "ImageProjectViewModel"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "D9EE77DD-23CB-49F9-8C08-41969379C47D - 7937d21e0efd74bf"
@@ -314,8 +314,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "622"
-            endingLineNumber = "622"
+            startingLineNumber = "630"
+            endingLineNumber = "630"
             landmarkName = "cropLayer(frameRect:cropRect:)"
             landmarkType = "7">
          </BreakpointContent>

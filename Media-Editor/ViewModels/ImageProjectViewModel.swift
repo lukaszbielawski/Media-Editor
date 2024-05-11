@@ -44,6 +44,7 @@ final class ImageProjectViewModel: ObservableObject {
 
     @Published var drawingRevertModel: RevertModel
     @Published var normalRevertModel: RevertModel
+    @Published var cropRevertModel: RevertModel
 
     @Published var layersToMerge: [LayerModel] = .init()
 
@@ -123,6 +124,8 @@ final class ImageProjectViewModel: ObservableObject {
     var currentRevertModel: RevertModel {
         if let currentTool = currentTool as? LayerToolType, currentTool == .draw {
             drawingRevertModel
+        } else if let currentTool = currentTool as? LayerToolType, currentTool == .crop {
+            cropRevertModel
         } else {
             normalRevertModel
         }
@@ -151,6 +154,7 @@ final class ImageProjectViewModel: ObservableObject {
 
         drawingRevertModel = RevertModel()
         normalRevertModel = RevertModel()
+        cropRevertModel = RevertModel()
 
         configureNavBar()
 
@@ -192,6 +196,7 @@ final class ImageProjectViewModel: ObservableObject {
         let latestSnapshot = createSnapshot()
         drawingRevertModel.latestSnapshot = latestSnapshot
         normalRevertModel.latestSnapshot = latestSnapshot
+        cropRevertModel.latestSnapshot = latestSnapshot
     }
 
     deinit {
@@ -285,18 +290,21 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     private func createSnapshot() -> SnapshotModel {
-        if currentRevertModel === drawingRevertModel {
+        if currentRevertModel === drawingRevertModel ||
+            currentRevertModel === cropRevertModel
+        {
             return .init(layers: projectLayers,
                          projectModel: projectModel,
                          drawings: drawings,
-                         currentDrawing: currentDrawing)
+                         currentDrawing: currentDrawing,
+                         cropModel: cropModel)
         } else {
             let layers = projectLayers.map { [unowned self] layer in
                 layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
             }
             let projectModel = projectModel.copy() as! ImageProjectModel
 
-            return .init(layers: layers, projectModel: projectModel, drawings: drawings, currentDrawing: currentDrawing)
+            return .init(layers: layers, projectModel: projectModel, drawings: drawings, currentDrawing: currentDrawing, cropModel: cropModel)
         }
     }
 
@@ -375,8 +383,11 @@ final class ImageProjectViewModel: ObservableObject {
         let previousDrawings = previousSnapshot.drawings
         let previousCurrentDrawing = previousSnapshot.currentDrawing
         let previousProjectModel = previousSnapshot.projectModel
+        let previousCropModel = previousSnapshot.cropModel
 
         withAnimation(.easeInOut(duration: 0.35)) {
+            cropModel = previousCropModel
+
             drawings = previousDrawings
             currentDrawing = previousCurrentDrawing
             projectModel.backgroundColor = previousProjectModel.backgroundColor
@@ -1041,6 +1052,11 @@ final class ImageProjectViewModel: ObservableObject {
     func turnOnDrawingRevertModel() {
         let latestSnapshot = createSnapshot()
         drawingRevertModel = RevertModel(latestSnapshot)
+    }
+
+    func turnOnCropRevertModel() {
+        let latestSnapshot = createSnapshot()
+        cropRevertModel = RevertModel(latestSnapshot)
     }
 
     func storeCurrentDrawing() {

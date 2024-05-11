@@ -12,4 +12,5 @@ struct SnapshotModel {
     let projectModel: ImageProjectModel
     let drawings: [DrawingModel]
     let currentDrawing: DrawingModel
+    let cropModel: CropModel
 }

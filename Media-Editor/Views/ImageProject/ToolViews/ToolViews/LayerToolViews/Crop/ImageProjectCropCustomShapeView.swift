@@ -15,33 +15,26 @@ struct ImageProjectCropCustomShapeView: View {
     @State private var colorPickerSubject = PassthroughSubject<ColorPickerType, Never>()
     @State private var onDisappearAction: FloatingButtonActionType?
 
-//    var colorPickerBinding: Binding<Color?> {
-//        return Binding<Color?> {
-//            if let color = vm.currentShapeStyleModel.shapeStyle as? Color {
-//                return color
-//            } else {
-//                return nil
-//            }
-//        } set: { color in
-//            guard let color else { return }
-//            vm.currentShapeStyleModel = ShapeStyleModel(shapeStyle: color, shapeStyleCG: UIColor(color).cgColor)
-//        }
-//    }
-
     var body: some View {
         ZStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ImageProjectToolTileView(title: "Drag", iconName: "hand.draw.fill")
-                        .onTapGesture {}
-                    ImageProjectToolTileView(title: "Add dot", iconName: "circle.badge.plus.fill")
-                        .onTapGesture {}
-                    ImageProjectToolTileView(title: "Remove dot", iconName: "circle.badge.minus.fill")
-                        .onTapGesture {}
+                    ForEach(CropCustomShapeType.allCases, id: \.self) { cropShapeType in
+                        ImageProjectToolTileView(title: cropShapeType.title, iconName: cropShapeType.iconName)
+                            .centerCropped()
+                            .overlay {
+                                if vm.cropModel.currentCropCustomShapeType == cropShapeType {
+                                    Color.accent
+                                        .modifier(ProjectToolTileSelectedModifier(paddingFactor: vm.tools.paddingFactor, lowerToolbarHeight: vm.plane.lowerToolbarHeight))
+                                }
+                            }
+                            .modifier(ProjectToolTileViewModifier())
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                vm.cropModel.currentCropCustomShapeType = cropShapeType
+                            }
+                    }
                 }
-            }
-            .onAppear { [unowned vm] in
-
             }
         }
 
