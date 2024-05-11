@@ -81,7 +81,7 @@ struct ImageProjectToolDetailsView: View {
                             }
                     }
                 }
-                if let colorPickerType = vm.currentColorPickerType {
+                if vm.currentColorPickerType != nil {
                     Group {
                         Color(.image)
                             .frame(height: vm.plane.lowerToolbarHeight)

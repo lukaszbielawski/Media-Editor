@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="225.55603mm"
-   height="215.56897mm"
-   viewBox="0 0 225.55602 215.56897"
+   width="215.5562mm"
+   height="215.74324mm"
+   viewBox="0 0 215.55618 215.74324"
    version="1.1"
    id="svg1"
    xmlns="http://www.w3.org/2000/svg"
@@ -13,7 +13,7 @@
      id="defs1" />
   <g
      id="layer1"
-     transform="translate(1.0001373e-4,-19.999737)">
+     transform="translate(1.0001373e-4,-20)">
     <g
        id="g6">
       <path
@@ -21,16 +21,9 @@
          style="fill:#000000;stroke:#000000;stroke-width:15.5562;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
          d="M 89.999949,27.777512 62.062703,44.353825 7.778,76.563164 V 182.32466 l 82.221949,45.46648 z" />
       <path
-         style="fill:#000000;stroke:#000000;stroke-width:9.74499;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill"
-         d="m 112.89382,24.888857 c 0,207.767523 0.30013,205.974383 -0.12639,205.761123 z"
-         id="path6" />
-      <rect
-         style="fill:#000000;stroke:#000000;stroke-width:22.1077;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-         id="rect37"
-         width="75.670235"
-         height="193.46126"
-         x="138.83185"
-         y="31.053587" />
+         style="fill:#000000;stroke:#000000;stroke-width:19.5245;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
+         d="m 127.54015,29.93345 v 195.0624 l 78.25419,0.98516 -49.01501,-122.79563 z"
+         id="path2" />
     </g>
   </g>
 </svg>

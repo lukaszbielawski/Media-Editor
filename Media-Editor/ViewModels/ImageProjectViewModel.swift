@@ -619,13 +619,16 @@ final class ImageProjectViewModel: ObservableObject {
             origin: .zero,
             size: cropRect.size.pixelSize(widthRatio, heightRatio)))
 
+        let shapePoints = cropModel.cropShapeType.shapePoints
+
         let croppedCGImage =
             try await photoExporterService
                 .cropLayerToImage(layer: activeLayer,
                                   pixelFrameSize: pixelFrameSize,
                                   pixelCropSize: pixelCropSize,
                                   pixelOffset: pixelOffset,
-                                  path: path)
+                                  cropPath: path,
+                                  shapePoints: shapePoints)
 
         try await saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: croppedCGImage)
 

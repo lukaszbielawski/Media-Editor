@@ -61,33 +61,75 @@ struct PhotoExporterService {
                           pixelFrameSize: CGSize,
                           pixelCropSize: CGSize,
                           pixelOffset: CGSize,
-                          path: Path) async throws -> CGImage
+                          cropPath: Path,
+                          shapePoints: CropShapeType.Points) async throws -> CGImage
     {
         return try await Task {
             guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
+
+            let offsetSize = CGSize(
+                width:  min(pixelCropSize.width - pixelFrameSize.width, 0.0) * 0.5 + abs(pixelOffset.width),
+                height: min(pixelCropSize.height - pixelFrameSize.height, 0.0) * 0.5 + abs(pixelOffset.height)
+            )
+
+            let contextSize = CGSize(
+                width: pixelCropSize.width *
+                    shapePoints.unitWidth
+                    - max(0.0, offsetSize.width),
+                height: pixelCropSize.height *
+                    shapePoints.unitHeight
+                    - max(0.0, offsetSize.height)
+            )
+
             guard let context = CGContext(data: nil,
-                                          width: Int(pixelCropSize.width),
-                                          height: Int(pixelCropSize.height),
+                                          width: Int(contextSize.width),
+                                          height: Int(contextSize.height),
                                           bitsPerComponent: 8,
                                           bytesPerRow: 0,
                                           space: CGColorSpaceCreateDeviceRGB(),
                                           bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
 
-            else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelCropSize.width), height: Int(pixelCropSize.height))) }
+            else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(contextSize.width), height: Int(contextSize.height))) }
 
-            let bezierPath = UIBezierPath(cgPath: path.cgPath)
+            let bezierPath = UIBezierPath(cgPath: cropPath.cgPath)
 
             let scaleTransform = CGAffineTransform(scaleX: 1,
                                                    y: -1)
 
             let correctionTranslation = CGAffineTransform(translationX: 0,
-                                                          y: path.boundingRect.size.height)
+                                                          y: cropPath.boundingRect.size.height)
 
-            bezierPath.apply(scaleTransform.concatenating(correctionTranslation))
+            let croppingFrameCoverageTranslation = CGAffineTransform(translationX: min(0.0, max(0.0, offsetSize.width) * copysign(-1.0, layer.scaleX ?? 1.0) * copysign(-1.0, pixelOffset.width)), y: -max(0.0, max(0.0, offsetSize.height) * copysign(-1.0, layer.scaleY ?? 1.0) * copysign(-1.0, pixelOffset.height)))
+
+            let shapeCoverageTranslation = CGAffineTransform(translationX: -shapePoints.minX * pixelFrameSize.width, y: shapePoints.minY * pixelFrameSize.height)
+
+            print("offset", pixelOffset)
+            print("cropSize", pixelCropSize)
+            print("framesize", pixelFrameSize)
+            print("contextSize", contextSize)
+            print("tx", croppingFrameCoverageTranslation.tx,
+                  "ty", croppingFrameCoverageTranslation.ty)
+
+            print("shape tx", shapeCoverageTranslation.tx,
+                  "shape ty", shapeCoverageTranslation.ty)
+
+
+            print("offsetSize", offsetSize)
+
+            bezierPath.apply(scaleTransform
+                .concatenating(correctionTranslation)
+                .concatenating(croppingFrameCoverageTranslation)
+                .concatenating(shapeCoverageTranslation)
+            )
 
             context.addPath(bezierPath.cgPath)
 
             context.clip()
+
+            context.concatenate(croppingFrameCoverageTranslation)
+            context.concatenate(shapeCoverageTranslation)
+            context.translateBy(x: 0.0, y: -(1.0 - shapePoints.unitHeight) * pixelFrameSize.height)
+            
 
             context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
 
@@ -95,10 +137,10 @@ struct PhotoExporterService {
                 x: (pixelCropSize.width - pixelFrameSize.width) * 0.5 * copysign(-1.0, layer.scaleX ?? 1.0),
                 y: (pixelCropSize.height - pixelFrameSize.height) * 0.5 * copysign(-1.0, layer.scaleY ?? 1.0)
             )
+
             context.translateBy(x: -pixelOffset.width, y: pixelOffset.height)
 
             context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
-
 
             context.draw(layerImage, in: CGRect(x: 0,
                                                 y: 0,
@@ -265,8 +307,6 @@ struct PhotoExporterService {
 
             for drawing in drawings {
                 var path = Path()
-
-
 
                 drawing.setupPath(&path)
 

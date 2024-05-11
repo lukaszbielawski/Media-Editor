@@ -87,14 +87,18 @@ struct ImageProjectCroppingFrameView: View {
             if action == .confirm {
                 Task {
                     guard vm.activeLayer != nil else { return }
-                    try await vm.cropLayer(
-                        frameRect: .init(origin: .zero, size: frameSize),
-                        cropRect: .init(origin: .init(x: offset.width, y: offset.height),
-                                        size: .init(
-                                            width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
-                                            height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)))
-                    vm.currentTool = .none
-                    vm.updateLatestSnapshot()
+                    do {
+                        try await vm.cropLayer(
+                            frameRect: .init(origin: .zero, size: frameSize),
+                            cropRect: .init(origin: .init(x: offset.width, y: offset.height),
+                                            size: .init(
+                                                width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
+                                                height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)))
+                        vm.currentTool = .none
+                        vm.updateLatestSnapshot()
+                    } catch {
+                        print(error)
+                    }
                 }
                 vm.leftFloatingButtonActionType = .back
             }

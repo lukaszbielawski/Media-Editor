@@ -14,7 +14,7 @@ struct ImageProjectToolCaseCropView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(CropShapeType.allCases, id: \.self) { cropShapeType in
-                    var title: String? = {
+                    let title: String? = {
                         if case .custom = cropShapeType {
                             "Custom"
                         } else {
