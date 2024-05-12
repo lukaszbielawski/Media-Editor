@@ -56,28 +56,36 @@ enum CropShapeType: CaseIterable, Hashable {
             return maxY - minY
         }
 
-        init(minX: CGFloat, maxX: CGFloat, minY: CGFloat, maxY: CGFloat) {
-            self.minX = max(minX, 0.0)
-            self.maxX = min(maxX, 1.0)
-            self.minY = max(minY, 0.0)
-            self.maxY = min(maxY, 1.0)
+        var midX: CGFloat {
+            return (minX + maxX) * 0.5
         }
+
+        var midY: CGFloat {
+            return (minY + maxY) * 0.5
+        }
+
+//        init(minX: CGFloat, maxX: CGFloat, minY: CGFloat, maxY: CGFloat) {
+//            self.minX = max(minX, 0.0)
+//            self.maxX = min(maxX, 1.0)
+//            self.minY = max(minY, 0.0)
+//            self.maxY = min(maxY, 1.0)
+//        }
     }
 
     var shapePoints: Points {
 
 
         if case .custom(let pathPoints) = self {
-            var minX = 1.0
-            var maxX = 0.0
-            var minY = 1.0
-            var maxY = 0.0
+            var minX = Double(Int.max)
+            var maxX = Double(Int.min)
+            var minY = Double(Int.max)
+            var maxY = Double(Int.min)
 
             for point in pathPoints {
-                minX = max(min(minX, point.x), 0.0)
-                maxX = min(max(maxX, point.x), 1.0)
-                minY = max(min(minY, point.y), 0.0)
-                maxY = min(max(maxY, point.y), 1.0)
+                minX = min(minX, point.x)
+                maxX = max(maxX, point.x)
+                minY = min(minY, point.y)
+                maxY = max(maxY, point.y)
             }
             return Points(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
         }

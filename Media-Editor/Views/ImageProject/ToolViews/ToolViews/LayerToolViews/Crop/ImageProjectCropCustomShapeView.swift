@@ -50,6 +50,8 @@ struct ImageProjectCropCustomShapeView: View {
                                                           .init(x: 0.0, y: 1.0)]
                     vm.cropModel.cropShapeType
                         = .custom(pathPoints: initialPathPoints)
+                    vm.lastCropModel.cropShapeType
+                        = .custom(pathPoints: initialPathPoints)
                 }
             }
         }

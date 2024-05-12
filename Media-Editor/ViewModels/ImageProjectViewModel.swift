@@ -26,6 +26,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var currentColorPickerType: ColorPickerType? = .none
     @Published var gradientModel: GradientModel = .init(stops: [], direction: .right)
     @Published var cropModel: CropModel = .init()
+    @Published var lastCropModel: CropModel = .init()
 
     @Published var originalCGImage: CGImage!
 

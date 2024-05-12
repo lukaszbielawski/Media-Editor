@@ -5,18 +5,21 @@
 //  Created by Łukasz Bielawski on 04/03/2024.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 struct ImageProjectCroppingFrameView: View {
     @EnvironmentObject var vm: ImageProjectViewModel
 
     @GestureState var lastOffset: CGSize?
+    @GestureState var lastPathPointsUnitOffset: CGSize?
     @GestureState var lastFrameScaleWidth: Double?
     @GestureState var lastFrameScaleHeight: Double?
 
     @State var offset: CGSize = .zero
+    @State var pathPointsUnitOffset: CGSize = .init(width: 0.0, height: 0.0)
+//    @State var lastPathPoints: [UnitPoint] = []
     @State var frameScaleWidth = 1.0
     @State var frameScaleHeight = 1.0
     @State var aspectRatioCorrectionWidth: CGFloat = 1.0
@@ -59,21 +62,54 @@ struct ImageProjectCroppingFrameView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 
         .compositingGroup()
-        .gesture(DragGesture()
-            .onChanged { value in
-                var newOffset = lastOffset ?? offset
-                newOffset.width += value.translation.width
-                newOffset.height += value.translation.height
+        .gesture({
+            if case .custom = vm.cropModel.cropShapeType {
+                DragGesture()
+                    .onChanged { value in
+                        let translation = value.translation
 
-                offset = newOffset
+                        let frameWidth = frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth
+                        let frameHeight = frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight
+
+                        let unitWidth = translation.width / frameWidth
+                        let unitHeight = translation.height / frameHeight
+
+                        var newOffset = lastPathPointsUnitOffset ?? pathPointsUnitOffset
+
+                        let newUnitOffset = UnitPoint(x: newOffset.width + unitWidth, y: newOffset.height + unitHeight)
+
+                        if case .custom(let lastPathPoints) = vm.lastCropModel.cropShapeType {
+                            changePathPointsPositions(of: lastPathPoints, offset: newUnitOffset)
+                        }
+                    }
+                    .updating($lastPathPointsUnitOffset) { _, lastPathPointsUnitOffset, _ in
+                        lastPathPointsUnitOffset = lastPathPointsUnitOffset ?? pathPointsUnitOffset
+                    }
+                    .onEnded { [unowned vm] _ in
+                        vm.updateLatestSnapshot()
+                        vm.lastCropModel = vm.cropModel
+                    }
+            } else {
+                DragGesture()
+                    .onChanged { value in
+                        var newOffset = lastOffset ?? offset
+                        newOffset.width += value.translation.width
+                        newOffset.height += value.translation.height
+
+                        offset = newOffset
+                    }
+                    .updating($lastOffset) { _, lastOffset, _ in
+                        lastOffset = lastOffset ?? offset
+                    }
+                    .onEnded { [unowned vm] _ in
+                        vm.updateLatestSnapshot()
+                    }
             }
-            .updating($lastOffset) { _, lastOffset, _ in
-                lastOffset = lastOffset ?? offset
-            }
-            .onEnded { [unowned vm] _ in
-                vm.updateLatestSnapshot()
-            }
+        }()
         )
+        .onChange(of: vm.cropModel.cropShapeType) { _ in
+            vm.centerButtonFunction?()
+        }
         .onChange(of: vm.cropModel.cropRatioType) { cropRatioType in
             let ratio = cropRatioType.value
 
@@ -100,11 +136,11 @@ struct ImageProjectCroppingFrameView: View {
             }
 
             cancellable =
-            saveSnapshotSubject
-                .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
-                .sink { [unowned vm] in
-                    vm.updateLatestSnapshot()
-                }
+                saveSnapshotSubject
+                    .debounce(for: .seconds(1.0), scheduler: DispatchQueue.main)
+                    .sink { [unowned vm] in
+                        vm.updateLatestSnapshot()
+                    }
 
             vm.turnOnCropRevertModel()
         }

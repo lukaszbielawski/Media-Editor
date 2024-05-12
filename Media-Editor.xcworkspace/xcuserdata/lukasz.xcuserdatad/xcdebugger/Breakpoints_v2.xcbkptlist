@@ -62,8 +62,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1119"
-            endingLineNumber = "1119"
+            startingLineNumber = "1120"
+            endingLineNumber = "1120"
             landmarkName = "endPenPath()"
             landmarkType = "7">
             <Locations>
@@ -110,8 +110,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1092"
-            endingLineNumber = "1092"
+            startingLineNumber = "1093"
+            endingLineNumber = "1093"
             landmarkName = "setupInitialColorPickerColor()"
             landmarkType = "7">
             <Locations>
@@ -160,6 +160,21 @@
                   endingLineNumber = "1080"
                   offsetFromSymbolStart = "332">
                </Location>
+               <Location
+                  uuid = "DAE397E6-44F7-4998-902A-0DAC69242A35 - 7c5b15f71949c218"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Media_Editor.ImageProjectViewModel.setupInitialColorPickerColor() -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1092"
+                  endingLineNumber = "1092"
+                  offsetFromSymbolStart = "168">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -173,10 +188,10 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1109"
-            endingLineNumber = "1109"
-            landmarkName = "ImageProjectViewModel"
-            landmarkType = "3">
+            startingLineNumber = "1110"
+            endingLineNumber = "1110"
+            landmarkName = "setupRightButtonActionForPen()"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "D9EE77DD-23CB-49F9-8C08-41969379C47D - 7937d21e0efd74bf"
@@ -222,6 +237,21 @@
                   startingLineNumber = "1096"
                   endingLineNumber = "1096"
                   offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "D9EE77DD-23CB-49F9-8C08-41969379C47D - a4f15b5ef4241d73"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Media_Editor.ImageProjectViewModel.setupRightButtonActionForPen() -&gt; ()"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/ViewModels/ImageProjectViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1109"
+                  endingLineNumber = "1109"
+                  offsetFromSymbolStart = "576">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -307,17 +337,64 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9315F16A-2D27-4EF5-8475-232CCBC0A235"
+            uuid = "1A61C1E2-A331-4D4D-8500-522AA286FA45"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
+            filePath = "Media-Editor/Services/PhotoExporterService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "630"
-            endingLineNumber = "630"
-            landmarkName = "cropLayer(frameRect:cropRect:)"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "cropLayerToImage(layer:pixelFrameSize:pixelCropSize:pixelOffset:cropPath:shapePoints:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1A61C1E2-A331-4D4D-8500-522AA286FA45 - 424dbafe68ecd82"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.cropLayerToImage(layer: Media_Editor.LayerModel, pixelFrameSize: __C.CGSize, pixelCropSize: __C.CGSize, pixelOffset: __C.CGSize, cropPath: SwiftUI.Path, shapePoints: Media_Editor.CropShapeType.Points) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "1344">
+               </Location>
+               <Location
+                  uuid = "1A61C1E2-A331-4D4D-8500-522AA286FA45 - 424dbafe68ecd82"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.cropLayerToImage(layer: Media_Editor.LayerModel, pixelFrameSize: __C.CGSize, pixelCropSize: __C.CGSize, pixelOffset: __C.CGSize, cropPath: SwiftUI.Path, shapePoints: Media_Editor.CropShapeType.Points) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "1400">
+               </Location>
+               <Location
+                  uuid = "1A61C1E2-A331-4D4D-8500-522AA286FA45 - 424dbafe68ecd82"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.cropLayerToImage(layer: Media_Editor.LayerModel, pixelFrameSize: __C.CGSize, pixelCropSize: __C.CGSize, pixelOffset: __C.CGSize, cropPath: SwiftUI.Path, shapePoints: Media_Editor.CropShapeType.Points) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "85"
+                  endingLineNumber = "85"
+                  offsetFromSymbolStart = "1420">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

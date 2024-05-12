@@ -128,13 +128,21 @@ extension ImageProjectCroppingFrameView {
         }
     }
 
-    private func changePathPointPosition(of oldUnitPoint: UnitPoint,
-                                         for newUnitPoint: UnitPoint,
-                                         index: Int,
-                                         pathPoints: [UnitPoint])
+    func changePathPointPosition(of oldUnitPoint: UnitPoint,
+                                 for newUnitPoint: UnitPoint,
+                                 index: Int,
+                                 pathPoints: [UnitPoint])
     {
         var newPathPoints = pathPoints
         newPathPoints[index] = newUnitPoint
+        vm.cropModel.cropShapeType = .custom(pathPoints: newPathPoints)
+        vm.lastCropModel.cropShapeType = .custom(pathPoints: newPathPoints)
+    }
+
+    func changePathPointsPositions(of pathPoints: [UnitPoint], offset: UnitPoint) {
+        let newPathPoints = pathPoints.map { point in
+            UnitPoint(x: point.x + offset.x, y: point.y + offset.y)
+        }
         vm.cropModel.cropShapeType = .custom(pathPoints: newPathPoints)
     }
 }

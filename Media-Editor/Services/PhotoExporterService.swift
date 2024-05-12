@@ -66,16 +66,22 @@ struct PhotoExporterService {
     {
         return try await Task {
             guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
+            
+
+            let customShapeOffset = CGSize(width: (shapePoints.maxX - 1.0) * pixelCropSize.width, height: (shapePoints.maxY - 1.0) * pixelCropSize.height)
 
             let offsetSize = CGSize(
-                width:  min(pixelCropSize.width - pixelFrameSize.width, 0.0) * 0.5 + abs(pixelOffset.width),
-                height: min(pixelCropSize.height - pixelFrameSize.height, 0.0) * 0.5 + abs(pixelOffset.height)
+                width: min(pixelCropSize.width * shapePoints.unitWidth - pixelFrameSize.width, 0.0) * 0.5 + abs(pixelOffset.width)
+                + customShapeOffset.width,
+                height: min(pixelCropSize.height * shapePoints.unitHeight - pixelFrameSize.height, 0.0) * 0.5 + abs(pixelOffset.height)
+                    + customShapeOffset.height
             )
 
             let contextSize = CGSize(
                 width: pixelCropSize.width *
                     shapePoints.unitWidth
                     - max(0.0, offsetSize.width),
+
                 height: pixelCropSize.height *
                     shapePoints.unitHeight
                     - max(0.0, offsetSize.height)
@@ -99,20 +105,23 @@ struct PhotoExporterService {
             let correctionTranslation = CGAffineTransform(translationX: 0,
                                                           y: cropPath.boundingRect.size.height)
 
-            let croppingFrameCoverageTranslation = CGAffineTransform(translationX: min(0.0, max(0.0, offsetSize.width) * copysign(-1.0, layer.scaleX ?? 1.0) * copysign(-1.0, pixelOffset.width)), y: -max(0.0, max(0.0, offsetSize.height) * copysign(-1.0, layer.scaleY ?? 1.0) * copysign(-1.0, pixelOffset.height)))
+            let croppingFrameCoverageTranslation = CGAffineTransform(
+                translationX: min(0.0, max(0.0, offsetSize.width * shapePoints.unitWidth) * copysign(-1.0, layer.scaleX ?? 1.0) * copysign(-1.0, pixelOffset.width)),
+                y: -max(0.0, max(0.0, offsetSize.height * shapePoints.unitHeight) * copysign(-1.0, layer.scaleY ?? 1.0) * copysign(-1.0, pixelOffset.height))
+            )
 
             let shapeCoverageTranslation = CGAffineTransform(translationX: -shapePoints.minX * pixelFrameSize.width, y: shapePoints.minY * pixelFrameSize.height)
 
             print("offset", pixelOffset)
             print("cropSize", pixelCropSize)
             print("framesize", pixelFrameSize)
+            print("shape points", shapePoints)
             print("contextSize", contextSize)
-            print("tx", croppingFrameCoverageTranslation.tx,
-                  "ty", croppingFrameCoverageTranslation.ty)
+            print("cropping frame tx", croppingFrameCoverageTranslation.tx,
+                  "cropping frame ty", croppingFrameCoverageTranslation.ty)
 
-            print("shape tx", shapeCoverageTranslation.tx,
-                  "shape ty", shapeCoverageTranslation.ty)
-
+            print("shape coverage tx", shapeCoverageTranslation.tx,
+                  "shape coverage ty", shapeCoverageTranslation.ty)
 
             print("offsetSize", offsetSize)
 
@@ -129,7 +138,6 @@ struct PhotoExporterService {
             context.concatenate(croppingFrameCoverageTranslation)
             context.concatenate(shapeCoverageTranslation)
             context.translateBy(x: 0.0, y: -(1.0 - shapePoints.unitHeight) * pixelFrameSize.height)
-            
 
             context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
 
@@ -231,7 +239,7 @@ struct PhotoExporterService {
                 let shapeStyle = layerBackgroundShapeStyle?.shapeStyle
                 let shapeStyleCG = layerBackgroundShapeStyle?.shapeStyleCG
 
-                if let layerBackgroundShapeStyle {
+                if layerBackgroundShapeStyle != nil {
                     if let color = shapeStyle as? Color {
                         context.setFillColor(color.cgColor)
                     } else if let cgLinearGradient = shapeStyleCG as? CGLinearGradient,
@@ -331,7 +339,6 @@ struct PhotoExporterService {
                 let pencilStyleCG = drawing.currentPencilStyle.shapeStyleCG
 
                 if drawing.currentPencilType == .eraser {
-                    print("hello")
                     context.setStrokeColor(UIColor.black.cgColor)
                 } else {
                     if let pencilStyle = pencilStyle as? Color {
