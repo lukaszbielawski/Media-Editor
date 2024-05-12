@@ -11,4 +11,5 @@ struct CropModel {
     var cropRatioType: CropRatioType = .any
     var cropShapeType: CropShapeType = .rectangle
     var currentCropCustomShapeType: CropCustomShapeType = .drag
+    var cropOffset: CGSize = .zero
 }

@@ -112,19 +112,6 @@ struct PhotoExporterService {
 
             let shapeCoverageTranslation = CGAffineTransform(translationX: -shapePoints.minX * pixelFrameSize.width, y: shapePoints.minY * pixelFrameSize.height)
 
-            print("offset", pixelOffset)
-            print("cropSize", pixelCropSize)
-            print("framesize", pixelFrameSize)
-            print("shape points", shapePoints)
-            print("contextSize", contextSize)
-            print("cropping frame tx", croppingFrameCoverageTranslation.tx,
-                  "cropping frame ty", croppingFrameCoverageTranslation.ty)
-
-            print("shape coverage tx", shapeCoverageTranslation.tx,
-                  "shape coverage ty", shapeCoverageTranslation.ty)
-
-            print("offsetSize", offsetSize)
-
             bezierPath.apply(scaleTransform
                 .concatenating(correctionTranslation)
                 .concatenating(croppingFrameCoverageTranslation)

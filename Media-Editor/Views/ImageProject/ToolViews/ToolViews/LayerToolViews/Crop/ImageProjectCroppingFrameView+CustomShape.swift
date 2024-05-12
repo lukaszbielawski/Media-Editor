@@ -69,8 +69,10 @@ extension ImageProjectCroppingFrameView {
 
                             let unitHeight = position.y / frameHeight
 
-                            let newUnitPoint = UnitPoint(x: unitWidth + 0.5, y: unitHeight + 0.5)
+                            var newUnitPoint = UnitPoint(x: unitWidth + 0.5, y: unitHeight + 0.5)
 
+                            newUnitPoint.x = min(max(newUnitPoint.x, 0.0), 1.0)
+                            newUnitPoint.y = min(max(newUnitPoint.y, 0.0), 1.0)
                             print(newUnitPoint)
 
                             changePathPointPosition(of: unitPoint,
@@ -104,7 +106,7 @@ extension ImageProjectCroppingFrameView {
                 }
             }
         }
-        .offset(offset)
+        .offset(vm.cropModel.cropOffset)
     }
 
     struct PulsatingCircleView: View {
@@ -140,9 +142,43 @@ extension ImageProjectCroppingFrameView {
     }
 
     func changePathPointsPositions(of pathPoints: [UnitPoint], offset: UnitPoint) {
+        var minX = 1.0
+        var maxX = 0.0
+        var minY = 1.0
+        var maxY = 0.0
+
         let newPathPoints = pathPoints.map { point in
-            UnitPoint(x: point.x + offset.x, y: point.y + offset.y)
+            minX = min(minX, point.x + offset.x)
+            maxX = max(maxX, point.x + offset.x)
+            minY = min(minY, point.y + offset.y)
+            maxY = max(maxY, point.y + offset.y)
+
+            return UnitPoint(x: point.x + offset.x, y: point.y + offset.y)
         }
-        vm.cropModel.cropShapeType = .custom(pathPoints: newPathPoints)
+
+        let minXOverflow = min(0.0, minX)
+        let maxXOverflow = max(0.0, maxX - 1.0)
+        let minYOverflow = min(0.0, minY)
+        let maxYOverflow = max(0.0, maxY - 1.0)
+
+        let validatedNewPathPoints = newPathPoints.map { point in
+            var newUnitOffsetCorrection: UnitPoint = .zero
+            if minXOverflow < 0.0 {
+                newUnitOffsetCorrection.x = minXOverflow
+            } else if maxXOverflow > 0.0 {
+                newUnitOffsetCorrection.x = maxXOverflow
+            }
+
+            if minYOverflow < 0.0 {
+                newUnitOffsetCorrection.y = minYOverflow
+            } else if maxYOverflow > 0.0 {
+                newUnitOffsetCorrection.y = maxYOverflow
+            }
+
+            return UnitPoint(x: point.x - newUnitOffsetCorrection.x,
+                             y: point.y - newUnitOffsetCorrection.y)
+        }
+
+        vm.cropModel.cropShapeType = .custom(pathPoints: validatedNewPathPoints)
     }
 }

@@ -80,8 +80,15 @@ struct ImageProjectViewFloatingCropSliderView: View {
                             lastOffset = lastOffset ?? sliderOffset
                         }
                 )
+
+            if case .custom = vm.cropModel.cropShapeType {
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+                    .transition(.normalOpacityTransition)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: vm.plane.lowerToolbarHeight * 0.5)
+        .clipShape(Capsule(style: .circular))
         .padding(.leading, vm.tools.paddingFactor * vm.plane.lowerToolbarHeight)
         .transition(.normalOpacityTransition)
         .onChange(of: stepNumber) { value in

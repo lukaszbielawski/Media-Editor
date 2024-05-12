@@ -17,13 +17,15 @@ struct ImageProjectCroppingFrameView: View {
     @GestureState var lastFrameScaleWidth: Double?
     @GestureState var lastFrameScaleHeight: Double?
 
-    @State var offset: CGSize = .zero
-    @State var pathPointsUnitOffset: CGSize = .init(width: 0.0, height: 0.0)
-//    @State var lastPathPoints: [UnitPoint] = []
+
+    @State var pathPointsUnitOffset: CGSize = .zero
     @State var frameScaleWidth = 1.0
     @State var frameScaleHeight = 1.0
     @State var aspectRatioCorrectionWidth: CGFloat = 1.0
     @State var aspectRatioCorrectionHeight: CGFloat = 1.0
+
+    @State var wasPreviousDragGestureFrameLockedForX: Bool = false
+    @State var wasPreviousDragGestureFrameLockedForY: Bool = false
 
     @State var saveSnapshotSubject = PassthroughSubject<Void, Never>()
     @State var cancellable: AnyCancellable?
@@ -38,6 +40,18 @@ struct ImageProjectCroppingFrameView: View {
         frameSize.width / frameSize.height
     }
 
+    var croppingFrameSize: CGSize {
+        .init(width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
+              height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)
+    }
+
+    var croppingRect: CGRect {
+        .init(origin: .init(x: vm.cropModel.cropOffset.width, y: vm.cropModel.cropOffset.height),
+              size: .init(
+                  width: croppingFrameSize.width,
+                  height: croppingFrameSize.height))
+    }
+
     @GestureState var lastCustomShapeOffset: CGSize?
     @State var customShapeoffset: CGSize = .zero
 
@@ -49,11 +63,11 @@ struct ImageProjectCroppingFrameView: View {
             vm.cropModel.cropShapeType.shape
                 .fill(Color.white)
                 .border(Color.clear, width: 2)
-                .frame(width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
-                       height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)
+                .frame(width: croppingFrameSize.width,
+                       height: croppingFrameSize.height)
                 .blendMode(.destinationOut)
                 .overlay(vm.cropModel.cropShapeType.isCustomShape ? nil : resizeFrame)
-                .offset(offset)
+                .offset(vm.cropModel.cropOffset)
 
             if case .custom(let pathPoints) = vm.cropModel.cropShapeType {
                 customCroppingFrameView(pathPoints: pathPoints)
@@ -68,15 +82,16 @@ struct ImageProjectCroppingFrameView: View {
                     .onChanged { value in
                         let translation = value.translation
 
-                        let frameWidth = frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth
-                        let frameHeight = frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight
+                        let frameWidth = croppingFrameSize.width
+                        let frameHeight = croppingFrameSize.height
 
                         let unitWidth = translation.width / frameWidth
                         let unitHeight = translation.height / frameHeight
 
-                        var newOffset = lastPathPointsUnitOffset ?? pathPointsUnitOffset
+                        let newOffset = lastPathPointsUnitOffset ?? pathPointsUnitOffset
 
                         let newUnitOffset = UnitPoint(x: newOffset.width + unitWidth, y: newOffset.height + unitHeight)
+                    
 
                         if case .custom(let lastPathPoints) = vm.lastCropModel.cropShapeType {
                             changePathPointsPositions(of: lastPathPoints, offset: newUnitOffset)
@@ -92,14 +107,10 @@ struct ImageProjectCroppingFrameView: View {
             } else {
                 DragGesture()
                     .onChanged { value in
-                        var newOffset = lastOffset ?? offset
-                        newOffset.width += value.translation.width
-                        newOffset.height += value.translation.height
-
-                        offset = newOffset
+                        croppingFrameDragGestureFunction(value.translation)
                     }
                     .updating($lastOffset) { _, lastOffset, _ in
-                        lastOffset = lastOffset ?? offset
+                        lastOffset = lastOffset ?? vm.cropModel.cropOffset
                     }
                     .onEnded { [unowned vm] _ in
                         vm.updateLatestSnapshot()
@@ -116,7 +127,7 @@ struct ImageProjectCroppingFrameView: View {
             withAnimation(.easeInOut(duration: 0.2)) {
                 frameScaleWidth = 1.0
                 frameScaleHeight = 1.0
-                offset = .zero
+                vm.cropModel.cropOffset = .zero
                 if let ratio {
                     aspectRatioCorrectionWidth = min(ratio / aspectRatio, 1.0)
                     aspectRatioCorrectionHeight = min(aspectRatio / ratio, 1.0)
@@ -131,7 +142,7 @@ struct ImageProjectCroppingFrameView: View {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     frameScaleWidth = 1.0
                     frameScaleHeight = 1.0
-                    offset = .zero
+                    vm.cropModel.cropOffset = .zero
                 }
             }
 
@@ -155,10 +166,7 @@ struct ImageProjectCroppingFrameView: View {
                     do {
                         try await vm.cropLayer(
                             frameRect: .init(origin: .zero, size: frameSize),
-                            cropRect: .init(origin: .init(x: offset.width, y: offset.height),
-                                            size: .init(
-                                                width: frameSize.width * frameScaleWidth * aspectRatioCorrectionWidth,
-                                                height: frameSize.height * frameScaleHeight * aspectRatioCorrectionHeight)))
+                            cropRect: croppingRect)
                         vm.currentTool = .none
                         vm.updateLatestSnapshot()
                     } catch {

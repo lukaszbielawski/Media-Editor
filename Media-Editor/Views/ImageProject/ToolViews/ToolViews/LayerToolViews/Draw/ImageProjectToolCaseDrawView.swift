@@ -19,7 +19,7 @@ struct ImageProjectToolCaseDrawView: View {
                     }
                     .overlay {
                         if vm.currentDrawing.currentPencilType == .eraser {
-                            Color.white
+                            Color.tint
                                 .opacity(0.4)
 
                                 .overlay {

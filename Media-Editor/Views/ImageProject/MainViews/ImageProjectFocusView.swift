@@ -21,6 +21,7 @@ struct ImageProjectFocusView: View {
                 return vm.calculateFrameRect(customBounds: pixelSize, isMargined: true)?.size ?? .zero
             }
 
+
             ZStack {
                 Color(.primary)
 
