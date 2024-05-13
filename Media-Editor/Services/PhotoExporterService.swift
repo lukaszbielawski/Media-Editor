@@ -66,13 +66,12 @@ struct PhotoExporterService {
     {
         return try await Task {
             guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
-            
 
             let customShapeOffset = CGSize(width: (shapePoints.maxX - 1.0) * pixelCropSize.width, height: (shapePoints.maxY - 1.0) * pixelCropSize.height)
 
             let offsetSize = CGSize(
                 width: min(pixelCropSize.width * shapePoints.unitWidth - pixelFrameSize.width, 0.0) * 0.5 + abs(pixelOffset.width)
-                + customShapeOffset.width,
+                    + customShapeOffset.width,
                 height: min(pixelCropSize.height * shapePoints.unitHeight - pixelFrameSize.height, 0.0) * 0.5 + abs(pixelOffset.height)
                     + customShapeOffset.height
             )
@@ -99,23 +98,46 @@ struct PhotoExporterService {
 
             let bezierPath = UIBezierPath(cgPath: cropPath.cgPath)
 
-            let scaleTransform = CGAffineTransform(scaleX: 1,
-                                                   y: -1)
-
-            let correctionTranslation = CGAffineTransform(translationX: 0,
-                                                          y: cropPath.boundingRect.size.height)
-
             let croppingFrameCoverageTranslation = CGAffineTransform(
-                translationX: min(0.0, max(0.0, offsetSize.width * shapePoints.unitWidth) * copysign(-1.0, layer.scaleX ?? 1.0) * copysign(-1.0, pixelOffset.width)),
-                y: -max(0.0, max(0.0, offsetSize.height * shapePoints.unitHeight) * copysign(-1.0, layer.scaleY ?? 1.0) * copysign(-1.0, pixelOffset.height))
+                translationX: min(0.0, max(0.0, offsetSize.width)
+                    * copysign(-1.0, layer.scaleX ?? 1.0)
+                    * copysign(-1.0, pixelOffset.width)),
+                y: -max(0.0, max(0.0, offsetSize.height)
+                    * copysign(-1.0, layer.scaleY ?? 1.0)
+                    * copysign(-1.0, pixelOffset.height))
             )
 
-            let shapeCoverageTranslation = CGAffineTransform(translationX: -shapePoints.minX * pixelFrameSize.width, y: shapePoints.minY * pixelFrameSize.height)
+            let pathCroppingFrameCoverageTranslation = CGAffineTransform(
+                translationX: min(0.0, max(0.0, offsetSize.width * shapePoints.unitWidth)
+                    * copysign(-1.0, pixelOffset.width)) * copysign(-1.0, layer.scaleX ?? 1.0),
+                y: -min(0.0, max(0.0, offsetSize.height * shapePoints.unitHeight)
+                    * copysign(-1.0, pixelOffset.height))
+                    * copysign(-1.0, layer.scaleY ?? 1.0)
+            )
 
-            bezierPath.apply(scaleTransform
-                .concatenating(correctionTranslation)
-                .concatenating(croppingFrameCoverageTranslation)
-                .concatenating(shapeCoverageTranslation)
+            let shapeCoverageTranslation = CGAffineTransform(translationX: -shapePoints.minX * pixelFrameSize.width * copysign(-1.0, layer.scaleX ?? 1.0), y: shapePoints.minY * pixelFrameSize.height * copysign(-1.0, layer.scaleY ?? 1.0))
+
+            let layerScaleTransform = CGAffineTransform(
+                scaleX:
+                copysign(-1.0, layer.scaleX ?? 1.0),
+                y:
+                -copysign(-1.0, layer.scaleY ?? 1.0)
+            )
+
+            let moveToOriginTranslation = CGAffineTransform(
+                translationX:
+                -contextSize.width * 0.5,
+                y:
+                -contextSize.height * 0.5
+            )
+
+            bezierPath.apply(
+                CGAffineTransformIdentity
+                    .concatenating(moveToOriginTranslation)
+                    .concatenating(layerScaleTransform)
+                    .concatenating(moveToOriginTranslation.inverted())
+                    .concatenating(pathCroppingFrameCoverageTranslation)
+                    .concatenating(shapeCoverageTranslation)
             )
 
             context.addPath(bezierPath.cgPath)
@@ -124,7 +146,11 @@ struct PhotoExporterService {
 
             context.concatenate(croppingFrameCoverageTranslation)
             context.concatenate(shapeCoverageTranslation)
-            context.translateBy(x: 0.0, y: -(1.0 - shapePoints.unitHeight) * pixelFrameSize.height)
+
+            context.translateBy(x: copysign(-1.0, layer.scaleX ?? 1.0) == 1.0 ? 0.0
+                : -(1.0 - shapePoints.unitWidth) * pixelFrameSize.width,
+                y: copysign(-1.0, layer.scaleY ?? 1.0) == 1.0 ? -(1.0 - shapePoints.unitHeight) * pixelFrameSize.height
+                    : 0.0)
 
             context.scaleBy(x: copysign(-1.0, layer.scaleX ?? 1.0), y: copysign(-1.0, layer.scaleY ?? 1.0))
 

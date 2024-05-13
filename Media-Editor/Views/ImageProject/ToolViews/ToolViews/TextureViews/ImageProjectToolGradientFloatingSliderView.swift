@@ -48,10 +48,10 @@ struct ImageProjectToolGradientFloatingSliderView: View {
                 ForEach(movableStops, id: \.0.self) { index, $stop in
                     let sliderOffset: Double = stop.location * maxOffset
 
-                    Ellipse()
+                    Capsule(style: .circular)
                         .fill(Color(appearance == .light ? .image : .tint))
                         .overlay {
-                            Ellipse()
+                            Capsule(style: .circular)
                                 .fill(stop.color)
                                 .padding(2)
                             Text(String(index + 1))
