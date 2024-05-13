@@ -12,6 +12,7 @@ enum LayerToolType: String, Tool {
     case crop
     case draw
     case background
+    case magicWand
     case flip
     case editText
 
@@ -29,6 +30,8 @@ extension LayerToolType {
             return "Draw"
         case .background:
             return "Background"
+        case .magicWand:
+            return "Magic Wand"
         case .flip:
             return "Flip"
         case .editText:
@@ -46,6 +49,8 @@ extension LayerToolType {
             return "pencil.and.scribble"
         case .background:
             return "rectangle.checkered"
+        case .magicWand:
+            return "wand.and.stars.inverse"
         case .flip:
             return "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"
         case .editText:
@@ -62,6 +67,8 @@ extension LayerToolType {
         case .draw:
             true
         case .background:
+            true
+        case .magicWand:
             true
         case .flip:
             false

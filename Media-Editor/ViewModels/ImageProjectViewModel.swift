@@ -27,6 +27,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var gradientModel: GradientModel = .init(stops: [], direction: .right)
     @Published var cropModel: CropModel = .init()
     @Published var lastCropModel: CropModel = .init()
+    @Published var magicWandModel: MagicWandModel = .init()
 
     @Published var originalCGImage: CGImage!
 
@@ -251,6 +252,8 @@ final class ImageProjectViewModel: ObservableObject {
             }
             objectWillChange.send()
         case .pencilColor:
+            break
+        case .bucketColorPicker:
             break
         }
         objectWillChange.send()
@@ -1088,6 +1091,8 @@ final class ImageProjectViewModel: ObservableObject {
                     return isGradientViewPresented ? nil : Color.black
                 }
                 return color
+            case .bucketColorPicker:
+                return Color.white
             }
         }()
         if let color {
@@ -1119,5 +1124,14 @@ final class ImageProjectViewModel: ObservableObject {
         if !currentDrawing.particlesPositions.isEmpty {
             storeCurrentDrawing()
         }
+    }
+
+    func performMagicWandAction(tapPosition: CGPoint) async throws {
+        guard let activeLayer else { return }
+
+        try await photoExporterService.performMagicWandAction(
+            tapPosition: tapPosition,
+            layer: activeLayer,
+            magicWandModel: magicWandModel)
     }
 }

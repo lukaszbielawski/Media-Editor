@@ -13,6 +13,7 @@ enum ColorPickerType {
     case textColor
     case borderColor
     case pencilColor
+    case bucketColorPicker
 
     var pickerType: TextureType {
         switch self {
@@ -25,6 +26,8 @@ enum ColorPickerType {
         case .borderColor:
             .colorOpacity
         case .pencilColor:
+            .gradient
+        case .bucketColorPicker:
             .gradient
         }
     }

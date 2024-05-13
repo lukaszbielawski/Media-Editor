@@ -14,5 +14,6 @@ enum PhotoExportError: Error {
     case contextResizedImageMaking
     case dataRetrieving
     case fontCreating
+    case noCGImageInLayer
     case other
 }

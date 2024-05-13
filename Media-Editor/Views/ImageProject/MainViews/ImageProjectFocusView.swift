@@ -44,6 +44,9 @@ struct ImageProjectFocusView: View {
                             } else if currentTool == .draw {
                                 ImageProjectDrawingCanvasView(frameSize: frameSize, pixelSize: pixelSize)
                             }
+                            else if currentTool == .magicWand {
+                                ImageProjectMagicWandCanvasView(frameSize: frameSize, pixelSize: pixelSize)
+                            }
                         }
                     }.compositingGroup()
                 }

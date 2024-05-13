@@ -408,6 +408,133 @@ struct PhotoExporterService {
         }.value
     }
 
+    func performMagicWandAction(tapPosition: CGPoint, layer: LayerModel, magicWandModel: MagicWandModel) async throws {
+        let tappedX = Int(min(layer.pixelSize.width - 1, max(0.0, round(tapPosition.x * layer.pixelToDigitalWidthRatio))))
+        let tappedY = Int(min(layer.pixelSize.height - 1, max(0.0, round(tapPosition.y * layer.pixelToDigitalHeightRatio))))
+
+        guard let layerImage = layer.cgImage else {
+            throw PhotoExportError.noCGImageInLayer
+        }
+
+        let width = layerImage.width
+        let height = layerImage.height
+
+        let scaledX = copysign(-1.0, layer.scaleX ?? 1.0) == 1.0 ? tappedX : width - tappedX
+        let scaledY = copysign(-1.0, layer.scaleY ?? 1.0) == 1.0 ? tappedY : height - tappedY
+
+        let tappedPixel = Pixel(x: scaledX, y: scaledY)
+
+        guard let dataProvider = layerImage.dataProvider,
+              let data = dataProvider.data,
+              let imageData = CFDataGetBytePtr(data)
+        else {
+            throw PhotoExportError.dataRetrieving
+        }
+
+        let bytesPerPixel = 4
+        let bytesPerRow = bytesPerPixel * width
+        let tappedPixelIndex = width * tappedPixel.y + tappedPixel.x
+        let tappedPixelIndexForComponents = tappedPixelIndex * bytesPerPixel
+
+        let initialPixelColor = getPixelColor(tappedPixelIndexForComponents, bytesPerPixel, bytesPerRow, imageData)
+
+        guard let initialColorComponents = initialPixelColor.components else {
+            throw PhotoExportError.dataRetrieving
+        }
+
+        let matchingPixelsPointer = floodFillForMatchingPixels(
+            initialPixelIndex: tappedPixelIndex,
+            referenceColorComponents: initialColorComponents,
+            tolerance: magicWandModel.tolerance,
+            width, height, bytesPerPixel, bytesPerRow, imageData
+        )
+
+//
+        print(CFDataGetLength(data))
+        print(tappedPixelIndex, width, height)
+
+        var trueCount = 0
+        for i in 0 ..< width * height {
+            if matchingPixelsPointer[i] {
+                trueCount += 1
+            }
+        }
+
+        print("Total filled pixels", trueCount)
+    }
+
+    private func getPixelColor(_ pixelComponentIndex: Int,
+                               _ bytesPerPixel: Int,
+                               _ bytesPerRow: Int,
+                               _ imageData: UnsafePointer<UInt8>) -> CGColor
+    {
+        let red = CGFloat(imageData[pixelComponentIndex]) / 255.0
+        let green = CGFloat(imageData[pixelComponentIndex + 1]) / 255.0
+        let blue = CGFloat(imageData[pixelComponentIndex + 2]) / 255.0
+        let alpha = CGFloat(imageData[pixelComponentIndex + 3]) / 255.0
+
+        return CGColor(red: red, green: green, blue: blue, alpha: alpha)
+    }
+
+    private func isColorSimilar(colorToCheck: CGColor, referenceColorComponents: [CGFloat], tolerance: CGFloat) -> Bool {
+        guard let colorToCheckComponents = colorToCheck.components else { return false }
+
+        for index in 0 ... 2 {
+            if abs(colorToCheckComponents[index] - referenceColorComponents[index]) > tolerance {
+                return false
+            }
+        }
+        return true
+    }
+
+    func floodFillForMatchingPixels(initialPixelIndex: Int,
+                                    referenceColorComponents: [CGFloat],
+                                    tolerance: CGFloat,
+                                    _ width: Int,
+                                    _ height: Int,
+                                    _ bytesPerPixel: Int,
+                                    _ bytesPerRow: Int,
+                                    _ imageData: UnsafePointer<UInt8>)
+        -> UnsafeMutablePointer<Bool>
+    {
+        let totalSize = width * height * MemoryLayout<Bool>.stride
+        var visitedPixelsPointer = UnsafeMutablePointer<Bool>.allocate(capacity: totalSize)
+        var matchingPixelsPointer = UnsafeMutablePointer<Bool>.allocate(capacity: totalSize)
+
+        var pixelToVisitStack = [initialPixelIndex]
+        visitedPixelsPointer[initialPixelIndex] = true
+
+        while !pixelToVisitStack.isEmpty {
+            let currentPixelIndex = pixelToVisitStack.removeLast()
+
+            let currentPixelIndexForComponents = currentPixelIndex * bytesPerPixel
+
+            let currentPixelColor = getPixelColor(currentPixelIndexForComponents, bytesPerPixel, bytesPerRow, imageData)
+
+            let isColorSimilar = isColorSimilar(colorToCheck: currentPixelColor,
+                                                referenceColorComponents: referenceColorComponents,
+                                                tolerance: tolerance)
+
+            guard isColorSimilar else { continue }
+
+            matchingPixelsPointer[currentPixelIndex] = true
+
+            let leftPixelIndex = max(0, currentPixelIndex - 1)
+            let rightPixelIndex = min(width * height - 1, currentPixelIndex + 1)
+            let topPixelIndex = max(0, currentPixelIndex - width)
+            let bottomPixelIndex = min(width * height - 1, currentPixelIndex + width)
+
+            let pixelIndices = [leftPixelIndex, rightPixelIndex, topPixelIndex, bottomPixelIndex]
+
+            for index in pixelIndices where !visitedPixelsPointer[index] {
+                visitedPixelsPointer[index] = true
+                pixelToVisitStack.append(index)
+            }
+        }
+
+        return matchingPixelsPointer
+    }
+
     func renderTextLayer(textModelEntity: TextModelEntity) async throws -> CGImage {
         return try await Task {
             let text = textModelEntity.text

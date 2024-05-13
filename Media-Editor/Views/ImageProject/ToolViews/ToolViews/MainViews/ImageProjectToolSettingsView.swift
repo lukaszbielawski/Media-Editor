@@ -35,6 +35,14 @@ struct ImageProjectToolSettingsView: View {
 
                     Spacer()
                     ImageProjectToolFloatingButtonView(buttonType: .right)
+                } else if layerTool == .magicWand {
+                    if vm.isGradientViewPresented {
+                        ImageProjectToolGradientFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    } else {
+                        ImageProjectToolCaseMagicWandFloatingSliderView(sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
+                    }
+                    Spacer()
+                    ImageProjectToolFloatingButtonView(buttonType: .right)
                 } else if layerTool == .background {
                     Spacer()
                     if vm.currentColorPickerType == .layerBackground {
@@ -67,14 +75,9 @@ struct ImageProjectToolSettingsView: View {
                 case .background:
                     Spacer()
                     if vm.currentColorPickerType == .projectBackground {
-                        if vm.isGradientViewPresented {
-                            ImageProjectToolCaseDrawFloatingSliderView(
-                                sliderHeight: vm.plane.lowerToolbarHeight * 0.5)
-                        } else {
-                            ImageProjectColorOpacityFloatingSliderView(
-                                sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
-                                colorPickerType: .projectBackground)
-                        }
+                        ImageProjectColorOpacityFloatingSliderView(
+                            sliderHeight: vm.plane.lowerToolbarHeight * 0.5,
+                            colorPickerType: .projectBackground)
                     }
                     Spacer()
                 default:

@@ -69,6 +69,11 @@ struct ImageProjectToolDetailsView: View {
                             .onAppear {
                                 vm.leftFloatingButtonActionType = .exitFocusMode
                             }
+                    case .magicWand:
+                        ImageProjectToolCaseMagicWandView()
+                            .onAppear {
+                                vm.leftFloatingButtonActionType = .exitFocusMode
+                            }
                     case .background:
                         ImageProjectToolCaseLayerBackgroundView()
                             .onTapGesture {

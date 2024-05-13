@@ -62,8 +62,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1120"
-            endingLineNumber = "1120"
+            startingLineNumber = "1126"
+            endingLineNumber = "1126"
             landmarkName = "endPenPath()"
             landmarkType = "7">
             <Locations>
@@ -110,8 +110,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1093"
-            endingLineNumber = "1093"
+            startingLineNumber = "1099"
+            endingLineNumber = "1099"
             landmarkName = "setupInitialColorPickerColor()"
             landmarkType = "7">
             <Locations>
@@ -203,8 +203,8 @@
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1110"
-            endingLineNumber = "1110"
+            startingLineNumber = "1116"
+            endingLineNumber = "1116"
             landmarkName = "setupRightButtonActionForPen()"
             landmarkType = "7">
             <Locations>
