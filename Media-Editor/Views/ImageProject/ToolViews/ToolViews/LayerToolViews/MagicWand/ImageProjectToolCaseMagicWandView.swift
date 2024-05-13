@@ -56,7 +56,7 @@ struct ImageProjectToolCaseMagicWandView: View {
                 }
             }
         }.onAppear {
-            vm.turnOnDrawingRevertModel()
+            vm.turnOnRevertModel(revertModel: &vm.magicWandRevertModel)
         }
     }
 }

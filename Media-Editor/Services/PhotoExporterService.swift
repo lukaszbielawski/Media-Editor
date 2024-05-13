@@ -65,7 +65,7 @@ struct PhotoExporterService {
                           shapePoints: CropShapeType.Points) async throws -> CGImage
     {
         return try await Task {
-            guard let layerImage = layer.cgImage else { throw PhotoExportError.other }
+            guard let layerImage = layer.cgImage else { throw PhotoExportError.noCGImageInLayer }
 
             let customShapeOffset = CGSize(width: (shapePoints.maxX - 1.0) * pixelCropSize.width, height: (shapePoints.maxY - 1.0) * pixelCropSize.height)
 
@@ -310,7 +310,7 @@ struct PhotoExporterService {
 
             else { throw PhotoExportError.contextCreation(contextSize: .init(width: Int(pixelFrameSize.width), height: Int(pixelFrameSize.height))) }
 
-            guard let layerImage = layer.cgImage, let layerScaleX = layer.scaleX, let layerScaleY = layer.scaleY else { throw PhotoExportError.other }
+            guard let layerImage = layer.cgImage, let layerScaleX = layer.scaleX, let layerScaleY = layer.scaleY else { throw PhotoExportError.noCGImageInLayer }
 
             context.draw(layerImage, in: CGRect(x: 0,
                                                 y: 0,
@@ -408,13 +408,87 @@ struct PhotoExporterService {
         }.value
     }
 
-    func performMagicWandAction(tapPosition: CGPoint, layer: LayerModel, magicWandModel: MagicWandModel) async throws {
+    func renderImageAfterMagicWandAction(layer: LayerModel,
+                                         layerImage: CGImage,
+                                         magicWandModel: MagicWandModel,
+                                         mask: UnsafePointer<Bool>) async throws -> CGImage
+    {
+        return try await Task(priority: .userInitiated) {
+            let contextWidth = Int(layer.pixelSize.width)
+            let contextHeight = Int(layer.pixelSize.height)
+
+            guard let context = CGContext(data: nil,
+                                          width: contextWidth,
+                                          height: contextHeight,
+                                          bitsPerComponent: 8,
+                                          bytesPerRow: 0,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+            else {
+                throw PhotoExportError.contextCreation(contextSize: .init(width: contextWidth, height: contextHeight))
+            }
+
+            context.draw(layerImage, in: CGRect(x: 0,
+                                                y: 0,
+                                                width: contextWidth,
+                                                height: contextHeight))
+
+            if magicWandModel.magicWandType == .magicWand {
+                context.setBlendMode(.destinationOut)
+                context.setFillColor(UIColor.white.cgColor)
+            } else if magicWandModel.magicWandType == .bucketFill {
+                let shapeStyle = magicWandModel.currentBucketFillShapeStyle.shapeStyle
+                let shapeStyleCG = magicWandModel.currentBucketFillShapeStyle.shapeStyleCG
+
+                if let color = shapeStyle as? Color {
+                    context.setFillColor(color.cgColor)
+                } else if let cgLinearGradient = shapeStyleCG as? CGLinearGradient,
+                          let cgGradient = cgLinearGradient.cgGradient
+                {
+                    let startPoint = cgLinearGradient.startPoint
+                    let endPoint = cgLinearGradient.endPoint
+
+                    let startX = CGFloat(contextWidth) * startPoint.x
+                    let startY = CGFloat(contextHeight) * startPoint.y
+                    let endX = CGFloat(contextWidth) * endPoint.x
+                    let endY = CGFloat(contextHeight) * endPoint.y
+
+                    let start = CGPoint(x: startX, y: startY)
+                    let end = CGPoint(x: endX, y: endY)
+
+                    context.drawLinearGradient(cgGradient,
+                                               start: start,
+                                               end: end,
+                                               options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
+                }
+//                context.fill(CGRect(origin: .zero, size: .init(width: contextWidth,
+//                                                               height: contextHeight)))
+            }
+
+            for y in 0 ..< contextHeight {
+                for x in 0 ..< contextWidth {
+                    let index = y * contextWidth + x
+                    if mask[index] {
+                        context.fill(CGRect(x: x, y: contextHeight - y - 1, width: 1, height: 1))
+                    }
+                }
+            }
+
+            guard let renderedImage = context.makeImage() else {
+                throw PhotoExportError.contextImageMaking
+            }
+
+            return renderedImage
+        }.value
+    }
+
+    func performMagicWandAction(tapPosition: CGPoint,
+                                layer: LayerModel,
+                                layerImage: CGImage,
+                                magicWandModel: MagicWandModel) async throws -> CGImage
+    {
         let tappedX = Int(min(layer.pixelSize.width - 1, max(0.0, round(tapPosition.x * layer.pixelToDigitalWidthRatio))))
         let tappedY = Int(min(layer.pixelSize.height - 1, max(0.0, round(tapPosition.y * layer.pixelToDigitalHeightRatio))))
-
-        guard let layerImage = layer.cgImage else {
-            throw PhotoExportError.noCGImageInLayer
-        }
 
         let width = layerImage.width
         let height = layerImage.height
@@ -449,18 +523,9 @@ struct PhotoExporterService {
             width, height, bytesPerPixel, bytesPerRow, imageData
         )
 
-//
-        print(CFDataGetLength(data))
-        print(tappedPixelIndex, width, height)
+        let resultImage = try await renderImageAfterMagicWandAction(layer: layer, layerImage: layerImage, magicWandModel: magicWandModel, mask: matchingPixelsPointer)
 
-        var trueCount = 0
-        for i in 0 ..< width * height {
-            if matchingPixelsPointer[i] {
-                trueCount += 1
-            }
-        }
-
-        print("Total filled pixels", trueCount)
+        return resultImage
     }
 
     private func getPixelColor(_ pixelComponentIndex: Int,
@@ -487,15 +552,15 @@ struct PhotoExporterService {
         return true
     }
 
-    func floodFillForMatchingPixels(initialPixelIndex: Int,
-                                    referenceColorComponents: [CGFloat],
-                                    tolerance: CGFloat,
-                                    _ width: Int,
-                                    _ height: Int,
-                                    _ bytesPerPixel: Int,
-                                    _ bytesPerRow: Int,
-                                    _ imageData: UnsafePointer<UInt8>)
-        -> UnsafeMutablePointer<Bool>
+    private func floodFillForMatchingPixels(initialPixelIndex: Int,
+                                            referenceColorComponents: [CGFloat],
+                                            tolerance: CGFloat,
+                                            _ width: Int,
+                                            _ height: Int,
+                                            _ bytesPerPixel: Int,
+                                            _ bytesPerRow: Int,
+                                            _ imageData: UnsafePointer<UInt8>)
+        -> UnsafePointer<Bool>
     {
         let totalSize = width * height * MemoryLayout<Bool>.stride
         var visitedPixelsPointer = UnsafeMutablePointer<Bool>.allocate(capacity: totalSize)
@@ -531,8 +596,7 @@ struct PhotoExporterService {
                 pixelToVisitStack.append(index)
             }
         }
-
-        return matchingPixelsPointer
+        return UnsafePointer<Bool>(matchingPixelsPointer)
     }
 
     func renderTextLayer(textModelEntity: TextModelEntity) async throws -> CGImage {

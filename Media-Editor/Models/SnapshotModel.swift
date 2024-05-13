@@ -13,4 +13,5 @@ struct SnapshotModel {
     let drawings: [DrawingModel]
     let currentDrawing: DrawingModel
     let cropModel: CropModel
+    let magicWandModel: MagicWandModel
 }

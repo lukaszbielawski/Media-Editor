@@ -47,6 +47,7 @@ final class ImageProjectViewModel: ObservableObject {
     @Published var drawingRevertModel: RevertModel
     @Published var normalRevertModel: RevertModel
     @Published var cropRevertModel: RevertModel
+    @Published var magicWandRevertModel: RevertModel
 
     @Published var layersToMerge: [LayerModel] = .init()
 
@@ -93,6 +94,8 @@ final class ImageProjectViewModel: ObservableObject {
                             textLayer.borderColor = color
                         }
                     }
+                case .magicWand:
+                    magicWandModel.currentBucketFillShapeStyle = currentShapeStyleModel
                 default:
                     break
                 }
@@ -128,6 +131,8 @@ final class ImageProjectViewModel: ObservableObject {
             drawingRevertModel
         } else if let currentTool = currentTool as? LayerToolType, currentTool == .crop {
             cropRevertModel
+        } else if let currentTool = currentTool as? LayerToolType, currentTool == .magicWand {
+            magicWandRevertModel
         } else {
             normalRevertModel
         }
@@ -142,7 +147,10 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     var isInNewCGImagePreview: Bool {
-        if let currentTool = currentTool as? LayerToolType, currentTool == .filters || currentTool == .background {
+        if let currentTool = currentTool as? LayerToolType, currentTool == .filters
+            || currentTool == .background
+            || currentTool == .magicWand
+        {
             return true
         } else {
             return false
@@ -157,6 +165,7 @@ final class ImageProjectViewModel: ObservableObject {
         drawingRevertModel = RevertModel()
         normalRevertModel = RevertModel()
         cropRevertModel = RevertModel()
+        magicWandRevertModel = RevertModel()
 
         configureNavBar()
 
@@ -199,6 +208,7 @@ final class ImageProjectViewModel: ObservableObject {
         drawingRevertModel.latestSnapshot = latestSnapshot
         normalRevertModel.latestSnapshot = latestSnapshot
         cropRevertModel.latestSnapshot = latestSnapshot
+        magicWandRevertModel.latestSnapshot = latestSnapshot
     }
 
     deinit {
@@ -294,21 +304,30 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     private func createSnapshot() -> SnapshotModel {
-        if currentRevertModel === drawingRevertModel ||
-            currentRevertModel === cropRevertModel
+        if currentRevertModel === drawingRevertModel
+            || currentRevertModel === cropRevertModel
+            || currentRevertModel === magicWandRevertModel
         {
             return .init(layers: projectLayers,
                          projectModel: projectModel,
                          drawings: drawings,
                          currentDrawing: currentDrawing,
-                         cropModel: cropModel)
-        } else {
+                         cropModel: cropModel,
+                         magicWandModel: magicWandModel)
+        } 
+//        else if currentRevertModel === magicWandRevertModel {
+//            let layers = projectLayers.map { [unowned self] layer in
+//                layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
+//            }
+//            
+//        } 
+        else {
             let layers = projectLayers.map { [unowned self] layer in
                 layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
             }
             let projectModel = projectModel.copy() as! ImageProjectModel
 
-            return .init(layers: layers, projectModel: projectModel, drawings: drawings, currentDrawing: currentDrawing, cropModel: cropModel)
+            return .init(layers: layers, projectModel: projectModel, drawings: drawings, currentDrawing: currentDrawing, cropModel: cropModel, magicWandModel: magicWandModel)
         }
     }
 
@@ -388,10 +407,11 @@ final class ImageProjectViewModel: ObservableObject {
         let previousCurrentDrawing = previousSnapshot.currentDrawing
         let previousProjectModel = previousSnapshot.projectModel
         let previousCropModel = previousSnapshot.cropModel
+        let previousMagicWandModel = previousSnapshot.magicWandModel
 
         withAnimation(.easeInOut(duration: 0.35)) {
             cropModel = previousCropModel
-
+            magicWandModel = previousMagicWandModel
             drawings = previousDrawings
             currentDrawing = previousCurrentDrawing
             projectModel.backgroundColor = previousProjectModel.backgroundColor
@@ -1053,14 +1073,9 @@ final class ImageProjectViewModel: ObservableObject {
         }
     }
 
-    func turnOnDrawingRevertModel() {
+    func turnOnRevertModel(revertModel: inout RevertModel) {
         let latestSnapshot = createSnapshot()
-        drawingRevertModel = RevertModel(latestSnapshot)
-    }
-
-    func turnOnCropRevertModel() {
-        let latestSnapshot = createSnapshot()
-        cropRevertModel = RevertModel(latestSnapshot)
+        revertModel = RevertModel(latestSnapshot)
     }
 
     func storeCurrentDrawing() {
@@ -1129,9 +1144,16 @@ final class ImageProjectViewModel: ObservableObject {
     func performMagicWandAction(tapPosition: CGPoint) async throws {
         guard let activeLayer else { return }
 
-        try await photoExporterService.performMagicWandAction(
-            tapPosition: tapPosition,
-            layer: activeLayer,
-            magicWandModel: magicWandModel)
+        do {
+            let resultImage = try await photoExporterService.performMagicWandAction(
+                tapPosition: tapPosition,
+                layer: activeLayer,
+                layerImage: originalCGImage.copy()!,
+                magicWandModel: magicWandModel)
+            activeLayer.cgImage = resultImage
+            objectWillChange.send()
+        } catch {
+            print(error)
+        }
     }
 }

@@ -57,7 +57,7 @@ struct ImageProjectToolCaseDrawView: View {
                 }
             }
         }.onAppear {
-            vm.turnOnDrawingRevertModel()
+            vm.turnOnRevertModel(revertModel: &vm.drawingRevertModel)
         }
     }
 }

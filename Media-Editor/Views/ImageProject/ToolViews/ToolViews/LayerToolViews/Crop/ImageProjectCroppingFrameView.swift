@@ -153,7 +153,7 @@ struct ImageProjectCroppingFrameView: View {
                         vm.updateLatestSnapshot()
                     }
 
-            vm.turnOnCropRevertModel()
+            vm.turnOnRevertModel(revertModel: &vm.cropRevertModel)
         }
         .onDisappear {
             vm.setupCenterButtonFunction()

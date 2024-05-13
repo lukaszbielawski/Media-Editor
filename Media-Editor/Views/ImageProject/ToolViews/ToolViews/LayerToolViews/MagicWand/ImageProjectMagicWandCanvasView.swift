@@ -29,21 +29,8 @@ struct ImageProjectMagicWandCanvasView: View {
     }
 
     var body: some View {
-//        ZStack {
-//            ForEach(vm.drawings + [vm.currentDrawing], id: \.self) { drawing in
-//                let strokeStyle = StrokeStyle(lineWidth: CGFloat(drawing.currentPencilSize), lineCap: .round)
-//
-//                Path { path in
-//                    drawing.setupPath(&path)
-//                }
-//                .pencilStroke(for: drawing, strokeStyle: strokeStyle)
-//                .blendMode(drawing.currentPencilType == .eraser ? .destinationOut : .normal)
-//                .clipShape(Rectangle().size(width: frameSize.width, height: frameSize.height))
-//            }
-//        }
         Color
             .clear
-            .border(Color.accent)
             .contentShape(Rectangle())
             .frame(width: frameSize.width,
                    height: frameSize.height)
@@ -55,26 +42,32 @@ struct ImageProjectMagicWandCanvasView: View {
                         Task(priority: .userInitiated) {
                             do {
                                 try await vm.performMagicWandAction(tapPosition: tapPosition)
+                                vm.updateLatestSnapshot()
                             } catch {
                                 print(error)
                             }
                         }
                     }
             )
+            .onAppear {
+                guard let activeLayer = vm.activeLayer else { return }
+                vm.originalCGImage = activeLayer.cgImage?.copy()
+            }
             .onReceive(vm.floatingButtonClickedSubject) { action in
                 if action == .confirm {
+                    guard let activeLayer = vm.activeLayer else { return }
                     vm.currentTool = .none
                     vm.currentColorPickerType = .none
-//                Task(priority: .userInitiated) { [unowned vm] in
-//                    await vm.applyDrawings(frameSize: frameSize)
-//                }
+                    Task {
+                        try await vm.saveNewCGImageOnDisk(fileName: activeLayer.fileName, cgImage: activeLayer.cgImage)
+                    }
+                    vm.updateLatestSnapshot()
                     vm.leftFloatingButtonActionType = .back
 
                 } else if action == .exitFocusMode {
+                    vm.disablePreviewCGImage()
                     vm.currentTool = .none
                     vm.currentColorPickerType = .none
-//                vm.drawings.removeAll()
-//                vm.currentDrawing.particlesPositions.removeAll()
                 }
             }
     }
