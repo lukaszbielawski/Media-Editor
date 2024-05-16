@@ -38,6 +38,23 @@ extension RenderSizeType: CaseIterable {
         }
     }
 
+    var sizeDividend: Int {
+        switch self {
+        case .preview:
+            1
+        case .raw:
+            1
+        case .threeQuarters:
+            1
+        case .halfSize:
+            2
+        case .quarter:
+            4
+        case .ten:
+            10
+        }
+    }
+
     var toString: String {
         switch self {
         case .preview:

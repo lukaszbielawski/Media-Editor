@@ -344,7 +344,8 @@ struct PhotoExporterService {
                 let lineWidthTransformed = CGFloat(drawing.currentPencilSize) * sqrt(pixelRatioTransform.a * pixelRatioTransform.d)
                     * sqrt(abs(layer.scaleX ?? 1.0) * abs(layer.scaleY ?? 1.0))
 
-                context.setAllowsAntialiasing(true)
+                context.setAllowsAntialiasing(false)
+                context.setShouldAntialias(false)
                 context.setLineWidth(lineWidthTransformed)
                 context.setLineCap(.round)
 
@@ -411,7 +412,8 @@ struct PhotoExporterService {
     func renderImageAfterMagicWandAction(layer: LayerModel,
                                          layerImage: CGImage,
                                          magicWandModel: MagicWandModel,
-                                         mask: UnsafePointer<Bool>) async throws -> CGImage
+                                         mask: Set<Pixel>,
+                                         renderSizeType: RenderSizeType) async throws -> CGImage
     {
         return try await Task(priority: .userInitiated) {
             let contextWidth = Int(layer.pixelSize.width)
@@ -461,17 +463,13 @@ struct PhotoExporterService {
                                                end: end,
                                                options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
                 }
-//                context.fill(CGRect(origin: .zero, size: .init(width: contextWidth,
-//                                                               height: contextHeight)))
             }
 
-            for y in 0 ..< contextHeight {
-                for x in 0 ..< contextWidth {
-                    let index = y * contextWidth + x
-                    if mask[index] {
-                        context.fill(CGRect(x: x, y: contextHeight - y - 1, width: 1, height: 1))
-                    }
-                }
+            for pixel in mask {
+                context.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend,
+                                    y: contextHeight - pixel.y * renderSizeType.sizeDividend - 1,
+                                    width: renderSizeType.sizeDividend,
+                                    height: renderSizeType.sizeDividend))
             }
 
             guard let renderedImage = context.makeImage() else {
@@ -485,63 +483,71 @@ struct PhotoExporterService {
     func performMagicWandAction(tapPosition: CGPoint,
                                 layer: LayerModel,
                                 layerImage: CGImage,
-                                magicWandModel: MagicWandModel) async throws -> CGImage
+                                magicWandModel: MagicWandModel,
+                                renderSizeType: RenderSizeType = .quarter,
+                                _ framePixelWidth: CGFloat,
+                                _ framePixelHeight: CGFloat,
+                                _ marginedWorkspaceWidth: CGFloat) async throws -> CGImage
     {
-        let tappedX = Int(min(layer.pixelSize.width - 1, max(0.0, round(tapPosition.x * layer.pixelToDigitalWidthRatio))))
-        let tappedY = Int(min(layer.pixelSize.height - 1, max(0.0, round(tapPosition.y * layer.pixelToDigitalHeightRatio))))
+        let tappedX = Int(min(layer.pixelSize.width - 1, max(0.0, round(tapPosition.x * layer.pixelToDigitalWidthRatio)))) / renderSizeType.sizeDividend
+        let tappedY = Int(min(layer.pixelSize.height - 1, max(0.0, round(tapPosition.y * layer.pixelToDigitalHeightRatio)))) / renderSizeType.sizeDividend
 
-        let width = layerImage.width
-        let height = layerImage.height
+        let width = layerImage.width / renderSizeType.sizeDividend
+        let height = layerImage.height / renderSizeType.sizeDividend
 
         let scaledX = copysign(-1.0, layer.scaleX ?? 1.0) == 1.0 ? tappedX : width - tappedX
         let scaledY = copysign(-1.0, layer.scaleY ?? 1.0) == 1.0 ? tappedY : height - tappedY
 
-        let tappedPixel = Pixel(x: scaledX, y: scaledY)
+        let tappedPixel = Pixel(x: scaledX - 1, y: scaledY - 1)
 
-        guard let dataProvider = layerImage.dataProvider,
+        let resizedPhoto = try await resizePhoto(renderedPhoto: layerImage,
+                                                 renderSize: renderSizeType,
+                                                 photoFormat: .png,
+                                                 framePixelWidth: framePixelWidth,
+                                                 framePixelHeight: framePixelHeight,
+                                                 marginedWorkspaceWidth: marginedWorkspaceWidth)
+
+        guard let dataProvider = resizedPhoto.dataProvider,
               let data = dataProvider.data,
               let imageData = CFDataGetBytePtr(data)
         else {
             throw PhotoExportError.dataRetrieving
         }
 
-        let bytesPerPixel = 4
-        let bytesPerRow = bytesPerPixel * width
-        let tappedPixelIndex = width * tappedPixel.y + tappedPixel.x
-        let tappedPixelIndexForComponents = tappedPixelIndex * bytesPerPixel
+        let pixelArray = imageData.toRGBABytesArray(width: width, height: height)
 
-        let initialPixelColor = getPixelColor(tappedPixelIndexForComponents, bytesPerPixel, bytesPerRow, imageData)
+        let initialPixelColor: CGColor = getPixelColor(pixelArray[tappedPixel])
 
         guard let initialColorComponents = initialPixelColor.components else {
             throw PhotoExportError.dataRetrieving
         }
 
-        let matchingPixelsPointer = floodFillForMatchingPixels(
-            initialPixelIndex: tappedPixelIndex,
-            referenceColorComponents: initialColorComponents,
-            tolerance: magicWandModel.tolerance,
-            width, height, bytesPerPixel, bytesPerRow, imageData
-        )
+        let matchingPixelsArray = MeasureUtilities.functionTime {
+            floodFillForMatchingPixels(
+                initialPixel: tappedPixel,
+                referenceColorComponents: initialColorComponents,
+                tolerance: magicWandModel.tolerance,
+                width, height, pixelArray
+            )
+        }
 
-        let resultImage = try await renderImageAfterMagicWandAction(layer: layer, layerImage: layerImage, magicWandModel: magicWandModel, mask: matchingPixelsPointer)
+        let resultImage = try await MeasureUtilities.functionTime {
+            try await renderImageAfterMagicWandAction(layer: layer, layerImage: layerImage, magicWandModel: magicWandModel, mask: matchingPixelsArray, renderSizeType: renderSizeType)
+        }
 
         return resultImage
     }
 
-    private func getPixelColor(_ pixelComponentIndex: Int,
-                               _ bytesPerPixel: Int,
-                               _ bytesPerRow: Int,
-                               _ imageData: UnsafePointer<UInt8>) -> CGColor
-    {
-        let red = CGFloat(imageData[pixelComponentIndex]) / 255.0
-        let green = CGFloat(imageData[pixelComponentIndex + 1]) / 255.0
-        let blue = CGFloat(imageData[pixelComponentIndex + 2]) / 255.0
-        let alpha = CGFloat(imageData[pixelComponentIndex + 3]) / 255.0
+    private func getPixelColor(_ pixelBytes: UInt32) -> CGColor {
+        let red = CGFloat((pixelBytes >> 24) & 0xFF) / 255.0
+        let green = CGFloat((pixelBytes >> 16) & 0xFF) / 255.0
+        let blue = CGFloat((pixelBytes >> 8) & 0xFF) / 255.0
+        let alpha = CGFloat(pixelBytes & 0xFF) / 255.0
 
         return CGColor(red: red, green: green, blue: blue, alpha: alpha)
     }
 
-    private func isColorSimilar(colorToCheck: CGColor, referenceColorComponents: [CGFloat], tolerance: CGFloat) -> Bool {
+    private func isColorSimilar(colorToCheck: CGColor, _ referenceColorComponents: [CGFloat], _ tolerance: CGFloat) -> Bool {
         guard let colorToCheckComponents = colorToCheck.components else { return false }
 
         for index in 0 ... 2 {
@@ -552,51 +558,48 @@ struct PhotoExporterService {
         return true
     }
 
-    private func floodFillForMatchingPixels(initialPixelIndex: Int,
+    private func floodFillForMatchingPixels(initialPixel: Pixel,
                                             referenceColorComponents: [CGFloat],
                                             tolerance: CGFloat,
                                             _ width: Int,
                                             _ height: Int,
-                                            _ bytesPerPixel: Int,
-                                            _ bytesPerRow: Int,
-                                            _ imageData: UnsafePointer<UInt8>)
-        -> UnsafePointer<Bool>
+                                            _ pixelArray: [[UInt32]])
+        -> Set<Pixel>
     {
-        let totalSize = width * height * MemoryLayout<Bool>.stride
-        var visitedPixelsPointer = UnsafeMutablePointer<Bool>.allocate(capacity: totalSize)
-        var matchingPixelsPointer = UnsafeMutablePointer<Bool>.allocate(capacity: totalSize)
+        var visitedPixelsArray: [[Bool]] = Array(repeating: Array(repeating: false, count: width), count: height)
+        var matchingPixelsArray: Set<Pixel> = [initialPixel]
 
-        var pixelToVisitStack = [initialPixelIndex]
-        visitedPixelsPointer[initialPixelIndex] = true
+        var pixelToVisitStack: [Pixel] = [initialPixel]
+        visitedPixelsArray[initialPixel.y][initialPixel.x] = true
 
         while !pixelToVisitStack.isEmpty {
-            let currentPixelIndex = pixelToVisitStack.removeLast()
+            let currentPixel = pixelToVisitStack.removeLast()
 
-            let currentPixelIndexForComponents = currentPixelIndex * bytesPerPixel
-
-            let currentPixelColor = getPixelColor(currentPixelIndexForComponents, bytesPerPixel, bytesPerRow, imageData)
-
-            let isColorSimilar = isColorSimilar(colorToCheck: currentPixelColor,
-                                                referenceColorComponents: referenceColorComponents,
-                                                tolerance: tolerance)
+            let currentPixelColor = getPixelColor(pixelArray[currentPixel])
+            let isColorSimilar = isColorSimilar(colorToCheck: currentPixelColor, referenceColorComponents, tolerance)
 
             guard isColorSimilar else { continue }
 
-            matchingPixelsPointer[currentPixelIndex] = true
+            matchingPixelsArray.insert(Pixel(x: currentPixel.x, y: currentPixel.y))
 
-            let leftPixelIndex = max(0, currentPixelIndex - 1)
-            let rightPixelIndex = min(width * height - 1, currentPixelIndex + 1)
-            let topPixelIndex = max(0, currentPixelIndex - width)
-            let bottomPixelIndex = min(width * height - 1, currentPixelIndex + width)
-
-            let pixelIndices = [leftPixelIndex, rightPixelIndex, topPixelIndex, bottomPixelIndex]
-
-            for index in pixelIndices where !visitedPixelsPointer[index] {
-                visitedPixelsPointer[index] = true
-                pixelToVisitStack.append(index)
+            if currentPixel.x - 1 >= 0, !visitedPixelsArray[currentPixel.y][currentPixel.x - 1] {
+                pixelToVisitStack.append(Pixel(x: currentPixel.x - 1, y: currentPixel.y))
+                visitedPixelsArray[currentPixel.y][currentPixel.x - 1] = true
+            }
+            if currentPixel.x + 1 < width, !visitedPixelsArray[currentPixel.y][currentPixel.x + 1] {
+                pixelToVisitStack.append(Pixel(x: currentPixel.x + 1, y: currentPixel.y))
+                visitedPixelsArray[currentPixel.y][currentPixel.x + 1] = true
+            }
+            if currentPixel.y - 1 >= 0, !visitedPixelsArray[currentPixel.y - 1][currentPixel.x] {
+                pixelToVisitStack.append(Pixel(x: currentPixel.x, y: currentPixel.y - 1))
+                visitedPixelsArray[currentPixel.y - 1][currentPixel.x] = true
+            }
+            if currentPixel.y + 1 < height, !visitedPixelsArray[currentPixel.y + 1][currentPixel.x] {
+                pixelToVisitStack.append(Pixel(x: currentPixel.x, y: currentPixel.y + 1))
+                visitedPixelsArray[currentPixel.y + 1][currentPixel.x] = true
             }
         }
-        return UnsafePointer<Bool>(matchingPixelsPointer)
+        return matchingPixelsArray
     }
 
     func renderTextLayer(textModelEntity: TextModelEntity) async throws -> CGImage {

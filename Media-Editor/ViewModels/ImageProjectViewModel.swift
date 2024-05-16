@@ -314,13 +314,13 @@ final class ImageProjectViewModel: ObservableObject {
                          currentDrawing: currentDrawing,
                          cropModel: cropModel,
                          magicWandModel: magicWandModel)
-        } 
+        }
 //        else if currentRevertModel === magicWandRevertModel {
 //            let layers = projectLayers.map { [unowned self] layer in
 //                layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
 //            }
-//            
-//        } 
+//
+//        }
         else {
             let layers = projectLayers.map { [unowned self] layer in
                 layer.copy(withCGImage: !self.isInNewCGImagePreview) as! LayerModel
@@ -1142,14 +1142,18 @@ final class ImageProjectViewModel: ObservableObject {
     }
 
     func performMagicWandAction(tapPosition: CGPoint) async throws {
-        guard let activeLayer else { return }
+        guard let activeLayer,
+              let framePixelWidth = projectModel.framePixelWidth,
+              let framePixelHeight = projectModel.framePixelHeight,
+              let marginedWorkspaceWidth = marginedWorkspaceSize?.width else { return }
 
         do {
             let resultImage = try await photoExporterService.performMagicWandAction(
                 tapPosition: tapPosition,
                 layer: activeLayer,
                 layerImage: originalCGImage.copy()!,
-                magicWandModel: magicWandModel)
+                magicWandModel: magicWandModel,
+                framePixelWidth, framePixelHeight, marginedWorkspaceWidth)
             activeLayer.cgImage = resultImage
             objectWillChange.send()
         } catch {
