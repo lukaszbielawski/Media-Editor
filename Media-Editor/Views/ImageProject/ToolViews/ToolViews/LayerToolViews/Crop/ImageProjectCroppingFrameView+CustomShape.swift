@@ -73,7 +73,6 @@ extension ImageProjectCroppingFrameView {
 
                             newUnitPoint.x = min(max(newUnitPoint.x, 0.0), 1.0)
                             newUnitPoint.y = min(max(newUnitPoint.y, 0.0), 1.0)
-                            print(newUnitPoint)
 
                             changePathPointPosition(of: unitPoint,
                                                     for: newUnitPoint,

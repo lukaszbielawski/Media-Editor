@@ -56,8 +56,9 @@ struct ImageProjectToolCaseDrawView: View {
                         }
                 }
             }
-        }.onAppear {
-            vm.turnOnRevertModel(revertModel: &vm.drawingRevertModel)
+        }
+        .onDisappear {
+            vm.disposeRevertModel(revertModelType: .drawing)
         }
     }
 }

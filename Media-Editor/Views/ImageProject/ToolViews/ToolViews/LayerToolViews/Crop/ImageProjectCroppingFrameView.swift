@@ -152,12 +152,11 @@ struct ImageProjectCroppingFrameView: View {
                     .sink { [unowned vm] in
                         vm.updateLatestSnapshot()
                     }
-
-            vm.turnOnRevertModel(revertModel: &vm.cropRevertModel)
         }
         .onDisappear {
             vm.setupCenterButtonFunction()
             vm.cropModel.cropShapeType = .rectangle
+            vm.disposeRevertModel(revertModelType: .cropping)
         }
         .onReceive(vm.floatingButtonClickedSubject) { [unowned vm] action in
             if action == .confirm {

@@ -24,7 +24,6 @@ struct ImageProjectToolView: View {
             ImageProjectToolSettingsView()
         }
         .onReceive(vm.floatingButtonClickedSubject) { [weak vm] functionType in
-            
             guard let vm else { return }
             if functionType == .back {
                 if vm.currentTool == nil {

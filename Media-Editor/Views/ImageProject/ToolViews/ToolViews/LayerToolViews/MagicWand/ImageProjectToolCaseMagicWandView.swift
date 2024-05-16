@@ -48,15 +48,13 @@ struct ImageProjectToolCaseMagicWandView: View {
                         .modifier(ProjectToolTileViewModifier())
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            if vm.currentDrawing.currentPencilType == .pen {
-                                vm.storeCurrentDrawing()
-                            }
                             vm.magicWandModel.magicWandType = magicWandType
                         }
                 }
             }
-        }.onAppear {
-            vm.turnOnRevertModel(revertModel: &vm.magicWandRevertModel)
+        }
+        .onDisappear {
+            vm.disposeRevertModel(revertModelType: .magicWand)
         }
     }
 }

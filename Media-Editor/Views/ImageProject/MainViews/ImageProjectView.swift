@@ -18,6 +18,7 @@ struct ImageProjectView: View {
     @State var editingFrameOpacity: CGFloat = 1.0
     @State var isBackToMenuAlertShown = false
     @State private var isToastShown = (isShown: false, result: false)
+    @State private var memoryChecker: Timer?
 
     init(project: ImageProjectEntity?) {
         _vm = StateObject(wrappedValue: ImageProjectViewModel(projectEntity: project!))
@@ -168,5 +169,18 @@ struct ImageProjectView: View {
 
         }.environmentObject(vm)
             .transition(AnyTransition.slide.animation(.easeInOut(duration: 1.0)))
+            .onAppear {
+                memoryChecker = Timer.scheduledTimer(withTimeInterval: 0.0, repeats: true) { [unowned vm] _ in
+                    if MeasureUtilities.getMemoryUsage() > 0.4 {
+                        if !vm.currentRevertModel.undoModel.isEmpty {
+                            vm.currentRevertModel.undoModel.removeFirst()
+                            print(vm.currentRevertModel.undoModel.count)
+                        }
+                    }
+                }
+            }
+            .onDisappear {
+                memoryChecker?.invalidate()
+            }
     }
 }

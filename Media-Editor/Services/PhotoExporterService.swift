@@ -464,6 +464,7 @@ struct PhotoExporterService {
                                                options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
                 }
             }
+            context.setShouldAntialias(true)
 
             for pixel in mask {
                 context.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend,
@@ -471,6 +472,7 @@ struct PhotoExporterService {
                                     width: renderSizeType.sizeDividend,
                                     height: renderSizeType.sizeDividend))
             }
+            context.setShouldAntialias(false)
 
             guard let renderedImage = context.makeImage() else {
                 throw PhotoExportError.contextImageMaking
@@ -498,7 +500,7 @@ struct PhotoExporterService {
         let scaledX = copysign(-1.0, layer.scaleX ?? 1.0) == 1.0 ? tappedX : width - tappedX
         let scaledY = copysign(-1.0, layer.scaleY ?? 1.0) == 1.0 ? tappedY : height - tappedY
 
-        let tappedPixel = Pixel(x: scaledX - 1, y: scaledY - 1)
+        let tappedPixel = Pixel(x: min(max(scaledX, 0), width - 1), y: min(max(scaledY, 0), height - 1))
 
         let resizedPhoto = try await resizePhoto(renderedPhoto: layerImage,
                                                  renderSize: renderSizeType,
@@ -522,7 +524,7 @@ struct PhotoExporterService {
             throw PhotoExportError.dataRetrieving
         }
 
-        let matchingPixelsArray = MeasureUtilities.functionTime {
+        let matchingPixelsSet = MeasureUtilities.functionTime {
             floodFillForMatchingPixels(
                 initialPixel: tappedPixel,
                 referenceColorComponents: initialColorComponents,
@@ -531,8 +533,19 @@ struct PhotoExporterService {
             )
         }
 
+        let smoothnessLevel = 2
+        var mask = matchingPixelsSet
+
+        for pixel in matchingPixelsSet {
+            for x in -smoothnessLevel ... smoothnessLevel where x != 0 {
+                for y in -smoothnessLevel ... smoothnessLevel where y != 0 {
+                    mask.insert(Pixel(x: pixel.x + x, y: pixel.y + y))
+                }
+            }
+        }
+
         let resultImage = try await MeasureUtilities.functionTime {
-            try await renderImageAfterMagicWandAction(layer: layer, layerImage: layerImage, magicWandModel: magicWandModel, mask: matchingPixelsArray, renderSizeType: renderSizeType)
+            try await renderImageAfterMagicWandAction(layer: layer, layerImage: layerImage, magicWandModel: magicWandModel, mask: mask, renderSizeType: renderSizeType)
         }
 
         return resultImage
