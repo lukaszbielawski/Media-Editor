@@ -37,7 +37,7 @@ struct ImageProjectToolCaseMagicWandView: View {
                 ForEach(MagicWandType.allCases, id: \.self) { magicWandType in
                     ImageProjectToolTileView(
                         title: magicWandType.name,
-                        systemName: magicWandType.iconName)
+                        iconName: magicWandType.iconName)
                         .centerCropped()
                         .overlay {
                             if vm.magicWandModel.magicWandType == magicWandType {

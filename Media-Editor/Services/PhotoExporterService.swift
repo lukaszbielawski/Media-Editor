@@ -30,31 +30,60 @@ struct PhotoExporterService {
                 resizedFramePixelHeight = framePixelHeight * renderSize.sizeFactor
             }
 
-            guard let colorSpace = renderedPhoto.colorSpace else {
-                throw PhotoExportError.colorSpace
+            guard let context = CGContext(data: nil,
+                                          width: Int(resizedFramePixelWidth),
+                                          height: Int(resizedFramePixelHeight),
+                                          bitsPerComponent: 8,
+                                          bytesPerRow: 0,
+                                          space: CGColorSpaceCreateDeviceRGB(),
+                                          bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+            else {
+                throw PhotoExportError.contextCreation(contextSize: .init(width: CGFloat(resizedFramePixelWidth),
+                                                                          height: CGFloat(resizedFramePixelHeight)))
             }
 
-            let context = CGContext(data: nil,
-                                    width: Int(resizedFramePixelWidth),
-                                    height: Int(resizedFramePixelHeight),
-                                    bitsPerComponent: renderedPhoto.bitsPerComponent,
-                                    bytesPerRow: 0,
-                                    space: colorSpace,
-                                    bitmapInfo: renderedPhoto.bitmapInfo.rawValue)
+            context.draw(renderedPhoto,
+                         in: CGRect(
+                             origin: .zero,
+                             size: CGSize(width: resizedFramePixelWidth,
+                                          height: resizedFramePixelHeight)
+                         ))
 
-            context?.draw(renderedPhoto,
-                          in: CGRect(
-                              origin: .zero,
-                              size: CGSize(width: resizedFramePixelWidth,
-                                           height: resizedFramePixelHeight)
-                          ))
-
-            guard let resizedImage = context?.makeImage() else {
+            guard let resizedImage = context.makeImage() else {
                 throw PhotoExportError.contextResizedImageMaking
             }
 
             return resizedImage
         }.value
+    }
+
+    private func renderResizedPhoto(image: CGImage, renderSizeType: RenderSizeType) throws -> CGImage {
+        let resizedWidth = Int(image.width) / renderSizeType.sizeDividend
+        let resizedHeight = Int(image.height) / renderSizeType.sizeDividend
+        guard let context = CGContext(data: nil,
+                                      width: resizedWidth,
+                                      height: resizedHeight,
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: 0,
+                                      space: CGColorSpaceCreateDeviceRGB(),
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        else {
+            throw PhotoExportError.contextCreation(contextSize: .init(width: CGFloat(resizedWidth),
+                                                                      height: CGFloat(resizedHeight)))
+        }
+
+        context.draw(image,
+                     in: CGRect(
+                         origin: .zero,
+                         size: CGSize(width: resizedWidth,
+                                      height: resizedHeight)
+                     ))
+
+        guard let resizedImage = context.makeImage() else {
+            throw PhotoExportError.contextResizedImageMaking
+        }
+
+        return resizedImage
     }
 
     func cropLayerToImage(layer: LayerModel,
@@ -464,7 +493,6 @@ struct PhotoExporterService {
                                                options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
                 }
             }
-            context.setShouldAntialias(true)
 
             for pixel in mask {
                 context.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend,
@@ -472,7 +500,6 @@ struct PhotoExporterService {
                                     width: renderSizeType.sizeDividend,
                                     height: renderSizeType.sizeDividend))
             }
-            context.setShouldAntialias(false)
 
             guard let renderedImage = context.makeImage() else {
                 throw PhotoExportError.contextImageMaking
@@ -487,27 +514,37 @@ struct PhotoExporterService {
                                 layerImage: CGImage,
                                 magicWandModel: MagicWandModel,
                                 renderSizeType: RenderSizeType = .quarter,
-                                _ framePixelWidth: CGFloat,
-                                _ framePixelHeight: CGFloat,
-                                _ marginedWorkspaceWidth: CGFloat) async throws -> CGImage
+                                _ frameSize: CGSize,
+                                _ marginedWorkspaceSize: CGSize) async throws -> CGImage
     {
-        let tappedX = Int(min(layer.pixelSize.width - 1, max(0.0, round(tapPosition.x * layer.pixelToDigitalWidthRatio)))) / renderSizeType.sizeDividend
-        let tappedY = Int(min(layer.pixelSize.height - 1, max(0.0, round(tapPosition.y * layer.pixelToDigitalHeightRatio)))) / renderSizeType.sizeDividend
+        let tappedX = Int(min(layer.pixelSize.width - 1, max(0.0, round(tapPosition.x))))
+        let tappedY = Int(min(layer.pixelSize.height - 1, max(0.0, round(tapPosition.y))))
 
         let width = layerImage.width / renderSizeType.sizeDividend
         let height = layerImage.height / renderSizeType.sizeDividend
 
-        let scaledX = copysign(-1.0, layer.scaleX ?? 1.0) == 1.0 ? tappedX : width - tappedX
-        let scaledY = copysign(-1.0, layer.scaleY ?? 1.0) == 1.0 ? tappedY : height - tappedY
+        let absScaledX =
+            CGFloat(tappedX / renderSizeType.sizeDividend)
+                * layer.pixelSize.width / frameSize.width
 
-        let tappedPixel = Pixel(x: min(max(scaledX, 0), width - 1), y: min(max(scaledY, 0), height - 1))
+        let absScaledY =
+            CGFloat(tappedY / renderSizeType.sizeDividend)
+                * layer.pixelSize.height / frameSize.height
 
-        let resizedPhoto = try await resizePhoto(renderedPhoto: layerImage,
-                                                 renderSize: renderSizeType,
-                                                 photoFormat: .png,
-                                                 framePixelWidth: framePixelWidth,
-                                                 framePixelHeight: framePixelHeight,
-                                                 marginedWorkspaceWidth: marginedWorkspaceWidth)
+        let scaledX = copysign(-1.0, layer.scaleX ?? 1.0) == 1.0
+            ? absScaledX
+            : CGFloat(width) - absScaledX
+
+        let scaledY = copysign(-1.0, layer.scaleY ?? 1.0) == 1.0
+            ? absScaledY
+            : CGFloat(height) - absScaledY
+
+        let tappedPixel = Pixel(x: min(Int(round(max(scaledX, 0))), width - 1),
+                                y: min(Int(round(max(scaledY, 0))), height - 1))
+
+        let resizedPhoto = try renderResizedPhoto(image: layerImage, renderSizeType: renderSizeType)
+
+        let bytesPerRow = resizedPhoto.bytesPerRow
 
         guard let dataProvider = resizedPhoto.dataProvider,
               let data = dataProvider.data,
@@ -516,7 +553,9 @@ struct PhotoExporterService {
             throw PhotoExportError.dataRetrieving
         }
 
-        let pixelArray = imageData.toRGBABytesArray(width: width, height: height)
+        let pixelArray = MeasureUtilities.functionTime {
+            imageData.toRGBABytesArray(width: width, height: height, bytesPerRow: bytesPerRow)
+        }
 
         let initialPixelColor: CGColor = getPixelColor(pixelArray[tappedPixel])
 

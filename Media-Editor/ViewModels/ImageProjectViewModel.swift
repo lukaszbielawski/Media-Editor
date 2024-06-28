@@ -1078,11 +1078,6 @@ final class ImageProjectViewModel: ObservableObject {
         }
     }
 
-//    func turnOnRevertModel(revertModelType: RevertModelType) {
-//        let latestSnapshot = createSnapshot()
-//        revertModels[revertModelType] = RevertModel(latestSnapshot)
-//    }
-
     func createRevertModel() -> RevertModel {
         let latestSnapshot = createSnapshot()
         return RevertModel(latestSnapshot)
@@ -1160,15 +1155,22 @@ final class ImageProjectViewModel: ObservableObject {
               let layerImage = activeLayer.cgImage,
               let framePixelWidth = projectModel.framePixelWidth,
               let framePixelHeight = projectModel.framePixelHeight,
-              let marginedWorkspaceWidth = marginedWorkspaceSize?.width else { return }
+              let marginedWorkspaceSize = marginedWorkspaceSize else { return }
 
         do {
+            let pixelSize = CGSize(width: activeLayer.pixelSize.width * abs(activeLayer.scaleX ?? 1.0),
+                                   height: activeLayer.pixelSize.height * abs(activeLayer.scaleY ?? 1.0))
+
+            var frameSize: CGSize {
+                return calculateFrameRect(customBounds: pixelSize, isMargined: true)?.size ?? .zero
+            }
+
             let resultImage = try await photoExporterService.performMagicWandAction(
                 tapPosition: tapPosition,
                 layer: activeLayer,
                 layerImage: layerImage,
                 magicWandModel: magicWandModel,
-                framePixelWidth, framePixelHeight, marginedWorkspaceWidth)
+                frameSize, marginedWorkspaceSize)
             activeLayer.cgImage = resultImage
             objectWillChange.send()
         } catch {

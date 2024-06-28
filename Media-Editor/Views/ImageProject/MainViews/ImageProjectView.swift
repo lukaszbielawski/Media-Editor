@@ -174,7 +174,6 @@ struct ImageProjectView: View {
                     if MeasureUtilities.getMemoryUsage() > 0.4 {
                         if !vm.currentRevertModel.undoModel.isEmpty {
                             vm.currentRevertModel.undoModel.removeFirst()
-                            print(vm.currentRevertModel.undoModel.count)
                         }
                     }
                 }

@@ -7,47 +7,79 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "306553D6-3DDB-45C9-99CD-300E52555211"
+            uuid = "B8149350-D628-4FD5-97D7-C084B49B0532"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Services/PhotoExporterService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "562"
+            endingLineNumber = "562"
+            landmarkName = "performMagicWandAction(tapPosition:layer:layerImage:magicWandModel:renderSizeType:_:_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DCACFF69-C618-4053-9A2B-C73880875E7B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Media-Editor/Views/ImageProject/MainViews/ImageProjectView.swift"
+            filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "685"
+            endingLineNumber = "685"
+            landmarkName = "deactivateLayer()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "30119297-C84F-4945-8114-A686B7C07061"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Services/PhotoExporterService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "566"
+            endingLineNumber = "566"
+            landmarkName = "performMagicWandAction(tapPosition:layer:layerImage:magicWandModel:renderSizeType:_:_:)"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "306553D6-3DDB-45C9-99CD-300E52555211 - 546e78bb4cd6dda7"
+                  uuid = "30119297-C84F-4945-8114-A686B7C07061 - 8250f889aa96dd47"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (__C.NSTimer) -&gt; () in closure #2 () -&gt; () in Media_Editor.ImageProjectView.body.getter : some"
+                  symbolName = "(1) suspend resume partial function for Media_Editor.PhotoExporterService.performMagicWandAction(tapPosition: __C.CGPoint, layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, renderSizeType: Media_Editor.RenderSizeType, _: __C.CGSize, _: __C.CGSize) async throws -&gt; __C.CGImageRef"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/MainViews/ImageProjectView.swift"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "336">
+                  startingLineNumber = "575"
+                  endingLineNumber = "575"
+                  offsetFromSymbolStart = "12248">
                </Location>
                <Location
-                  uuid = "306553D6-3DDB-45C9-99CD-300E52555211 - 546e78bb4cd6dda7"
+                  uuid = "30119297-C84F-4945-8114-A686B7C07061 - ecd6031aa99be92"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (__C.NSTimer) -&gt; () in closure #2 () -&gt; () in Media_Editor.ImageProjectView.body.getter : some"
+                  symbolName = "closure #2 () -&gt; Swift.Set&lt;Media_Editor.Pixel&gt; in Media_Editor.PhotoExporterService.performMagicWandAction(tapPosition: __C.CGPoint, layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, renderSizeType: Media_Editor.RenderSizeType, _: __C.CGSize, _: __C.CGSize) async throws -&gt; __C.CGImageRef"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Views/ImageProject/MainViews/ImageProjectView.swift"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "175"
-                  endingLineNumber = "175"
-                  offsetFromSymbolStart = "136">
+                  startingLineNumber = "579"
+                  endingLineNumber = "579"
+                  offsetFromSymbolStart = "104">
                </Location>
             </Locations>
          </BreakpointContent>

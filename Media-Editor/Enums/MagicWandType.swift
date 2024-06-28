@@ -25,7 +25,7 @@ enum MagicWandType: CaseIterable {
         case .magicWand:
             "wand.and.stars.inverse"
         case .bucketFill:
-            "triangle.fill"
+            "bucket.fill"
         }
     }
 }

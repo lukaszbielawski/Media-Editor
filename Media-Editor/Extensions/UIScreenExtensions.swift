@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 extension UIScreen {
-    static var bottomSafeArea: CGFloat {
+    @MainActor static var bottomSafeArea: CGFloat {
         let keyWindow = UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }
             .map { $0 as? UIWindowScene }
@@ -20,7 +20,7 @@ extension UIScreen {
         return (keyWindow?.safeAreaInsets.bottom) ?? 0
     }
 
-    static var topSafeArea: CGFloat {
+    @MainActor static var topSafeArea: CGFloat {
         let keyWindow = UIApplication.shared.connectedScenes
             .filter { $0.activationState == .foregroundActive }
             .map { $0 as? UIWindowScene }

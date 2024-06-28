@@ -8,9 +8,10 @@
 import Foundation
 
 extension UnsafePointer where Pointee == UInt8 {
-    func toRGBABytesArray(width: Int, height: Int) -> [[UInt32]] {
+    func toRGBABytesArray(width: Int, height: Int, bytesPerRow: Int) -> [[UInt32]] {
         var currentPointer = self
         var returnArray = [[UInt32]]()
+
         for _ in 1 ... height {
             let uint32Buffer: UnsafeBufferPointer<UInt32> =
                 UnsafeBufferPointer(start: currentPointer, count: width * 4).withMemoryRebound(to: UInt32.self) { buffer in
@@ -19,10 +20,12 @@ extension UnsafePointer where Pointee == UInt8 {
                     }
                 }
             returnArray.append(Array(uint32Buffer))
-            let nextPointer = currentPointer.advanced(by: width * 4)
+            let nextPointer = currentPointer.advanced(by: bytesPerRow)
             currentPointer = nextPointer
+
         }
 
         return returnArray
     }
 }
+
