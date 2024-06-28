@@ -459,46 +459,81 @@ struct PhotoExporterService {
                 throw PhotoExportError.contextCreation(contextSize: .init(width: contextWidth, height: contextHeight))
             }
 
-            context.draw(layerImage, in: CGRect(x: 0,
-                                                y: 0,
-                                                width: contextWidth,
-                                                height: contextHeight))
-
             if magicWandModel.magicWandType == .magicWand {
+                context.draw(layerImage, in: CGRect(x: 0,
+                                                    y: 0,
+                                                    width: contextWidth,
+                                                    height: contextHeight))
                 context.setBlendMode(.destinationOut)
                 context.setFillColor(UIColor.white.cgColor)
+                for pixel in mask {
+                    context.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend,
+                                        y: contextHeight - pixel.y * renderSizeType.sizeDividend - 1,
+                                        width: renderSizeType.sizeDividend,
+                                        height: renderSizeType.sizeDividend))
+                }
             } else if magicWandModel.magicWandType == .bucketFill {
                 let shapeStyle = magicWandModel.currentBucketFillShapeStyle.shapeStyle
                 let shapeStyleCG = magicWandModel.currentBucketFillShapeStyle.shapeStyleCG
 
                 if let color = shapeStyle as? Color {
                     context.setFillColor(color.cgColor)
+                    context.draw(layerImage, in: CGRect(x: 0,
+                                                        y: 0,
+                                                        width: contextWidth,
+                                                        height: contextHeight))
+                    for pixel in mask {
+                        context.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend,
+                                            y: contextHeight - pixel.y * renderSizeType.sizeDividend - 1,
+                                            width: renderSizeType.sizeDividend,
+                                            height: renderSizeType.sizeDividend))
+                    }
                 } else if let cgLinearGradient = shapeStyleCG as? CGLinearGradient,
                           let cgGradient = cgLinearGradient.cgGradient
                 {
                     let startPoint = cgLinearGradient.startPoint
                     let endPoint = cgLinearGradient.endPoint
 
-                    let startX = CGFloat(contextWidth) * startPoint.x
-                    let startY = CGFloat(contextHeight) * startPoint.y
-                    let endX = CGFloat(contextWidth) * endPoint.x
-                    let endY = CGFloat(contextHeight) * endPoint.y
+                    UIGraphicsBeginImageContext(CGSize(width: contextWidth, height: contextHeight))
+                    let gradientContext = UIGraphicsGetCurrentContext()!
+
+                    let startX = CGFloat(contextWidth) * cgLinearGradient.startPoint.x
+                    let startY = CGFloat(contextHeight) * cgLinearGradient.startPoint.y
+                    let endX = CGFloat(contextWidth) * cgLinearGradient.endPoint.x
+                    let endY = CGFloat(contextHeight) * cgLinearGradient.endPoint.y
 
                     let start = CGPoint(x: startX, y: startY)
                     let end = CGPoint(x: endX, y: endY)
 
-                    context.drawLinearGradient(cgGradient,
-                                               start: start,
-                                               end: end,
-                                               options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
-                }
-            }
+                    gradientContext.drawLinearGradient(cgGradient, start: start, end: end, options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
 
-            for pixel in mask {
-                context.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend,
-                                    y: contextHeight - pixel.y * renderSizeType.sizeDividend - 1,
-                                    width: renderSizeType.sizeDividend,
-                                    height: renderSizeType.sizeDividend))
+                    let gradientImage = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+
+                    UIGraphicsBeginImageContext(CGSize(width: contextWidth, height: contextHeight))
+                    let imageContext = UIGraphicsGetCurrentContext()!
+
+                    imageContext.translateBy(x: 0, y: CGFloat(contextHeight))
+                    imageContext.scaleBy(x: 1.0, y: -1.0)
+
+                    imageContext.draw(layerImage, in: CGRect(x: 0, y: 0, width: contextWidth, height: contextHeight))
+
+                    imageContext.setBlendMode(.destinationOut)
+                    imageContext.setFillColor(UIColor.white.cgColor)
+
+                    for pixel in mask {
+                        imageContext.fill(CGRect(x: pixel.x * renderSizeType.sizeDividend, y: contextHeight - pixel.y * renderSizeType.sizeDividend - 1, width: renderSizeType.sizeDividend, height: renderSizeType.sizeDividend))
+                    }
+
+                    let imageWithHoles = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+
+                    UIGraphicsBeginImageContext(CGSize(width: contextWidth, height: contextHeight))
+
+                    context.draw(gradientImage!.cgImage!, in: CGRect(x: 0, y: 0, width: contextWidth, height: contextHeight))
+
+                    context.draw(imageWithHoles!.cgImage!, in: CGRect(x: 0, y: 0, width: contextWidth, height: contextHeight))
+                }
             }
 
             guard let renderedImage = context.makeImage() else {
@@ -553,9 +588,7 @@ struct PhotoExporterService {
             throw PhotoExportError.dataRetrieving
         }
 
-        let pixelArray = MeasureUtilities.functionTime {
-            imageData.toRGBABytesArray(width: width, height: height, bytesPerRow: bytesPerRow)
-        }
+        let pixelArray = imageData.toRGBABytesArray(width: width, height: height, bytesPerRow: bytesPerRow)
 
         let initialPixelColor: CGColor = getPixelColor(pixelArray[tappedPixel])
 
@@ -563,14 +596,12 @@ struct PhotoExporterService {
             throw PhotoExportError.dataRetrieving
         }
 
-        let matchingPixelsSet = MeasureUtilities.functionTime {
-            floodFillForMatchingPixels(
-                initialPixel: tappedPixel,
-                referenceColorComponents: initialColorComponents,
-                tolerance: magicWandModel.tolerance,
-                width, height, pixelArray
-            )
-        }
+        let matchingPixelsSet = floodFillForMatchingPixels(
+            initialPixel: tappedPixel,
+            referenceColorComponents: initialColorComponents,
+            tolerance: magicWandModel.tolerance,
+            width, height, pixelArray
+        )
 
         let smoothnessLevel = 2
         var mask = matchingPixelsSet
@@ -583,9 +614,13 @@ struct PhotoExporterService {
             }
         }
 
-        let resultImage = try await MeasureUtilities.functionTime {
-            try await renderImageAfterMagicWandAction(layer: layer, layerImage: layerImage, magicWandModel: magicWandModel, mask: mask, renderSizeType: renderSizeType)
-        }
+        let resultImage = try await renderImageAfterMagicWandAction(
+            layer: layer,
+            layerImage: layerImage,
+            magicWandModel: magicWandModel,
+            mask: mask,
+            renderSizeType: renderSizeType
+        )
 
         return resultImage
     }

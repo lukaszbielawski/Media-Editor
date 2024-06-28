@@ -49,6 +49,7 @@ struct ImageProjectToolCaseMagicWandView: View {
                         .contentShape(Rectangle())
                         .onTapGesture {
                             vm.magicWandModel.magicWandType = magicWandType
+                            vm.updateLatestSnapshot()
                         }
                 }
             }

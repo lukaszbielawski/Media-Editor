@@ -312,7 +312,6 @@ final class ImageProjectViewModel: ObservableObject {
     private func createSnapshot() -> SnapshotModel {
         if currentRevertModelType == .drawing
             || currentRevertModelType == .cropping
-//            || currentRevertModel === magicWandRevertModel
         {
             return .init(layers: projectLayers,
                          projectModel: projectModel,
@@ -413,6 +412,13 @@ final class ImageProjectViewModel: ObservableObject {
         let previousProjectModel = previousSnapshot.projectModel
         let previousCropModel = previousSnapshot.cropModel
         let previousMagicWandModel = previousSnapshot.magicWandModel
+
+        if previousMagicWandModel.magicWandType == .magicWand,
+           magicWandModel.magicWandType == .bucketFill {
+            currentColorPickerType = .none
+        }
+
+
 
         withAnimation(.easeInOut(duration: 0.35)) {
             cropModel = previousCropModel
@@ -1172,6 +1178,7 @@ final class ImageProjectViewModel: ObservableObject {
                 magicWandModel: magicWandModel,
                 frameSize, marginedWorkspaceSize)
             activeLayer.cgImage = resultImage
+            updateLatestSnapshot()
             objectWillChange.send()
         } catch {
             print(error)

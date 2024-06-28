@@ -42,7 +42,6 @@ struct ImageProjectMagicWandCanvasView: View {
                         Task(priority: .userInitiated) {
                             do {
                                 try await vm.performMagicWandAction(tapPosition: tapPosition)
-                                vm.updateLatestSnapshot()
                             } catch {
                                 print(error)
                             }

@@ -7,31 +7,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B8149350-D628-4FD5-97D7-C084B49B0532"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Media-Editor/Services/PhotoExporterService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "562"
-            endingLineNumber = "562"
-            landmarkName = "performMagicWandAction(tapPosition:layer:layerImage:magicWandModel:renderSizeType:_:_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "DCACFF69-C618-4053-9A2B-C73880875E7B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "685"
-            endingLineNumber = "685"
+            startingLineNumber = "691"
+            endingLineNumber = "691"
             landmarkName = "deactivateLayer()"
             landmarkType = "7">
          </BreakpointContent>
@@ -39,49 +23,174 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "30119297-C84F-4945-8114-A686B7C07061"
+            uuid = "69F713E3-9A20-4B2F-B172-06E29C83FA58"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/ViewModels/ImageProjectViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "838"
+            endingLineNumber = "838"
+            landmarkName = "showLayerOnScreen(layerModel:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A0F9BCB5-1B55-44D9-AC7A-4C5B04C5EB73"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Media-Editor/Services/PhotoExporterService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "566"
-            endingLineNumber = "566"
-            landmarkName = "performMagicWandAction(tapPosition:layer:layerImage:magicWandModel:renderSizeType:_:_:)"
+            startingLineNumber = "479"
+            endingLineNumber = "479"
+            landmarkName = "renderImageAfterMagicWandAction(layer:layerImage:magicWandModel:mask:renderSizeType:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "30119297-C84F-4945-8114-A686B7C07061 - 8250f889aa96dd47"
+                  uuid = "A0F9BCB5-1B55-44D9-AC7A-4C5B04C5EB73 - 1afc6f05d7c84f0f"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for Media_Editor.PhotoExporterService.performMagicWandAction(tapPosition: __C.CGPoint, layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, renderSizeType: Media_Editor.RenderSizeType, _: __C.CGSize, _: __C.CGSize) async throws -&gt; __C.CGImageRef"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "575"
-                  endingLineNumber = "575"
-                  offsetFromSymbolStart = "12248">
+                  startingLineNumber = "479"
+                  endingLineNumber = "479"
+                  offsetFromSymbolStart = "1836">
                </Location>
                <Location
-                  uuid = "30119297-C84F-4945-8114-A686B7C07061 - ecd6031aa99be92"
+                  uuid = "A0F9BCB5-1B55-44D9-AC7A-4C5B04C5EB73 - 1afc6f05d7c84f0f"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 () -&gt; Swift.Set&lt;Media_Editor.Pixel&gt; in Media_Editor.PhotoExporterService.performMagicWandAction(tapPosition: __C.CGPoint, layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, renderSizeType: Media_Editor.RenderSizeType, _: __C.CGSize, _: __C.CGSize) async throws -&gt; __C.CGImageRef"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
                   moduleName = "Media-Editor"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "579"
-                  endingLineNumber = "579"
-                  offsetFromSymbolStart = "104">
+                  startingLineNumber = "479"
+                  endingLineNumber = "479"
+                  offsetFromSymbolStart = "1860">
+               </Location>
+               <Location
+                  uuid = "A0F9BCB5-1B55-44D9-AC7A-4C5B04C5EB73 - 1afc6f05d7c84f0f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "479"
+                  endingLineNumber = "479"
+                  offsetFromSymbolStart = "1892">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3C96E810-AF53-4F76-9E77-9D25AF522AC0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Services/PhotoExporterService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "491"
+            endingLineNumber = "491"
+            landmarkName = "renderImageAfterMagicWandAction(layer:layerImage:magicWandModel:mask:renderSizeType:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3C96E810-AF53-4F76-9E77-9D25AF522AC0 - 1afc6f05d7c8489b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "2360">
+               </Location>
+               <Location
+                  uuid = "3C96E810-AF53-4F76-9E77-9D25AF522AC0 - 1afc6f05d7c8489b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "2536">
+               </Location>
+               <Location
+                  uuid = "3C96E810-AF53-4F76-9E77-9D25AF522AC0 - 1afc6f05d7c8489b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "2388">
+               </Location>
+               <Location
+                  uuid = "3C96E810-AF53-4F76-9E77-9D25AF522AC0 - 1afc6f05d7c8489b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for closure #1 @Sendable () async throws -&gt; __C.CGImageRef in Media_Editor.PhotoExporterService.renderImageAfterMagicWandAction(layer: Media_Editor.LayerModel, layerImage: __C.CGImageRef, magicWandModel: Media_Editor.MagicWandModel, mask: Swift.Set&lt;Media_Editor.Pixel&gt;, renderSizeType: Media_Editor.RenderSizeType) async throws -&gt; __C.CGImageRef"
+                  moduleName = "Media-Editor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lukasz/Documents/GitHub/Media-Editor/Media-Editor/Services/PhotoExporterService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
+                  offsetFromSymbolStart = "2564">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "54E5E3FB-7B6B-4D2E-9818-ADF7DF4FF734"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Media-Editor/Services/PhotoExporterService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
+            landmarkName = "renderImageAfterMagicWandAction(layer:layerImage:magicWandModel:mask:renderSizeType:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

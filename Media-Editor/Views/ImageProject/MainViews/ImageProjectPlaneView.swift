@@ -101,7 +101,10 @@ struct ImageProjectPlaneView: View {
             }
         })
         .onTapGesture {
-            vm.deactivateLayer()
+            guard let currentTool = vm.currentTool as? LayerToolType, currentTool.isFocusViewTool else {
+                vm.deactivateLayer()
+                return
+            }
         }
         .gesture(
             MagnificationGesture()
