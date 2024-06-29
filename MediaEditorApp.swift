@@ -12,14 +12,12 @@ import Photos
 import SwiftUI
 
 import FirebaseCore
-import GoogleMobileAds
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool
     {
         FirebaseApp.configure()
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
         return true
     }
 }
@@ -28,30 +26,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct MediaEditorApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @Environment(\.scenePhase) var scenePhase
-    @StateObject var appOpenAdsManager = AppOpenAdsManager()
 
     var body: some Scene {
         WindowGroup {
             MenuView()
                 .background(Color(.background))
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                    appOpenAdsManager.displayAppOpenAd()
-                }
-                .onAppear {
-                    appOpenAdsManager.loadAppOpenAd()
-                }
         }
         .onChange(of: scenePhase) { newValue in
             PersistenceController.shared.saveChanges()
-            if newValue == .active {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    requestIDFA()
-                }
-            }
         }
     }
-}
-
-func requestIDFA() {
-    ATTrackingManager.requestTrackingAuthorization { _ in }
 }

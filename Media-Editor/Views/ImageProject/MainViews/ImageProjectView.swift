@@ -10,7 +10,6 @@ import SwiftUI
 
 struct ImageProjectView: View {
     @StateObject var vm: ImageProjectViewModel
-    @StateObject var interstitialAdManager = InterstitialAdsManager()
 
     @Environment(\.dismiss) var dismiss
 
@@ -130,7 +129,6 @@ struct ImageProjectView: View {
             .ignoresSafeArea(edges: .top)
             .onAppear {
                 vm.plane.totalLowerToolbarHeight = vm.plane.lowerToolbarHeight + UIScreen.bottomSafeArea
-                interstitialAdManager.loadInterstitialAd()
             }
             .toolbar { imageProjectToolbar }
             .sheet(isPresented: $vm.isExportSheetPresented) {
@@ -140,14 +138,6 @@ struct ImageProjectView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .ignoresSafeArea()
-                    }
-                    .onDisappear {
-                        if isToastShown == (true, true) {
-                            interstitialAdManager.didDismissAdAction = { [unowned vm] in
-                                vm.centerButtonFunction?()
-                            }
-                            interstitialAdManager.displayInterstitialAd()
-                        }
                     }
             }
             .alert("Deleting image", isPresented: $vm.tools.isDeleteImageAlertPresented) {

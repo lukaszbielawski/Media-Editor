@@ -87,7 +87,6 @@
 		B25FB59B2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */; };
 		B2675FF92B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2675FF82B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift */; };
 		B268B3CD2BCBAC5400D107B3 /* SenderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B268B3CC2BCBAC5400D107B3 /* SenderType.swift */; };
-		B268B3D02BCBCDB000D107B3 /* InterstitialAdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B268B3CF2BCBCDB000D107B3 /* InterstitialAdsManager.swift */; };
 		B269528A2BE4D3D00091206E /* ImageProjectToolColorPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26952892BE4D3D00091206E /* ImageProjectToolColorPickerView.swift */; };
 		B269528C2BE511A40091206E /* ImageProjectToolCaseLayerBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B269528B2BE511A40091206E /* ImageProjectToolCaseLayerBackgroundView.swift */; };
 		B269528E2BE51F4F0091206E /* ImageProjectToolCaseProjectBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B269528D2BE51F4F0091206E /* ImageProjectToolCaseProjectBackgroundView.swift */; };
@@ -173,7 +172,6 @@
 		B2E0CF6B2BC7DDBE00FCBF63 /* ImageProjectTextSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E0CF6A2BC7DDBE00FCBF63 /* ImageProjectTextSliderView.swift */; };
 		B2E0CF6D2BC7F5A700FCBF63 /* PublisherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E0CF6C2BC7F5A700FCBF63 /* PublisherExtensions.swift */; };
 		B2E0CF6F2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E0CF6E2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift */; };
-		B2E2624E2BCC3601003C41ED /* AppOpenAdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E2624D2BCC3601003C41ED /* AppOpenAdsManager.swift */; };
 		B2EFC4672B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */; };
 		B2F00E4B2BCA79D70053B7DB /* FontType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F00E4A2BCA79D70053B7DB /* FontType.swift */; };
 		B2F86F082BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */; };
@@ -269,7 +267,6 @@
 		B25FB59A2B5DBA2300EBFB16 /* ProjectToolTileViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectToolTileViewModifier.swift; sourceTree = "<group>"; };
 		B2675FF82B5E80AE0072FD3D /* ImageProjectImportPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectImportPhotoView.swift; sourceTree = "<group>"; };
 		B268B3CC2BCBAC5400D107B3 /* SenderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenderType.swift; sourceTree = "<group>"; };
-		B268B3CF2BCBCDB000D107B3 /* InterstitialAdsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdsManager.swift; sourceTree = "<group>"; };
 		B26952892BE4D3D00091206E /* ImageProjectToolColorPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorPickerView.swift; sourceTree = "<group>"; };
 		B269528B2BE511A40091206E /* ImageProjectToolCaseLayerBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseLayerBackgroundView.swift; sourceTree = "<group>"; };
 		B269528D2BE51F4F0091206E /* ImageProjectToolCaseProjectBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseProjectBackgroundView.swift; sourceTree = "<group>"; };
@@ -355,7 +352,6 @@
 		B2E0CF6A2BC7DDBE00FCBF63 /* ImageProjectTextSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectTextSliderView.swift; sourceTree = "<group>"; };
 		B2E0CF6C2BC7F5A700FCBF63 /* PublisherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherExtensions.swift; sourceTree = "<group>"; };
 		B2E0CF6E2BC7F9FA00FCBF63 /* ThrottleAndDebounceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottleAndDebounceType.swift; sourceTree = "<group>"; };
-		B2E2624D2BCC3601003C41ED /* AppOpenAdsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppOpenAdsManager.swift; sourceTree = "<group>"; };
 		B2EFC4662B9C6472005F07A1 /* ImageProjectToolCaseMergeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseMergeView.swift; sourceTree = "<group>"; };
 		B2F00E4A2BCA79D70053B7DB /* FontType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontType.swift; sourceTree = "<group>"; };
 		B2F86F072BDE53C500C5AAFE /* ImageProjectToolCaseDrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolCaseDrawView.swift; sourceTree = "<group>"; };
@@ -410,7 +406,6 @@
 				B2C3521B2B9747CC00E64525 /* Shapes */,
 				B27092A92BE2DCA500F32FEB /* Result Builders */,
 				B211036B2B499DD000CA4981 /* Resources */,
-				B268B3CE2BCBCD9600D107B3 /* Ads */,
 				B21103582B49703D00CA4981 /* CoreData */,
 				B2B2B10A2B4C026200E3E8A6 /* Errors */,
 				B25FB5992B5DB9E900EBFB16 /* Modifiers */,
@@ -770,15 +765,6 @@
 			path = SummaryViews;
 			sourceTree = "<group>";
 		};
-		B268B3CE2BCBCD9600D107B3 /* Ads */ = {
-			isa = PBXGroup;
-			children = (
-				B268B3CF2BCBCDB000D107B3 /* InterstitialAdsManager.swift */,
-				B2E2624D2BCC3601003C41ED /* AppOpenAdsManager.swift */,
-			);
-			path = Ads;
-			sourceTree = "<group>";
-		};
 		B27092A92BE2DCA500F32FEB /* Result Builders */ = {
 			isa = PBXGroup;
 			children = (
@@ -989,7 +975,6 @@
 				B22744C12B5C6D56000740DF /* ShellScript */,
 				EA8052C4287E8D07676097A3 /* [CP] Embed Pods Frameworks */,
 				B2C842F52BC2B8E700A7853F /* ShellScript */,
-				6C568CF6CEB52BBD913F7055 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1049,23 +1034,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		6C568CF6CEB52BBD913F7055 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Media-Editor/Pods-Media-Editor-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Media-Editor/Pods-Media-Editor-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Media-Editor/Pods-Media-Editor-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		ACC70208B37A7DB79E8EC6EF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1286,9 +1254,7 @@
 				B25FB5942B5DA85400EBFB16 /* ProjectToolType.swift in Sources */,
 				B25FB5892B5D76BC00EBFB16 /* ImageProjectToolScrollView.swift in Sources */,
 				B21C24F72B8BA46300DBE6B2 /* PhotoFormatType.swift in Sources */,
-				B2E2624E2BCC3601003C41ED /* AppOpenAdsManager.swift in Sources */,
 				B2F918AD2B58554300540F33 /* CGSizeExtensions.swift in Sources */,
-				B268B3D02BCBCDB000D107B3 /* InterstitialAdsManager.swift in Sources */,
 				B20936782B5ED35900757317 /* StatusBarHiddenModifier.swift in Sources */,
 				B2B28BE72B87F01B00EC96B8 /* ImageProjectToolCaseFlipView.swift in Sources */,
 				B2A918862BF212E3003AFC09 /* ImageProjectToolCaseMagicWandView.swift in Sources */,

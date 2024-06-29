@@ -8,7 +8,7 @@ target 'Media-Editor' do
   pod 'FirebaseCore'
   pod 'FirebaseAnalytics'
   pod 'FirebaseCrashlytics'
-  pod 'Google-Mobile-Ads-SDK'
+#  pod 'Google-Mobile-Ads-SDK'
 
   
   post_install do |installer|
