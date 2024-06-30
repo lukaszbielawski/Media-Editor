@@ -27,12 +27,18 @@ struct MediaEditorApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @Environment(\.scenePhase) var scenePhase
 
+    @StateObject var onboardingViewModel = OnboardingViewModel()
+
     var body: some Scene {
         WindowGroup {
-            MenuView()
-                .background(Color(.background))
+            if onboardingViewModel.isPurchased {
+                MenuView()
+            } else {
+                OnboardingTabView()
+                    .environmentObject(onboardingViewModel)
+            }
         }
-        .onChange(of: scenePhase) { newValue in
+        .onChange(of: scenePhase) { _ in
             PersistenceController.shared.saveChanges()
         }
     }
