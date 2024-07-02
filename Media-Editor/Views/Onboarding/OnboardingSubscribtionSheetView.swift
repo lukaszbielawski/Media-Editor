@@ -49,6 +49,7 @@ struct OnboardingSubscribtionSheetView: View {
                     • Current subscription may not be cancelled during the active subscription period; however, you can manage your subscription and/or turn off auto-renewal by visiting your iTunes Account Settings after purchase
                     • Privacy policy and terms of use:
                     https://lukaszbielawski8.wordpress.com/2024/04/20/privacy-policy/
+                    https://lukaszbielawski8.wordpress.com/2024/07/02/end-user-license-agreement/
                     """)
                     .fixedSize(horizontal: false, vertical: true)
                     .font(.footnote)
