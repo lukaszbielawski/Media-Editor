@@ -32,6 +32,7 @@ struct OnboardingTabView: View {
                     ForEach(OnboardingTabType.allCases, id: \.self) { tabType in
                         tabType.associatedView
                             .tag(tabType)
+                            .foregroundStyle(Color(.tint))
                             .onTapGesture {
                                 if let nextTab = tabType.next() {
                                     withAnimation(.easeInOut(duration: 0.35)) {
@@ -44,13 +45,19 @@ struct OnboardingTabView: View {
                 .animation(.easeInOut(duration: 0.35), value: vm.isSheetPresented)
                 .padding(.bottom, vm.isSheetPresented ? vm.sheetHeight : 16.0)
             }
-            OnboardingSubscribtionSheetView()
-                .frame(height: vm.sheetHeight)
-                .background(Color(.background))
-                .roundedUpperCorners(16.0)
-                .compositingGroup()
-                .animation(.easeInOut(duration: 0.35), value: vm.isSheetPresented)
-                .offset(y: vm.isSheetPresented ? 0 : vm.sheetHeight)
+            if vm.isSubscriptionFullscreenShown {
+                Rectangle()
+                    .fill(Material.ultraThinMaterial)
+                    .onTapGesture {
+                        vm.isSubscriptionFullscreenShown = false
+                    }
+            }
+            VStack {
+                Spacer()
+                    .layoutPriority(1.0)
+                OnboardingSubscribtionSheetView()
+                    .compositingGroup()
+            }
         }
         .background(Image("MenuBackground"))
         .tabViewStyle(.page)
