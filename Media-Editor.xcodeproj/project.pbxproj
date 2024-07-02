@@ -52,6 +52,7 @@
 		B21C25002B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */; };
 		B21D085D2B78D2CC0060C35F /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21D085C2B78D2CC0060C35F /* DoubleExtensions.swift */; };
 		B222EA5A2C340C3500D8D8F6 /* SubscriptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B222EA592C340C3500D8D8F6 /* SubscriptionType.swift */; };
+		B222EA602C3453EB00D8D8F6 /* CapsuleBorderStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = B222EA5F2C3453EB00D8D8F6 /* CapsuleBorderStroke.swift */; };
 		B22744C02B5C19ED000740DF /* NavBarAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */; };
 		B22B1BEE2BC1B0B8003A0031 /* KaushanScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */; };
 		B22B1BEF2BC1B0B8003A0031 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = B22B1BED2BC1B0B8003A0031 /* OFL.txt */; };
@@ -244,6 +245,7 @@
 		B21C24FF2B8BBD2A00DBE6B2 /* ImageProjectToolColorTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProjectToolColorTileView.swift; sourceTree = "<group>"; };
 		B21D085C2B78D2CC0060C35F /* DoubleExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtensions.swift; sourceTree = "<group>"; };
 		B222EA592C340C3500D8D8F6 /* SubscriptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionType.swift; sourceTree = "<group>"; };
+		B222EA5F2C3453EB00D8D8F6 /* CapsuleBorderStroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleBorderStroke.swift; sourceTree = "<group>"; };
 		B22744BF2B5C19ED000740DF /* NavBarAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarAccessor.swift; sourceTree = "<group>"; };
 		B22B1BEC2BC1B0B8003A0031 /* KaushanScript-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KaushanScript-Regular.ttf"; sourceTree = "<group>"; };
 		B22B1BED2BC1B0B8003A0031 /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
@@ -740,6 +742,7 @@
 				B29416022B77FDF400F81596 /* EditFrameResizeModifier.swift */,
 				B2C842E72BC291B000A7853F /* FormHiddenBackground.swift */,
 				B20095642BDF7CD5006B6B47 /* ProjectToolTileSelectedModifier.swift */,
+				B222EA5F2C3453EB00D8D8F6 /* CapsuleBorderStroke.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -1229,6 +1232,7 @@
 				B21C24F42B8B776B00DBE6B2 /* SnapshotModel.swift in Sources */,
 				B2ADA4972BE5FF2E00100FAC /* ImageProjectToolGradientPickerView.swift in Sources */,
 				B24AD9052B55495B00BBD1E8 /* PhotoEntityController.swift in Sources */,
+				B222EA602C3453EB00D8D8F6 /* CapsuleBorderStroke.swift in Sources */,
 				B24AD9012B553C2200BBD1E8 /* ProjectEntityController.swift in Sources */,
 				B25FB5922B5DA36700EBFB16 /* ImageProjectToolTileView.swift in Sources */,
 				B2F86F182BDEA63600C5AAFE /* ImageProjectToolCaseDrawFloatingSliderView.swift in Sources */,
@@ -1493,7 +1497,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Media-Editor/Preview Content\"";
 				DEVELOPMENT_TEAM = J6U333HZ7J;
@@ -1515,7 +1519,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.PixivaDebug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1532,7 +1536,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Media-Editor/Preview Content\"";
 				DEVELOPMENT_TEAM = J6U333HZ7J;
 				ENABLE_PREVIEWS = YES;
@@ -1553,7 +1557,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lukaszbielawski.Pixiva;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

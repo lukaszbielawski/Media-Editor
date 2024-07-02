@@ -14,19 +14,17 @@ final class OnboardingViewModel: ObservableObject {
     @Published var currentTab: OnboardingTabType = .title
     @Published var isFreeTrialToggled: Bool = false
     @Published var sheetHeight: CGFloat = 300.0
+    @Published var isSubscriptionFullscreenShown = false
+    @Published var subscribtionTypeSelected: SubscriptionType? = .none
 
     @Published var subscriptions: [Product] = []
     @Published var purchasedSubscriptions: [Product] = []
 
     @AppStorage("isSubscribed") var isSubscribed: Bool = false {
         willSet {
-            DispatchQueue.main.async {
-                self.objectWillChange.send()
-            }
+            objectWillChange.send()
         }
     }
-
-    let subscriptionTypes = SubscriptionType.allCases
 
     var updateListenerTask: Task<Void, Error>? = nil
 
@@ -43,9 +41,21 @@ final class OnboardingViewModel: ObservableObject {
         }
     }
 
+    func showSubscribtionSheet() async {
+        guard let subscribtionTypeSelected else { return }
+        let subscribtionType = isFreeTrialToggled ? subscribtionTypeSelected.toggleTrial : subscribtionTypeSelected
+        let product = subscriptions.first(where: { $0.id == subscribtionType.id })
+        guard let product else { return }
+        do {
+            _ = try await purchase(product)
+        } catch {
+            print(error)
+        }
+    }
+
     func requestProducts() async {
         do {
-            subscriptions = try await Product.products(for: subscriptionTypes.map { $0.id })
+            subscriptions = try await Product.products(for: SubscriptionType.allCases.map { $0.id })
         } catch {
             print(error)
         }
