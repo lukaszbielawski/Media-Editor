@@ -13,6 +13,8 @@ The Media Editor app is a versatile tool for editing photos, built with SwiftUI,
 * <b>Filters</b>: Apply a wide range of filters to individual layers to enhance or modify their appearance.
 * <b>Cropping and Clipping</b>: Crop layers to remove unnecessary parts of picture. Additionally, you can clip layers into various shapes such as ellipses or hexagons.
 * <b>Merging</b>: Combine multiple layers into a single layer, simplifying your project.
+* <b>Magic Wand</b>: Quickly select and manipulate specific areas of your image with the magic wand tool.
+* <b>Adding Text</b>: Insert and customize text layers with various fonts, sizes, and colors.
 * <b>Background Editing</b>: Resize the background canvas and change its color to suit your preferences.
 * <b>Auto-save Feature</b>: Your progress is automatically saved to ensure you never lose your work.
 * <b>Undo/Redo</b>: Seamlessly revert or reapply changes with the undo and redo feature.
@@ -21,8 +23,7 @@ The Media Editor app is a versatile tool for editing photos, built with SwiftUI,
 <h2>Presentation</h2>
 
 
-https://github.com/lukaszbielawski/Media-Editor/assets/44624897/67cc5fef-33ce-44bf-822d-73de08933b9e
-
+https://github.com/lukaszbielawski/Media-Editor/assets/44624897/be1bd087-1794-4944-b426-08634dad0fe1
 
 
 
