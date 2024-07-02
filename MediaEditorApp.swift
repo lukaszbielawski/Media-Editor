@@ -31,11 +31,13 @@ struct MediaEditorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if onboardingViewModel.isPurchased {
+            if onboardingViewModel.isSubscribed {
                 MenuView()
+                    .transition(.normalOpacityTransition)
             } else {
                 OnboardingTabView()
                     .environmentObject(onboardingViewModel)
+                    .transition(.normalOpacityTransition)
             }
         }
         .onChange(of: scenePhase) { _ in

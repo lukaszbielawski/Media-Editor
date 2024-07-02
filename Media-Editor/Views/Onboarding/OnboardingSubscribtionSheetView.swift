@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnboardingSubscribtionSheetView: View {
     @EnvironmentObject var vm: OnboardingViewModel
+    @State var isToggled = false
 
     var body: some View {
         HStack {
@@ -19,9 +20,25 @@ struct OnboardingSubscribtionSheetView: View {
                 OnboardingSubscribtionSheetCapsuleView(circleText: "-30%", upperText: "One year",
                                                        lowerText: vm.isFreeTrialToggled ? "3-day trial included" : "Best value",
                                                        price: " 49.99$", duration: "1 y")
+                    .onTapGesture {
+                        Task {
+                            let subscribtionType = vm.isFreeTrialToggled ? SubscriptionType.oneYearWithFreeTrial : SubscriptionType.oneYear
+                            let product = vm.subscriptions.first(where: { $0.id == subscribtionType.id })
+                            guard let product else { return }
+                            if try await vm.purchase(product) != nil {}
+                        }
+                    }
                 OnboardingSubscribtionSheetCapsuleView(circleText: "-10%", upperText: "One month",
                                                        lowerText: vm.isFreeTrialToggled ? "3-day trial included" : "Most popular",
                                                        price: "4.99$", duration: "1 mo")
+                    .onTapGesture {
+                        Task {
+                            let subscribtionType = vm.isFreeTrialToggled ? SubscriptionType.oneMonthWithFreeTrial : SubscriptionType.oneMonth
+                            let product = vm.subscriptions.first(where: { $0.id == subscribtionType.id })
+                            guard let product else { return }
+                            if try await vm.purchase(product) != nil {}
+                        }
+                    }
                 HStack {
                     Spacer()
                     OnboardingSubscribtionTrialToggleView()

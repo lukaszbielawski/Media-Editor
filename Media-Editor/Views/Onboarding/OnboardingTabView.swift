@@ -47,7 +47,7 @@ struct OnboardingTabView: View {
             OnboardingSubscribtionSheetView()
                 .frame(height: vm.sheetHeight)
                 .background(Color(.background))
-                .clipShape(RoundedRectangle(cornerRadius: 16.0))
+                .roundedUpperCorners(16.0)
                 .compositingGroup()
                 .animation(.easeInOut(duration: 0.35), value: vm.isSheetPresented)
                 .offset(y: vm.isSheetPresented ? 0 : vm.sheetHeight)

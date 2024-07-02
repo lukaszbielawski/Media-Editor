@@ -1,0 +1,189 @@
+{
+  "identifier" : "97D32734",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6499069427",
+    "_developerTeamID" : "J6U333HZ7J",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 741608356.57397401,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21505856",
+      "localizations" : [
+
+      ],
+      "name" : "PremiumSubscribtions",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6505098233",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get full access to all features of Pixiva",
+              "displayName" : "Pixiva - One Month Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "lukaszbielawski.Pixiva.OneMonthPremium",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pixiva - One Month Premium",
+          "subscriptionGroupID" : "21505856",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6505102078",
+          "introductoryOffer" : {
+            "internalID" : "11FE454A",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
+          "localizations" : [
+            {
+              "description" : "Get full access to all features of Pixiva",
+              "displayName" : "One Month Premium 3-Day Free",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "lukaszbielawski.Pixiva.OneMonthPremiumFree3DayTrial",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pixiva - One Month Premium Free 3-day Trial",
+          "subscriptionGroupID" : "21505856",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6505101859",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get full access to all features of Pixiva",
+              "displayName" : "Pixiva - One Year Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "lukaszbielawski.Pixiva.OneYearPremium",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pixiva - One Year Premium",
+          "subscriptionGroupID" : "21505856",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 4,
+          "internalID" : "6505102091",
+          "introductoryOffer" : {
+            "internalID" : "5669D357",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
+          "localizations" : [
+            {
+              "description" : "Get full access to all features of Pixiva",
+              "displayName" : "One Year Premium 3-Day Free",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "lukaszbielawski.Pixiva.OneYearPremiumFree3DayTrial",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pixiva - One Year Premium Free 3-Day Trial",
+          "subscriptionGroupID" : "21505856",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
